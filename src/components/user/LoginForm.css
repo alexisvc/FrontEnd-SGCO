@@ -1,0 +1,105 @@
+.login-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    background-image: url("../../backgrounds/main.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    font-family: 'Satisfy', cursive;
+}
+
+.login {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 90%;
+    width: 100%;
+    font-family: 'Satisfy', cursive;
+}
+
+.login-title {
+    grid-row: 1;
+    grid-column: 1 / 3;
+}
+
+.login-title h1 {
+    font-family: 'Satisfy', cursive;
+    font-size: 10vh;
+    color: yellow;
+    margin: 0;
+    -webkit-text-stroke: 2px black;
+}
+
+.login-form {
+    width: 70%;
+    height: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+    justify-content: center;
+}
+
+.login-heading {
+    font-size: 6vh;
+    color: #FF637D;
+    -webkit-text-stroke: 0.5px black;
+    margin: 0.5vh auto;
+}
+
+.login-button {
+    font-size: 2.25vh;
+    width: 50%;
+    margin: 2vh auto;
+    padding: 10px;
+    background-color: #FF637D;
+    font-family: 'Satisfy', cursive;
+    color: #EAF2E3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #66D7D1;
+}
+
+.footer-login {
+    font-size: 2.25vh;
+    color: #333;
+}
+
+.login-link {
+    text-decoration: none;
+    color: #FF637D;
+    font-weight: bold;
+}
+
+.login-link:hover {
+    color: #66D7D1;
+}
+
+.img-form {
+    justify-content: center;
+    align-items: center;
+}
+
+.img-form img {
+    width: 60%;
+    height: 60%;
+    object-fit: cover;
+    border: none;
+    margin: 5vh;
+}

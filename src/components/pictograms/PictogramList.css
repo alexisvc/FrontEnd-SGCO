@@ -1,0 +1,99 @@
+.pictogram-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  background-image: url("../../backgrounds/pictograms.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  font-family: 'Satisfy', cursive;
+}
+
+.heading {
+  width: 100%;
+  height: fit-content;
+}
+
+.heading h2 {
+  font-size: 7vh;
+  color: yellow;
+  -webkit-text-stroke: 1.5px black;
+  margin: auto;
+}
+
+.filter {
+  height: fit-content;
+  height: 5%;
+  margin: 2vh;
+}
+
+.filter span {
+  font-size: 2.25vh;
+}
+
+.filter select {
+  font-size: 2.25vh;
+  text-align: center;
+}
+
+.pictogram-table-container {
+  width: 90%;
+  height: 80%;
+  overflow-y: auto;
+}
+
+.pictogram-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.pictogram-table th,
+.pictogram-table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+}
+
+.pictogram-table th {
+  background-color: #FF637D;
+  font-size: 3vh;
+  -webkit-text-stroke: 0.75px black;
+  color: #EAF2E3;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.pictogram-table td {
+  font-size: 2.5vh;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.img-list {
+  background-color: aliceblue;
+  border: 1px solid #000;
+  width: 8vw;
+}
+
+.edit-button {
+  width: 30%;
+  margin: 10px;
+  padding: 10px;
+  background-color: #FF637D;
+  font-family: 'Satisfy', cursive;
+  color: #EAF2E3;
+  border: none;
+  border-radius: 5px;
+  font-size: 2vh;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #66D7D1;
+  transform: scale(1.1);
+}
