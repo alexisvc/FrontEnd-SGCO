@@ -1,5 +1,5 @@
-import axios from "axios";
-const baseUrl = "http://localhost:3001/api/patients";
+import axios from 'axios';
+const baseUrl = 'http://localhost:3001/api/patients';
 
 const getAllPatients = () => {
   return axios.get(baseUrl).then((response) => response.data);
@@ -7,6 +7,10 @@ const getAllPatients = () => {
 
 const getPatientById = (patientId) => {
   return axios.get(`${baseUrl}/${patientId}`).then((response) => response.data);
+};
+
+const getPatientByCedula = (numeroCedula) => {
+  return axios.get(`${baseUrl}/cedula/${numeroCedula}`).then((response) => response.data);
 };
 
 const createPatient = (newPatient) => {
@@ -24,6 +28,7 @@ const deletePatient = (patientId) => {
 export default {
   getAllPatients,
   getPatientById,
+  getPatientByCedula,
   createPatient,
   updatePatient,
   deletePatient,

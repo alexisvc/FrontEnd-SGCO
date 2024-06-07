@@ -1,4 +1,3 @@
-// usePatients.js
 import { useEffect, useState } from 'react';
 import patientsService from '../services/patients';
 
@@ -24,6 +23,19 @@ export function usePatients() {
   const fetchPatientById = (id) => {
     setLoading(true);
     patientsService.getPatientById(id)
+      .then(data => {
+        setPatient(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchPatientByCedula = (numeroCedula) => {
+    setLoading(true);
+    patientsService.getPatientByCedula(numeroCedula)
       .then(data => {
         setPatient(data);
         setLoading(false);
@@ -79,6 +91,7 @@ export function usePatients() {
     loading,
     error,
     fetchPatientById,
+    fetchPatientByCedula,
     createPatient,
     updatePatient,
     deletePatient,
