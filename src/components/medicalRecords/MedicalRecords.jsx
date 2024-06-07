@@ -59,9 +59,28 @@ const MedicalRecords = () => {
     setNewMedicalRecord(prevRecord => ({ ...prevRecord, [name]: value }));
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChangee = (e) => {
     const { name, checked } = e.target;
     setNewMedicalRecord(prevRecord => ({ ...prevRecord, [name]: checked }));
+  };
+
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setNewMedicalRecord(prevRecord => {
+      const updatedHabitosNocivos = checked
+        ? [...prevRecord.habitosNocivos, name]
+        : prevRecord.habitosNocivos.filter(habito => habito !== name);
+      return { ...prevRecord, habitosNocivos: updatedHabitosNocivos };
+    });
+  };
+
+  const handleRadioChange = (e) => {
+    const { name, value } = e.target;
+    setNewMedicalRecord(prevRecord => ({
+      ...prevRecord,
+      [name]: value === 'true'
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -142,6 +161,230 @@ const MedicalRecords = () => {
               />
             </label>
             {/* Agregar más campos de formulario aquí para cada atributo */}
+            <label>
+              Motivo Consulta:
+              <textarea
+                name="motivoConsulta"
+                value={newMedicalRecord.motivoConsulta}
+                onChange={handleChange}
+                required
+                />
+            </label>
+            <label>
+              Expectativa Paciente:
+              <textarea
+                name="expectativaPaciente"
+                value={newMedicalRecord.expectativaPaciente}
+                onChange={handleChange}
+                placeholder='Espectativa del paciente'
+                required
+                />
+            </label>
+            <label>
+              Enfermedad Sistémica:
+              <input
+                type='text'
+                name="enfermedadSistemica"
+                value={newMedicalRecord.enfermedadSistemica}
+                onChange={handleChange}
+                placeholder='Enfermedad Sistémica'
+                //required
+                />
+            </label>
+            <label>
+              Enfermedad Preexistente:
+              <input
+              type='text'
+                name="enfermedadPreexistente"
+                value={newMedicalRecord.enfermedadPreexistente}
+                onChange={handleChange}
+                placeholder='Enfermedad Preexistente'
+                //required
+                />
+            </label>
+            <label>
+              Médico Tratante:
+              <input
+              type='text'
+                name="medicoTratante"
+                value={newMedicalRecord.medicoTratante}
+                onChange={handleChange}
+                placeholder='Médico Tratante'
+                //required
+                />
+            </label>
+            <label>
+              Teléfono Médico Tratante:
+              <input
+              type='text'
+                name="telMedicoTratante"
+                value={newMedicalRecord.telMedicoTratante}
+                onChange={handleChange}
+                placeholder='Teléfono Médico Tratante'
+                //required
+                />
+            </label>
+            <label>
+              Medicamentos que Consume:
+              <textarea
+                name="medicamentosConsume"
+                value={newMedicalRecord.medicamentosConsume}
+                onChange={handleChange}
+                placeholder='Medicamentos que Consume'
+                //required
+                />
+            </label>
+            <label>
+              Alergia a Medicamentos:
+              <textarea
+                name="alergiaMedicamentos"
+                value={newMedicalRecord.alergiaMedicamentos}
+                onChange={handleChange}
+                placeholder='Alergia a Medicamentos'
+                //required
+                />
+            </label>
+            <label>
+              Hábitos Nocivos:
+              <div>
+                <input
+                  type="checkbox"
+                  name="tabaco"
+                  checked={newMedicalRecord.habitosNocivos.includes('tabaco')}
+                  onChange={handleCheckboxChange}
+                />
+                <label for="tabaco">Tabaco</label>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  name="alcohol"
+                  checked={newMedicalRecord.habitosNocivos.includes('alcohol')}
+                  onChange={handleCheckboxChange}
+                />
+                <label for="alcohol">Alcohol</label>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  name="drogas"
+                  checked={newMedicalRecord.habitosNocivos.includes('drogas')}
+                  onChange={handleCheckboxChange}
+                />
+                <label for="drogas">Drogas</label>
+              </div>
+            </label>
+            <label>
+              Enfermedades Respiratorias:
+              <textarea
+                name="enfermedadesRespiratorias"
+                value={newMedicalRecord.enfermedadesRespiratorias}
+                onChange={handleChange}
+                placeholder='Enfermedades Respiratorias'
+                //required
+                />
+            </label>
+            <label>
+              Enfermedades Hormonales:
+              <textarea
+                name="enfermedadesHormonales"
+                value={newMedicalRecord.enfermedadesHormonales}
+                onChange={handleChange}
+                placeholder='Enfermedades Hormonales'
+                //required
+                />
+            </label>
+            <label>
+              ¿Está gestando?
+              <div>
+                <input
+                  type="radio"
+                  name="estaGestando"
+                  value="true"
+                  checked={newMedicalRecord.estaGestando === true}
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor="estaGestando">Sí</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="estaGestando"
+                  value="false"
+                  checked={newMedicalRecord.estaGestando === false}
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor="estaGestando">No</label>
+              </div>
+            </label>
+
+            {newMedicalRecord.estaGestando && (
+              <label>
+                Mes de Gestación:
+                <input
+                  type="text"
+                  name="mesGestacion"
+                  value={newMedicalRecord.mesGestacion}
+                  onChange={handleChange}
+                  placeholder='Mes de Gestación'
+                  required
+                />
+              </label>
+            )}
+
+            <label>
+              ¿Es menor de edad?
+              <div>
+                <input
+                  type="radio"
+                  name="esMenorEdad"
+                  value="true"
+                  checked={newMedicalRecord.esMenorEdad === true}
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor="esMenorEdad">Sí</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="esMenorEdad"
+                  value="false"
+                  checked={newMedicalRecord.esMenorEdad === false}
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor="esMenorEdad">No</label>
+              </div>
+            </label>
+            
+            {newMedicalRecord.esMenorEdad && (
+              <label>
+                Nombre del Representante:
+                <input
+                  type="text"
+                  name="nombreRepresentante"
+                  value={newMedicalRecord.nombreRepresentante}
+                  onChange={handleChange}
+                  placeholder='Nombre del Representante'
+                  required
+                  />
+              </label>           
+            )}
+
+            {newMedicalRecord.esMenorEdad && (
+            <label>
+              Teléfono del Representante:
+              <input
+                type="text"
+                name="telRepresentante"
+                value={newMedicalRecord.telRepresentante}
+                onChange={handleChange}
+                placeholder='Teléfono del Representante'
+                required
+                />
+            </label>
+            )}
+
+
             <button type="submit">Crear Historia Clínica</button>
           </form>
         </div>
