@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import pictogramServices from "../services/pictograms";
+
 import loginService from "../services/login";
 
 export function useUser() {
@@ -11,7 +11,6 @@ export function useUser() {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      pictogramServices.setToken(user.token);
     }
   }, []);
 
@@ -24,7 +23,6 @@ export function useUser() {
 
     console.log("user", user);
     window.localStorage.setItem("loggedUser", JSON.stringify(user));
-    pictogramServices.setToken(user.token);
 
     setUser(user);
   };
@@ -32,7 +30,6 @@ export function useUser() {
   // Logout
   const logout = () => {
     setUser(null);
-    pictogramServices.setToken(user.token);
     window.localStorage.removeItem("loggedUser");
   };
 

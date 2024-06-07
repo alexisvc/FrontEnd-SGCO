@@ -4,9 +4,7 @@ import "./Home.css";
 import {
   FaArrowRight,
   FaGamepad,
-  FaHashtag,
   FaInfoCircle,
-  FaLessThan,
   FaSignInAlt,
   FaSignOutAlt,
   FaUserPlus,
@@ -80,19 +78,19 @@ function Home({ user, logout, login }) {
               </button>
             </Link>
 
-            <Link to="/" className="link-button">
+            {/*<Link to="/" className="link-button">
               <button onClick={handleGuestLogin}>
                 <FaGamepad />
                 <span> Jugar como invitado</span>
               </button>
-            </Link>
+          </Link>*/}
 
-            <Link to="/register" className="link-button">
+            {/*<Link to="/register" className="link-button">
               <button>
                 <FaUserPlus />
                 <span> Registrarse</span>
               </button>
-            </Link>
+        </Link>*/}
           </div>
           <div className="footer">
             <div>

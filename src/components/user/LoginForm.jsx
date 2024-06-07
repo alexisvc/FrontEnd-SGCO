@@ -11,7 +11,6 @@ import {
   FaQuestion,
   FaYoutube,
 } from "react-icons/fa";
-import { useSpeechSynthesis } from "../../hooks/useSpeechSynthesis";
 import PopUpHelp from "../extras/PopUpHelp";
 import PopUpInstructions from "../extras/PopUpInstructions";
 
@@ -22,7 +21,6 @@ export const LoginForm = ({ login }) => {
 
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isPopUpOpenInstructions, setIsPopUpOpenInstructions] = useState(false);
-  const { speak, speaking } = useSpeechSynthesis();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -115,7 +113,7 @@ export const LoginForm = ({ login }) => {
               </label>
               <input
               id="username"
-                type="email"
+                type="text"
                 placeholder="Ingresa tu correo electrónico. Ej: alexis@correo.com"
                 value={username}
                 name="username"

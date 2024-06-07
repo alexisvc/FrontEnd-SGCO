@@ -16,7 +16,6 @@ import PictogramList from "./components/pictograms/PictogramList";
 import { useUser } from "./hooks/useUser";
 import { usePictograms } from "./hooks/usePictograms";
 import Home from "./components/Home";
-import { FaHome, FaUserPlus, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import "./App.css";
 import RecognitionGame from "./components/games/recognition-game/RecognitionGame";
 import PictogramMenu from "./components/pictograms/PictogramMenu";
@@ -26,6 +25,8 @@ import GameOptions from "./components/games/recognition-game/GameOptions";
 import Welcome from "./components/Welcome";
 import AboutUs from "./components/extras/AboutUs";
 import EditUser from "./components/user/EditUser";
+import MedicalRecords from "./components/medicalRecords/MedicalRecords";
+import Patients from "./components/patients/Patients";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -47,6 +48,17 @@ function App() {
                 isLoggedIn ? <Navigate to="/" /> : <LoginForm login={login} />
               }
             />
+
+            <Route 
+              path="/patients"
+              element={isLoggedIn ? <Patients user={user} /> : <Home />}
+            />
+
+            <Route 
+              path="/medicalRecords/:patientId"
+              element={isLoggedIn ? <MedicalRecords user={user} /> : <Home />}
+            />
+
             <Route
               path="/register"
               element={isLoggedIn ? <Navigate to="/" /> : <RegistrationForm />}

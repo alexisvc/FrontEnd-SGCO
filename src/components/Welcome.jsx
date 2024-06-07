@@ -33,12 +33,6 @@ function Welcome({ user, logout, isGuestUser }) {
       >
         {isLoggedIn && (
           <>
-            {/*<button className="user">
-              <Link to="/edit-user" className="link-button">
-                <FaUserAlt />
-                <span>{user.name}</span>
-              </Link>
-        </button>*/}
             <button onClick={() => setIsPopUpOpen(true)}>
               <FaSignOutAlt />
               <span>Salir</span>
@@ -46,41 +40,29 @@ function Welcome({ user, logout, isGuestUser }) {
           </>
         )}
       </div>
-      <img
+      {/*<img
         className="img-home"
         src="public\credits\home.png"
         alt="imagen de la aventura"
-      />
+      />*/}
 
       {isLoggedIn && (
         <div className="buttons-welcome">
-          {!isGuestUser && (
-            <Link to="/pictogram-menu" className="link-button">
-              <button>
-                <span>🌳</span>
-                <span>Bosque de los Símbolos</span>
-
-                {/*
-              <span>Pictogramas</span>*/}
-              </button>
-            </Link>
-          )}
+          <Link to="/patients" className="link-button">
+            <button>
+              <span>Historias Clinicas</span>
+            </button>
+          </Link>
 
           <Link to="/acc-menu" className="link-button">
             <button>
-              <span>🏔️</span>
-              <span>Valle de los Pictogramas</span>
-              {/*<FaTable />
-              <span>Tablero de Comunicación</span>*/}
+              <span>Agendamiento</span>
             </button>
           </Link>
 
           <Link to="/game-menu" className="link-button">
             <button>
-              <span>🌎</span>
-              <span>Planeta de los Símbolos</span>
-              {/*<FaGamepad />
-              <span>Juego de Reconocimiento</span>*/}
+              <span>Planificación y Presupuesto</span>
             </button>
           </Link>
         </div>
