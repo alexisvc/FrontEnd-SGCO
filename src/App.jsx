@@ -9,15 +9,10 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginForm } from "./components/user/LoginForm";
-import PictogramForm from "./components/pictograms/PictogramForm";
 import RegistrationForm from "./components/user/RegistrationForm";
-import { PictogramDisplay } from "./components/acc/PictogramDisplay";
-import PictogramList from "./components/pictograms/PictogramList";
 import { useUser } from "./hooks/useUser";
-import { usePictograms } from "./hooks/usePictograms";
 import Home from "./components/Home";
 import "./App.css";
-import RecognitionGame from "./components/games/recognition-game/RecognitionGame";
 import PictogramMenu from "./components/pictograms/PictogramMenu";
 import GameMenu from "./components/games/GameMenu";
 import PictogramAccMenu from "./components/acc/PictogramACCMenu";
@@ -25,14 +20,13 @@ import GameOptions from "./components/games/recognition-game/GameOptions";
 import Welcome from "./components/Welcome";
 import AboutUs from "./components/extras/AboutUs";
 import EditUser from "./components/user/EditUser";
-import MedicalRecords from "./components/medicalRecords/MedicalRecords";
 import Patients from "./components/patients/Patients";
+import MedicalRecordDetails from "./components/medicalRecords/MedicalRecordsDetails";
+import useMedicalRecords from "./hooks/useMedicalRecords";
 
 function App() {
   const { user, logout, login } = useUser();
-  const { pictograms, createPictogram, updatePictogram, deletePictogram } =
-    usePictograms(user);
-
+  const { medicalRecords } = useMedicalRecords();
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
 
@@ -55,8 +49,8 @@ function App() {
             />
 
             <Route 
-              path="/medicalRecords/:patientId"
-              element={isLoggedIn ? <MedicalRecords user={user} /> : <Home />}
+              path="/prueba/:patientId"
+              element={isLoggedIn ? <MedicalRecordDetails user={user} medicalRecords={medicalRecords} /> : <Home />}
             />
 
             <Route
@@ -72,12 +66,6 @@ function App() {
               element={isLoggedIn ? <PictogramAccMenu /> : <Home />}
             />
             <Route
-              path="/saac"
-              element={
-                isLoggedIn ? <PictogramDisplay images={pictograms} /> : <Home />
-              }
-            />
-            <Route
               path="/game-menu"
               element={isLoggedIn ? <GameMenu /> : <Home />}
             />
@@ -86,42 +74,8 @@ function App() {
               element={isLoggedIn ? <GameOptions /> : <Home />}
             />
             <Route
-              path="/recognition-game/:difficulty"
-              element={
-                isLoggedIn ? (
-                  <RecognitionGame pictograms={pictograms} />
-                ) : (
-                  <Home />
-                )
-              }
-            />
-            <Route
               path="/pictogram-menu"
               element={isLoggedIn ? <PictogramMenu /> : <Home />}
-            />
-            <Route
-              path="/pictogram-form"
-              element={
-                isLoggedIn ? (
-                  <PictogramForm createPictogram={createPictogram} pictograms={pictograms}/>
-                ) : (
-                  <Home />
-                )
-              }
-            />
-            <Route
-              path="/pictogram-list"
-              element={
-                isLoggedIn ? (
-                  <PictogramList
-                    pictograms={pictograms}
-                    updatePictogram={updatePictogram}
-                    deletePictogram={deletePictogram}
-                  />
-                ) : (
-                  <Home />
-                )
-              }
             />
             <Route
               path="/about-us"

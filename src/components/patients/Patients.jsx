@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { usePatients } from '../../hooks/usePatients';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaArrowCircleLeft } from 'react-icons/fa';
 
 const Patients = ({ user }) => {
+  const navigate = useNavigate();
   const { patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient } = usePatients();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
@@ -64,6 +66,14 @@ const Patients = ({ user }) => {
 
   return (
     <div>
+      <button
+        onClick={() => {
+          navigate("/main-menu");
+        }}
+      >
+        <FaArrowCircleLeft />
+        <span>Atrás</span>
+      </button>
       <h1>Pacientes</h1>
       <button onClick={() => setShowCreateForm(!showCreateForm)}>
         {showCreateForm ? 'Ocultar Crear Paciente' : 'Crear Paciente'}
@@ -227,7 +237,7 @@ const Patients = ({ user }) => {
                 <td>{patient.telefono}</td>
                 <td>{patient.telContactoEmergencia}</td>
                 <td>{patient.afinidadContactoEmergencia}</td>
-                <td><Link to={`/medicalRecords/${patient.id}`}>Ver HC</Link></td>
+                <td><Link to={`/prueba/${patient.id}`}>Ver HC</Link></td>
               </tr>
             ))}
           </tbody>
