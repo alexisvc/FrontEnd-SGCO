@@ -21,12 +21,11 @@ import Welcome from "./components/Welcome";
 import AboutUs from "./components/extras/AboutUs";
 import EditUser from "./components/user/EditUser";
 import Patients from "./components/patients/Patients";
-import MedicalRecordDetails from "./components/medicalRecords/MedicalRecordsDetails";
-import { useMedicalRecords } from "./hooks/useMedicalRecords";
+import PatientAndMedicalRecordDetails from "./components/PatientAndMedicalRecordDetails";
 
 function App() {
   const { user, logout, login } = useUser();
-  const { medicalRecords, createMedicalRecord } = useMedicalRecords();
+  //const { medicalRecords, createMedicalRecord } = useMedicalRecords();
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
 
@@ -48,10 +47,9 @@ function App() {
               element={isLoggedIn ? <Patients user={user} /> : <Home />}
             />
 
-            <Route 
-              path="/prueba/:patientId"
-              element={isLoggedIn ? <MedicalRecordDetails /> : <Home />}
-            />
+            
+
+<Route path="/prueba/:patientId" element={<PatientAndMedicalRecordDetails />} />
 
             <Route
               path="/register"

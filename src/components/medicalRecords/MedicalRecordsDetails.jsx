@@ -12,7 +12,7 @@ const MedicalRecordDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Medical Records: ", medicalRecords);
+    //console.log("Medical Records: ", medicalRecords);
     if (useMedicalRecords && medicalRecords.length > 0) {
       const record = medicalRecords.find(
         (record) => record.paciente.id === patientId
