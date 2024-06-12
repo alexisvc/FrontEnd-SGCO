@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecord }) => {
 
-  const [formData, setFormData] = useState({
+  const [newMedicalRecord, setNewMedicalRecord] = useState({
     date: patientMedicalRecord.date.split('T')[0],
     description: patientMedicalRecord.description,
     paciente: patientId,
@@ -15,7 +15,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
     telMedicoTratante: patientMedicalRecord.telMedicoTratante,
     medicamentosConsume: patientMedicalRecord.medicamentosConsume,
     alergiaMedicamentos: patientMedicalRecord.alergiaMedicamentos,
-    habit: patientMedicalRecord.habit,
+    habitosNocivos: patientMedicalRecord.habitosNocivos,
     enfermedadesRespiratorias: patientMedicalRecord.enfermedadesRespiratorias,
     enfermedadesHormonales: patientMedicalRecord.enfermedadesHormonales,
     estaGestando: patientMedicalRecord.estaGestando,
@@ -51,7 +51,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevFormData) => ({
+    setNewMedicalRecord((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? (checked ? true : false) : value,
     }));
@@ -59,417 +59,693 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateMedicalRecord(patientMedicalRecord.id, formData);
+    updateMedicalRecord(patientMedicalRecord.id, newMedicalRecord);
     navigate("/patients");
+  };
+
+  const handleCheckboxChange = (e, listName) => {
+    const { name, checked } = e.target;
+    const updatedList = checked
+      ? [...newMedicalRecord[listName], name]
+      : newMedicalRecord[listName].filter(item => item !== name);
+
+    setNewMedicalRecord({
+      ...newMedicalRecord,
+      [listName]: updatedList,
+    });
+  };
+
+  const handleRadioChange = (e) => {
+    const { name, value } = e.target;
+    setNewMedicalRecord(prevRecord => ({
+      ...prevRecord,
+      [name]: value === 'true'
+    }));
   };
 
   return (
     <div>
-      <h2>Editar Historia Clínica</h2>
-      <form onSubmit={handleSubmit}>
-        <label>{formData.paciente}</label>
-        <label>
-          Fecha:
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Descripción:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </label>
-        <br />
-        <label>
-          Motivo de Consulta:
-          <input
-            type="text"
-            name="motivoConsulta"
-            value={formData.motivoConsulta}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Expectativa del Paciente:
-          <input
-            type="text"
-            name="expectativaPaciente"
-            value={formData.expectativaPaciente}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Enfermedad Sistémica:
-          <input
-            type="text"
-            name="enfermedadSistemica"
-            value={formData.enfermedadSistemica}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Enfermedad Preexistente:
-          <input
-            type="text"
-            name="enfermedadPreexistente"
-            value={formData.enfermedadPreexistente}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Médico Tratante:
-          <input
-            type="text"
-            name="medicoTratante"
-            value={formData.medicoTratante}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Teléfono del Médico Tratante:
-          <input
-            type="text"
-            name="telMedicoTratante"
-            value={formData.telMedicoTratante}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Medicamentos que Consume:
-          <input
-            type="text"
-            name="medicamentosConsume"
-            value={formData.medicamentosConsume}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Alergia a Medicamentos:
-          <input
-            type="text"
-            name="alergiaMedicamentos"
-            value={formData.alergiaMedicamentos}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Enfermedades Respiratorias:
-          <input
-            type="text"
-            name="enfermedadesRespiratorias"
-            value={formData.enfermedadesRespiratorias}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Enfermedades Hormonales:
-          <input
-            type="text"
-            name="enfermedadesHormonales"
-            value={formData.enfermedadesHormonales}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          ¿Está Gestando?:
-          <input
-            type="checkbox"
-            name="estaGestando"
-            checked={formData.estaGestando}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Mes de Gestación:
-          <input
-            type="text"
-            name="mesGestacion"
-            value={formData.mesGestacion}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          ¿Es Menor de Edad?:
-          <input
-            type="checkbox"
-            name="esMenorEdad"
-            checked={formData.esMenorEdad}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Nombre del Representante:
-          <input
-            type="text"
-            name="nombreRepresentante"
-            value={formData.nombreRepresentante}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Teléfono del Representante:
-          <input
-            type="text"
-            name="telRepresentante"
-            value={formData.telRepresentante}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Última Visita al Dentista:
-          <input
-            type="text"
-            name="ultimaVisitaDentista"
-            value={formData.ultimaVisitaDentista}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Infiltraciones Anestesia Previa:
-          <input
-            type="checkbox"
-            name="infiltracionesAnestesiaPrev"
-            checked={formData.infiltracionesAnestesiaPrev}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Reacciones Adversas a Infiltración:
-          <input
-            type="checkbox"
-            name="reaccionesAdversasInfiltracion"
-            checked={formData.reaccionesAdversasInfiltracion}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          ¿Qué Reacción?:
-          <input
-            type="text"
-            name="queReaccionInfiltracion"
-            value={formData.queReaccionInfiltracion}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Exodoncia/Cirugías Previas:
-          <input
-            type="checkbox"
-            name="exodonciaCirugiaPrevias"
-            checked={formData.exodonciaCirugiaPrevias}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Complicaciones Luego de Cirugías:
-          <input
-            type="checkbox"
-            name="complicacionesLuegoCirugias"
-            checked={formData.complicacionesLuegoCirugias}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          ¿Qué Complicaciones?:
-          <input
-            type="text"
-            name="queComplicacionesCirugias"
-            value={formData.queComplicacionesCirugias}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Presenta Dificultades:
-          <input
-            type="text"
-            name="presentaDificultades"
-            value={formData.presentaDificultades}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Otra Dificultad:
-          <input
-            type="text"
-            name="otraDificultad"
-            value={formData.otraDificultad}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Presenta:
-          <input
-            type="text"
-            name="presenta"
-            value={formData.presenta}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Estado de la Lengua:
-          <input
-            type="text"
-            name="estadoLengua"
-            value={formData.estadoLengua}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Estado de los Labios:
-          <input
-            type="text"
-            name="estadoLabios"
-            value={formData.estadoLabios}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Estado de los Carrillos:
-          <input
-            type="text"
-            name="estadoCarillos"
-            value={formData.estadoCarillos}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Estado del Piso de la Boca:
-          <input
-            type="text"
-            name="estadoPisoBoca"
-            value={formData.estadoPisoBoca}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Estado Gingivo Perio:
-          <input
-            type="text"
-            name="estadoGingivoPerio"
-            value={formData.estadoGingivoPerio}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Estado de Enfermedad Perio:
-          <input
-            type="text"
-            name="estadoEnfermedadPerio"
-            value={formData.estadoEnfermedadPerio}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Análisis Oclusal Der RM:
-          <input
-            type="text"
-            name="analisisOclusalDerRM"
-            value={formData.analisisOclusalDerRM}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Análisis Oclusal Der RC:
-          <input
-            type="text"
-            name="analisisOclusalDerRC"
-            value={formData.analisisOclusalDerRC}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Análisis Oclusal Izq RM:
-          <input
-            type="text"
-            name="analisisOclusalIzqRM"
-            value={formData.analisisOclusalIzqRM}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Análisis Oclusal Izq RC:
-          <input
-            type="text"
-            name="analisisOclusalIzqRC"
-            value={formData.analisisOclusalIzqRC}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Condición Esqueletal:
-          <input
-            type="text"
-            name="condicionEsqueletal"
-            value={formData.condicionEsqueletal}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Diagnóstico Oclusal:
-          <input
-            type="text"
-            name="diagnosticoOclusal"
-            value={formData.diagnosticoOclusal}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <button type="submit">Guardar Historia Clínica</button>
-      </form>
-    </div>
+          <h3>Crear Nueva Historia Clínica</h3>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Fecha:
+              <input
+                type="date"
+                name="date"
+                value={newMedicalRecord.date}
+                onChange={handleChange}
+                required
+              />
+            </label>
+            <label>
+              Descripción:
+              <textarea
+                name="description"
+                value={newMedicalRecord.description}
+                onChange={handleChange}
+                required
+              />
+            </label>
+            {/* Descripción no parece necesario */}
+            <div>
+              <h3>MOTIVO Y EXPECTATIVA</h3>
+              <label>
+                Motivo Consulta:
+                <textarea
+                  name="motivoConsulta"
+                  value={newMedicalRecord.motivoConsulta}
+                  onChange={handleChange}
+                  placeholder='Motivo de Consulta'
+                  required
+                  />
+              </label>
+              <label>
+                Expectativa Paciente:
+                <textarea
+                  name="expectativaPaciente"
+                  value={newMedicalRecord.expectativaPaciente}
+                  onChange={handleChange}
+                  placeholder='Expectativa del paciente'
+                  required
+                  />
+              </label>
+            </div>
+            {/*RIESGOS Y ENFERMEDADES SISTEMICAS*/}
+            <div>
+              <h3>RIESGOS Y ENFERMEDADES SISTÉMICAS</h3>
+              <div>
+              <label>
+                Enfermedad Sistémica:
+                <input
+                  type='text'
+                  name="enfermedadSistemica"
+                  value={newMedicalRecord.enfermedadSistemica}
+                  onChange={handleChange}
+                  placeholder='Enfermedad Sistémica'
+                  //required
+                  />
+              </label>
+              </div>
+
+              <div>
+              <label>
+                Enfermedad Preexistente:
+                <input
+                type='text'
+                  name="enfermedadPreexistente"
+                  value={newMedicalRecord.enfermedadPreexistente}
+                  onChange={handleChange}
+                  placeholder='Enfermedad Preexistente'
+                  //required
+                  />
+              </label>
+              </div>
+
+              <div>
+              <label>
+                Médico Tratante:
+                <input
+                type='text'
+                  name="medicoTratante"
+                  value={newMedicalRecord.medicoTratante}
+                  onChange={handleChange}
+                  placeholder='Médico Tratante'
+                  //required
+                  />
+              </label>
+              <label>
+                Teléfono Médico Tratante:
+                <input
+                type='text'
+                  name="telMedicoTratante"
+                  value={newMedicalRecord.telMedicoTratante}
+                  onChange={handleChange}
+                  placeholder='Teléfono Médico Tratante'
+                  //required
+                  />
+              </label>
+              </div>
+            
+              <div>
+              <label>
+                Medicamentos que Consume:
+                <textarea
+                  name="medicamentosConsume"
+                  value={newMedicalRecord.medicamentosConsume}
+                  onChange={handleChange}
+                  placeholder='Medicamentos que Consume'
+                  //required
+                  />
+              </label>
+              <label>
+                Alergia a Medicamentos:
+                <textarea
+                  name="alergiaMedicamentos"
+                  value={newMedicalRecord.alergiaMedicamentos}
+                  onChange={handleChange}
+                  placeholder='Alergia a Medicamentos'
+                  //required
+                  />
+              </label>
+              </div>
+
+              <div>
+              <label>
+                Hábitos Nocivos:
+                <div>
+                  <input
+                    type="checkbox"
+                    name="tabaco"
+                    checked={newMedicalRecord.habitosNocivos.includes('tabaco')}
+                    onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
+                  />
+                  <label for="tabaco">Tabaco</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="alcohol"
+                    checked={newMedicalRecord.habitosNocivos.includes('alcohol')}
+                    onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
+                  />
+                  <label for="alcohol">Alcohol</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="drogas"
+                    checked={newMedicalRecord.habitosNocivos.includes('drogas')}
+                    onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
+                  />
+                  <label for="drogas">Drogas</label>
+                </div>
+              </label>
+              </div>
+              <div>
+              <label>
+                Enfermedades Respiratorias:
+                <textarea
+                  name="enfermedadesRespiratorias"
+                  value={newMedicalRecord.enfermedadesRespiratorias}
+                  onChange={handleChange}
+                  placeholder='Enfermedades Respiratorias'
+                  //required
+                  />
+              </label>
+              </div>
+              <div>
+              <label>
+                Enfermedades Hormonales:
+                <textarea
+                  name="enfermedadesHormonales"
+                  value={newMedicalRecord.enfermedadesHormonales}
+                  onChange={handleChange}
+                  placeholder='Enfermedades Hormonales'
+                  //required
+                  />
+              </label>
+              </div>
+              <div>
+              <label>
+                ¿Está gestando?
+                <div>
+                  <input
+                    type="radio"
+                    name="estaGestando"
+                    value="true"
+                    checked={newMedicalRecord.estaGestando === true}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="estaGestando">Sí</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="estaGestando"
+                    value="false"
+                    checked={newMedicalRecord.estaGestando === false}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="estaGestando">No</label>
+                </div>
+              </label>
+
+              {newMedicalRecord.estaGestando && (
+                <label>
+                  Mes de Gestación:
+                  <input
+                    type="text"
+                    name="mesGestacion"
+                    value={newMedicalRecord.mesGestacion}
+                    onChange={handleChange}
+                    placeholder='Mes de Gestación'
+                    required
+                  />
+                </label>
+              )}
+              </div>
+              <div>
+              <label>
+                ¿Es menor de edad?
+                <div>
+                  <input
+                    type="radio"
+                    name="esMenorEdad"
+                    value="true"
+                    checked={newMedicalRecord.esMenorEdad === true}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="esMenorEdad">Sí</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="esMenorEdad"
+                    value="false"
+                    checked={newMedicalRecord.esMenorEdad === false}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="esMenorEdad">No</label>
+                </div>
+              </label>
+              
+              {newMedicalRecord.esMenorEdad && (
+                <label>
+                  Nombre del Representante:
+                  <input
+                    type="text"
+                    name="nombreRepresentante"
+                    value={newMedicalRecord.nombreRepresentante}
+                    onChange={handleChange}
+                    placeholder='Nombre del Representante'
+                    required
+                    />
+                </label>           
+              )}
+
+              {newMedicalRecord.esMenorEdad && (
+              <label>
+                Teléfono del Representante:
+                <input
+                  type="text"
+                  name="telRepresentante"
+                  value={newMedicalRecord.telRepresentante}
+                  onChange={handleChange}
+                  placeholder='Teléfono del Representante'
+                  required
+                  />
+              </label>
+              )}
+              </div>
+            </div>
+
+            {/*ESTOMATOLOGICO*/}
+            <div>
+              <h3>ESTOMATOLOGICO</h3>
+              <div>
+              <label>
+                Última Visita al Dentista:
+                <input
+                  type="text"
+                  name="ultimaVisitaDentista"
+                  value={newMedicalRecord.ultimaVisitaDentista}
+                  onChange={handleChange}
+                  placeholder='Última Visita al Dentista'
+                  //required
+                  />
+              </label>
+              </div>
+              <div>
+              <label>
+                Infiltraciones de anestesia previas?:
+                <div>
+                  <input
+                    type="radio"
+                    name="infiltracionesAnestesiaPrev"
+                    value="true"
+                    checked={newMedicalRecord.infiltracionesAnestesiaPrev === true}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="infiltracionesAnestesiaPrev">Sí</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="infiltracionesAnestesiaPrev"
+                    value="false"
+                    checked={newMedicalRecord.infiltracionesAnestesiaPrev === false}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="infiltracionesAnestesiaPrev">No</label>
+                </div>
+              </label>
+
+              <label>
+                Reacciones adversas a la infiltración de anestesia?:
+                <div>
+                  <input
+                    type="radio"
+                    name="reaccionesAdversasInfiltracion"
+                    value="true"
+                    checked={newMedicalRecord.reaccionesAdversasInfiltracion === true}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="reaccionesAdversasInfiltracion">Sí</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="reaccionesAdversasInfiltracion"
+                    value="false"
+                    checked={newMedicalRecord.reaccionesAdversasInfiltracion === false}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="reaccionesAdversasInfiltracion">No</label>
+                </div>
+              </label>
+
+              {newMedicalRecord.reaccionesAdversasInfiltracion && (
+                <label>
+                  Qué reacción a la infiltración?:
+                  <input
+                    type="text"
+                    name="queReaccionInfiltracion"
+                    value={newMedicalRecord.queReaccionInfiltracion}
+                    onChange={handleChange}
+                    placeholder='Qué Reacción a la Infiltración'
+                    required
+                    />
+                </label>
+              )}
+              </div>
+              <div>
+              <label>
+                Exodoncia o cirugías bucales o maxilares previas?:
+                <div>
+                  <input
+                    type="radio"
+                    name="exodonciaCirugiaPrevias"
+                    value="true"
+                    checked={newMedicalRecord.exodonciaCirugiaPrevias === true}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="exodonciaCirugiaPrevias">Sí</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="exodonciaCirugiaPrevias"
+                    value="false"
+                    checked={newMedicalRecord.exodonciaCirugiaPrevias === false}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="exodonciaCirugiaPrevias">No</label>
+                </div>
+              </label>
+
+              <label>
+                Ha tenido complicaciones luego de las cirugías?:
+                <div>
+                  <input
+                    type="radio"
+                    name="complicacionesLuegoCirugias"
+                    value="true"
+                    checked={newMedicalRecord.complicacionesLuegoCirugias === true}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="complicacionesLuegoCirugias">Sí</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="complicacionesLuegoCirugias"
+                    value="false"
+                    checked={newMedicalRecord.complicacionesLuegoCirugias === false}
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor="complicacionesLuegoCirugias">No</label>
+                </div>
+              </label>  
+
+              {newMedicalRecord.complicacionesLuegoCirugias && (
+                <label>
+                  Qué complicaciones luego de las cirugías?:
+                  <input
+                    type="text"
+                    name="queComplicacionesCirugias"
+                    value={newMedicalRecord.queComplicacionesCirugias}
+                    onChange={handleChange}
+                    placeholder='Qué Complicaciones Luego de Cirugías'
+                    required
+                    />
+                </label>
+              )}
+              </div>
+              <div>
+              <label>
+                Presenta dificultades para:
+                <div>
+                  <input
+                    type="checkbox"
+                    name="masticar"
+                    checked={newMedicalRecord.presentaDificultades.includes('masticar')}
+                    onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
+                  />
+                  <label for="masticar">Masticar</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="hablar"
+                    checked={newMedicalRecord.presentaDificultades.includes('hablar')}
+                    onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
+                  />
+                  <label for="hablar">Hablar</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="abrirBoca"
+                    checked={newMedicalRecord.presentaDificultades.includes('abrirBoca')}
+                    onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
+                  />
+                  <label for="abrirBoca">Abrir la boca</label>
+                </div>
+              </label>
+
+              <label>
+                Otra Dificultad:
+                <input
+                  type='text'
+                  name="otraDificultad"
+                  value={newMedicalRecord.otraDificultad}
+                  onChange={handleChange}
+                  placeholder='Otra Dificultad'
+                  //required
+                />
+              </label>
+              </div>
+              <div>
+              <label>
+                Presenta:
+                <div>
+                  <input
+                    type="checkbox"
+                    name="supuracion"
+                    checked={newMedicalRecord.presenta.includes('supuracion')}
+                    onChange={(e) => handleCheckboxChange(e, 'presenta')}
+                  />
+                  <label for="supuracion">Supuración</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="sangrado"
+                    checked={newMedicalRecord.presenta.includes('sangrado')}
+                    onChange={(e) => handleCheckboxChange(e, 'presenta')}
+                  />
+                  <label for="sangrado">Sangrado</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="movilidadDental"
+                    checked={newMedicalRecord.presenta.includes('movilidadDental')}
+                    onChange={(e) => handleCheckboxChange(e, 'presenta')}
+                  />
+                  <label for="movilidadDental">Movilidad Dental</label>
+                </div>
+              </label>
+              </div>
+            </div>
+
+            {/*ESTADO TEJIDOS BLANDOS*/}
+            <div>
+              <h3>ESTADO TEJIDOS BLANDOS</h3>
+              <div>
+              <label>
+                Estado de la Lengua:
+                <input
+                  type='text'
+                  name="estadoLengua"
+                  value={newMedicalRecord.estadoLengua}
+                  onChange={handleChange}
+                  placeholder='Estado de la Lengua'
+                  //required
+                  />
+              </label>
+              <label>
+                Estado de los Labios:
+                <input
+                  type='text'
+                  name="estadoLabios"
+                  value={newMedicalRecord.estadoLabios}
+                  onChange={handleChange}
+                  placeholder='Estado de los Labios'
+                  //required
+                  />
+              </label>
+              </div>
+              <div>
+              <label>
+                Estado de los Carrillos:
+                <input
+                  type='text'
+                  name="estadoCarillos"
+                  value={newMedicalRecord.estadoCarillos}
+                  onChange={handleChange}
+                  placeholder='Estado de los Carrillos'
+                  //required
+                  />
+              </label>
+              <label>
+                Estado del Piso de la Boca:
+                <input
+                  type='text'
+                  name="estadoPisoBoca"
+                  value={newMedicalRecord.estadoPisoBoca}
+                  onChange={handleChange}
+                  placeholder='Estado del Piso de la Boca'
+                  //required
+                  />
+              </label>
+              </div>
+              <div>
+              <label>
+                Estado Gingivo-Periodontal:
+                <input
+                  type='text'
+                  name="estadoGingivoPerio"
+                  value={newMedicalRecord.estadoGingivoPerio}
+                  onChange={handleChange}
+                  placeholder='Estado Gingivo-Periodontal'
+                  //required
+                  />
+              </label>
+              <label>
+                Estado de Enfermedad Periodontal:
+                <input
+                  type='text'
+                  name="estadoEnfermedadPerio"
+                  value={newMedicalRecord.estadoEnfermedadPerio}
+                  onChange={handleChange}
+                  placeholder='Estado de Enfermedad Periodontal'
+                  //required
+                  />
+              </label>
+              </div>
+            </div>
+
+            {/*ANALISIS OCLUSAL*/}
+            <div>
+              <h3>ANÁLISIS OCLUSAL</h3>
+              <div>
+                <h6>DERECHA</h6>
+                <label>
+                  Análisis Oclusal Derecho RM:
+                  <input
+                    type='text'
+                    name="analisisOclusalDerRM"
+                    value={newMedicalRecord.analisisOclusalDerRM}
+                    onChange={handleChange}
+                    placeholder='Análisis Oclusal Derecho RM'
+                    //required
+                    />
+                </label>
+                <label>
+                  Análisis Oclusal Derecho RC:
+                  <input
+                    type='text'
+                    name="analisisOclusalDerRC"
+                    value={newMedicalRecord.analisisOclusalDerRC}
+                    onChange={handleChange}
+                    placeholder='Análisis Oclusal Derecho RC'
+                    //required
+                    />
+                </label>
+
+              </div>
+
+              <div>
+                <h6>IZQUIERDA</h6>
+                <label>
+                  Análisis Oclusal Izquierdo RC:
+                  <input
+                    type='text'
+                    name="analisisOclusalIzqRC"
+                    value={newMedicalRecord.analisisOclusalIzqRC}
+                    onChange={handleChange}
+                    placeholder='Análisis Oclusal Izquierdo RC'
+                    //required
+                    />
+                </label>
+                <label>
+                  Análisis Oclusal Izquierdo RM:
+                  <input
+                    type='text'
+                    name="analisisOclusalIzqRM"
+                    value={newMedicalRecord.analisisOclusalIzqRM}
+                    onChange={handleChange}
+                    placeholder='Análisis Oclusal Izquierdo RM'
+                    //required
+                    />
+                </label>
+
+              </div>
+              <div>
+              <label>
+                Condición Esqueletal:
+                <textarea
+                  //type='textarea'
+                  name="condicionEsqueletal"
+                  value={newMedicalRecord.condicionEsqueletal}
+                  onChange={handleChange}
+                  placeholder='Condición Esquelética'
+                  //required
+                  />
+              </label>
+              </div>
+              <div>
+              <label>
+                Diagnóstico Oclusal:
+                <textarea
+                  //type='textarea'
+                  name="diagnosticoOclusal"
+                  value={newMedicalRecord.diagnosticoOclusal}
+                  onChange={handleChange}
+                  placeholder='Diagnóstico Oclusal'
+                  //required
+                  />
+              </label>
+              </div>
+            </div>
+
+            {/* Botón de envío */}
+            <div>
+              <button type="submit">Guardar Historia Clínica</button>
+            </div>
+          </form>
+        </div>
   );
 };
 
