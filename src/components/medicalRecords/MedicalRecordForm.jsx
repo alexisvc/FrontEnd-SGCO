@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecord }) => {
 
   const [formData, setFormData] = useState({
-    date: patientMedicalRecord.date,
+    date: patientMedicalRecord.date.split('T')[0],
     description: patientMedicalRecord.description,
     paciente: patientId,
     motivoConsulta: patientMedicalRecord.motivoConsulta,
