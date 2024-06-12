@@ -14,7 +14,6 @@ const MedicalRecordDetails = () => {
   useEffect(() => {
     console.log("Medical Records: ", medicalRecords);
     if (useMedicalRecords && medicalRecords.length > 0) {
-      // Encuentra el historial clínico del paciente actual
       const record = medicalRecords.find(
         (record) => record.paciente.id === patientId
       );

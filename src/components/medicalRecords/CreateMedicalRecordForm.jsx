@@ -52,7 +52,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: type === "checkbox" ? (checked ? true : false) : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -176,7 +176,296 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
           />
         </label>
         <br />
-        {/* Agrega los demás campos aquí */}
+        <label>
+          Enfermedades Respiratorias:
+          <input
+            type="text"
+            name="enfermedadesRespiratorias"
+            value={formData.enfermedadesRespiratorias}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Enfermedades Hormonales:
+          <input
+            type="text"
+            name="enfermedadesHormonales"
+            value={formData.enfermedadesHormonales}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          ¿Está Gestando?:
+          <input
+            type="checkbox"
+            name="estaGestando"
+            checked={formData.estaGestando}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Mes de Gestación:
+          <input
+            type="text"
+            name="mesGestacion"
+            value={formData.mesGestacion}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          ¿Es Menor de Edad?:
+          <input
+            type="checkbox"
+            name="esMenorEdad"
+            checked={formData.esMenorEdad}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Nombre del Representante:
+          <input
+            type="text"
+            name="nombreRepresentante"
+            value={formData.nombreRepresentante}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Teléfono del Representante:
+          <input
+            type="text"
+            name="telRepresentante"
+            value={formData.telRepresentante}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Última Visita al Dentista:
+          <input
+            type="text"
+            name="ultimaVisitaDentista"
+            value={formData.ultimaVisitaDentista}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Infiltraciones Anestesia Previa:
+          <input
+            type="checkbox"
+            name="infiltracionesAnestesiaPrev"
+            checked={formData.infiltracionesAnestesiaPrev}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Reacciones Adversas a Infiltración:
+          <input
+            type="checkbox"
+            name="reaccionesAdversasInfiltracion"
+            checked={formData.reaccionesAdversasInfiltracion}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          ¿Qué Reacción?:
+          <input
+            type="text"
+            name="queReaccionInfiltracion"
+            value={formData.queReaccionInfiltracion}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Exodoncia o Cirugías Previas:
+          <input
+            type="checkbox"
+            name="exodonciaCirugiaPrevias"
+            checked={formData.exodonciaCirugiaPrevias}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Complicaciones Luego de Cirugías:
+          <input
+            type="checkbox"
+            name="complicacionesLuegoCirugias"
+            checked={formData.complicacionesLuegoCirugias}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          ¿Qué Complicaciones?:
+          <input
+            type="text"
+            name="queComplicacionesCirugias"
+            value={formData.queComplicacionesCirugias}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Presenta Dificultades:
+          <input
+            type="text"
+            name="presentaDificultades"
+            value={formData.presentaDificultades}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Otra Dificultad:
+          <input
+            type="text"
+            name="otraDificultad"
+            value={formData.otraDificultad}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Presenta:
+          <input
+            type="text"
+            name="presenta"
+            value={formData.presenta}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Estado de la Lengua:
+          <input
+            type="text"
+            name="estadoLengua"
+            value={formData.estadoLengua}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Estado de los Labios:
+          <input
+            type="text"
+            name="estadoLabios"
+            value={formData.estadoLabios}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Estado de los Carrillos:
+          <input
+            type="text"
+            name="estadoCarillos"
+            value={formData.estadoCarillos}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Estado del Piso de la Boca:
+          <input
+            type="text"
+            name="estadoPisoBoca"
+            value={formData.estadoPisoBoca}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Estado Gingivo Perio:
+          <input
+            type="text"
+            name="estadoGingivoPerio"
+            value={formData.estadoGingivoPerio}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Estado de Enfermedad Perio:
+          <input
+            type="text"
+            name="estadoEnfermedadPerio"
+            value={formData.estadoEnfermedadPerio}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Análisis Oclusal Der RM:
+          <input
+            type="text"
+            name="analisisOclusalDerRM"
+            value={formData.analisisOclusalDerRM}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Análisis Oclusal Der RC:
+          <input
+            type="text"
+            name="analisisOclusalDerRC"
+            value={formData.analisisOclusalDerRC}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Análisis Oclusal Izq RM:
+          <input
+            type="text"
+            name="analisisOclusalIzqRM"
+            value={formData.analisisOclusalIzqRM}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Análisis Oclusal Izq RC:
+          <input
+            type="text"
+            name="analisisOclusalIzqRC"
+            value={formData.analisisOclusalIzqRC}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Condición Esqueletal:
+          <input
+            type="text"
+            name="condicionEsqueletal"
+            value={formData.condicionEsqueletal}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Diagnóstico Oclusal:
+          <input
+            type="text"
+            name="diagnosticoOclusal"
+            value={formData.diagnosticoOclusal}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
         <button type="submit">Crear Historia Clínica</button>
       </form>
     </div>
