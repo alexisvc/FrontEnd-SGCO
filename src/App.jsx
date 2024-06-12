@@ -22,10 +22,21 @@ import AboutUs from "./components/extras/AboutUs";
 import EditUser from "./components/user/EditUser";
 import Patients from "./components/patients/Patients";
 import PatientAndMedicalRecordDetails from "./components/PatientAndMedicalRecordDetails";
+import { usePatients } from "./hooks/usePatients";
 
 function App() {
   const { user, logout, login } = useUser();
   //const { medicalRecords, createMedicalRecord } = useMedicalRecords();
+  const {
+    patients,
+    patient,
+    loading,
+    error,
+    fetchPatientById,
+    fetchPatientByCedula,
+    createPatient,
+    updatePatient,
+  } = usePatients();
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
 
@@ -42,22 +53,39 @@ function App() {
               }
             />
 
-            <Route 
+            <Route
               path="/patients"
-              element={isLoggedIn ? <Patients user={user} /> : <Home />}
+              element={
+                isLoggedIn ? (
+                  <Patients
+                    user={user}
+                    patients={patients}
+                    patient={patient}
+                    loading={loading}
+                    error={error}
+                    fetchPatientById={fetchPatientById}
+                    fetchPatientByCedula={fetchPatientByCedula}
+                    createPatient={createPatient}
+                    updatePatient={updatePatient}
+                  />
+                ) : (
+                  <Home />
+                )
+              }
             />
 
-            
-
-<Route path="/prueba/:patientId" element={<PatientAndMedicalRecordDetails />} />
+            <Route
+              path="/prueba/:patientId"
+              element={<PatientAndMedicalRecordDetails updatePatient={updatePatient} />}
+            />
 
             <Route
               path="/register"
               element={isLoggedIn ? <Navigate to="/" /> : <RegistrationForm />}
             />
             <Route
-            path="/edit-user"
-            element={ isLoggedIn ? <EditUser user={user} /> : <Home /> }
+              path="/edit-user"
+              element={isLoggedIn ? <EditUser user={user} /> : <Home />}
             />
             <Route
               path="/acc-menu"
@@ -75,21 +103,25 @@ function App() {
               path="/pictogram-menu"
               element={isLoggedIn ? <PictogramMenu /> : <Home />}
             />
-            <Route
-              path="/about-us"
-              element={ <AboutUs />}
-            />
+            <Route path="/about-us" element={<AboutUs />} />
             <Route
               path="/main-menu"
               element={
                 isLoggedIn ? (
-                  <Welcome user={user} logout={logout} isGuestUser={isGuestUser} />
+                  <Welcome
+                    user={user}
+                    logout={logout}
+                    isGuestUser={isGuestUser}
+                  />
                 ) : (
                   <Home />
                 )
               }
             />
-            <Route path="/" element={<Home user={user} logout={logout} login={login} />} />
+            <Route
+              path="/"
+              element={<Home user={user} logout={logout} login={login} />}
+            />
           </Routes>
         </div>
       </Router>

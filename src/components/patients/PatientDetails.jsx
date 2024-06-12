@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FaArrowCircleLeft } from 'react-icons/fa';
 import { usePatients } from '../../hooks/usePatients';
 
-const PatientDetails = () => {
+const PatientDetails = ({updatePatient}) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { updatePatient } = usePatients();
+  //const { updatePatient } = usePatients();
   const { patient } = location.state;
 
   const [editablePatient, setEditablePatient] = useState({ ...patient });

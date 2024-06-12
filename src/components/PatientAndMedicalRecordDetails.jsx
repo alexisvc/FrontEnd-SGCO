@@ -7,7 +7,7 @@ import CreateMedicalRecordForm from "./medicalRecords/CreateMedicalRecordForm";
 import PatientDetails from "./patients/PatientDetails";
 // Importar el componente PatientDetails
 
-const PatientAndMedicalRecordDetails = () => {
+const PatientAndMedicalRecordDetails = ({updatePatient}) => {
   const { patientId } = useParams();
   const location = useLocation();
   const { patient } = location.state || {};
@@ -31,7 +31,7 @@ const PatientAndMedicalRecordDetails = () => {
         <span>Atrás</span>
       </button>
       {patient && (
-        <PatientDetails patient={patient} />
+        <PatientDetails patient={patient} updatePatient={updatePatient} />
       )}
       {patientMedicalRecord ? (
         <MedicalRecordForm

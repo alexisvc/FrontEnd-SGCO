@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowCircleLeft } from 'react-icons/fa';
 import PatientForm from './PatientForm';
 
-const Patients = ({ user }) => {
+const Patients = ({ user, patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient, updatePatient }) => {
   const navigate = useNavigate();
-  const { patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient } = usePatients();
+  //const { patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient, updatePatient } = usePatients();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
   const [searchId, setSearchId] = useState('');
