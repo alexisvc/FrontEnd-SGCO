@@ -1,81 +1,99 @@
-// useMedicalRecords.js
 import { useEffect, useState } from 'react';
-import medicalRecordsService from '../services/medicalRecordsService'; // Asegúrate de ajustar la ruta si es necesario
+import medicalRecordsService from '../services/medicalRecordsService';
 
-const useMedicalRecords = () => {
+export function useMedicalRecords() {
   const [medicalRecords, setMedicalRecords] = useState([]);
+  const [medicalRecord, setMedicalRecord] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Función para cargar todas las historias clínicas al inicio
-    const loadAllMedicalRecords = async () => {
-      try {
-        const records = await medicalRecordsService.getAllMedicalRecords();
-        setMedicalRecords(records);
-        console.log("Records");
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-
-    // Llamar a la función para cargar las historias clínicas al inicio
-    loadAllMedicalRecords();
+    setLoading(true);
+    medicalRecordsService.getAllMedicalRecords()
+      .then(data => {
+        setMedicalRecords(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
   }, []);
 
-  const fetchAllMedicalRecords = async () => {
-    try {
-      const records = await medicalRecordsService.getAllMedicalRecords();
-      setMedicalRecords(records);
-    } catch (error) {
-      console.error(error.message);
-    }
+  const fetchMedicalRecordById = (id) => {
+    setLoading(true);
+    medicalRecordsService.getMedicalRecordById(id)
+      .then(data => {
+        setMedicalRecord(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
-  const fetchMedicalRecordById = async (medicalRecordId) => {
-    try {
-      const record = await medicalRecordsService.getMedicalRecordById(medicalRecordId);
-      return record;
-    } catch (error) {
-      console.error(error.message);
-    }
+  const fetchMedicalRecordsByPatientId = (patientId) => {
+    setLoading(true);
+    medicalRecordsService.getMedicalRecordsByPatientId(patientId)
+      .then(data => {
+        setMedicalRecords(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
-  const fetchMedicalRecordsByPatientId = async (patientId) => {
-    try {
-      const records = await medicalRecordsService.getMedicalRecordsByPatientId(patientId);
-      setMedicalRecords(records);
-    } catch (error) {
-      console.error(error.message);
-    }
+  const createMedicalRecord = (newMedicalRecord) => {
+    setLoading(true);
+    medicalRecordsService.createMedicalRecord(newMedicalRecord)
+      .then(data => {
+        setMedicalRecords([...medicalRecords, data]);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
-  const createMedicalRecord = async (newMedicalRecord) => {
-    try {
-      const createdRecord = await medicalRecordsService.createMedicalRecord(newMedicalRecord);
-      setMedicalRecords(prevRecords => [...prevRecords, createdRecord]);
-    } catch (error) {
-      console.error(error.message);
-    }
+  const updateMedicalRecord = (id, updatedMedicalRecord) => {
+    setLoading(true);
+    medicalRecordsService.updateMedicalRecord(id, updatedMedicalRecord)
+      .then(data => {
+        setMedicalRecords(medicalRecords.map(record => record.id === id ? data : record));
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
-  const updateMedicalRecord = async (medicalRecordId, updatedMedicalRecord) => {
-    try {
-      await medicalRecordsService.updateMedicalRecord(medicalRecordId, updatedMedicalRecord);
-      // Aquí podrías actualizar los registros en el estado si es necesario
-    } catch (error) {
-      console.error(error.message);
-    }
+  const deleteMedicalRecord = (id) => {
+    setLoading(true);
+    medicalRecordsService.deleteMedicalRecord(id)
+      .then(() => {
+        setMedicalRecords(medicalRecords.filter(record => record.id !== id));
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
-  const deleteMedicalRecord = async (medicalRecordId) => {
-    try {
-      await medicalRecordsService.deleteMedicalRecord(medicalRecordId);
-      setMedicalRecords(prevRecords => prevRecords.filter(record => record.id !== medicalRecordId));
-    } catch (error) {
-      console.error(error.message);
-    }
+  return {
+    medicalRecords,
+    medicalRecord,
+    loading,
+    error,
+    fetchMedicalRecordById,
+    fetchMedicalRecordsByPatientId,
+    createMedicalRecord,
+    updateMedicalRecord,
+    deleteMedicalRecord,
   };
-
-  return { medicalRecords, fetchAllMedicalRecords, fetchMedicalRecordById, fetchMedicalRecordsByPatientId, createMedicalRecord, updateMedicalRecord, deleteMedicalRecord };
-};
-
-export default useMedicalRecords;
+}

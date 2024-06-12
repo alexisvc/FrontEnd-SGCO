@@ -22,11 +22,11 @@ import AboutUs from "./components/extras/AboutUs";
 import EditUser from "./components/user/EditUser";
 import Patients from "./components/patients/Patients";
 import MedicalRecordDetails from "./components/medicalRecords/MedicalRecordsDetails";
-import useMedicalRecords from "./hooks/useMedicalRecords";
+import { useMedicalRecords } from "./hooks/useMedicalRecords";
 
 function App() {
   const { user, logout, login } = useUser();
-  const { medicalRecords } = useMedicalRecords();
+  const { medicalRecords, createMedicalRecord } = useMedicalRecords();
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
 
@@ -50,7 +50,7 @@ function App() {
 
             <Route 
               path="/prueba/:patientId"
-              element={isLoggedIn ? <MedicalRecordDetails user={user} medicalRecords={medicalRecords} /> : <Home />}
+              element={isLoggedIn ? <MedicalRecordDetails /> : <Home />}
             />
 
             <Route

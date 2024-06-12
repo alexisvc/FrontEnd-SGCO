@@ -62,6 +62,7 @@ const Patients = ({ user }) => {
       telContactoEmergencia: '',
       afinidadContactoEmergencia: ''
     });
+    setShowCreateForm(false);
   };
 
   return (

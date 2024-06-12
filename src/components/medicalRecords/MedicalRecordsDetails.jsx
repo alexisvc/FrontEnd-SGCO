@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowCircleLeft } from "react-icons/fa";
+import CreateMedicalRecordForm from "./CreateMedicalRecordForm";
+import { useMedicalRecords } from "../../hooks/useMedicalRecords";
+import MedicalRecordForm from "./MedicalRecordForm";
 
-const MedicalRecordDetails = ({ user, medicalRecords }) => {
+const MedicalRecordDetails = () => {
   const { patientId } = useParams();
+  const {medicalRecords, createMedicalRecord, updateMedicalRecord } = useMedicalRecords();
   const [patientMedicalRecord, setPatientMedicalRecord] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verificar que medicalRecords tenga un valor antes de acceder a su longitud o buscar en él
-    //console.log(medicalRecords);
-    if (medicalRecords && medicalRecords.length > 0) {
+    console.log("Medical Records: ", medicalRecords);
+    if (useMedicalRecords && medicalRecords.length > 0) {
       // Encuentra el historial clínico del paciente actual
       const record = medicalRecords.find(
         (record) => record.paciente.id === patientId
@@ -30,13 +33,9 @@ const MedicalRecordDetails = ({ user, medicalRecords }) => {
         <span>Atrás</span>
       </button>
       {patientMedicalRecord ? (
-        <div>
-          <h2>Historia Clínica del Paciente</h2>
-          <p>Fecha: {patientMedicalRecord.date}</p>
-          <p>Descripción: {patientMedicalRecord.description}</p>
-        </div>
+        <MedicalRecordForm patientId={patientId} updateMedicalRecord={updateMedicalRecord} patientMedicalRecord={patientMedicalRecord} />
       ) : (
-        <h1>No se encontro Historia Clinica</h1>
+        <CreateMedicalRecordForm patientId={patientId} createMedicalRecord={createMedicalRecord}/>
       )}
     </div>
   );
