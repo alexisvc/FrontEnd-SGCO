@@ -42,6 +42,8 @@ function App() {
     patientTreatments,
     createPatientTreatment,
     updatePatientTreatment,
+    getAllPatientTreatments,
+    getPatientTreatmentsByPatientId
   } = usePatientTreatments();
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
@@ -88,6 +90,8 @@ function App() {
                   patientTreatments={patientTreatments}
                   createPatientTreatment={createPatientTreatment}
                   updatePatientTreatment={updatePatientTreatment}
+                  getAllPatientTreatments={getAllPatientTreatments}
+                  getPatientTreatmentsByPatientId={getPatientTreatmentsByPatientId}
                 />
               }
             />

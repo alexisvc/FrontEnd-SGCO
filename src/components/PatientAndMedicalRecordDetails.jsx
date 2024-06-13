@@ -5,7 +5,7 @@ import { useMedicalRecords } from "../hooks/useMedicalRecords";
 import MedicalRecordForm from "./medicalRecords/MedicalRecordForm";
 import CreateMedicalRecordForm from "./medicalRecords/CreateMedicalRecordForm";
 import PatientDetails from "./patients/PatientDetails";
-import PatientTreatments from "./patientTreatments/PatientTreatments";
+import TreamentPlansDetails from "./treatmentPlans/TreamentPlansDetails";
 // Importar el componente PatientDetails
 
 const PatientAndMedicalRecordDetails = ({
@@ -13,6 +13,8 @@ const PatientAndMedicalRecordDetails = ({
   patientTreatments,
   createPatientTreatment,
   updatePatientTreatment,
+  getAllPatientTreatments,
+  getPatientTreatmentsByPatientId
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -23,13 +25,15 @@ const PatientAndMedicalRecordDetails = ({
   const navigate = useNavigate();
 
   useEffect(() => {
+    getPatientTreatmentsByPatientId(patientId);
+
     if (medicalRecords && medicalRecords.length > 0) {
       const record = medicalRecords.find(
         (record) => record.paciente.id === patientId
       );
       setPatientMedicalRecord(record);
     }
-  }, [medicalRecords, patientId]);
+  }, [medicalRecords, patientId, patientTreatments]);
 
   return (
     <div>
@@ -54,12 +58,14 @@ const PatientAndMedicalRecordDetails = ({
           createMedicalRecord={createMedicalRecord}
         />
       )}
-      <PatientTreatments
+      <TreamentPlansDetails
             patientId={patientId}
             patientTreatments={patientTreatments}
             createPatientTreatment={createPatientTreatment}
             updatePatientTreatment={updatePatientTreatment}
+            getAllPatientTreatments={getAllPatientTreatments}
           />
+          
     </div>
   );
 };
