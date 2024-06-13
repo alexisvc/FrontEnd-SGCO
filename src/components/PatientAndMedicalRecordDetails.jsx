@@ -5,13 +5,20 @@ import { useMedicalRecords } from "../hooks/useMedicalRecords";
 import MedicalRecordForm from "./medicalRecords/MedicalRecordForm";
 import CreateMedicalRecordForm from "./medicalRecords/CreateMedicalRecordForm";
 import PatientDetails from "./patients/PatientDetails";
+import PatientTreatments from "./patientTreatments/PatientTreatments";
 // Importar el componente PatientDetails
 
-const PatientAndMedicalRecordDetails = ({updatePatient}) => {
+const PatientAndMedicalRecordDetails = ({
+  updatePatient,
+  patientTreatments,
+  createPatientTreatment,
+  updatePatientTreatment,
+}) => {
   const { patientId } = useParams();
   const location = useLocation();
   const { patient } = location.state || {};
-  const { medicalRecords, createMedicalRecord, updateMedicalRecord } = useMedicalRecords();
+  const { medicalRecords, createMedicalRecord, updateMedicalRecord } =
+    useMedicalRecords();
   const [patientMedicalRecord, setPatientMedicalRecord] = useState(null);
   const navigate = useNavigate();
 
@@ -34,17 +41,25 @@ const PatientAndMedicalRecordDetails = ({updatePatient}) => {
         <PatientDetails patient={patient} updatePatient={updatePatient} />
       )}
       {patientMedicalRecord ? (
-        <MedicalRecordForm
-          patientId={patientId} 
-          updateMedicalRecord={updateMedicalRecord} 
-          patientMedicalRecord={patientMedicalRecord} 
-        />
+        <>
+          <MedicalRecordForm
+            patientId={patientId}
+            updateMedicalRecord={updateMedicalRecord}
+            patientMedicalRecord={patientMedicalRecord}
+          />
+        </>
       ) : (
         <CreateMedicalRecordForm
-          patientId={patientId} 
-          createMedicalRecord={createMedicalRecord} 
+          patientId={patientId}
+          createMedicalRecord={createMedicalRecord}
         />
       )}
+      <PatientTreatments
+            patientId={patientId}
+            patientTreatments={patientTreatments}
+            createPatientTreatment={createPatientTreatment}
+            updatePatientTreatment={updatePatientTreatment}
+          />
     </div>
   );
 };

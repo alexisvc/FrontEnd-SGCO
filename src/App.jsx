@@ -23,6 +23,7 @@ import EditUser from "./components/user/EditUser";
 import Patients from "./components/patients/Patients";
 import PatientAndMedicalRecordDetails from "./components/PatientAndMedicalRecordDetails";
 import { usePatients } from "./hooks/usePatients";
+import usePatientTreatments from "./hooks/usePatientTreatments";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -37,6 +38,11 @@ function App() {
     createPatient,
     updatePatient,
   } = usePatients();
+  const {
+    patientTreatments,
+    createPatientTreatment,
+    updatePatientTreatment,
+  } = usePatientTreatments();
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
 
@@ -76,7 +82,14 @@ function App() {
 
             <Route
               path="/prueba/:patientId"
-              element={<PatientAndMedicalRecordDetails updatePatient={updatePatient} />}
+              element={
+                <PatientAndMedicalRecordDetails
+                  updatePatient={updatePatient}
+                  patientTreatments={patientTreatments}
+                  createPatientTreatment={createPatientTreatment}
+                  updatePatientTreatment={updatePatientTreatment}
+                />
+              }
             />
 
             <Route
