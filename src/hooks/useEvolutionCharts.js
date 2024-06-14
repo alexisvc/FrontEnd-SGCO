@@ -1,10 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import evolutionChartService from '../services/evolutionChartService';
 
 const useEvolutionCharts = () => {
   const [evolutionCharts, setEvolutionCharts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    evolutionChartService.getAllEvolutionCharts()
+    .then(data => {
+      setEvolutionCharts(data);
+    })
+    .catch(err =>{
+      setError(err);
+    
+    })
+  }, []);
 
   const fetchEvolutionCharts = async () => {
     setLoading(true);

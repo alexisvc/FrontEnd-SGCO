@@ -24,6 +24,7 @@ import Patients from "./components/patients/Patients";
 import PatientAndMedicalRecordDetails from "./components/PatientAndMedicalRecordDetails";
 import { usePatients } from "./hooks/usePatients";
 import usePatientTreatments from "./hooks/usePatientTreatments";
+import useEvolutionCharts from "./hooks/useEvolutionCharts";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -45,8 +46,16 @@ function App() {
     getAllPatientTreatments,
     getPatientTreatmentsByPatientId
   } = usePatientTreatments();
+  const {
+    evolutionCharts,
+    createEvolutionChart,
+    updateEvolutionChart,
+    fetchEvolutionCharts,
+    fetchEvolutionChartsByPatientId,
+  } = useEvolutionCharts();
+
   const isLoggedIn = !!user;
-  const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";
+  const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";//
 
   return (
     <div className="app">
@@ -92,6 +101,13 @@ function App() {
                   updatePatientTreatment={updatePatientTreatment}
                   getAllPatientTreatments={getAllPatientTreatments}
                   getPatientTreatmentsByPatientId={getPatientTreatmentsByPatientId}
+
+                  evolutionCharts={evolutionCharts}
+                  createEvolutionChart={createEvolutionChart}
+                  updateEvolutionChart={updateEvolutionChart}
+                  fetchEvolutionCharts={fetchEvolutionCharts}
+                  fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
+                
                 />
               }
             />

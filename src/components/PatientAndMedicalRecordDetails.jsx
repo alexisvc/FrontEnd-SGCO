@@ -6,6 +6,7 @@ import MedicalRecordForm from "./medicalRecords/MedicalRecordForm";
 import CreateMedicalRecordForm from "./medicalRecords/CreateMedicalRecordForm";
 import PatientDetails from "./patients/PatientDetails";
 import TreamentPlansDetails from "./treatmentPlans/TreamentPlansDetails";
+import EvolutionChartsDetails from "./evolutionCharts/EvolutionChartsDetails";
 // Importar el componente PatientDetails
 
 const PatientAndMedicalRecordDetails = ({
@@ -14,7 +15,12 @@ const PatientAndMedicalRecordDetails = ({
   createPatientTreatment,
   updatePatientTreatment,
   getAllPatientTreatments,
-  getPatientTreatmentsByPatientId
+  getPatientTreatmentsByPatientId,
+  evolutionCharts,
+  createEvolutionChart,
+  updateEvolutionChart,
+  fetchEvolutionCharts,
+  fetchEvolutionChartsByPatientId,
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -26,7 +32,7 @@ const PatientAndMedicalRecordDetails = ({
 
   useEffect(() => {
     getPatientTreatmentsByPatientId(patientId);
-
+    fetchEvolutionChartsByPatientId(patientId);
     if (medicalRecords && medicalRecords.length > 0) {
       const record = medicalRecords.find(
         (record) => record.paciente.id === patientId
@@ -65,6 +71,13 @@ const PatientAndMedicalRecordDetails = ({
             updatePatientTreatment={updatePatientTreatment}
             getAllPatientTreatments={getAllPatientTreatments}
           />
+      <EvolutionChartsDetails
+        patientId={patientId}
+        evolutionCharts={evolutionCharts}
+        createEvolutionChart={createEvolutionChart}
+        updateEvolutionChart={updateEvolutionChart}
+        fetchEvolutionCharts={fetchEvolutionCharts}
+        />
           
     </div>
   );
