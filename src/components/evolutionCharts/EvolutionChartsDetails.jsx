@@ -1,6 +1,8 @@
 import React from "react";
 import EditEvolutionChartForm from "./EditEvolutionChartForm";
 import CreateEvolutionChartForm from "./CreateEvolutionChartForm";
+import { Typography, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 
 const EvolutionChartsDetails = ({
@@ -28,45 +30,48 @@ const EvolutionChartsDetails = ({
   };
 
   return (
-    <>
-      <h3>Cuadro de Evolución</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Actividad Clínica</th>
-            <th>Recomendación</th>
-            <th>Firma Odontólogo</th>
-            <th>Firma Paciente</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Mostrar cada tratamiento existente como una fila editable */}
-          {evolutionCharts.map((chart) => (
-            <EditEvolutionChartForm
-              key={chart.id}
-              evolutionChartId={chart.id}
-              evolutionChartData={{
-                fechaCuadEvol: chart.fechaCuadEvol.split("T")[0],
-                actividadCuadEvol: chart.actividadCuadEvol,
-                recomendacionCuadEvol: chart.recomendacionCuadEvol,
-                firmaOdon: chart.firmaOdon,
-                firmaPaciente: chart.firmaPaciente,
-              }}
-              updateEvolutionChart={handleUpdateEvolutionCharts}
+    <Container>
+      <Typography variant="h4" gutterBottom sx = {{ marginBottom: 3, marginTop: 5}} align="center">
+        Cuadro de Evolución
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align='center'><Typography variant='h7'>Fecha</Typography></TableCell>
+              <TableCell align='center'><Typography variant='h7'>Actividad Clínica</Typography></TableCell>
+              <TableCell align='center'><Typography variant='h7'>Recomendación</Typography></TableCell>
+              <TableCell align='center'><Typography variant='h7'>Firma Odontólogo</Typography></TableCell>
+              <TableCell align='center'><Typography variant='h7'>Firma Paciente</Typography></TableCell>
+              <TableCell align='center'><Typography variant='h7'>Acciones</Typography></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* Mostrar cada cuadro de evolución existente como una fila editable */}
+            {evolutionCharts.map((chart) => (
+              <EditEvolutionChartForm
+                key={chart.id}
+                evolutionChartId={chart.id}
+                evolutionChartData={{
+                  fechaCuadEvol: chart.fechaCuadEvol.split("T")[0],
+                  actividadCuadEvol: chart.actividadCuadEvol,
+                  recomendacionCuadEvol: chart.recomendacionCuadEvol,
+                  firmaOdon: chart.firmaOdon,
+                  firmaPaciente: chart.firmaPaciente,
+                }}
+                updateEvolutionChart={handleUpdateEvolutionCharts}
+              />
+            ))}
+
+            {/* Fila para crear un nuevo cuadro de evolución */}
+            <CreateEvolutionChartForm
+              patientId={patientId}
+              createEvolutionChart={handleCreateEvolutionCharts}
             />
-          ))}
-
-          {/* Fila para crear un nuevo tratamiento */}
-          <CreateEvolutionChartForm
-            patientId={patientId}
-            createEvolutionChart={handleCreateEvolutionCharts}
-          />
-
-
-        </tbody>
-      </table>
-    </>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 

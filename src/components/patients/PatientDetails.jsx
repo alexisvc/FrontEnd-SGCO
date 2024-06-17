@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaArrowCircleLeft } from 'react-icons/fa';
 import { usePatients } from '../../hooks/usePatients';
+import { Grid, TextField, Button, Box, Typography, Container } from '@mui/material';
 
 const PatientDetails = ({updatePatient}) => {
   const location = useLocation();
@@ -26,89 +27,135 @@ const PatientDetails = ({updatePatient}) => {
   };
 
   return (
-    <div>
-      <h3>Detalles del Paciente</h3>
+    
+    <Container>
+      <Typography variant="h4" align="center" gutterBottom>
+        Detalles del Paciente
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="nombrePaciente"
-          value={editablePatient.nombrePaciente}
-          onChange={handleChange}
-          placeholder="Nombre"
-        />
-        <input
-          type="number"
-          name="edadPaciente"
-          value={editablePatient.edadPaciente}
-          onChange={handleChange}
-          placeholder="Edad"
-        />
-        <input
-          type="date"
-          name="fechaNacimiento"
-          value={editablePatient.fechaNacimiento.split('T')[0]}
-          onChange={handleChange}
-          placeholder="Fecha de Nacimiento"
-        />
-        <input
-          type="email"
-          name="correoPaciente"
-          value={editablePatient.correoPaciente}
-          onChange={handleChange}
-          placeholder="Correo"
-        />
-        <input
-          type="text"
-          name="direccionPaciente"
-          value={editablePatient.direccionPaciente}
-          onChange={handleChange}
-          placeholder="Dirección"
-        />
-        <input
-          type="text"
-          name="generoPaciente"
-          value={editablePatient.generoPaciente}
-          onChange={handleChange}
-          placeholder="Género"
-        />
-        <input
-          type="text"
-          name="numeroCedula"
-          value={editablePatient.numeroCedula}
-          onChange={handleChange}
-          placeholder="Número de Cédula"
-        />
-        <input
-          type="text"
-          name="ocupacion"
-          value={editablePatient.ocupacion}
-          onChange={handleChange}
-          placeholder="Ocupación"
-        />
-        <input
-          type="text"
-          name="telefono"
-          value={editablePatient.telefono}
-          onChange={handleChange}
-          placeholder="Teléfono"
-        />
-        <input
-          type="text"
-          name="telContactoEmergencia"
-          value={editablePatient.telContactoEmergencia}
-          onChange={handleChange}
-          placeholder="Teléfono de Contacto de Emergencia"
-        />
-        <input
-          type="text"
-          name="afinidadContactoEmergencia"
-          value={editablePatient.afinidadContactoEmergencia}
-          onChange={handleChange}
-          placeholder="Afinidad de Contacto de Emergencia"
-        />
-        <button type="submit">Actualizar</button>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Nombre del Paciente"
+              name="nombrePaciente"
+              value={editablePatient.nombrePaciente}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="number"
+              label="Edad del Paciente"
+              name="edadPaciente"
+              value={editablePatient.edadPaciente}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="date"
+              label="Fecha de Nacimiento"
+              name="fechaNacimiento"
+              value={editablePatient.fechaNacimiento.split('T')[0]}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="email"
+              label="Correo electrónico"
+              name="correoPaciente"
+              value={editablePatient.correoPaciente}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Dirección"
+              name="direccionPaciente"
+              value={editablePatient.direccionPaciente}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Género"
+              name="generoPaciente"
+              value={editablePatient.generoPaciente}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Número de Cédula"
+              name="numeroCedula"
+              value={editablePatient.numeroCedula}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Ocupación"
+              name="ocupacion"
+              value={editablePatient.ocupacion}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Teléfono"
+              name="telefono"
+              value={editablePatient.telefono}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Teléfono de Contacto de Emergencia"
+              name="telContactoEmergencia"
+              value={editablePatient.telContactoEmergencia}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Afinidad de Contacto de Emergencia"
+              name="afinidadContactoEmergencia"
+              value={editablePatient.afinidadContactoEmergencia}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} style={{ textAlign: 'center' }}>
+            <Button type="submit" variant="contained" color="primary">
+              Actualizar Paciente
+            </Button>
+          </Grid>
+        </Grid>
       </form>
-    </div>
+    </Container>
   );
 };
 

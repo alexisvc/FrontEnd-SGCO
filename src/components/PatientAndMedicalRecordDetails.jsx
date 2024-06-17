@@ -7,6 +7,8 @@ import CreateMedicalRecordForm from "./medicalRecords/CreateMedicalRecordForm";
 import PatientDetails from "./patients/PatientDetails";
 import TreamentPlansDetails from "./treatmentPlans/TreamentPlansDetails";
 import EvolutionChartsDetails from "./evolutionCharts/EvolutionChartsDetails";
+import { Button } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // Importar el componente PatientDetails
 
 const PatientAndMedicalRecordDetails = ({
@@ -43,10 +45,16 @@ const PatientAndMedicalRecordDetails = ({
 
   return (
     <div>
-      <button onClick={() => navigate("/patients")}>
-        <FaArrowCircleLeft />
-        <span>Atrás</span>
-      </button>
+      
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/patients")}
+          sx={{ mb: 2 }}
+        >
+          Atrás
+        </Button>
+      
       {patient && (
         <PatientDetails patient={patient} updatePatient={updatePatient} />
       )}

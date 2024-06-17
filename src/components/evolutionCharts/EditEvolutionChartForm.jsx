@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Typography, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import SaveIcon from '@mui/icons-material/Save';
 
 const EditEvolutionChartForm = ({
   evolutionChartId,
@@ -27,56 +30,59 @@ const EditEvolutionChartForm = ({
   };
 
   return (
-    <tr>
-      <td>
-        <input
-          type="date"
+    <TableRow >
+      <TableCell>
+        <TextField
           name="fechaCuadEvol"
           value={formData.fechaCuadEvol}
           onChange={handleInputChange}
-          placeholder="Fecha"
+          variant="outlined"
+          size="small"
+          type="date"
         />
-      </td>
-      <td>
-        <input
-          type="text"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="actividadCuadEvol"
           value={formData.actividadCuadEvol}
           onChange={handleInputChange}
-          placeholder="Actividad Clínica"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="text"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="recomendacionCuadEvol"
           value={formData.recomendacionCuadEvol}
           onChange={handleInputChange}
-          placeholder="Recomendación"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="text"          
+      </TableCell>
+      <TableCell>
+        <TextField
           name="firmaOdon"
           value={formData.firmaOdon}
           onChange={handleInputChange}
-          placeholder="Firma Odontólogo"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="text"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="firmaPaciente"
           value={formData.firmaPaciente}
           onChange={handleInputChange}
-          placeholder="Firma Paciente"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <button onClick={handleSubmit}>Guardar</button>
-      </td>
-    </tr>
+      </TableCell>
+      <TableCell align='center'>
+        <IconButton onClick={handleSubmit}>
+          <SaveIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
   );
 };
 

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { TableRow, TableCell, TextField, IconButton } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
 
 const EditTreatmentForm = ({
   treatmentId,
@@ -26,48 +28,51 @@ const EditTreatmentForm = ({
   };
 
   return (
-    <tr>
-      <td>
-        <input
-          type="text"
+    <TableRow>
+      <TableCell>
+        <TextField
           name="cita"
           value={formData.cita}
           onChange={handleInputChange}
-          placeholder="Cita"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="text"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="actividadPlanTrat"
           value={formData.actividadPlanTrat}
           onChange={handleInputChange}
-          placeholder="Actividad Plan Tratamiento"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="date"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="fechaPlanTrat"
           value={formData.fechaPlanTrat}
           onChange={handleInputChange}
-          placeholder="Fecha Plan Tratamiento"
+          variant="outlined"
+          size="small"
+          type="date"
         />
-      </td>
-      <td>
-        <input
-          type="number"
-          step="0.01"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="montoAbono"
           value={formData.montoAbono}
           onChange={handleInputChange}
-          placeholder="Monto Abono"
+          variant="outlined"
+          size="small"
+          type="number"
         />
-      </td>
-      <td>
-        <button onClick={handleSubmit}>Guardar</button>
-      </td>
-    </tr>
+      </TableCell>
+      <TableCell align='center'>
+        <IconButton onClick={handleSubmit}>
+          <SaveIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
   );
 };
 

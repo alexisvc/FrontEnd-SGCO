@@ -1,5 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  Button,
+  Grid,
+  Box
+} from "@mui/material";
 
 const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
   const [newMedicalRecord, setNewMedicalRecord] = useState({
@@ -83,668 +98,619 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
   };
 
   return (
-    <div>
-          <h3>Crear Nueva Historia Clínica</h3>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Fecha:
-              <input
-                type="date"
-                name="date"
-                value={newMedicalRecord.date}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              Descripción:
-              <textarea
-                name="description"
-                value={newMedicalRecord.description}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            {/* Descripción no parece necesario */}
-            <div>
-              <h3>MOTIVO Y EXPECTATIVA</h3>
-              <label>
-                Motivo Consulta:
-                <textarea
+    <Container>
+      <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
+        Historia Clínica
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={4}>
+          <Grid item xs={5}>
+            <TextField
+              fullWidth
+              type="date"
+              label="Fecha"
+              name="date"
+              value={newMedicalRecord.date}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              required
+              sx = {{ margin: 1 }}
+            />
+          </Grid>
+          <Grid item xs={7}>
+            <TextField
+              fullWidth
+              label="Descripción"
+              name="description"
+              value={newMedicalRecord.description}
+              onChange={handleChange}
+              multiline
+              required
+              sx = {{ margin: 1 }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>
+              Motivo y Expectativa
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Motivo Consulta"
                   name="motivoConsulta"
                   value={newMedicalRecord.motivoConsulta}
                   onChange={handleChange}
-                  placeholder='Motivo de Consulta'
+                  multiline
                   required
-                  />
-              </label>
-              <label>
-                Expectativa Paciente:
-                <textarea
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Expectativa Paciente"
                   name="expectativaPaciente"
                   value={newMedicalRecord.expectativaPaciente}
                   onChange={handleChange}
-                  placeholder='Expectativa del paciente'
+                  multiline
                   required
-                  />
-              </label>
-            </div>
-            {/*RIESGOS Y ENFERMEDADES SISTEMICAS*/}
-            <div>
-              <h3>RIESGOS Y ENFERMEDADES SISTÉMICAS</h3>
-              <div>
-              <label>
-                Enfermedad Sistémica:
-                <input
-                  type='text'
-                  name="enfermedadSistemica"
-                  value={newMedicalRecord.enfermedadSistemica}
-                  onChange={handleChange}
-                  placeholder='Enfermedad Sistémica'
-                  //required
-                  />
-              </label>
-              </div>
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>
+              Riesgos y Enfermedades Sistémicas
+            </Typography>
 
-              <div>
-              <label>
-                Enfermedad Preexistente:
-                <input
-                type='text'
-                  name="enfermedadPreexistente"
-                  value={newMedicalRecord.enfermedadPreexistente}
-                  onChange={handleChange}
-                  placeholder='Enfermedad Preexistente'
-                  //required
-                  />
-              </label>
-              </div>
+            <TextField
+              fullWidth
+              label="Enfermedad Sistémica"
+              name="enfermedadSistemica"
+              value={newMedicalRecord.enfermedadSistemica}
+              onChange={handleChange}
+              sx={{ margin: 1 }}
+            />
+            <TextField
+              fullWidth
+              label="Enfermedad Preexistente"
+              name="enfermedadPreexistente"
+              value={newMedicalRecord.enfermedadPreexistente}
+              onChange={handleChange}
+              sx={{ margin: 1 }}
+            />
 
-              <div>
-              <label>
-                Médico Tratante:
-                <input
-                type='text'
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Médico Tratante"
                   name="medicoTratante"
                   value={newMedicalRecord.medicoTratante}
                   onChange={handleChange}
-                  placeholder='Médico Tratante'
-                  //required
-                  />
-              </label>
-              <label>
-                Teléfono Médico Tratante:
-                <input
-                type='text'
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Teléfono Médico Tratante"
                   name="telMedicoTratante"
                   value={newMedicalRecord.telMedicoTratante}
                   onChange={handleChange}
-                  placeholder='Teléfono Médico Tratante'
-                  //required
-                  />
-              </label>
-              </div>
-            
-              <div>
-              <label>
-                Medicamentos que Consume:
-                <textarea
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12} container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Medicamentos que Consume"
                   name="medicamentosConsume"
                   value={newMedicalRecord.medicamentosConsume}
                   onChange={handleChange}
-                  placeholder='Medicamentos que Consume'
-                  //required
-                  />
-              </label>
-              <label>
-                Alergia a Medicamentos:
-                <textarea
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Alergia a Medicamentos"
                   name="alergiaMedicamentos"
                   value={newMedicalRecord.alergiaMedicamentos}
                   onChange={handleChange}
-                  placeholder='Alergia a Medicamentos'
-                  //required
-                  />
-              </label>
-              </div>
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12} container spacing={2}>
 
-              <div>
-              <label>
-                Hábitos Nocivos:
-                <div>
-                  <input
-                    type="checkbox"
-                    name="tabaco"
-                    checked={newMedicalRecord.habitosNocivos.includes('tabaco')}
-                    onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
-                  />
-                  <label for="tabaco">Tabaco</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="alcohol"
-                    checked={newMedicalRecord.habitosNocivos.includes('alcohol')}
-                    onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
-                  />
-                  <label for="alcohol">Alcohol</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="drogas"
-                    checked={newMedicalRecord.habitosNocivos.includes('drogas')}
-                    onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
-                  />
-                  <label for="drogas">Drogas</label>
-                </div>
-              </label>
-              </div>
-              <div>
-              <label>
-                Enfermedades Respiratorias:
-                <textarea
-                  name="enfermedadesRespiratorias"
-                  value={newMedicalRecord.enfermedadesRespiratorias}
-                  onChange={handleChange}
-                  placeholder='Enfermedades Respiratorias'
-                  //required
-                  />
-              </label>
-              </div>
-              <div>
-              <label>
-                Enfermedades Hormonales:
-                <textarea
-                  name="enfermedadesHormonales"
-                  value={newMedicalRecord.enfermedadesHormonales}
-                  onChange={handleChange}
-                  placeholder='Enfermedades Hormonales'
-                  //required
-                  />
-              </label>
-              </div>
-              <div>
-              <label>
-                ¿Está gestando?
-                <div>
-                  <input
-                    type="radio"
-                    name="estaGestando"
-                    value="true"
-                    checked={newMedicalRecord.estaGestando === true}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="estaGestando">Sí</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="estaGestando"
-                    value="false"
-                    checked={newMedicalRecord.estaGestando === false}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="estaGestando">No</label>
-                </div>
-              </label>
+              <FormLabel component="legend" sx={{ margin: 3 }}> Hábitos Nocivos:</FormLabel>
 
-              {newMedicalRecord.estaGestando && (
-                <label>
-                  Mes de Gestación:
-                  <input
-                    type="text"
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="tabaco"
+                      checked={newMedicalRecord.habitosNocivos.includes('tabaco')}
+                      onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
+                    />
+                  }
+                  label="Tabaco"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="alcohol"
+                      checked={newMedicalRecord.habitosNocivos.includes('alcohol')}
+                      onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
+                    />
+                  }
+                  label="Alcohol"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="drogas"
+                      checked={newMedicalRecord.habitosNocivos.includes('drogas')}
+                      onChange={(e) => handleCheckboxChange(e, 'habitosNocivos')}
+                    />
+                  }
+                  label="Drogas"
+                />
+              </FormGroup>
+            </Grid>
+            <TextField
+              fullWidth
+              label="Enfermedades Respiratorias"
+              name="enfermedadesRespiratorias"
+              value={newMedicalRecord.enfermedadesRespiratorias}
+              onChange={handleChange}
+              multiline
+              sx={{ margin: 1 }}
+            />
+            <TextField
+              fullWidth
+              label="Enfermedades Hormonales"
+              name="enfermedadesHormonales"
+              value={newMedicalRecord.enfermedadesHormonales}
+              onChange={handleChange}
+              multiline
+              sx={{ margin: 1 }}
+            />
+            <Grid item xs={12} container spacing={2} sx={{ margin: 1 }}>
+              <FormControl component="fieldset" sx={{ marginTop: 1 , marginRight: 5, marginLeft: 1}}>
+                <FormLabel component="legend">¿Está gestando?</FormLabel>
+                <RadioGroup
+                  name="estaGestando"
+                  value={String(newMedicalRecord.estaGestando)}
+                  onChange={handleRadioChange}
+                  row
+                >
+                  <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="false" control={<Radio />} label="No" />
+                </RadioGroup>
+              </FormControl>
+              <Grid item xs={4} sx={{ marginLeft: 1 }}>
+
+                {newMedicalRecord.estaGestando && (
+                  <TextField
+                    fullWidth
+                    label="Mes de Gestación"
                     name="mesGestacion"
                     value={newMedicalRecord.mesGestacion}
                     onChange={handleChange}
-                    placeholder='Mes de Gestación'
-                    required
                   />
-                </label>
-              )}
-              </div>
-              <div>
-              <label>
-                ¿Es menor de edad?
-                <div>
-                  <input
-                    type="radio"
-                    name="esMenorEdad"
-                    value="true"
-                    checked={newMedicalRecord.esMenorEdad === true}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="esMenorEdad">Sí</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="esMenorEdad"
-                    value="false"
-                    checked={newMedicalRecord.esMenorEdad === false}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="esMenorEdad">No</label>
-                </div>
-              </label>
-              
-              {newMedicalRecord.esMenorEdad && (
-                <label>
-                  Nombre del Representante:
-                  <input
-                    type="text"
-                    name="nombreRepresentante"
-                    value={newMedicalRecord.nombreRepresentante}
-                    onChange={handleChange}
-                    placeholder='Nombre del Representante'
-                    required
+                )}
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12} container spacing={2} sx={{ margin: 1 }}>
+              <FormControl component="fieldset" sx={{ margin: 1 }}>
+                <FormLabel component="legend">¿Es menor de edad?</FormLabel>
+                <RadioGroup
+                  name="esMenorEdad"
+                  value={String(newMedicalRecord.esMenorEdad)}
+                  onChange={handleRadioChange}
+                  row
+                >
+                  <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="false" control={<Radio />} label="No" />
+                </RadioGroup>
+              </FormControl>
+            
+              <Grid item xs={6} sx={{ marginLeft: 1 }}>
+                {newMedicalRecord.esMenorEdad && (
+                  <>
+                    <TextField
+                      fullWidth
+                      label="Nombre del Representante"
+                      name="nombreRepresentante"
+                      value={newMedicalRecord.nombreRepresentante}
+                      onChange={handleChange}
+                      sx={{ margin: 1 }}
+                    />  
+                  </>
+                )}
+                </Grid>
+                <Grid item xs={4}>
+                {newMedicalRecord.esMenorEdad && (
+                  <>
+                    <TextField
+                      fullWidth
+                      label="Teléfono del Representante"
+                      name="telRepresentante"
+                      value={newMedicalRecord.telRepresentante}
+                      onChange={handleChange}
+                      sx={{ margin: 1 }}
                     />
-                </label>           
-              )}
+                  </>
+                )}
+                </Grid>
+            </Grid>
+          </Grid>
 
-              {newMedicalRecord.esMenorEdad && (
-              <label>
-                Teléfono del Representante:
-                <input
-                  type="text"
-                  name="telRepresentante"
-                  value={newMedicalRecord.telRepresentante}
-                  onChange={handleChange}
-                  placeholder='Teléfono del Representante'
-                  required
-                  />
-              </label>
-              )}
-              </div>
-            </div>
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>
+              Estomatológico
+            </Typography>
 
-            {/*ESTOMATOLOGICO*/}
-            <div>
-              <h3>ESTOMATOLOGICO</h3>
-              <div>
-              <label>
-                Última Visita al Dentista:
-                <input
-                  type="text"
-                  name="ultimaVisitaDentista"
-                  value={newMedicalRecord.ultimaVisitaDentista}
-                  onChange={handleChange}
-                  placeholder='Última Visita al Dentista'
-                  //required
-                  />
-              </label>
-              </div>
-              <div>
-              <label>
-                Infiltraciones de anestesia previas?:
-                <div>
-                  <input
-                    type="radio"
-                    name="infiltracionesAnestesiaPrev"
-                    value="true"
-                    checked={newMedicalRecord.infiltracionesAnestesiaPrev === true}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="infiltracionesAnestesiaPrev">Sí</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="infiltracionesAnestesiaPrev"
-                    value="false"
-                    checked={newMedicalRecord.infiltracionesAnestesiaPrev === false}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="infiltracionesAnestesiaPrev">No</label>
-                </div>
-              </label>
+            <TextField
+              fullWidth
+              label="Última Visita al Dentista"
+              name="ultimaVisitaDentista"
+              value={newMedicalRecord.ultimaVisitaDentista}
+              onChange={handleChange}
+              multiline
+              sx={{ margin: 1 }}
+            />
+            <Grid container spacing={2} sx = {{ margin: 1}}>
+              <FormControl component="fieldset" sx={{ margin: 1 }}>
+                <FormLabel component="legend">Infiltraciones de anestesia previas?:</FormLabel>
+                <RadioGroup
+                  name="infiltracionesAnestesiaPrev"
+                  value={String(newMedicalRecord.infiltracionesAnestesiaPrev)}
+                  onChange={handleRadioChange}
+                  row
+                >
+                  <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="false" control={<Radio />} label="No" />
+                </RadioGroup>
+              </FormControl>
 
-              <label>
-                Reacciones adversas a la infiltración de anestesia?:
-                <div>
-                  <input
-                    type="radio"
-                    name="reaccionesAdversasInfiltracion"
-                    value="true"
-                    checked={newMedicalRecord.reaccionesAdversasInfiltracion === true}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="reaccionesAdversasInfiltracion">Sí</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="reaccionesAdversasInfiltracion"
-                    value="false"
-                    checked={newMedicalRecord.reaccionesAdversasInfiltracion === false}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="reaccionesAdversasInfiltracion">No</label>
-                </div>
-              </label>
+              
+              <FormControl component="fieldset" sx={{ margin: 1 }}>
+                <FormLabel component="legend">Reacciones adversas a la infiltración de anestesia?:</FormLabel>
+                <RadioGroup
+                  name="reaccionesAdversasInfiltracion"
+                  value={String(newMedicalRecord.reaccionesAdversasInfiltracion)}
+                  onChange={handleRadioChange}
+                  row
+                >
+                  <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="false" control={<Radio />} label="No" />
+                </RadioGroup>
+              </FormControl>
 
-              {newMedicalRecord.reaccionesAdversasInfiltracion && (
-                <label>
-                  Qué reacción a la infiltración?:
-                  <input
-                    type="text"
+              <Grid item xs={5}>
+                {newMedicalRecord.reaccionesAdversasInfiltracion && (
+                  <TextField
+                    fullWidth
+                    label="¿Qué reacción a la infiltración?:"
                     name="queReaccionInfiltracion"
                     value={newMedicalRecord.queReaccionInfiltracion}
                     onChange={handleChange}
-                    placeholder='Qué Reacción a la Infiltración'
-                    required
-                    />
-                </label>
-              )}
-              </div>
-              <div>
-              <label>
-                Exodoncia o cirugías bucales o maxilares previas?:
-                <div>
-                  <input
-                    type="radio"
-                    name="exodonciaCirugiaPrevias"
-                    value="true"
-                    checked={newMedicalRecord.exodonciaCirugiaPrevias === true}
-                    onChange={handleRadioChange}
+                    
                   />
-                  <label htmlFor="exodonciaCirugiaPrevias">Sí</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="exodonciaCirugiaPrevias"
-                    value="false"
-                    checked={newMedicalRecord.exodonciaCirugiaPrevias === false}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="exodonciaCirugiaPrevias">No</label>
-                </div>
-              </label>
+                )}
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx = {{ margin: 1}}>
+              <Grid item xs={3} sx ={{ marginLeft: -1, marginRight: 1 }}>
 
-              <label>
-                Ha tenido complicaciones luego de las cirugías?:
-                <div>
-                  <input
-                    type="radio"
-                    name="complicacionesLuegoCirugias"
-                    value="true"
-                    checked={newMedicalRecord.complicacionesLuegoCirugias === true}
+                <FormControl component="fieldset" > 
+                  <FormLabel component="legend">Exodoncia o cirugías bucales o maxilares previas?:</FormLabel>
+                  <RadioGroup
+                    name="exodonciaCirugiaPrevias"
+                    value={String(newMedicalRecord.exodonciaCirugiaPrevias)}
                     onChange={handleRadioChange}
-                  />
-                  <label htmlFor="complicacionesLuegoCirugias">Sí</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="complicacionesLuegoCirugias"
-                    value="false"
-                    checked={newMedicalRecord.complicacionesLuegoCirugias === false}
-                    onChange={handleRadioChange}
-                  />
-                  <label htmlFor="complicacionesLuegoCirugias">No</label>
-                </div>
-              </label>  
+                    row
+                  >
+                    <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                    <FormControlLabel value="false" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
 
-              {newMedicalRecord.complicacionesLuegoCirugias && (
-                <label>
-                  Qué complicaciones luego de las cirugías?:
-                  <input
-                    type="text"
+              <Grid item xs={3} sx = {{ marginLeft: -3, marginRight: 3}}>
+                <FormControl component="fieldset"> 
+                  <FormLabel component="legend">Ha tenido complicaciones luego de las cirugías?:</FormLabel>
+                  <RadioGroup
+                    name="complicacionesLuegoCirugias"
+                    value={String(newMedicalRecord.complicacionesLuegoCirugias)}
+                    onChange={handleRadioChange}
+                    row
+                  >
+                    <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                    <FormControlLabel value="false" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={5} sx = {{ marginLeft: 10, marginTop: 2 }}>
+                {newMedicalRecord.complicacionesLuegoCirugias && (
+                  <TextField
+                    fullWidth
+                    label="¿Qué complicaciones luego de las cirugías?:"
                     name="queComplicacionesCirugias"
                     value={newMedicalRecord.queComplicacionesCirugias}
                     onChange={handleChange}
-                    placeholder='Qué Complicaciones Luego de Cirugías'
-                    required
+                    
+                  />
+                )}
+              </Grid>
+          </Grid>
+
+          
+          <Grid container spacing={2} sx = {{ margin: 1 }}>  
+            <FormControl component="fieldset" sx={{ margin: 1 }}>
+              <FormLabel component="legend">¿Presenta dificultades para?:</FormLabel>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="masticar"
+                      checked={newMedicalRecord.presentaDificultades.includes('masticar')}
+                      onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
                     />
-                </label>
-              )}
-              </div>
-              <div>
-              <label>
-                Presenta dificultades para:
-                <div>
-                  <input
-                    type="checkbox"
-                    name="masticar"
-                    checked={newMedicalRecord.presentaDificultades.includes('masticar')}
-                    onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
-                  />
-                  <label for="masticar">Masticar</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="hablar"
-                    checked={newMedicalRecord.presentaDificultades.includes('hablar')}
-                    onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
-                  />
-                  <label for="hablar">Hablar</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="abrirBoca"
-                    checked={newMedicalRecord.presentaDificultades.includes('abrirBoca')}
-                    onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
-                  />
-                  <label for="abrirBoca">Abrir la boca</label>
-                </div>
-              </label>
-
-              <label>
-                Otra Dificultad:
-                <input
-                  type='text'
-                  name="otraDificultad"
-                  value={newMedicalRecord.otraDificultad}
-                  onChange={handleChange}
-                  placeholder='Otra Dificultad'
-                  //required
+                  }
+                  label="Masticar"
                 />
-              </label>
-              </div>
-              <div>
-              <label>
-                Presenta:
-                <div>
-                  <input
-                    type="checkbox"
-                    name="supuracion"
-                    checked={newMedicalRecord.presenta.includes('supuracion')}
-                    onChange={(e) => handleCheckboxChange(e, 'presenta')}
-                  />
-                  <label for="supuracion">Supuración</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="sangrado"
-                    checked={newMedicalRecord.presenta.includes('sangrado')}
-                    onChange={(e) => handleCheckboxChange(e, 'presenta')}
-                  />
-                  <label for="sangrado">Sangrado</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="movilidadDental"
-                    checked={newMedicalRecord.presenta.includes('movilidadDental')}
-                    onChange={(e) => handleCheckboxChange(e, 'presenta')}
-                  />
-                  <label for="movilidadDental">Movilidad Dental</label>
-                </div>
-              </label>
-              </div>
-            </div>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="hablar"
+                      checked={newMedicalRecord.presentaDificultades.includes('hablar')}
+                      onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
+                    />
+                  }
+                  label="Hablar"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="abrirBoca"
+                      checked={newMedicalRecord.presentaDificultades.includes('abrirBoca')}
+                      onChange={(e) => handleCheckboxChange(e, 'presentaDificultades')}
+                    />
+                  }
+                  label="Abrir la boca"
+                />
+              </FormGroup>
+            </FormControl>
+            <Grid item xs={3} sx = {{ marginLeft: 2}}>
+              <TextField
+                fullWidth
+                label="Otra Dificultad"
+                name="otraDificultad"
+                value={newMedicalRecord.otraDificultad}
+                onChange={handleChange}
+                multiline
+                sx={{ margin: 1 }}
+              />
+              </Grid>
+          </Grid>
 
-            {/*ESTADO TEJIDOS BLANDOS*/}
-            <div>
-              <h3>ESTADO TEJIDOS BLANDOS</h3>
-              <div>
-              <label>
-                Estado de la Lengua:
-                <input
-                  type='text'
+            <FormControl component="fieldset" sx={{ marginLeft: 2 }}>
+              <FormLabel component="legend">¿Presenta?:</FormLabel>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="supuracion"
+                      checked={newMedicalRecord.presenta.includes('supuracion')}
+                      onChange={(e) => handleCheckboxChange(e, 'presenta')}
+                    />
+                  }
+                  label="Supuración"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="sangrado"
+                      checked={newMedicalRecord.presenta.includes('sangrado')}
+                      onChange={(e) => handleCheckboxChange(e, 'presenta')}
+                    />
+                  }
+                  label="Sangrado"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="movilidadDental"
+                      checked={newMedicalRecord.presenta.includes('movilidadDental')}
+                      onChange={(e) => handleCheckboxChange(e, 'presenta')}
+                    />
+                  }
+                  label="Movilidad Dental"
+                />
+              </FormGroup>
+            </FormControl>
+
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>
+              Estado de Tejidos Blandos
+            </Typography>
+
+            <Grid container spacing={2}>
+
+              <Grid item xs={5} sx = {{ marginRight: 12}}>
+                <TextField
+                  fullWidth
+                  label="Estado de la Lengua:"
                   name="estadoLengua"
                   value={newMedicalRecord.estadoLengua}
                   onChange={handleChange}
-                  placeholder='Estado de la Lengua'
-                  //required
-                  />
-              </label>
-              <label>
-                Estado de los Labios:
-                <input
-                  type='text'
+                  multiline
+                  sx = {{margin: 1}}
+                />
+              </Grid>
+
+              <Grid item xs={5} sx = {{ marginLeft: 12}}>
+                <TextField
+                  fullWidth
+                  label="Estado de los Labios:"
                   name="estadoLabios"
                   value={newMedicalRecord.estadoLabios}
                   onChange={handleChange}
-                  placeholder='Estado de los Labios'
-                  //required
-                  />
-              </label>
-              </div>
-              <div>
-              <label>
-                Estado de los Carrillos:
-                <input
-                  type='text'
+                  multiline
+                  sx = {{margin: 1}}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2}>
+              <Grid item xs={5} sx = {{ marginRight: 12}}>
+                <TextField
+                  fullWidth
+                  label="Estado de los Carrillos:"
                   name="estadoCarillos"
                   value={newMedicalRecord.estadoCarillos}
                   onChange={handleChange}
-                  placeholder='Estado de los Carrillos'
-                  //required
-                  />
-              </label>
-              <label>
-                Estado del Piso de la Boca:
-                <input
-                  type='text'
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={5} sx = {{ marginLeft: 12}}>
+                <TextField
+                  fullWidth
+                  label="Estado del Piso de la Boca:"
                   name="estadoPisoBoca"
                   value={newMedicalRecord.estadoPisoBoca}
                   onChange={handleChange}
-                  placeholder='Estado del Piso de la Boca'
-                  //required
-                  />
-              </label>
-              </div>
-              <div>
-              <label>
-                Estado Gingivo-Periodontal:
-                <input
-                  type='text'
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+                </Grid>
+            </Grid>
+
+            <Grid container spacing={2}>
+              <Grid item xs={5} sx = {{ marginRight: 12}}>
+                <TextField
+                  fullWidth
+                  label="Estado Gingivo-Periodontal:"
                   name="estadoGingivoPerio"
                   value={newMedicalRecord.estadoGingivoPerio}
                   onChange={handleChange}
-                  placeholder='Estado Gingivo-Periodontal'
-                  //required
-                  />
-              </label>
-              <label>
-                Estado de Enfermedad Periodontal:
-                <input
-                  type='text'
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+                </Grid>
+                <Grid item xs={5} sx = {{ marginLeft: 12}}>
+                <TextField
+                  fullWidth
+                  label="Estado de Enfermedad Periodontal:"
                   name="estadoEnfermedadPerio"
                   value={newMedicalRecord.estadoEnfermedadPerio}
                   onChange={handleChange}
-                  placeholder='Estado de Enfermedad Periodontal'
-                  //required
-                  />
-              </label>
-              </div>
-            </div>
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+                </Grid>
+            </Grid> 
+          </Grid>
 
-            {/*ANALISIS OCLUSAL*/}
-            <div>
-              <h3>ANÁLISIS OCLUSAL</h3>
-              <div>
-                <h6>DERECHA</h6>
-                <label>
-                  Análisis Oclusal Derecho RM:
-                  <input
-                    type='text'
-                    name="analisisOclusalDerRM"
-                    value={newMedicalRecord.analisisOclusalDerRM}
-                    onChange={handleChange}
-                    placeholder='Análisis Oclusal Derecho RM'
-                    //required
-                    />
-                </label>
-                <label>
-                  Análisis Oclusal Derecho RC:
-                  <input
-                    type='text'
-                    name="analisisOclusalDerRC"
-                    value={newMedicalRecord.analisisOclusalDerRC}
-                    onChange={handleChange}
-                    placeholder='Análisis Oclusal Derecho RC'
-                    //required
-                    />
-                </label>
+          <Grid item xs={12}>
+            <Typography variant="h6" gutterBottom>
+              Análisis Oclusal
+            </Typography>
 
-              </div>
-
-              <div>
-                <h6>IZQUIERDA</h6>
-                <label>
-                  Análisis Oclusal Izquierdo RC:
-                  <input
-                    type='text'
-                    name="analisisOclusalIzqRC"
-                    value={newMedicalRecord.analisisOclusalIzqRC}
-                    onChange={handleChange}
-                    placeholder='Análisis Oclusal Izquierdo RC'
-                    //required
-                    />
-                </label>
-                <label>
-                  Análisis Oclusal Izquierdo RM:
-                  <input
-                    type='text'
-                    name="analisisOclusalIzqRM"
-                    value={newMedicalRecord.analisisOclusalIzqRM}
-                    onChange={handleChange}
-                    placeholder='Análisis Oclusal Izquierdo RM'
-                    //required
-                    />
-                </label>
-
-              </div>
-              <div>
-              <label>
-                Condición Esqueletal:
-                <textarea
-                  //type='textarea'
-                  name="condicionEsqueletal"
-                  value={newMedicalRecord.condicionEsqueletal}
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <TextField
+                  fullWidth
+                  label="Análisis Oclusal Derecho RM"
+                  name="analisisOclusalDerRM"
+                  value={newMedicalRecord.analisisOclusalDerRM}
                   onChange={handleChange}
-                  placeholder='Condición Esquelética'
-                  //required
-                  />
-              </label>
-              </div>
-              <div>
-              <label>
-                Diagnóstico Oclusal:
-                <textarea
-                  //type='textarea'
-                  name="diagnosticoOclusal"
-                  value={newMedicalRecord.diagnosticoOclusal}
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  fullWidth
+                  label="Análisis Oclusal Derecho RC"
+                  name="analisisOclusalDerRC"
+                  value={newMedicalRecord.analisisOclusalDerRC}
                   onChange={handleChange}
-                  placeholder='Diagnóstico Oclusal'
-                  //required
-                  />
-              </label>
-              </div>
-            </div>
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  fullWidth
+                  label="Análisis Oclusal Izquierdo RC"
+                  name="analisisOclusalIzqRC"
+                  value={newMedicalRecord.analisisOclusalIzqRC}
+                  onChange={handleChange}
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  fullWidth
+                  label="Análisis Oclusal Izquierdo RM"
+                  name="analisisOclusalIzqRM"
+                  value={newMedicalRecord.analisisOclusalIzqRM}
+                  onChange={handleChange}
+                  multiline
+                  sx={{ margin: 1 }}
+                />
+              </Grid>
+              
+            </Grid>
 
-            {/* Botón de envío */}
-            <div>
-              <button type="submit">Crear Historia Clínica</button>
-            </div>
-          </form>
-        </div>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Condición Esqueletal:"
+                name="condicionEsqueletal"
+                value={newMedicalRecord.condicionEsqueletal}
+                onChange={handleChange}
+                multiline
+                sx={{ margin: 1 }}
+              />
+              <TextField
+                fullWidth
+                label="Diagnóstico Oclusal:"
+                name="diagnosticoOclusal"
+                value={newMedicalRecord.diagnosticoOclusal}
+                onChange={handleChange}
+                multiline
+                sx={{ margin: 1 }}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12} container justifyContent="center">
+            <Button type="submit" variant="contained" color="primary">
+              Crear Historia Clínica
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </Container>
   );
 };
 
