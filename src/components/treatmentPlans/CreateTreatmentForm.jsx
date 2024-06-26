@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { IconButton, TableRow, TableCell, TextField } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const CreateTreatmentForm = ({
   patientId,
@@ -36,48 +38,51 @@ const CreateTreatmentForm = ({
   };
 
   return (
-    <tr>
-      <td>
-        <input
-          type="text"
+    <TableRow>
+      <TableCell>
+        <TextField
           name="cita"
           value={formData.cita}
           onChange={handleInputChange}
-          placeholder="Cita"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="text"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="actividadPlanTrat"
           value={formData.actividadPlanTrat}
           onChange={handleInputChange}
-          placeholder="Actividad Plan Tratamiento"
+          variant="outlined"
+          size="small"
         />
-      </td>
-      <td>
-        <input
-          type="date"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="fechaPlanTrat"
           value={formData.fechaPlanTrat}
           onChange={handleInputChange}
-          placeholder="Fecha Plan Tratamiento"
+          variant="outlined"
+          size="small"
+          type="date"
         />
-      </td>
-      <td>
-        <input
-          type="number"
-          step="0.01"
+      </TableCell>
+      <TableCell>
+        <TextField
           name="montoAbono"
           value={formData.montoAbono}
           onChange={handleInputChange}
-          placeholder="Monto Abono"
+          variant="outlined"
+          size="small"
+          type="number"
         />
-      </td>
-      <td>
-        <button onClick={handleSubmit}>Crear</button>
-      </td>
-    </tr>
+      </TableCell>
+      <TableCell align='center'>
+        <IconButton onClick={handleSubmit}>
+          <AddCircleIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
   );
 };
 

@@ -1,90 +1,138 @@
 import React from 'react';
+import { Grid, TextField, Button, Box, Typography, Container } from '@mui/material';
+
 
 const PatientForm = ({ newPatient, handleCreateChange, handleCreateSubmit }) => {
   return (
-    <div>
-      <h3>Crear Paciente</h3>
+   <Container>
+      <Typography variant="h6" align="center" sx = {{ marginBottom: 4 }} gutterBottom>
+        Crear Paciente
+      </Typography>
       <form onSubmit={handleCreateSubmit}>
-        <input
-          type="text"
-          name="nombrePaciente"
-          value={newPatient.nombrePaciente}
-          onChange={handleCreateChange}
-          placeholder="Nombre"
-        />
-        <input
-          type="number"
-          name="edadPaciente"
-          value={newPatient.edadPaciente}
-          onChange={handleCreateChange}
-          placeholder="Edad"
-        />
-        <input
-          type="date"
-          name="fechaNacimiento"
-          value={newPatient.fechaNacimiento}
-          onChange={handleCreateChange}
-          placeholder="Fecha de Nacimiento"
-        />
-        <input
-          type="email"
-          name="correoPaciente"
-          value={newPatient.correoPaciente}
-          onChange={handleCreateChange}
-          placeholder="Correo"
-        />
-        <input
-          type="text"
-          name="direccionPaciente"
-          value={newPatient.direccionPaciente}
-          onChange={handleCreateChange}
-          placeholder="Dirección"
-        />
-        <input
-          type="text"
-          name="generoPaciente"
-          value={newPatient.generoPaciente}
-          onChange={handleCreateChange}
-          placeholder="Género"
-        />
-        <input
-          type="text"
-          name="numeroCedula"
-          value={newPatient.numeroCedula}
-          onChange={handleCreateChange}
-          placeholder="Número de Cédula"
-        />
-        <input
-          type="text"
-          name="ocupacion"
-          value={newPatient.ocupacion}
-          onChange={handleCreateChange}
-          placeholder="Ocupación"
-        />
-        <input
-          type="text"
-          name="telefono"
-          value={newPatient.telefono}
-          onChange={handleCreateChange}
-          placeholder="Teléfono"
-        />
-        <input
-          type="text"
-          name="telContactoEmergencia"
-          value={newPatient.telContactoEmergencia}
-          onChange={handleCreateChange}
-          placeholder="Teléfono de Contacto de Emergencia"
-        />
-        <input
-          type="text"
-          name="afinidadContactoEmergencia"
-          value={newPatient.afinidadContactoEmergencia}
-          onChange={handleCreateChange}
-          placeholder="Afinidad de Contacto de Emergencia"
-        />
-        <button type="submit">Crear</button>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Nombre del Paciente"
+              name="nombrePaciente"
+              value={newPatient.nombrePaciente}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="number"
+              label="Edad del Paciente"
+              name="edadPaciente"
+              value={newPatient.edadPaciente}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="date"
+              label="Fecha de Nacimiento"
+              name="fechaNacimiento"
+              value={newPatient.fechaNacimiento}
+              onChange={handleCreateChange}
+              InputLabelProps={{ shrink: true }}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="email"
+              label="Correo electrónico"
+              name="correoPaciente"
+              value={newPatient.correoPaciente}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Dirección"
+              name="direccionPaciente"
+              value={newPatient.direccionPaciente}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Género"
+              name="generoPaciente"
+              value={newPatient.generoPaciente}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Número de Cédula"
+              name="numeroCedula"
+              value={newPatient.numeroCedula}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Ocupación"
+              name="ocupacion"
+              value={newPatient.ocupacion}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Teléfono"
+              name="telefono"
+              value={newPatient.telefono}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Teléfono de Contacto de Emergencia"
+              name="telContactoEmergencia"
+              value={newPatient.telContactoEmergencia}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Afinidad de Contacto de Emergencia"
+              name="afinidadContactoEmergencia"
+              value={newPatient.afinidadContactoEmergencia}
+              onChange={handleCreateChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} style={{ textAlign: 'center' }}>
+            <Button type="submit" variant="contained" color="primary">
+              Crear Paciente
+            </Button>
+          </Grid>
+        </Grid>
       </form>
-    </div>
+    </Container>
+    
   );
 };
 
