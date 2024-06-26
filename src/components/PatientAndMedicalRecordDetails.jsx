@@ -7,8 +7,9 @@ import CreateMedicalRecordForm from "./medicalRecords/CreateMedicalRecordForm";
 import PatientDetails from "./patients/PatientDetails";
 import TreamentPlansDetails from "./treatmentPlans/TreamentPlansDetails";
 import EvolutionChartsDetails from "./evolutionCharts/EvolutionChartsDetails";
-import { Button } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EndodonticTreamentsDetails from "./endodonticTreatments/EndodonticTreatmentsDetails";
 // Importar el componente PatientDetails
 
 const PatientAndMedicalRecordDetails = ({
@@ -23,6 +24,8 @@ const PatientAndMedicalRecordDetails = ({
   updateEvolutionChart,
   fetchEvolutionCharts,
   fetchEvolutionChartsByPatientId,
+  endodonticTreatments,
+  fetchEndodonticTreatmentsByPatientId,
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -33,28 +36,37 @@ const PatientAndMedicalRecordDetails = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPatientTreatmentsByPatientId(patientId);
-    fetchEvolutionChartsByPatientId(patientId);
     if (medicalRecords && medicalRecords.length > 0) {
-      const record = medicalRecords.find(
-        (record) => record.paciente.id === patientId
-      );
-      setPatientMedicalRecord(record);
+      const record = medicalRecords.find(record => record.paciente && record.paciente.id === patientId);
+      if (record) {
+        setPatientMedicalRecord(record);
+      } else {
+        setPatientMedicalRecord(null); // Otra acción en caso de que no se encuentre el registro médico
+      }
     }
-  }, [medicalRecords, patientId, patientTreatments]);
+  }, [medicalRecords, patientId]);
+  
+  useEffect(() => {
+    getPatientTreatmentsByPatientId(patientId);
+  }, [patientId, patientTreatments]); // Dependencia específica para actualizar datos según patientId
+  useEffect(() => {
+    fetchEvolutionChartsByPatientId(patientId);
+  }, [patientId, evolutionCharts]); // Dependencia específica para actualizar datos según patientId
+  useEffect(() => {
+    fetchEndodonticTreatmentsByPatientId(patientId);
+  }, [patientId, endodonticTreatments]); // Dependencia específica para actualizar datos según patientId
 
   return (
     <div>
-      
-        <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/patients")}
-          sx={{ mb: 2 }}
-        >
-          Atrás
-        </Button>
-      
+      <Button
+        variant="outlined"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate("/patients")}
+        sx={{ mb: 2 }}
+      >
+        Atrás
+      </Button>
+
       {patient && (
         <PatientDetails patient={patient} updatePatient={updatePatient} />
       )}
@@ -73,20 +85,24 @@ const PatientAndMedicalRecordDetails = ({
         />
       )}
       <TreamentPlansDetails
-            patientId={patientId}
-            patientTreatments={patientTreatments}
-            createPatientTreatment={createPatientTreatment}
-            updatePatientTreatment={updatePatientTreatment}
-            getAllPatientTreatments={getAllPatientTreatments}
-          />
+        patientId={patientId}
+        patientTreatments={patientTreatments}
+        createPatientTreatment={createPatientTreatment}
+        updatePatientTreatment={updatePatientTreatment}
+        getAllPatientTreatments={getAllPatientTreatments}
+      />
       <EvolutionChartsDetails
         patientId={patientId}
         evolutionCharts={evolutionCharts}
         createEvolutionChart={createEvolutionChart}
         updateEvolutionChart={updateEvolutionChart}
         fetchEvolutionCharts={fetchEvolutionCharts}
-        />
-          
+      />
+
+      <EndodonticTreamentsDetails
+        patientId={patientId}
+        endodonticTreatments={endodonticTreatments}
+      />
     </div>
   );
 };

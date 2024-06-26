@@ -25,6 +25,7 @@ import PatientAndMedicalRecordDetails from "./components/PatientAndMedicalRecord
 import { usePatients } from "./hooks/usePatients";
 import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
+import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -53,6 +54,16 @@ function App() {
     fetchEvolutionCharts,
     fetchEvolutionChartsByPatientId,
   } = useEvolutionCharts();
+
+  const {
+    endodonticTreatments,
+    endodonticTreatment,
+    fetchEndodonticTreatmentById,
+    fetchEndodonticTreatmentsByPatientId,
+    createEndodonticTreatment,
+    updateEndodonticTreatment,
+    deleteEndodonticTreatment,
+  } = useEndodonticTreatments();
 
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";//
@@ -107,6 +118,9 @@ function App() {
                   updateEvolutionChart={updateEvolutionChart}
                   fetchEvolutionCharts={fetchEvolutionCharts}
                   fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
+
+                  endodonticTreatments={endodonticTreatments}
+                  fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
                 
                 />
               }

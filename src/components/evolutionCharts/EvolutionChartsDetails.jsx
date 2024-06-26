@@ -21,7 +21,7 @@ const EvolutionChartsDetails = ({
       paciente: patientId,
     };
     await createEvolutionChart(newEvolutionChartData);
-    await fetchEvolutionCharts();
+    //await fetchEvolutionCharts();
   };
 
   // Función para manejar la actualización de un tratamiento existente

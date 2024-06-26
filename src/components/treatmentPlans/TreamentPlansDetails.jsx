@@ -19,7 +19,7 @@ const TreamentPlansDetails = ({
       paciente: patientId,
     };
     await createPatientTreatment(newTreatmentData);
-    await getAllPatientTreatments();
+    
   };
 
   // Función para manejar la actualización de un tratamiento existente
