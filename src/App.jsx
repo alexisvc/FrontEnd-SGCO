@@ -120,6 +120,8 @@ function App() {
                   fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
 
                   endodonticTreatments={endodonticTreatments}
+                  createEndodonticTreatment={createEndodonticTreatment}
+                  updateEndodonticTreatment={updateEndodonticTreatment}
                   fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
                 
                 />

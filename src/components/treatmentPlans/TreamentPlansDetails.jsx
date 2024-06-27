@@ -28,7 +28,7 @@ const TreamentPlansDetails = ({
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h4" gutterBottom sx = {{ marginBottom: 3, marginTop: 5}} align="center">
         Tratamientos
       </Typography>

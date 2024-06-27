@@ -25,6 +25,8 @@ const PatientAndMedicalRecordDetails = ({
   fetchEvolutionCharts,
   fetchEvolutionChartsByPatientId,
   endodonticTreatments,
+  createEndodonticTreatment,
+  updateEndodonticTreatment,
   fetchEndodonticTreatmentsByPatientId,
 }) => {
   const { patientId } = useParams();
@@ -102,6 +104,8 @@ const PatientAndMedicalRecordDetails = ({
       <EndodonticTreamentsDetails
         patientId={patientId}
         endodonticTreatments={endodonticTreatments}
+        createEndodonticTreatment={createEndodonticTreatment}
+        updateEndodonticTreatment={updateEndodonticTreatment}
       />
     </div>
   );
