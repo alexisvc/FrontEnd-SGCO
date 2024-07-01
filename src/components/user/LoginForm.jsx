@@ -30,14 +30,14 @@ export const LoginForm = ({ login }) => {
       await login({ username, password });
       setUsername("");
       setPassword("");
-      toast.success("¡Felicidades! Tu ingreso fue exitoso.", {
+      toast.success("Ingreso exitoso.", {
         position: "top-right",
         autoClose: 3000,
       });
     } catch (error) {
       console.error("Error al ingresar:", error);
       toast.error(
-        "Credenciales son incorrectas. Por favor, inténtalo de nuevo.",
+        "Credenciales incorrectas. Inténtalo de nuevo.",
         {
           position: "top-right",
           autoClose: 3000,
@@ -85,13 +85,15 @@ export const LoginForm = ({ login }) => {
           <FaHome />
           <span>Inicio</span>
         </button>
-        <h1>PictoAndes</h1>
+        <h1>MP Especialdiades Odontológicas</h1>
+          {/*
         <button
           onClick={() => {
             setIsPopUpOpenInstructions(true);
           }}
         >
           <FaQuestion />
+
           <span>Indicaciones</span>
         </button>
         <button
@@ -102,10 +104,13 @@ export const LoginForm = ({ login }) => {
           <FaYoutube />
           <span>Ayuda</span>
         </button>
+        */}
       </div>
       <div className="login">
         <div className="login-form">
           <h2 className="login-heading">Iniciar Sesión</h2>
+          <br />
+          
           <form onSubmit={handleLogin}>
             <div className="form-input">
               <label htmlFor="username">
@@ -122,6 +127,7 @@ export const LoginForm = ({ login }) => {
                 className="input-field"
               />
             </div>
+            <br />
             <div className="form-input">
               <label htmlFor="password">
               <p>Contraseña:</p>
@@ -150,6 +156,7 @@ export const LoginForm = ({ login }) => {
               <button className="login-button">Ingresar</button>
             </div>
           </form>
+{/*
           <div className="footer-login">
             <p>
               ¿No tienes una cuenta?
@@ -159,13 +166,16 @@ export const LoginForm = ({ login }) => {
               </Link>
             </p>
           </div>
+*/}
         </div>
+        
         <div className="img-form">
           <img
-            src="public\characters\andino.png"
+            src="public\backgrounds\main.png"
             alt="Andino"
           />
         </div>
+        
       </div>
     </div>
   );

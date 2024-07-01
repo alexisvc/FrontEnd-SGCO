@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Home.css";
+import "./Welcome.css";
 import {
   FaGamepad,
   FaList,
@@ -29,7 +29,7 @@ function Welcome({ user, logout, isGuestUser }) {
       )}
       <div
         className="app-navigation"
-        style={{ display: "flex", justifyContent: "flex-end" }}
+        style={{ display: "flex", justifyContent: "flex-end", marginTop: "-8rem" }}
       >
         {isLoggedIn && (
           <>
@@ -67,21 +67,16 @@ function Welcome({ user, logout, isGuestUser }) {
           </Link>
         </div>
       )}
+      
       <div className="footer">
+        
         <div>
-          <img src="src\assets\logos\epn2.png" alt="imagen de la aventura" />
-        </div>
-        <div>
-          {/*<p>Realizado por: Vizuete Alexis || Tutora: Dra. Carrión Mayra</p>
+          {/*<p>Realizado por: Vizuete Alexis</p>
           <p>© 2024 PictoAndes</p>*/}
         </div>
-        <div>
-          <img
-            src="src\assets\logos\ludologo.png"
-            alt="imagen de la aventura"
-          />
-        </div>
+        
       </div>
+      
     </div>
   );
 }

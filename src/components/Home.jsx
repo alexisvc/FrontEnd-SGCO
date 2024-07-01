@@ -53,23 +53,31 @@ function Home({ user, logout, login }) {
             className="app-navigation"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
+            {/* 
             <Link to="/about-us" className="link-button">
               <button>
                 <FaInfoCircle />
                 <span>Créditos </span>
               </button>
             </Link>
+            */}
           </div>
           {/*<h2>Bienvenido a PictoAndes</h2>
             <img
               src="public/characters/andino.png"
               alt="imagen de la aventura"
             />*/}
+
+            {/* 
           <img
             className="img-home"
             src="public\credits\home.png"
             alt="creditos"
           />
+          */}
+          <br /> 
+          <br />
+          <br />
           <div className="buttons-welcome">
             <Link to="/login" className="link-button">
               <button>
@@ -90,8 +98,9 @@ function Home({ user, logout, login }) {
                 <FaUserPlus />
                 <span> Registrarse</span>
               </button>
-        </Link>*/}
+        </Link>
           </div>
+
           <div className="footer">
             <div>
               <img
@@ -107,7 +116,9 @@ function Home({ user, logout, login }) {
                 alt="ludolago"
               />
             </div>
+            */}
           </div>
+          
         </>
       ) : (
         <>
@@ -127,11 +138,23 @@ function Home({ user, logout, login }) {
           </div>
           {/*<img className="img-title" src="public\credits\title.png" alt="imagen de la aventura" />*/}
           <div className="home-content">
+            {/*
             <img
               src="public\instructions\welcome-message.png"
               alt="imagen de la aventura"
             />
-            <div>
+            */}
+           
+          </div>
+          <div className="img-form">
+            <img
+              src="public\backgrounds\main.png"
+            />
+          </div>
+          
+          <div className="footer-button">
+            
+          <div>
               <Link to="/main-menu" className="link-button">
                 <button>
                   <FaArrowRight />
@@ -139,8 +162,7 @@ function Home({ user, logout, login }) {
                 </button>
               </Link>
             </div>
-          </div>
-          <div className="footer-button">
+{/*
             <button
               onClick={() => {
                 handleImageClick();
@@ -149,6 +171,7 @@ function Home({ user, logout, login }) {
               <FiVolume2 />
               <span>Audio</span>
             </button>
+            */}
           </div>
         </>
       )}
