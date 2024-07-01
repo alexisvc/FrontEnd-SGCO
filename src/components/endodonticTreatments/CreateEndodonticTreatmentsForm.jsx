@@ -124,6 +124,7 @@ const CreateEndodonticTreatmentsForm = ({
                     value={formData.dienteEnd}
                     onChange={handleInputChange}
                     variant="outlined"
+                    required
                     />
                 </Grid>
                 <Grid item xs={3} sx={{marginLeft: 35}}>
