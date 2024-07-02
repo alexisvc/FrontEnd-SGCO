@@ -26,6 +26,8 @@ import { usePatients } from "./hooks/usePatients";
 import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
+import { usePeriodonticTreatments } from "./hooks/usePeriodonticTreatments";
+
 
 function App() {
   const { user, logout, login } = useUser();
@@ -64,6 +66,17 @@ function App() {
     updateEndodonticTreatment,
     deleteEndodonticTreatment,
   } = useEndodonticTreatments();
+
+  const {
+    periodonticTreatments,
+    periodonticTreatment,
+    fetchPeriodonticTreatmentById,
+    fetchPeriodonticTreatmentsByPatientId,
+    createPeriodonticTreatment,
+    updatePeriodonticTreatment,
+    deletePeriodonticTreatment,
+  } = usePeriodonticTreatments();
+  
 
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";//
@@ -124,6 +137,11 @@ function App() {
                   updateEndodonticTreatment={updateEndodonticTreatment}
                   fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
                 
+                  periodonticTreatments={periodonticTreatments}
+                  createPeriodonticTreatment={createPeriodonticTreatment}
+                  updatePeriodonticTreatment={updatePeriodonticTreatment}
+                  fetchPeriodonticTreatmentsByPatientId={fetchPeriodonticTreatmentsByPatientId}
+
                 />
               }
             />

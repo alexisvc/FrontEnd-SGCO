@@ -10,6 +10,8 @@ import EvolutionChartsDetails from "./evolutionCharts/EvolutionChartsDetails";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EndodonticTreamentsDetails from "./endodonticTreatments/EndodonticTreatmentsDetails";
+import PeriodonticTreatmentsDetails from "./periodonticTreatments/PeriodonticTreatmentsDetails";
+
 // Importar el componente PatientDetails
 
 const PatientAndMedicalRecordDetails = ({
@@ -28,6 +30,12 @@ const PatientAndMedicalRecordDetails = ({
   createEndodonticTreatment,
   updateEndodonticTreatment,
   fetchEndodonticTreatmentsByPatientId,
+  periodonticTreatments,
+  createPeriodonticTreatment,
+  updatePeriodonticTreatment,
+  fetchPeriodonticTreatments,
+  fetchPeriodonticTreatmentsByPatientId,
+  
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -57,6 +65,9 @@ const PatientAndMedicalRecordDetails = ({
   useEffect(() => {
     fetchEndodonticTreatmentsByPatientId(patientId);
   }, [patientId, endodonticTreatments]); // Dependencia específica para actualizar datos según patientId
+  useEffect(() => {
+    fetchPeriodonticTreatmentsByPatientId(patientId);
+  }, [patientId, periodonticTreatments]); // Dependencia específica para actualizar datos según patientId
 
   return (
     <div>
@@ -106,6 +117,13 @@ const PatientAndMedicalRecordDetails = ({
         endodonticTreatments={endodonticTreatments}
         createEndodonticTreatment={createEndodonticTreatment}
         updateEndodonticTreatment={updateEndodonticTreatment}
+      />
+
+      <PeriodonticTreatmentsDetails
+        patientId={patientId}
+        periodonticTreatments={periodonticTreatments}
+        createPeriodonticTreatment={createPeriodonticTreatment}
+        updatePeriodonticTreatment={updatePeriodonticTreatment}
       />
     </div>
   );
