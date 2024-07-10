@@ -27,6 +27,7 @@ import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 import { usePeriodonticTreatments } from "./hooks/usePeriodonticTreatments";
+import { useOrtodoncia } from "./hooks/useOrtdoncia";
 
 
 function App() {
@@ -70,12 +71,20 @@ function App() {
   const {
     periodonticTreatments,
     periodonticTreatment,
-    fetchPeriodonticTreatmentById,
     fetchPeriodonticTreatmentsByPatientId,
     createPeriodonticTreatment,
     updatePeriodonticTreatment,
     deletePeriodonticTreatment,
   } = usePeriodonticTreatments();
+
+  const {
+    ortodoncias,
+    ortodoncia,
+    fetchOrtodonciasByPatientId,
+    createOrtodoncia,
+    updateOrtodoncia,
+    deleteOrtodoncia
+  } = useOrtodoncia();
   
 
   const isLoggedIn = !!user;
@@ -142,6 +151,11 @@ function App() {
                   updatePeriodonticTreatment={updatePeriodonticTreatment}
                   fetchPeriodonticTreatmentsByPatientId={fetchPeriodonticTreatmentsByPatientId}
 
+                  ortodoncias={ortodoncias}
+                  ortodoncia={ortodoncia}
+                  fetchOrtodonciasByPatientId={fetchOrtodonciasByPatientId}
+                  createOrtodoncia={createOrtodoncia}
+                  updateOrtodoncia={updateOrtodoncia}
                 />
               }
             />

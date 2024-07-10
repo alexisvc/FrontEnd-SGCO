@@ -11,6 +11,7 @@ import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EndodonticTreamentsDetails from "./endodonticTreatments/EndodonticTreatmentsDetails";
 import PeriodonticTreatmentsDetails from "./periodonticTreatments/PeriodonticTreatmentsDetails";
+import OrtodonciaDetails from "./ortodoncia/OrtodonciaDetails";
 
 // Importar el componente PatientDetails
 
@@ -35,7 +36,12 @@ const PatientAndMedicalRecordDetails = ({
   updatePeriodonticTreatment,
   fetchPeriodonticTreatments,
   fetchPeriodonticTreatmentsByPatientId,
-  
+
+  ortodoncias,
+  ortodoncia,
+  fetchOrtodonciasByPatientId,
+  createOrtodoncia,
+  updateOrtodoncia
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -47,7 +53,9 @@ const PatientAndMedicalRecordDetails = ({
 
   useEffect(() => {
     if (medicalRecords && medicalRecords.length > 0) {
-      const record = medicalRecords.find(record => record.paciente && record.paciente.id === patientId);
+      const record = medicalRecords.find(
+        (record) => record.paciente && record.paciente.id === patientId
+      );
       if (record) {
         setPatientMedicalRecord(record);
       } else {
@@ -55,7 +63,7 @@ const PatientAndMedicalRecordDetails = ({
       }
     }
   }, [medicalRecords, patientId]);
-  
+
   useEffect(() => {
     getPatientTreatmentsByPatientId(patientId);
   }, [patientId, patientTreatments]); // Dependencia específica para actualizar datos según patientId
@@ -80,17 +88,14 @@ const PatientAndMedicalRecordDetails = ({
         Atrás
       </Button>
 
-      {patient && (
-        <PatientDetails patient={patient} updatePatient={updatePatient} />
-      )}
+      <PatientDetails patient={patient} updatePatient={updatePatient} />
+
       {patientMedicalRecord ? (
-        <>
-          <MedicalRecordForm
-            patientId={patientId}
-            updateMedicalRecord={updateMedicalRecord}
-            patientMedicalRecord={patientMedicalRecord}
-          />
-        </>
+        <MedicalRecordForm
+          patientId={patientId}
+          updateMedicalRecord={updateMedicalRecord}
+          patientMedicalRecord={patientMedicalRecord}
+        />
       ) : (
         <CreateMedicalRecordForm
           patientId={patientId}
@@ -119,12 +124,23 @@ const PatientAndMedicalRecordDetails = ({
         updateEndodonticTreatment={updateEndodonticTreatment}
       />
 
-      <PeriodonticTreatmentsDetails
+      {/*<PeriodonticTreatmentsDetails
         patientId={patientId}
         periodonticTreatments={periodonticTreatments}
         createPeriodonticTreatment={createPeriodonticTreatment}
         updatePeriodonticTreatment={updatePeriodonticTreatment}
+      />*/}
+      
+      <OrtodonciaDetails 
+        patientId={patientId} 
+        ortodoncias={ortodoncias}
+        ortodoncia={ortodoncia} 
+        fetchOrtodonciasByPatientId={fetchOrtodonciasByPatientId}
+        createOrtodoncia={createOrtodoncia}
+        updateOrtodoncia={updateOrtodoncia}
+        
       />
+
     </div>
   );
 };
