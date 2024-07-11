@@ -12,6 +12,7 @@ const OrtodonciaDetails = ({
   const [ortodoncia, setOrtodoncia] = useState(null);
   const {evoluciones, fetchEvolucionesByOrtodonciaId, createEvolucion, updateEvolucion} = useEvolucionOrtodoncia();
 
+  // Buscar si el paciente tiene una ortodoncia
   useEffect(() => {
     if (ortodoncias && ortodoncias.length > 0) {
       const ortodoncia = ortodoncias.find(
@@ -25,6 +26,7 @@ const OrtodonciaDetails = ({
     }
   }, [ortodoncias, patientId]);
 
+  // Buscar las evoluciones de la ortodoncia
   useEffect(() => {
     if (ortodoncia) {
       console.log(ortodoncia.id);
@@ -42,6 +44,8 @@ const OrtodonciaDetails = ({
           ortodoncia={ortodoncia}
           updateOrtodoncia={updateOrtodoncia}
           evoluciones={evoluciones}
+          createEvolucion={createEvolucion}
+          updateEvolucion={updateEvolucion}
         />
       ) : (
         <CreateOrtodonciaForm

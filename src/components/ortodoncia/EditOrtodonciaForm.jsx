@@ -4,14 +4,16 @@ import SaveIcon from "@mui/icons-material/Save";
 import { Typography, Grid, Box, Button, Container } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
+import EvolucionOrtodonciaDetails from "../evolucionOrtodoncia/EvolucionOrtodonciaDetails";
 
-const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones }) => {
+const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createEvolucion, updateEvolucion }) => {
   const [formData, setFormData] = useState({
-    diagnosticoOrtodoncia: ortodoncia?.diagnosticoOrtodoncia || "",
-    tiempoAproximadoOrtodoncia: ortodoncia?.tiempoAproximadoOrtodoncia || "",
-    diagnosticoOrtopedia: ortodoncia?.diagnosticoOrtopedia || "",
-    objetivoOrtopedia: ortodoncia?.objetivoOrtopedia || "",
-    tiempoAproximadoOrtopedia: ortodoncia?.tiempoAproximadoOrtopedia || "",
+    diagnostico: ortodoncia?.diagnostico || "",
+    objetivo: ortodoncia?.objetivo || "",
+    tiempoAproximado: ortodoncia?.tiempoAproximado || "",
+    tipoBracket: ortodoncia?.tipoBracket || "",
+    aparatoOrtopedico: ortodoncia?.aparatoOrtopedico || "",
+    observaciones: ortodoncia?.observaciones || ""
   });
 
   const navigate = useNavigate();
@@ -36,12 +38,12 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones }) => {
         Editar Ortodoncia
       </Typography>
       <Grid container spacing={2} sx={{ margin: 2 }}>
-        <Grid item xs={12}>
+      <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Diagnóstico de Ortodoncia"
-            name="diagnosticoOrtodoncia"
-            value={formData.diagnosticoOrtodoncia}
+            label="Diagnóstico "
+            name="diagnostico"
+            value={formData.diagnostico}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -50,9 +52,9 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Tiempo Aproximado de Ortodoncia"
-            name="tiempoAproximadoOrtodoncia"
-            value={formData.tiempoAproximadoOrtodoncia}
+            label="Objetivo"
+            name="objetivo"
+            value={formData.objetivo}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -61,9 +63,9 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Diagnóstico de Ortopedia"
-            name="diagnosticoOrtopedia"
-            value={formData.diagnosticoOrtopedia}
+            label="Tiempo Aproximado"
+            name="tiempoAproximado"
+            value={formData.tiempoAproximado}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -72,9 +74,9 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Objetivo de Ortopedia"
-            name="objetivoOrtopedia"
-            value={formData.objetivoOrtopedia}
+            label="Tipo de Bracket"
+            name="tipoBracket"
+            value={formData.tipoBracket}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -83,19 +85,33 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Tiempo Aproximado de Ortopedia"
-            name="tiempoAproximadoOrtopedia"
-            value={formData.tiempoAproximadoOrtopedia}
+            label="Aparato Ortopédico"
+            name="aparatoOrtopedico"
+            value={formData.aparatoOrtopedico}
             onChange={handleInputChange}
             variant="outlined"
             required
           />
         </Grid>
         <Grid item xs={12}>
-          {evoluciones.map((evolucion) => (
-            <p key={evolucion.id}>{evolucion.evolucion}</p>
-          ))}
+          <TextField
+            fullWidth
+            label="Observaciones"
+            name="observaciones"
+            value={formData.observaciones}
+            onChange={handleInputChange}
+            variant="outlined"
+            required
+          />
         </Grid>
+        {/* Mostrar cada evolución existente como una fila editable */}
+        <EvolucionOrtodonciaDetails
+          ortodoncia={ortodoncia}
+          evoluciones={evoluciones}
+          createEvolucion={createEvolucion}
+          updateEvolucion={updateEvolucion}
+        />
+
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
             <Button variant="contained" color="primary" onClick={handleSubmit}>

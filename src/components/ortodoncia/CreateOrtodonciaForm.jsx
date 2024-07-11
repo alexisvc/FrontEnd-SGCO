@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { 
-  TextField, 
-  Typography, 
-  Grid, 
-  Box, 
-  Button, 
+import {
+  TextField,
+  Typography,
+  Grid,
+  Box,
+  Button,
   Container,
-} from '@mui/material';
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
 
 const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
   const [formData, setFormData] = useState({
-    diagnosticoOrtodoncia: "",
-    tiempoAproximadoOrtodoncia: "",
-    diagnosticoOrtopedia: "",
-    objetivoOrtopedia: "",
-    tiempoAproximadoOrtopedia: "",
+    diagnostico: "",
+    objetivo: "",
+    tiempoAproximado: "",
+    tipoBracket: "",
+    aparatoOrtopedico: "",
+    observaciones: "",
   });
 
   const navigate = useNavigate();
@@ -38,25 +39,28 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
     await createOrtodoncia(newTreatmentData);
     // Lógica para limpiar el formulario o mostrar un mensaje de éxito
     setFormData({
-      diagnosticoOrtodoncia: "",
-      tiempoAproximadoOrtodoncia: "",
-      diagnosticoOrtopedia: "",
-      objetivoOrtopedia: "",
-      tiempoAproximadoOrtopedia: "",
+      diagnostico: "",
+      objetivo: "",
+      tiempoAproximado: "",
+      tipoBracket: "",
+      aparatoOrtopedico: "",
+      observaciones: "",
     });
     navigate("/patients");
   };
 
   return (
     <Container>
-      <Typography variant="h5" align="center" gutterBottom>Crear Ortodoncia</Typography>
+      <Typography variant="h5" align="center" gutterBottom>
+        Crear Ortodoncia
+      </Typography>
       <Grid container spacing={2} sx={{ margin: 2 }}>
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Diagnóstico de Ortodoncia"
-            name="diagnosticoOrtodoncia"
-            value={formData.diagnosticoOrtodoncia}
+            label="Diagnóstico "
+            name="diagnostico"
+            value={formData.diagnostico}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -65,9 +69,9 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Tiempo Aproximado de Ortodoncia"
-            name="tiempoAproximadoOrtodoncia"
-            value={formData.tiempoAproximadoOrtodoncia}
+            label="Objetivo"
+            name="objetivo"
+            value={formData.objetivo}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -76,9 +80,9 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Diagnóstico de Ortopedia"
-            name="diagnosticoOrtopedia"
-            value={formData.diagnosticoOrtopedia}
+            label="Tiempo Aproximado"
+            name="tiempoAproximado"
+            value={formData.tiempoAproximado}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -87,9 +91,9 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Objetivo de Ortopedia"
-            name="objetivoOrtopedia"
-            value={formData.objetivoOrtopedia}
+            label="Tipo de Bracket"
+            name="tipoBracket"
+            value={formData.tipoBracket}
             onChange={handleInputChange}
             variant="outlined"
             required
@@ -98,9 +102,20 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Tiempo Aproximado de Ortopedia"
-            name="tiempoAproximadoOrtopedia"
-            value={formData.tiempoAproximadoOrtopedia}
+            label="Aparato Ortopédico"
+            name="aparatoOrtopedico"
+            value={formData.aparatoOrtopedico}
+            onChange={handleInputChange}
+            variant="outlined"
+            required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Observaciones"
+            name="observaciones"
+            value={formData.observaciones}
             onChange={handleInputChange}
             variant="outlined"
             required
