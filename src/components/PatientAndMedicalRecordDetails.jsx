@@ -37,11 +37,6 @@ const PatientAndMedicalRecordDetails = ({
   fetchPeriodonticTreatments,
   fetchPeriodonticTreatmentsByPatientId,
 
-  ortodoncias,
-  ortodoncia,
-  fetchOrtodonciasByPatientId,
-  createOrtodoncia,
-  updateOrtodoncia
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -93,8 +88,8 @@ const PatientAndMedicalRecordDetails = ({
       {patientMedicalRecord ? (
         <MedicalRecordForm
           patientId={patientId}
-          updateMedicalRecord={updateMedicalRecord}
           patientMedicalRecord={patientMedicalRecord}
+          updateMedicalRecord={updateMedicalRecord}
         />
       ) : (
         <CreateMedicalRecordForm
@@ -132,13 +127,7 @@ const PatientAndMedicalRecordDetails = ({
       />*/}
       
       <OrtodonciaDetails 
-        patientId={patientId} 
-        ortodoncias={ortodoncias}
-        ortodoncia={ortodoncia} 
-        fetchOrtodonciasByPatientId={fetchOrtodonciasByPatientId}
-        createOrtodoncia={createOrtodoncia}
-        updateOrtodoncia={updateOrtodoncia}
-        
+        patientId={patientId}        
       />
 
     </div>

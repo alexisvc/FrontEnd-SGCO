@@ -76,15 +76,6 @@ function App() {
     updatePeriodonticTreatment,
     deletePeriodonticTreatment,
   } = usePeriodonticTreatments();
-
-  const {
-    ortodoncias,
-    ortodoncia,
-    fetchOrtodonciasByPatientId,
-    createOrtodoncia,
-    updateOrtodoncia,
-    deleteOrtodoncia
-  } = useOrtodoncia();
   
 
   const isLoggedIn = !!user;
@@ -150,12 +141,6 @@ function App() {
                   createPeriodonticTreatment={createPeriodonticTreatment}
                   updatePeriodonticTreatment={updatePeriodonticTreatment}
                   fetchPeriodonticTreatmentsByPatientId={fetchPeriodonticTreatmentsByPatientId}
-
-                  ortodoncias={ortodoncias}
-                  ortodoncia={ortodoncia}
-                  fetchOrtodonciasByPatientId={fetchOrtodonciasByPatientId}
-                  createOrtodoncia={createOrtodoncia}
-                  updateOrtodoncia={updateOrtodoncia}
                 />
               }
             />

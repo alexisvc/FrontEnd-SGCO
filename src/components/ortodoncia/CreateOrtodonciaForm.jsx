@@ -8,6 +8,7 @@ import {
   Container,
 } from '@mui/material';
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { useNavigate } from "react-router";
 
 const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
     objetivoOrtopedia: "",
     tiempoAproximadoOrtopedia: "",
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,6 +44,7 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
       objetivoOrtopedia: "",
       tiempoAproximadoOrtopedia: "",
     });
+    navigate("/patients");
   };
 
   return (

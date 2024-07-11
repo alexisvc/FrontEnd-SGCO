@@ -1,19 +1,38 @@
 import React, { useEffect, useState } from "react";
 import CreateOrtodonciaForm from "./CreateOrtodonciaForm";
 import EditOrtodonciaForm from "./EditOrtodonciaForm";
+import { useOrtodoncia } from "../../hooks/useOrtdoncia";
+import { useEvolucionOrtodoncia } from "../../hooks/useEvolucionOrtodoncia";
 
 const OrtodonciaDetails = ({
-  patientId,
-  ortodoncia,
-  fetchOrtodonciasByPatientId,
-  createOrtodoncia,
-  updateOrtodoncia,
+  patientId
 }) => {
+  
+  const {ortodoncias, createOrtodoncia, updateOrtodoncia} = useOrtodoncia();
+  const [ortodoncia, setOrtodoncia] = useState(null);
+  const {evoluciones, fetchEvolucionesByOrtodonciaId, createEvolucion, updateEvolucion} = useEvolucionOrtodoncia();
+
   useEffect(() => {
-    console.log(patientId);
-    fetchOrtodonciasByPatientId(patientId);
-    console.log(ortodoncia);
-  }, [patientId]);
+    if (ortodoncias && ortodoncias.length > 0) {
+      const ortodoncia = ortodoncias.find(
+        (ortodoncia) => ortodoncia.paciente && ortodoncia.paciente.id === patientId
+      );
+      if (ortodoncia) {
+        setOrtodoncia(ortodoncia);
+      } else {
+        setOrtodoncia(null);
+      }
+    }
+  }, [ortodoncias, patientId]);
+
+  useEffect(() => {
+    if (ortodoncia) {
+      console.log(ortodoncia.id);
+      fetchEvolucionesByOrtodonciaId(ortodoncia.id);
+      console.log(evoluciones);
+    }
+  }, [ortodoncia]);
+
 
   return (
     <>
@@ -22,6 +41,7 @@ const OrtodonciaDetails = ({
           patientId={patientId}
           ortodoncia={ortodoncia}
           updateOrtodoncia={updateOrtodoncia}
+          evoluciones={evoluciones}
         />
       ) : (
         <CreateOrtodonciaForm
