@@ -12,6 +12,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EndodonticTreamentsDetails from "./endodonticTreatments/EndodonticTreatmentsDetails";
 import PeriodonticTreatmentsDetails from "./periodonticTreatments/PeriodonticTreatmentsDetails";
 import OrtodonciaDetails from "./ortodoncia/OrtodonciaDetails";
+import CirugiaPatologiaDetails from "./cirugiaPatologia/CirugiaPatologiaDetails";
 
 // Importar el componente PatientDetails
 
@@ -35,8 +36,7 @@ const PatientAndMedicalRecordDetails = ({
   createPeriodonticTreatment,
   updatePeriodonticTreatment,
   fetchPeriodonticTreatments,
-  fetchPeriodonticTreatmentsByPatientId,
-
+  fetchPeriodonticTreatmentsByPatientId
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -128,6 +128,10 @@ const PatientAndMedicalRecordDetails = ({
       
       <OrtodonciaDetails 
         patientId={patientId}        
+      />
+
+      <CirugiaPatologiaDetails
+        patientId={patientId}
       />
 
     </div>

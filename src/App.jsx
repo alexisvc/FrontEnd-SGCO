@@ -27,7 +27,6 @@ import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 import { usePeriodonticTreatments } from "./hooks/usePeriodonticTreatments";
-import { useOrtodoncia } from "./hooks/useOrtdoncia";
 
 
 function App() {
@@ -75,8 +74,7 @@ function App() {
     createPeriodonticTreatment,
     updatePeriodonticTreatment,
     deletePeriodonticTreatment,
-  } = usePeriodonticTreatments();
-  
+  } = usePeriodonticTreatments();  
 
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";//
