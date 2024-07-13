@@ -13,6 +13,7 @@ import EndodonticTreamentsDetails from "./endodonticTreatments/EndodonticTreatme
 import PeriodonticTreatmentsDetails from "./periodonticTreatments/PeriodonticTreatmentsDetails";
 import OrtodonciaDetails from "./ortodoncia/OrtodonciaDetails";
 import CirugiaPatologiaDetails from "./cirugiaPatologia/CirugiaPatologiaDetails";
+import RehabilitacionOralDetails from "./rehabilitacionOral/RehabilitacionOralDetails";
 
 // Importar el componente PatientDetails
 
@@ -36,7 +37,7 @@ const PatientAndMedicalRecordDetails = ({
   createPeriodonticTreatment,
   updatePeriodonticTreatment,
   fetchPeriodonticTreatments,
-  fetchPeriodonticTreatmentsByPatientId
+  fetchPeriodonticTreatmentsByPatientId,
 }) => {
   const { patientId } = useParams();
   const location = useLocation();
@@ -112,6 +113,15 @@ const PatientAndMedicalRecordDetails = ({
         fetchEvolutionCharts={fetchEvolutionCharts}
       />
 
+      {/*<PeriodonticTreatmentsDetails
+        patientId={patientId}
+        periodonticTreatments={periodonticTreatments}
+        createPeriodonticTreatment={createPeriodonticTreatment}
+        updatePeriodonticTreatment={updatePeriodonticTreatment}
+      />*/}
+
+      <CirugiaPatologiaDetails patientId={patientId} />
+
       <EndodonticTreamentsDetails
         patientId={patientId}
         endodonticTreatments={endodonticTreatments}
@@ -119,21 +129,10 @@ const PatientAndMedicalRecordDetails = ({
         updateEndodonticTreatment={updateEndodonticTreatment}
       />
 
-      {/*<PeriodonticTreatmentsDetails
-        patientId={patientId}
-        periodonticTreatments={periodonticTreatments}
-        createPeriodonticTreatment={createPeriodonticTreatment}
-        updatePeriodonticTreatment={updatePeriodonticTreatment}
-      />*/}
+      <OrtodonciaDetails patientId={patientId} />
+
+      <RehabilitacionOralDetails patientId={patientId} />
       
-      <OrtodonciaDetails 
-        patientId={patientId}        
-      />
-
-      <CirugiaPatologiaDetails
-        patientId={patientId}
-      />
-
     </div>
   );
 };
