@@ -1,24 +1,23 @@
 import React, { useState } from "react";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SaveIcon from '@mui/icons-material/Save';
-import { 
-    TextField, 
-    Typography, 
-    Grid, 
-    Box, 
-    Button, 
-    Container, 
-    FormControl, 
-    FormControlLabel, 
-    FormLabel, 
-    Radio, 
-    RadioGroup, 
-    Checkbox,
-    IconButton,
-    FormGroup,
-} from '@mui/material';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SaveIcon from "@mui/icons-material/Save";
+import {
+  TextField,
+  Typography,
+  Grid,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Checkbox,
+  IconButton,
+  FormGroup,
+} from "@mui/material";
 import { useNavigate } from "react-router";
-
 
 const CreateRehabilitacionOralForm = ({
   patientId,
@@ -40,7 +39,7 @@ const CreateRehabilitacionOralForm = ({
     simetriaGingival: [],
     biotipoPeriodental: [],
     numeroDiente: [],
-    perdidaHuesoPeriodental:[],
+    perdidaHuesoPeriodental: [],
     otrasPatologiasOseas: "",
     restriccionViasRespiratorias: "",
     relacionIncisal: [],
@@ -74,7 +73,7 @@ const CreateRehabilitacionOralForm = ({
     const { name, checked } = e.target;
     const updatedList = checked
       ? [...formData[listName], name]
-      : formData[listName].filter(item => item !== name);
+      : formData[listName].filter((item) => item !== name);
 
     setFormData({
       ...formData,
@@ -86,7 +85,7 @@ const CreateRehabilitacionOralForm = ({
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -96,46 +95,45 @@ const CreateRehabilitacionOralForm = ({
       ...formData,
       paciente: patientId,
     };
-    
+
     await createRehabilitacionOral(newData);
     // Lógica para limpiar el formulario o mostrar un mensaje de éxito
     setFormData({
-        refHorizontal: [],
-    refVertical: [],
-    longitudLabio: [],
-    formaLabio: [],
-    exposicionSonrisa: [],
-    corredorBucal: [],
-    orientacionPlanoOclusalAnt: [],
-    visibilidadBordeSup: "",
-    orientacionPlanoOclusalPost: [],
-    anchoIncisivoCentalSup: "",
-    longitud: "",
-    colorDientes: "",
-    simetriaGingival: [],
-    biotipoPeriodental: [],
-    numeroDiente: [],
-    perdidaHuesoPeriodental:[],
-    otrasPatologiasOseas: "",
-    restriccionViasRespiratorias: "",
-    relacionIncisal: [],
-    overbite: [],
-    overjet: [],
-    tinitus: [],
-    puedeRepetirMordida: "",
-    restauracionesDefectuosas: [],
-    lesionesCariosas: [],
-    dientesFaltantes: [],
-    coronaDental: [],
-    espigos: [],
-    implantes: [],
-    edentuloParcial: [],
-    clasificacionDeKenedy: "",
-    edentuloTotal: "",
-    diagnosticoOclusal: "",
+      refHorizontal: [],
+      refVertical: [],
+      longitudLabio: [],
+      formaLabio: [],
+      exposicionSonrisa: [],
+      corredorBucal: [],
+      orientacionPlanoOclusalAnt: [],
+      visibilidadBordeSup: "",
+      orientacionPlanoOclusalPost: [],
+      anchoIncisivoCentalSup: "",
+      longitud: "",
+      colorDientes: "",
+      simetriaGingival: [],
+      biotipoPeriodental: [],
+      numeroDiente: [],
+      perdidaHuesoPeriodental: [],
+      otrasPatologiasOseas: "",
+      restriccionViasRespiratorias: "",
+      relacionIncisal: [],
+      overbite: [],
+      overjet: [],
+      tinitus: [],
+      puedeRepetirMordida: "",
+      restauracionesDefectuosas: [],
+      lesionesCariosas: [],
+      dientesFaltantes: [],
+      coronaDental: [],
+      espigos: [],
+      implantes: [],
+      edentuloParcial: [],
+      clasificacionDeKenedy: "",
+      edentuloTotal: "",
+      diagnosticoOclusal: "",
     });
     navigate("/patients");
-    
   };
 
   return (
@@ -738,7 +736,7 @@ const CreateRehabilitacionOralForm = ({
         </Grid>
 
         <Typography variant="h6" align="center" gutterBottom>
-        Análisis Oclusión
+          Análisis Oclusión
         </Typography>
 
         <Grid item xs={12}>
@@ -892,7 +890,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="Si"
                     checked={formData.puedeRepetirMordida.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "puedeRepetirMordida")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "puedeRepetirMordida")
+                    }
                   />
                 }
                 label="Si"
@@ -902,7 +902,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="No"
                     checked={formData.puedeRepetirMordida.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "puedeRepetirMordida")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "puedeRepetirMordida")
+                    }
                   />
                 }
                 label="No"
@@ -912,19 +914,23 @@ const CreateRehabilitacionOralForm = ({
         </Grid>
 
         <Typography variant="h6" align="center" gutterBottom>
-        Condición Dental
+          Condición Dental
         </Typography>
 
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Restauraciones defectuosas:</FormLabel>
+            <FormLabel component="legend">
+              Restauraciones defectuosas:
+            </FormLabel>
             <FormGroup row>
               <FormControlLabel
                 control={
                   <Checkbox
                     name="Si"
                     checked={formData.restauracionesDefectuosas.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "restauracionesDefectuosas")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "restauracionesDefectuosas")
+                    }
                   />
                 }
                 label="Si"
@@ -934,7 +940,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="No"
                     checked={formData.restauracionesDefectuosas.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "restauracionesDefectuosas")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "restauracionesDefectuosas")
+                    }
                   />
                 }
                 label="No"
@@ -943,8 +951,12 @@ const CreateRehabilitacionOralForm = ({
                 control={
                   <Checkbox
                     name="Cuales"
-                    checked={formData.restauracionesDefectuosas.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "restauracionesDefectuosas")}
+                    checked={formData.restauracionesDefectuosas.includes(
+                      "Cuales"
+                    )}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "restauracionesDefectuosas")
+                    }
                   />
                 }
                 label="Cuales"
@@ -952,7 +964,7 @@ const CreateRehabilitacionOralForm = ({
             </FormGroup>
           </FormControl>
         </Grid>
-        
+
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Lesiones cariosas:</FormLabel>
@@ -962,7 +974,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="Si"
                     checked={formData.lesionesCariosas.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "lesionesCariosas")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "lesionesCariosas")
+                    }
                   />
                 }
                 label="Si"
@@ -972,7 +986,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="No"
                     checked={formData.lesionesCariosas.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "lesionesCariosas")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "lesionesCariosas")
+                    }
                   />
                 }
                 label="No"
@@ -982,7 +998,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="Cuales"
                     checked={formData.lesionesCariosas.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "lesionesCariosas")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "lesionesCariosas")
+                    }
                   />
                 }
                 label="Cuales"
@@ -1000,7 +1018,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="Si"
                     checked={formData.dientesFaltantes.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "dientesFaltantes")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "dientesFaltantes")
+                    }
                   />
                 }
                 label="Si"
@@ -1010,7 +1030,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="No"
                     checked={formData.dientesFaltantes.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "dientesFaltantes")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "dientesFaltantes")
+                    }
                   />
                 }
                 label="No"
@@ -1020,7 +1042,9 @@ const CreateRehabilitacionOralForm = ({
                   <Checkbox
                     name="Cuales"
                     checked={formData.dientesFaltantes.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "dientesFaltantes")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "dientesFaltantes")
+                    }
                   />
                 }
                 label="Cuales"
@@ -1031,7 +1055,9 @@ const CreateRehabilitacionOralForm = ({
 
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación de corona dental:</FormLabel>
+            <FormLabel component="legend">
+              Colocación de corona dental:
+            </FormLabel>
             <FormGroup row>
               <FormControlLabel
                 control={
@@ -1139,7 +1165,9 @@ const CreateRehabilitacionOralForm = ({
 
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación sobre implantes dientes:</FormLabel>
+            <FormLabel component="legend">
+              Colocación sobre implantes dientes:
+            </FormLabel>
             <FormGroup row>
               <FormControlLabel
                 control={

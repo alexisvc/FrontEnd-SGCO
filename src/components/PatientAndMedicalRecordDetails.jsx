@@ -14,6 +14,8 @@ import PeriodonticTreatmentsDetails from "./periodonticTreatments/PeriodonticTre
 import OrtodonciaDetails from "./ortodoncia/OrtodonciaDetails";
 import CirugiaPatologiaDetails from "./cirugiaPatologia/CirugiaPatologiaDetails";
 import RehabilitacionOralDetails from "./rehabilitacionOral/RehabilitacionOralDetails";
+import DisfuncionMandibularService from "../services/disfuncionMandibularService";
+import DisfuncionMandibularDetails from "./disfuncionMandibular/DisfuncionMandibularDetails";
 
 // Importar el componente PatientDetails
 
@@ -132,6 +134,8 @@ const PatientAndMedicalRecordDetails = ({
       <OrtodonciaDetails patientId={patientId} />
 
       <RehabilitacionOralDetails patientId={patientId} />
+
+      <DisfuncionMandibularDetails patientId={patientId} />
       
     </div>
   );
