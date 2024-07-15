@@ -41,6 +41,7 @@ function App() {
     fetchPatientByCedula,
     createPatient,
     updatePatient,
+    setPatient,
   } = usePatients();
   const {
     patientTreatments,
@@ -66,15 +67,7 @@ function App() {
     updateEndodonticTreatment,
     deleteEndodonticTreatment,
   } = useEndodonticTreatments();
-
-  const {
-    periodonticTreatments,
-    periodonticTreatment,
-    fetchPeriodonticTreatmentsByPatientId,
-    createPeriodonticTreatment,
-    updatePeriodonticTreatment,
-    deletePeriodonticTreatment,
-  } = usePeriodonticTreatments();  
+  
 
   const isLoggedIn = !!user;
   const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";//
@@ -106,6 +99,7 @@ function App() {
                     fetchPatientByCedula={fetchPatientByCedula}
                     createPatient={createPatient}
                     updatePatient={updatePatient}
+                    setPatient={setPatient}
                   />
                 ) : (
                   <Home />
@@ -134,11 +128,6 @@ function App() {
                   createEndodonticTreatment={createEndodonticTreatment}
                   updateEndodonticTreatment={updateEndodonticTreatment}
                   fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
-                
-                  periodonticTreatments={periodonticTreatments}
-                  createPeriodonticTreatment={createPeriodonticTreatment}
-                  updatePeriodonticTreatment={updatePeriodonticTreatment}
-                  fetchPeriodonticTreatmentsByPatientId={fetchPeriodonticTreatmentsByPatientId}
                 />
               }
             />

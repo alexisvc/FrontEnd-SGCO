@@ -5,38 +5,39 @@ import CreateMedicalRecordForm from "./CreateMedicalRecordForm";
 import { useMedicalRecords } from "../../hooks/useMedicalRecords";
 import MedicalRecordForm from "./MedicalRecordForm";
 
-const MedicalRecordDetails = () => {
-  const { patientId } = useParams();
-  const {medicalRecords, createMedicalRecord, updateMedicalRecord } = useMedicalRecords();
+const MedicalRecordDetails = ({ patientId }) => {
+  const { medicalRecords, createMedicalRecord, updateMedicalRecord } =
+    useMedicalRecords();
   const [patientMedicalRecord, setPatientMedicalRecord] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    //console.log("Medical Records: ", medicalRecords);
-    if (useMedicalRecords && medicalRecords.length > 0) {
+    if (medicalRecords && medicalRecords.length > 0) {
       const record = medicalRecords.find(
-        (record) => record.paciente.id === patientId
+        (record) => record.paciente && record.paciente.id === patientId
       );
-      setPatientMedicalRecord(record);
+      if (record) {
+        setPatientMedicalRecord(record);
+      } else {
+        setPatientMedicalRecord(null); // Otra acción en caso de que no se encuentre el registro médico
+      }
     }
   }, [medicalRecords, patientId]);
 
   return (
-    <div>
-      <button
-        onClick={() => {
-          navigate("/patients");
-        }}
-      >
-        <FaArrowCircleLeft />
-        <span>Atrás</span>
-      </button>
+    <>
       {patientMedicalRecord ? (
-        <MedicalRecordForm patientId={patientId} updateMedicalRecord={updateMedicalRecord} patientMedicalRecord={patientMedicalRecord} />
+        <MedicalRecordForm
+          patientId={patientId}
+          patientMedicalRecord={patientMedicalRecord}
+          updateMedicalRecord={updateMedicalRecord}
+        />
       ) : (
-        <CreateMedicalRecordForm patientId={patientId} createMedicalRecord={createMedicalRecord}/>
+        <CreateMedicalRecordForm
+          patientId={patientId}
+          createMedicalRecord={createMedicalRecord}
+        />
       )}
-    </div>
+    </>
   );
 };
 

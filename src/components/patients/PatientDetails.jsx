@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FaArrowCircleLeft } from 'react-icons/fa';
-import { usePatients } from '../../hooks/usePatients';
-import { Grid, TextField, Button, Box, Typography, Container } from '@mui/material';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaArrowCircleLeft } from "react-icons/fa";
+import { usePatients } from "../../hooks/usePatients";
+import {
+  Grid,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
 
-const PatientDetails = ({updatePatient}) => {
+const PatientDetails = ({ updatePatient }) => {
   const location = useLocation();
   const navigate = useNavigate();
   //const { updatePatient } = usePatients();
@@ -23,11 +30,10 @@ const PatientDetails = ({updatePatient}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     updatePatient(patient.id, editablePatient);
-    navigate('/patients');
+    navigate("/patients");
   };
 
   return (
-    
     <Container>
       <Typography variant="h4" align="center" gutterBottom>
         Detalles del Paciente
@@ -61,7 +67,7 @@ const PatientDetails = ({updatePatient}) => {
               type="date"
               label="Fecha de Nacimiento"
               name="fechaNacimiento"
-              value={editablePatient.fechaNacimiento.split('T')[0]}
+              value={editablePatient.fechaNacimiento.split("T")[0]}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
               required
@@ -148,7 +154,7 @@ const PatientDetails = ({updatePatient}) => {
               required
             />
           </Grid>
-          <Grid item xs={12} style={{ textAlign: 'center' }}>
+          <Grid item xs={12} style={{ textAlign: "center" }}>
             <Button type="submit" variant="contained" color="primary">
               Actualizar Paciente
             </Button>

@@ -1,23 +1,50 @@
 import React, { useState } from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import EditEndodonticTreatmentsForm from "./EditEndodonticTreatmentsForm";
 import CreateEndodonticTreatmentsForm from "./CreateEndodonticTreatmentsForm";
 import { 
   Button, 
   Typography, 
   Container,
-  Paper, 
-  Box
+  Paper
 } from '@mui/material';
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `tab-${index}`,
+    'aria-controls': `tabpanel-${index}`,
+  };
+}
 
 const EndodonticTreatmentsDetails = ({ 
   patientId, 
   endodonticTreatments,
   createEndodonticTreatment,
   updateEndodonticTreatment,
-  fetchEndodonticTreatments,
 }) => {
-  const [showEditFormId, setShowEditFormId] = useState(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const handleCreateEndodonticTreatments = async (formData) => {
     const newEndodonticTreamentData = {
@@ -25,35 +52,39 @@ const EndodonticTreatmentsDetails = ({
       paciente: patientId,
     };
     await createEndodonticTreatment(newEndodonticTreamentData);
-    setShowCreateForm(false);
   };
 
   const handleUpdateEndodonticTreatments = async (id, formData) => {
     await updateEndodonticTreatment(id, formData);
-    setShowEditFormId(null);
-  };
-
-  const toggleEditForm = (id) => {
-    setShowEditFormId(showEditFormId === id ? null : id);
-  };
-
-  const toggleCreateForm = () => {
-    setShowCreateForm(!showCreateForm);
   };
 
   return (
     <>
       <Container component={Paper}>
-        <Typography align='center' variant="h4" sx={{margin: 3}}>Endodoncias</Typography>
-        
-        {endodonticTreatments.map((treatment) => (
-          <div key={treatment.id}>
-            <Box display="flex" justifyContent="center">
-              <Button sx={{margin: 1}} variant="contained" color="primary" onClick={() => toggleEditForm(treatment.id)}>
-                {showEditFormId === treatment.id ? 'Ocultar HC Endodoncia' : 'Ver HC Endodoncia'}
-              </Button>
-            </Box>
-            {showEditFormId === treatment.id && (
+        <Typography align='center' variant="h4" sx={{ margin: 3 }}>Endodoncias</Typography>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', overflow: 'auto' }}>
+            <Tabs 
+              value={value} 
+              onChange={handleChange} 
+              aria-label="endodontic treatments tabs" 
+              variant="scrollable" 
+              scrollButtons="auto"
+            >
+              <Tab label="Crear Endodoncia" {...a11yProps(0)} />
+              {endodonticTreatments.map((treatment, index) => (
+                <Tab label={`Endodoncia ${index + 1}`} {...a11yProps(index + 1)} key={treatment.id} />
+              ))}
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <CreateEndodonticTreatmentsForm
+              patientId={patientId}
+              createEndodonticTreatment={handleCreateEndodonticTreatments}
+            />
+          </CustomTabPanel>
+          {endodonticTreatments.map((treatment, index) => (
+            <CustomTabPanel value={value} index={index + 1} key={treatment.id}>
               <EditEndodonticTreatmentsForm 
                 endodonticTreatmentsId={treatment.id}
                 endodonticTreatmentsData={{
@@ -81,21 +112,9 @@ const EndodonticTreatmentsDetails = ({
                 }} 
                 updateEndodonticTreatments={handleUpdateEndodonticTreatments}
               />
-            )}
-          </div>
-        ))}
-        
-        <Box display="flex" justifyContent="center">
-          <Button sx={{margin: 1}} onClick={toggleCreateForm} variant="contained" color="primary">
-            {showCreateForm ? 'Ocultar Crear HC Endodoncia' : 'Crear HC Endodoncia'}
-          </Button>
+            </CustomTabPanel>
+          ))}
         </Box>
-        {showCreateForm && (
-          <CreateEndodonticTreatmentsForm
-            patientId={patientId}
-            createEndodonticTreatment={handleCreateEndodonticTreatments}
-          />
-        )}
       </Container>
     </>
   );

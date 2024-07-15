@@ -1,47 +1,58 @@
-import React, { useState } from 'react';
-import { usePatients } from '../../hooks/usePatients';
-import { useNavigate } from 'react-router-dom';
-import { FaArrowCircleLeft } from 'react-icons/fa';
-import PatientForm from './PatientForm';
-import { Button, 
-  Typography, 
-  Grid, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Paper, 
+import React, { useState } from "react";
+import { usePatients } from "../../hooks/usePatients";
+import { useNavigate } from "react-router-dom";
+import { FaArrowCircleLeft } from "react-icons/fa";
+import PatientForm from "./PatientForm";
+import {
+  Button,
+  Typography,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   IconButton,
-  TextField, 
-  Container, 
-  Box
-} from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import SearchIcon from '@mui/icons-material/Search';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+  TextField,
+  Container,
+  Box,
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import SearchIcon from "@mui/icons-material/Search";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const Patients = ({ user, patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient }) => {
+const Patients = ({
+  user,
+  patients,
+  patient,
+  loading,
+  error,
+  fetchPatientById,
+  fetchPatientByCedula,
+  createPatient,
+  setPatient
+}) => {
   const navigate = useNavigate();
   //const { patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient, updatePatient } = usePatients();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
-  const [searchId, setSearchId] = useState('');
-  const [searchCedula, setSearchCedula] = useState('');
+  const [searchId, setSearchId] = useState("");
+  const [searchCedula, setSearchCedula] = useState("");
   const [newPatient, setNewPatient] = useState({
-    nombrePaciente: '',
-    edadPaciente: '',
-    fechaNacimiento: '',
-    correoPaciente: '',
-    direccionPaciente: '',
-    generoPaciente: '',
-    numeroCedula: '',
-    ocupacion: '',
-    telefono: '',
-    telContactoEmergencia: '',
-    afinidadContactoEmergencia: ''
+    nombrePaciente: "",
+    edadPaciente: "",
+    fechaNacimiento: "",
+    correoPaciente: "",
+    direccionPaciente: "",
+    generoPaciente: "",
+    numeroCedula: "",
+    ocupacion: "",
+    telefono: "",
+    telContactoEmergencia: "",
+    afinidadContactoEmergencia: "",
   });
 
   const handleSearchIdChange = (e) => {
@@ -70,27 +81,28 @@ const Patients = ({ user, patients, patient, loading, error, fetchPatientById, f
     e.preventDefault();
     createPatient(newPatient);
     setNewPatient({
-      nombrePaciente: '',
-      edadPaciente: '',
-      fechaNacimiento: '',
-      correoPaciente: '',
-      direccionPaciente: '',
-      generoPaciente: '',
-      numeroCedula: '',
-      ocupacion: '',
-      telefono: '',
-      telContactoEmergencia: '',
-      afinidadContactoEmergencia: ''
+      nombrePaciente: "",
+      edadPaciente: "",
+      fechaNacimiento: "",
+      correoPaciente: "",
+      direccionPaciente: "",
+      generoPaciente: "",
+      numeroCedula: "",
+      ocupacion: "",
+      telefono: "",
+      telContactoEmergencia: "",
+      afinidadContactoEmergencia: "",
     });
     setShowCreateForm(false);
   };
 
   const handleViewPatient = (patient) => {
     navigate(`/prueba/${patient.id}`, { state: { patient } });
+    setShowSearchForm(false);
   };
 
   return (
-    <div>
+    <>
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
@@ -98,56 +110,75 @@ const Patients = ({ user, patients, patient, loading, error, fetchPatientById, f
       >
         Atrás
       </Button>
-      <Typography variant="h3" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
+      <Typography
+        variant="h3"
+        align="center"
+        gutterBottom
+        sx={{ marginTop: 5, marginBottom: 4 }}
+      >
         Pacientes
       </Typography>
-      
-      <Grid container spacing={2} justifyContent="center" sx = {{ marginBottom: 4 }}>
+
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        sx={{ marginBottom: 4 }}
+      >
         <Grid item>
           <Button
             variant="outlined"
             startIcon={<PersonAddIcon />}
-            onClick={() => setShowCreateForm(!showCreateForm)}
+            onClick={() => {
+              setShowCreateForm(!showCreateForm);
+              setShowSearchForm(false);
+            }}
           >
-            {showCreateForm ? 'Ocultar Crear Paciente' : 'Crear Paciente'}
+            {showCreateForm ? "Ocultar Crear Paciente" : "Crear Paciente"}
           </Button>
         </Grid>
-        <Grid item> 
+        <Grid item>
           <Button
             variant="outlined"
             startIcon={<SearchIcon />}
-            onClick={() => setShowSearchForm(!showSearchForm)}
+            onClick={() => {
+              setShowSearchForm(!showSearchForm);
+              setShowCreateForm(false);
+              setSearchCedula("");            
+              setPatient(null);
+            }}
           >
-            {showSearchForm ? 'Ocultar Buscar Paciente' : 'Buscar Paciente'}
+            {showSearchForm ? "Ocultar Buscar Paciente" : "Buscar Paciente"}
           </Button>
         </Grid>
       </Grid>
 
       {showCreateForm && (
-        <PatientForm 
-          newPatient={newPatient} 
-          handleCreateChange={handleCreateChange} 
-          handleCreateSubmit={handleCreateSubmit} 
+        <PatientForm
+          newPatient={newPatient}
+          handleCreateChange={handleCreateChange}
+          handleCreateSubmit={handleCreateSubmit}
         />
       )}
+
       {showSearchForm && (
-        <div>
-          <Typography variant="h6" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
+        <>
+          <Typography
+            variant="h6"
+            align="center"
+            gutterBottom
+            sx={{ marginTop: 5, marginBottom: 4 }}
+          >
             Buscar Paciente
           </Typography>
 
-          <Container component="form" onSubmit={handleSearchSubmit} sx={{ mt: 2 }}>
+          <Container
+            component="form"
+            onSubmit={handleSearchSubmit}
+            sx={{ mt: 2 }}
+          >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  label="Ingrese ID del paciente"
-                  value={searchId}
-                  onChange={handleSearchIdChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -158,28 +189,30 @@ const Patients = ({ user, patients, patient, loading, error, fetchPatientById, f
               </Grid>
               <Grid item xs={12} container justifyContent="center">
                 <Grid item xs={2}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  startIcon={<SearchIcon />}
-                  fullWidth
-                >
-                  Buscar
-                </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    startIcon={<SearchIcon />}
+                    fullWidth
+                  >
+                    Buscar
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Container>
 
-          {loading && <p>Loading...</p>}
-          {error && <p>Error: {error.message}</p>}
           {patient && (
             <Container>
-            <Typography variant="h5" align="center" gutterBottom sx = {{margin: 5}}>
-              Detalles del Paciente
-            </Typography>
-            
+              <Typography
+                variant="h5"
+                align="center"
+                gutterBottom
+                sx={{ margin: 5 }}
+              >
+                Detalles del Paciente
+              </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -210,7 +243,7 @@ const Patients = ({ user, patients, patient, loading, error, fetchPatientById, f
                     type="date"
                     label="Fecha de Nacimiento"
                     name="fechaNacimiento"
-                    value={patient.fechaNacimiento.split('T')[0]}
+                    value={patient.fechaNacimiento.split("T")[0]}
                     InputLabelProps={{ shrink: true }}
                     InputProps={{
                       readOnly: true,
@@ -306,63 +339,112 @@ const Patients = ({ user, patients, patient, loading, error, fetchPatientById, f
                     }}
                   />
                 </Grid>
-                
+                <Grid item xs={12} container justifyContent="center">
+                  <Grid item xs={2}>
+                    <Button
+                      onClick={() => handleViewPatient(patient)}
+                      variant="contained"
+                      color="primary"
+                      startIcon={<VisibilityIcon />}
+                      fullWidth
+                    >
+                      Ver HC
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
-            
-          </Container>
+            </Container>
           )}
-        </div>
+        </>
       )}
-      <div>
-      <Typography variant="h5" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
-        Lista de Pacientes
-      </Typography>
-        
-      <TableContainer component={Paper}>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell align='center'><Typography variant='h6'>Nombre </Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Edad</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Fecha de Nacimiento</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Correo</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Dirección</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Género</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Número de Cédula</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Ocupación</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Teléfono</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Tel. Emergencia</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Afinidad Emergencia</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h6'>Historia Clínica</Typography></TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {patients.map((patient) => (
-          <TableRow key={patient.id}>
-            <TableCell align='center'>{patient.nombrePaciente}</TableCell>
-            <TableCell align='center'>{patient.edadPaciente}</TableCell>
-            <TableCell align='center'>{patient.fechaNacimiento.split('T')[0]}</TableCell>
-            <TableCell align='center'>{patient.correoPaciente}</TableCell>
-            <TableCell align='center'>{patient.direccionPaciente}</TableCell>
-            <TableCell align='center'>{patient.generoPaciente}</TableCell>
-            <TableCell align='center'>{patient.numeroCedula}</TableCell>
-            <TableCell align='center'>{patient.ocupacion}</TableCell>
-            <TableCell align='center'>{patient.telefono}</TableCell>
-            <TableCell align='center'>{patient.telContactoEmergencia}</TableCell>
-            <TableCell align='center'>{patient.afinidadContactoEmergencia}</TableCell>
-            <TableCell align='center'>
-              <IconButton onClick={() => handleViewPatient(patient)}>
-                <VisibilityIcon />
-                Ver HC
-              </IconButton>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-      </div>
-    </div>
+
+      <>
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          sx={{ marginTop: 5, marginBottom: 4 }}
+        >
+          Lista de Pacientes
+        </Typography>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">
+                  <Typography variant="h6">Nombre </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Edad</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Fecha de Nacimiento</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Correo</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Dirección</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Género</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Número de Cédula</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Ocupación</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Teléfono</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Tel. Emergencia</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Afinidad Emergencia</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Historia Clínica</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {patients.map((patient) => (
+                <TableRow key={patient.id}>
+                  <TableCell align="center">{patient.nombrePaciente}</TableCell>
+                  <TableCell align="center">{patient.edadPaciente}</TableCell>
+                  <TableCell align="center">
+                    {patient.fechaNacimiento.split("T")[0]}
+                  </TableCell>
+                  <TableCell align="center">{patient.correoPaciente}</TableCell>
+                  <TableCell align="center">
+                    {patient.direccionPaciente}
+                  </TableCell>
+                  <TableCell align="center">{patient.generoPaciente}</TableCell>
+                  <TableCell align="center">{patient.numeroCedula}</TableCell>
+                  <TableCell align="center">{patient.ocupacion}</TableCell>
+                  <TableCell align="center">{patient.telefono}</TableCell>
+                  <TableCell align="center">
+                    {patient.telContactoEmergencia}
+                  </TableCell>
+                  <TableCell align="center">
+                    {patient.afinidadContactoEmergencia}
+                  </TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={() => handleViewPatient(patient)}>
+                      <VisibilityIcon />
+                    </IconButton>
+                    Ver HC
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </>
+    </>
   );
 };
 

@@ -95,5 +95,6 @@ export function usePatients() {
     createPatient,
     updatePatient,
     deletePatient,
+    setPatient
   };
 }

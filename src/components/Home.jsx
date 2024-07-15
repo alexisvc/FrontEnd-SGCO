@@ -68,14 +68,14 @@ function Home({ user, logout, login }) {
               alt="imagen de la aventura"
             />*/}
 
-            {/* 
+          {/* 
           <img
             className="img-home"
             src="public\credits\home.png"
             alt="creditos"
           />
           */}
-          <br /> 
+          <br />
           <br />
           <br />
           <div className="buttons-welcome">
@@ -118,7 +118,6 @@ function Home({ user, logout, login }) {
             </div>
             */}
           </div>
-          
         </>
       ) : (
         <>
@@ -144,17 +143,13 @@ function Home({ user, logout, login }) {
               alt="imagen de la aventura"
             />
             */}
-           
           </div>
           <div className="img-form">
-            <img
-              src="public\backgrounds\main.png"
-            />
+            <img src="public\backgrounds\main.png" />
           </div>
-          
+
           <div className="footer-button">
-            
-          <div>
+            <div>
               <Link to="/main-menu" className="link-button">
                 <button>
                   <FaArrowRight />
@@ -162,7 +157,7 @@ function Home({ user, logout, login }) {
                 </button>
               </Link>
             </div>
-{/*
+            {/*
             <button
               onClick={() => {
                 handleImageClick();
