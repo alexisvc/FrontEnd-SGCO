@@ -13,7 +13,8 @@ import {
   Radio,
   Button,
   Grid,
-  Box
+  Box,
+  Paper
 } from "@mui/material";
 
 const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecord }) => {
@@ -98,7 +99,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
         Historia Clínica
       </Typography>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TableRow, TableCell, TextField, IconButton } from "@mui/material";
+import { TableRow, TableCell, TextField, IconButton, Paper } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import { Typography, Grid, Box, Button, Container } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -35,11 +35,11 @@ const EditCirugiaPatologiaForm = ({
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
         Editar Cirugía y Patología Oral
       </Typography>
-      <Grid container spacing={2} sx={{ margin: 2 }}>
+      <Grid container spacing={2} sx={12}>
         <Grid item xs={12}>
           <TextField
             fullWidth

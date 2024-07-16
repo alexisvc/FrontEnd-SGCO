@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Container,
+  Paper,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
@@ -50,11 +51,11 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
         Crear Ortodoncia
       </Typography>
-      <Grid container spacing={2} sx={{ margin: 2 }}>
+      <Grid container spacing={2} sx={12}>
         <Grid item xs={12}>
           <TextField
             fullWidth

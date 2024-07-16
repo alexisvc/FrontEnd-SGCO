@@ -93,7 +93,7 @@ const EditDisfuncionMandibularForm = ({
       <Typography variant="h5" align="center" gutterBottom>
         Disfunción Temporo Mandibular
       </Typography>
-      <Grid container spacing={2} sx={{ margin: 2 }}>
+      <Grid container spacing={2} sx={12}>
         <Typography variant="h6" align="center" gutterBottom>
           Análisis de ATM
         </Typography>

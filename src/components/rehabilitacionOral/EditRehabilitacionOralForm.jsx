@@ -14,6 +14,7 @@ import {
   Checkbox,
   IconButton,
   FormGroup,
+  Paper
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
@@ -52,17 +53,18 @@ const EditRehabilitacionOralForm = ({
     puedeRepetirMordida: rehabilitacionOral?.puedeRepetirMordida || "",
     restauracionesDefectuosas:
       rehabilitacionOral?.restauracionesDefectuosas || false,
-    // restauracionesDefectuosasCuales: rehabilitacionOral?.restauracionesDefectuosasCuales || "",
+    restauracionesDefectuosasCuales: rehabilitacionOral?.restauracionesDefectuosasCuales || "",
     lesionesCariosas: rehabilitacionOral?.lesionesCariosas || false,
-    // lesionesCariosasCuales: rehabilitacionOral?.lesionesCariosasCuales || "",
+    lesionesCariosasCuales: rehabilitacionOral?.lesionesCariosasCuales || "",
     dientesFaltantes: rehabilitacionOral?.dientesFaltantes || false,
-    // dientesFaltantesCuales: rehabilitacionOral?.dientesFaltantesCuales || "",
+    dientesFaltantesCuales: rehabilitacionOral?.dientesFaltantesCuales || "",
     coronaDental: rehabilitacionOral?.coronaDental || false,
-    // coronaDentalCuales: rehabilitacionOral?.coronaDentalCuales || "",
+    coronaDentalCuales: rehabilitacionOral?.coronaDentalCuales || "",
     espigos: rehabilitacionOral?.espigos || false,
-    // espigosCuales: rehabilitacionOral?.espigosCuales || "",
+    espigosCuales: rehabilitacionOral?.espigosCuales || "",
+    espigos2: rehabilitacionOral?.espigos2 || false,
     implantes: rehabilitacionOral?.implantes || false,
-    // implantesCuales: rehabilitacionOral?.implantesCuales || "",
+    implantesCuales: rehabilitacionOral?.implantesCuales || "",
     edentuloParcial: rehabilitacionOral?.edentuloParcial || false,
     clasificacionDeKenedy: rehabilitacionOral?.clasificacionDeKenedy || "",
     edentuloTotal: rehabilitacionOral?.edentuloTotal || "",
@@ -106,11 +108,11 @@ const EditRehabilitacionOralForm = ({
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
         Editar Rehabilitación Oral
       </Typography>
-      <Grid container spacing={2} sx={{ margin: 2 }}>
+      <Grid container spacing={2} sx={12}>
         <Typography variant="h6" align="center" gutterBottom>
           Examen Extra Oral
         </Typography>
@@ -705,7 +707,7 @@ const EditRehabilitacionOralForm = ({
         </Grid>
 
         <Typography variant="h6" align="center" gutterBottom>
-        Análisis Oclusión
+          Análisis Oclusión
         </Typography>
 
         <Grid item xs={12}>
@@ -859,7 +861,9 @@ const EditRehabilitacionOralForm = ({
                   <Checkbox
                     name="Si"
                     checked={formData.puedeRepetirMordida.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "puedeRepetirMordida")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "puedeRepetirMordida")
+                    }
                   />
                 }
                 label="Si"
@@ -869,213 +873,141 @@ const EditRehabilitacionOralForm = ({
                   <Checkbox
                     name="No"
                     checked={formData.puedeRepetirMordida.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "puedeRepetirMordida")}
+                    onChange={(e) =>
+                      handleCheckboxChange(e, "puedeRepetirMordida")
+                    }
                   />
                 }
                 label="No"
               />
             </FormGroup>
           </FormControl>
-        </Grid>
+        </Grid> 
 
         <Typography variant="h6" align="center" gutterBottom>
-        Condición Dental
+          Condición Dental
         </Typography>
 
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Restauraciones defectuosas:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Si"
-                    checked={formData.restauracionesDefectuosas.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "restauracionesDefectuosas")}
-                  />
-                }
-                label="Si"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="No"
-                    checked={formData.restauracionesDefectuosas.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "restauracionesDefectuosas")}
-                  />
-                }
-                label="No"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Cuales"
-                    checked={formData.restauracionesDefectuosas.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "restauracionesDefectuosas")}
-                  />
-                }
-                label="Cuales"
-              />
-            </FormGroup>
+            <FormLabel component="legend">Restauraciones defectuosas</FormLabel>
+            <RadioGroup
+              row
+              aria-label="restauracionesDefectuosas"
+              name="restauracionesDefectuosas"
+              value={formData.restauracionesDefectuosas}
+              onChange={handleInputChange}
+            >
+              <FormControlLabel value="true" control={<Radio />} label="Si" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+            </RadioGroup>
           </FormControl>
+          <TextField
+            fullWidth
+            label="Cuales"
+            name="restauracionesDefectuosasCuales"
+            value={formData.restauracionesDefectuosasCuales}
+            onChange={handleInputChange}
+          />
         </Grid>
-        
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Lesiones cariosas:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Si"
-                    checked={formData.lesionesCariosas.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "lesionesCariosas")}
-                  />
-                }
-                label="Si"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="No"
-                    checked={formData.lesionesCariosas.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "lesionesCariosas")}
-                  />
-                }
-                label="No"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Cuales"
-                    checked={formData.lesionesCariosas.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "lesionesCariosas")}
-                  />
-                }
-                label="Cuales"
-              />
-            </FormGroup>
+            <FormLabel component="legend">Lesiones cariosas</FormLabel>
+            <RadioGroup
+              row
+              aria-label="lesionesCariosas"
+              name="lesionesCariosas"
+              value={formData.lesionesCariosas}
+              onChange={handleInputChange}
+            >
+              <FormControlLabel value="true" control={<Radio />} label="Si" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+            </RadioGroup>
           </FormControl>
+          <TextField
+            fullWidth
+            label="Cuales"
+            name="lesionesCariosasCuales"
+            value={formData.lesionesCariosasCuales}
+            onChange={handleInputChange}
+          />
         </Grid>
-
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Dientes faltantes:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Si"
-                    checked={formData.dientesFaltantes.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "dientesFaltantes")}
-                  />
-                }
-                label="Si"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="No"
-                    checked={formData.dientesFaltantes.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "dientesFaltantes")}
-                  />
-                }
-                label="No"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Cuales"
-                    checked={formData.dientesFaltantes.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "dientesFaltantes")}
-                  />
-                }
-                label="Cuales"
-              />
-            </FormGroup>
+            <FormLabel component="legend">Dientes Faltantes</FormLabel>
+            <RadioGroup
+              row
+              aria-label="dientesFaltantes"
+              name="dientesFaltantes"
+              value={formData.dientesFaltantes}
+              onChange={handleInputChange}
+            >
+              <FormControlLabel value="true" control={<Radio />} label="Si" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+            </RadioGroup>
           </FormControl>
+          <TextField
+            fullWidth
+            label="Cuales"
+            name="dientesFaltantesCuales"
+            value={formData.dientesFaltantesCuales}
+            onChange={handleInputChange}
+          />
         </Grid>
-
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación de corona dental:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Si"
-                    checked={formData.coronaDental.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "coronaDental")}
-                  />
-                }
-                label="Si"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="No"
-                    checked={formData.coronaDental.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "coronaDental")}
-                  />
-                }
-                label="No"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Cuales"
-                    checked={formData.coronaDental.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "coronaDental")}
-                  />
-                }
-                label="Cuales"
-              />
-            </FormGroup>
+            <FormLabel component="legend">Colocación de corona dental</FormLabel>
+            <RadioGroup
+              row
+              aria-label="coronaDental"
+              name="coronaDental"
+              value={formData.coronaDental}
+              onChange={handleInputChange}
+            >
+              <FormControlLabel value="true" control={<Radio />} label="Si" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+            </RadioGroup>
           </FormControl>
+          <TextField
+            fullWidth
+            label="Cuales"
+            name="coronaDentalCuales"
+            value={formData.coronaDentalCuales}
+            onChange={handleInputChange}
+          />
         </Grid>
-
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación de espigos:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Si"
-                    checked={formData.espigos.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "espigos")}
-                  />
-                }
-                label="Si"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="No"
-                    checked={formData.espigos.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "espigos")}
-                  />
-                }
-                label="No"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Cuales"
-                    checked={formData.espigos.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "espigos")}
-                  />
-                }
-                label="Cuales"
-              />
-            </FormGroup>
+            <FormLabel component="legend">Colocación de espigos</FormLabel>
+            <RadioGroup
+              row
+              aria-label="espigos"
+              name="espigos"
+              value={formData.espigos}
+              onChange={handleInputChange}
+            >
+              <FormControlLabel value="true" control={<Radio />} label="Si" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+            </RadioGroup>
+          </FormControl>
+          <TextField
+            fullWidth
+            label="Cuales"
+            name="coronaDentalCuales"
+            value={formData.espigosCuales}
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend"></FormLabel>
             <FormGroup row>
               <FormControlLabel
                 control={
                   <Checkbox
                     name="Erosión"
-                    checked={formData.espigos.includes("Erosión")}
-                    onChange={(e) => handleCheckboxChange(e, "espigos")}
+                    checked={formData.espigos2.includes("Erosión")}
+                    onChange={(e) => handleCheckboxChange(e, "espigos2")}
                   />
                 }
                 label="Erosión"
@@ -1084,8 +1016,8 @@ const EditRehabilitacionOralForm = ({
                 control={
                   <Checkbox
                     name="Abfracción"
-                    checked={formData.espigos.includes("Abfracción")}
-                    onChange={(e) => handleCheckboxChange(e, "espigos")}
+                    checked={formData.espigos2.includes("Abfracción")}
+                    onChange={(e) => handleCheckboxChange(e, "espigos2")}
                   />
                 }
                 label="Abfracción"
@@ -1094,8 +1026,8 @@ const EditRehabilitacionOralForm = ({
                 control={
                   <Checkbox
                     name="Atrición"
-                    checked={formData.espigos.includes("Atrición")}
-                    onChange={(e) => handleCheckboxChange(e, "espigos")}
+                    checked={formData.espigos2.includes("Atrición")}
+                    onChange={(e) => handleCheckboxChange(e, "espigos2")}
                   />
                 }
                 label="Atrición"
@@ -1103,43 +1035,27 @@ const EditRehabilitacionOralForm = ({
             </FormGroup>
           </FormControl>
         </Grid>
-
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación sobre implantes dientes:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Si"
-                    checked={formData.implantes.includes("Si")}
-                    onChange={(e) => handleCheckboxChange(e, "implantes")}
-                  />
-                }
-                label="Si"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="No"
-                    checked={formData.implantes.includes("No")}
-                    onChange={(e) => handleCheckboxChange(e, "implantes")}
-                  />
-                }
-                label="No"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Cuales"
-                    checked={formData.implantes.includes("Cuales")}
-                    onChange={(e) => handleCheckboxChange(e, "implantes")}
-                  />
-                }
-                label="Cuales"
-              />
-            </FormGroup>
+            <FormLabel component="legend">Colocación sobre implantes dientes</FormLabel>
+            <RadioGroup
+              row
+              aria-label="implantes"
+              name="implantes"
+              value={formData.implantes}
+              onChange={handleInputChange}
+            >
+              <FormControlLabel value="true" control={<Radio />} label="Si" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+            </RadioGroup>
           </FormControl>
+          <TextField
+            fullWidth
+            label="Cuales"
+            name="implantesCuales"
+            value={formData.implantesCuales}
+            onChange={handleInputChange}
+          />
         </Grid>
 
         <Grid item xs={12}>

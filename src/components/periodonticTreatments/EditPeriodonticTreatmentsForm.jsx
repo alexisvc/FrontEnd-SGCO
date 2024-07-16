@@ -87,7 +87,7 @@ const EditPeriodonticTreatmentsForm = ({
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
         Editar Historia de Periodoncia
       </Typography>
@@ -115,7 +115,7 @@ const EditPeriodonticTreatmentsForm = ({
             Inferior
           </Typography>
         </Grid>
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
@@ -428,7 +428,7 @@ const EditPeriodonticTreatmentsForm = ({
             Superior
           </Typography>
         </Grid>
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>

@@ -105,7 +105,7 @@ const CreatePeriodonticTreatmentsForm = ({
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
         Crear Periodoncia
       </Typography>
@@ -133,7 +133,7 @@ const CreatePeriodonticTreatmentsForm = ({
             Inferior
           </Typography>
         </Grid>
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
@@ -446,7 +446,7 @@ const CreatePeriodonticTreatmentsForm = ({
             Superior
           </Typography>
         </Grid>
-        <TableContainer component={Paper}>
+        <TableContainer >
           <Table>
             <TableHead>
               <TableRow>

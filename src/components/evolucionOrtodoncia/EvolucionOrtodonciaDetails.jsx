@@ -28,8 +28,8 @@ const EvolucionOrtodonciaDetails = ({
   };
 
   return (
-    <Container component={Paper}>
-      <TableContainer component={Paper}>
+    <Container >
+      <TableContainer >
     <Table>
       <TableHead>
         <TableRow>

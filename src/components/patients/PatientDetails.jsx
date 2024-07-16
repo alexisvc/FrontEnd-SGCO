@@ -9,6 +9,7 @@ import {
   Box,
   Typography,
   Container,
+  Paper,
 } from "@mui/material";
 
 const PatientDetails = ({ updatePatient }) => {
@@ -34,7 +35,7 @@ const PatientDetails = ({ updatePatient }) => {
   };
 
   return (
-    <Container>
+    <Container component={Paper} >
       <Typography variant="h4" align="center" gutterBottom>
         Detalles del Paciente
       </Typography>
