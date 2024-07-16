@@ -17,10 +17,8 @@ const DisfuncionMandibularDetails = ({ patientId }) => {
       );
       if (disfuncionMandibular) {
         setDisfuncionMandibular(disfuncionMandibular);
-        console.log(disfuncionMandibular);
       } else {
         setDisfuncionMandibular(null);
-        console.log(disfuncionMandibular);
       }
     }
   }, [disfuncionMandibularList, patientId]);

@@ -16,6 +16,7 @@ import {
   Paper,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
+import { useNavigate } from "react-router";
 
 
 const CreatePeriodonticTreatmentsForm = ({
@@ -46,6 +47,8 @@ const CreatePeriodonticTreatmentsForm = ({
     profundidadSondajeSuperiorB: Array(16).fill(""),
     nivelInsercionSuperiorB: Array(16).fill(""),
   });
+
+  const navigate = useNavigate();
 
   const handleArrayInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -98,13 +101,13 @@ const CreatePeriodonticTreatmentsForm = ({
         profundidadSondajeSuperiorB: [],
         nivelInsercionSuperiorB: []
     });
-    
+    navigate("/patients");
   };
 
   return (
     <Container>
       <Typography variant="h5" align="center" gutterBottom>
-        Editar Historia de Periodoncia
+        Crear Periodoncia
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>

@@ -20,8 +20,6 @@ export function useUser() {
       username,
       password,
     });
-
-    console.log("user", user);
     window.localStorage.setItem("loggedUser", JSON.stringify(user));
 
     setUser(user);

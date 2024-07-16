@@ -25,11 +25,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const Patients = ({
-  user,
   patients,
   patient,
-  loading,
-  error,
   fetchPatientById,
   fetchPatientByCedula,
   createPatient,

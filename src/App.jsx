@@ -26,51 +26,22 @@ import { usePatients } from "./hooks/usePatients";
 import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
-import { usePeriodonticTreatments } from "./hooks/usePeriodonticTreatments";
 
 
 function App() {
   const { user, logout, login } = useUser();
-  //const { medicalRecords, createMedicalRecord } = useMedicalRecords();
   const {
     patients,
     patient,
-    loading,
-    error,
     fetchPatientById,
     fetchPatientByCedula,
     createPatient,
     updatePatient,
     setPatient,
   } = usePatients();
-  const {
-    patientTreatments,
-    createPatientTreatment,
-    updatePatientTreatment,
-    getAllPatientTreatments,
-    getPatientTreatmentsByPatientId
-  } = usePatientTreatments();
-  const {
-    evolutionCharts,
-    createEvolutionChart,
-    updateEvolutionChart,
-    fetchEvolutionCharts,
-    fetchEvolutionChartsByPatientId,
-  } = useEvolutionCharts();
-
-  const {
-    endodonticTreatments,
-    endodonticTreatment,
-    fetchEndodonticTreatmentById,
-    fetchEndodonticTreatmentsByPatientId,
-    createEndodonticTreatment,
-    updateEndodonticTreatment,
-    deleteEndodonticTreatment,
-  } = useEndodonticTreatments();
   
 
   const isLoggedIn = !!user;
-  const isGuestUser = isLoggedIn && user.username === "invitado@correo.com";//
 
   return (
     <div className="app">
@@ -90,11 +61,8 @@ function App() {
               element={
                 isLoggedIn ? (
                   <Patients
-                    user={user}
                     patients={patients}
                     patient={patient}
-                    loading={loading}
-                    error={error}
                     fetchPatientById={fetchPatientById}
                     fetchPatientByCedula={fetchPatientByCedula}
                     createPatient={createPatient}
@@ -112,22 +80,6 @@ function App() {
               element={
                 <PatientAndMedicalRecordDetails
                   updatePatient={updatePatient}
-                  patientTreatments={patientTreatments}
-                  createPatientTreatment={createPatientTreatment}
-                  updatePatientTreatment={updatePatientTreatment}
-                  getAllPatientTreatments={getAllPatientTreatments}
-                  getPatientTreatmentsByPatientId={getPatientTreatmentsByPatientId}
-
-                  evolutionCharts={evolutionCharts}
-                  createEvolutionChart={createEvolutionChart}
-                  updateEvolutionChart={updateEvolutionChart}
-                  fetchEvolutionCharts={fetchEvolutionCharts}
-                  fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
-
-                  endodonticTreatments={endodonticTreatments}
-                  createEndodonticTreatment={createEndodonticTreatment}
-                  updateEndodonticTreatment={updateEndodonticTreatment}
-                  fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
                 />
               }
             />
@@ -164,7 +116,6 @@ function App() {
                   <Welcome
                     user={user}
                     logout={logout}
-                    isGuestUser={isGuestUser}
                   />
                 ) : (
                   <Home />

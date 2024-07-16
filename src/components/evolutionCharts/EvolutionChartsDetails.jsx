@@ -1,18 +1,34 @@
 import React from "react";
 import EditEvolutionChartForm from "./EditEvolutionChartForm";
 import CreateEvolutionChartForm from "./CreateEvolutionChartForm";
-import { Typography, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import {
+  Typography,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import useEvolutionCharts from "../../hooks/useEvolutionCharts";
 
+const EvolutionChartsDetails = ({ patientId }) => {
+  const {
+    evolutionCharts,
+    createEvolutionChart,
+    updateEvolutionChart,
+    fetchEvolutionChartsByPatientId,
+  } = useEvolutionCharts();
 
-const EvolutionChartsDetails = ({
-  patientId,
-  evolutionCharts,
-  createEvolutionChart,
-  updateEvolutionChart,
-  fetchEvolutionCharts,
-  
-}) => {
+  // Cargar los cuadros de evolución del paciente al montar el componente
+  React.useEffect(() => {
+    fetchEvolutionChartsByPatientId(patientId);
+  }, [patientId]);
 
   // Función para manejar la creación de un nuevo tratamiento
   const handleCreateEvolutionCharts = async (formData) => {
@@ -31,19 +47,36 @@ const EvolutionChartsDetails = ({
 
   return (
     <Container component={Paper}>
-      <Typography variant="h4" gutterBottom sx = {{ marginBottom: 3, marginTop: 5}} align="center">
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ marginBottom: 3, marginTop: 5 }}
+        align="center"
+      >
         Cuadro de Evolución
       </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align='center'><Typography variant='h7'>Fecha</Typography></TableCell>
-              <TableCell align='center'><Typography variant='h7'>Actividad Clínica</Typography></TableCell>
-              <TableCell align='center'><Typography variant='h7'>Recomendación</Typography></TableCell>
-              <TableCell align='center'><Typography variant='h7'>Firma Odontólogo</Typography></TableCell>
-              <TableCell align='center'><Typography variant='h7'>Firma Paciente</Typography></TableCell>
-              <TableCell align='center'><Typography variant='h7'>Acciones</Typography></TableCell>
+              <TableCell align="center">
+                <Typography variant="h7">Fecha</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="h7">Actividad Clínica</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="h7">Recomendación</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="h7">Firma Odontólogo</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="h7">Firma Paciente</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="h7">Acciones</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

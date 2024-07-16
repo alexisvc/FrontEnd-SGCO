@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
 import MedicalRecordDetails from "./medicalRecords/MedicalRecordsDetails";
 import PatientDetails from "./patients/PatientDetails";
 import TreamentPlansDetails from "./treatmentPlans/TreamentPlansDetails";
@@ -35,45 +35,20 @@ function CustomTabPanel(props) {
 function a11yProps(index) {
   return {
     id: `tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
+    "aria-controls": `tabpanel-${index}`,
   };
 }
 
 const PatientAndMedicalRecordDetails = ({
-  updatePatient,
-  patientTreatments,
-  createPatientTreatment,
-  updatePatientTreatment,
-  getAllPatientTreatments,
-  getPatientTreatmentsByPatientId,
-  evolutionCharts,
-  createEvolutionChart,
-  updateEvolutionChart,
-  fetchEvolutionCharts,
-  fetchEvolutionChartsByPatientId,
-  endodonticTreatments,
-  createEndodonticTreatment,
-  updateEndodonticTreatment,
-  fetchEndodonticTreatmentsByPatientId
+  updatePatient
 }) => {
+  // Tomamos el patientId de la URL
   const { patientId } = useParams();
   const location = useLocation();
   const { patient } = location.state || {};
+
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    getPatientTreatmentsByPatientId(patientId);
-  }, [patientId, patientTreatments]); // Dependencia específica para actualizar datos según patientId
-
-  useEffect(() => {
-    fetchEvolutionChartsByPatientId(patientId);
-  }, [patientId, evolutionCharts]); // Dependencia específica para actualizar datos según patientId
-
-  useEffect(() => {
-    fetchEndodonticTreatmentsByPatientId(patientId);
-  }, [patientId, endodonticTreatments]); // Dependencia específica para actualizar datos según patientId
- // Dependencia específica para actualizar datos según patientId
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -92,13 +67,20 @@ const PatientAndMedicalRecordDetails = ({
 
       <PatientDetails patient={patient} updatePatient={updatePatient} />
 
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', overflow: 'auto', mt: 5 }}>
-          <Tabs 
-            value={value} 
-            onChange={handleChange} 
-            aria-label="patient treatments tabs" 
-            variant="scrollable" 
+      <Box sx={{ width: "100%" }}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            overflow: "auto",
+            mt: 5,
+          }}
+        >
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="patient treatments tabs"
+            variant="scrollable"
             scrollButtons="auto"
           >
             <Tab label="Detalles Médicos" {...a11yProps(0)} />
@@ -118,23 +100,11 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
-          <TreamentPlansDetails
-            patientId={patientId}
-            patientTreatments={patientTreatments}
-            createPatientTreatment={createPatientTreatment}
-            updatePatientTreatment={updatePatientTreatment}
-            getAllPatientTreatments={getAllPatientTreatments}
-          />
+          <TreamentPlansDetails patientId={patientId} />
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={2}>
-          <EvolutionChartsDetails
-            patientId={patientId}
-            evolutionCharts={evolutionCharts}
-            createEvolutionChart={createEvolutionChart}
-            updateEvolutionChart={updateEvolutionChart}
-            fetchEvolutionCharts={fetchEvolutionCharts}
-          />
+          <EvolutionChartsDetails patientId={patientId} />
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={3}>
@@ -144,9 +114,6 @@ const PatientAndMedicalRecordDetails = ({
         <CustomTabPanel value={value} index={4}>
           <EndodonticTreamentsDetails
             patientId={patientId}
-            endodonticTreatments={endodonticTreatments}
-            createEndodonticTreatment={createEndodonticTreatment}
-            updateEndodonticTreatment={updateEndodonticTreatment}
           />
         </CustomTabPanel>
 
@@ -163,9 +130,7 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={8}>
-          <PeriodonticTreatmentsDetails
-            patientId={patientId}
-          />
+          <PeriodonticTreatmentsDetails patientId={patientId} />
         </CustomTabPanel>
       </Box>
     </>

@@ -15,6 +15,7 @@ import {
   Paper,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
+import { useNavigate } from "react-router";
 
 const EditPeriodonticTreatmentsForm = ({
   periodonticTreatment,
@@ -59,6 +60,8 @@ const EditPeriodonticTreatmentsForm = ({
       periodonticTreatment?.nivelInsercionSuperiorB || Array(16).fill(""),
   });
 
+  const navigate = useNavigate();
+
   const handleArrayInputChange = (e, index) => {
     const { name, value } = e.target;
     const updatedArray = [...formData[name]];
@@ -80,6 +83,7 @@ const EditPeriodonticTreatmentsForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     await updatePeriodonticTreatment(periodonticTreatment.id, formData);
+    navigate("/patients");
   };
 
   return (

@@ -11,7 +11,6 @@ export function useRegistration() {
         name,
         password
       });
-      console.log("usuario creado");
       setIsRegistered(true);
   };
 

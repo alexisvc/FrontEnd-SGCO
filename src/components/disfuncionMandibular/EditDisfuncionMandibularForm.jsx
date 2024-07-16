@@ -14,6 +14,7 @@ import {
   Checkbox,
   IconButton,
   FormGroup,
+  Paper
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
@@ -33,10 +34,12 @@ const EditDisfuncionMandibularForm = ({
     clickArticular: disfuncionMandibular?.clickArticular || false,
     crepitacion: disfuncionMandibular?.crepitacion || false,
     subluxacion: disfuncionMandibular?.subluxacion || false,
-    dolorArticularDer: disfuncionMandibular?.dolorArticularDer || false,
-    dolorArticularIzq: disfuncionMandibular?.dolorArticularIzq || false,
-    dolorMuscularIzq: disfuncionMandibular?.dolorMuscularIzq || false,
-    dolorMuscularDer: disfuncionMandibular?.dolorMuscularDer || false,
+    dolorArticularDer:
+      disfuncionMandibular?.dolorArticularDer || Array(3).fill(""),
+    dolorArticularIzq:
+      disfuncionMandibular?.dolorArticularIzq || Array(3).fill(""),
+    dolorMuscularIzq: disfuncionMandibular?.dolorMuscularIzq || Array(27).fill(""),
+    dolorMuscularDer: disfuncionMandibular?.dolorMuscularDer || Array(27).fill(""),
     dolorMuscular: disfuncionMandibular?.dolorMuscular || false,
     dolorMuscularDescripcion:
       disfuncionMandibular?.dolorMuscularDescripcion || "",
@@ -49,11 +52,13 @@ const EditDisfuncionMandibularForm = ({
 
   const navigate = useNavigate();
 
-  const handleInputChangee = (e) => {
+  const handleArrayInputChange = (e, index) => {
     const { name, value } = e.target;
+    const updatedArray = [...formData[name]];
+    updatedArray[index] = value;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: updatedArray,
     });
   };
 
@@ -84,7 +89,7 @@ const EditDisfuncionMandibularForm = ({
   };
 
   return (
-    <Container>
+    <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
         Disfunción Temporo Mandibular
       </Typography>
@@ -321,92 +326,42 @@ const EditDisfuncionMandibularForm = ({
           />
         </Grid>
 
-        <Grid item xs={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Izquierda:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="1"
-                    checked={formData.dolorArticularIzq.includes("1")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorArticularIzq")
-                    }
-                  />
-                }
-                label="1"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="2"
-                    checked={formData.dolorArticularIzq.includes("2")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorArticularIzq")
-                    }
-                  />
-                }
-                label="2"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="3"
-                    checked={formData.dolorArticularIzq.includes("3")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorArticularIzq")
-                    }
-                  />
-                }
-                label="3"
-              />
-            </FormGroup>
-          </FormControl>
+        <Grid item xs={4}>
+          <Typography variant="h7" gutterBottom>
+            Izquierda
+          </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Derecha:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="1"
-                    checked={formData.dolorArticularDer.includes("1")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorArticularDer")
-                    }
-                  />
-                }
-                label="1"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="2"
-                    checked={formData.dolorArticularDer.includes("2")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorArticularDer")
-                    }
-                  />
-                }
-                label="2"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="3"
-                    checked={formData.dolorArticularDer.includes("3")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorArticularDer")
-                    }
-                  />
-                }
-                label="3"
-              />
-            </FormGroup>
-          </FormControl>
+        {formData.dolorArticularIzq.map((value, index) => (
+          <Grid item xs={2} key={index}>
+            <TextField
+              name="dolorArticularIzq"
+              label={index + 1}
+              value={value}
+              onChange={(e) => handleArrayInputChange(e, index)}
+              variant="outlined"
+              size="small"
+            />
+          </Grid>
+        ))}
+
+        <Grid item xs={4}>
+          <Typography variant="h7" gutterBottom>
+            Derecha
+          </Typography>
         </Grid>
+        {formData.dolorArticularDer.map((value, index) => (
+          <Grid item xs={2} key={index}>
+            <TextField
+              name="dolorArticularDer"
+              label={index + 1}
+              value={value}
+              onChange={(e) => handleArrayInputChange(e, index)}
+              variant="outlined"
+              size="small"
+            />
+          </Grid>
+        ))}
+
         <Grid item xs={12}>
           <Typography variant="h6" align="left" gutterBottom>
             Dolor Muscular
@@ -427,692 +382,48 @@ const EditDisfuncionMandibularForm = ({
           />
         </Grid>
 
-        <Grid item xs={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Izquierda:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="1"
-                    checked={formData.dolorMuscularIzq.includes("1")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="1"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="2"
-                    checked={formData.dolorMuscularIzq.includes("2")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="2"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="3"
-                    checked={formData.dolorMuscularIzq.includes("3")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="3"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="4"
-                    checked={formData.dolorMuscularIzq.includes("4")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="4"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="5"
-                    checked={formData.dolorMuscularIzq.includes("5")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="5"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="6"
-                    checked={formData.dolorMuscularIzq.includes("6")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="6"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="7"
-                    checked={formData.dolorMuscularIzq.includes("7")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="7"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="8"
-                    checked={formData.dolorMuscularIzq.includes("8")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="8"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="9"
-                    checked={formData.dolorMuscularIzq.includes("9")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="9"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="10"
-                    checked={formData.dolorMuscularIzq.includes("10")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="10"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="11"
-                    checked={formData.dolorMuscularIzq.includes("11")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="11"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="12"
-                    checked={formData.dolorMuscularIzq.includes("12")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="12"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="13"
-                    checked={formData.dolorMuscularIzq.includes("13")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="13"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="14"
-                    checked={formData.dolorMuscularIzq.includes("14")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="14"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="15"
-                    checked={formData.dolorMuscularIzq.includes("15")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="15"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="16"
-                    checked={formData.dolorMuscularIzq.includes("16")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="16"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="17"
-                    checked={formData.dolorMuscularIzq.includes("17")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="17"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="18"
-                    checked={formData.dolorMuscularIzq.includes("18")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="18"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="19"
-                    checked={formData.dolorMuscularIzq.includes("19")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="19"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="20"
-                    checked={formData.dolorMuscularIzq.includes("20")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="20"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="21"
-                    checked={formData.dolorMuscularIzq.includes("21")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="21"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="22"
-                    checked={formData.dolorMuscularIzq.includes("22")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="22"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="23"
-                    checked={formData.dolorMuscularIzq.includes("23")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="23"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="24"
-                    checked={formData.dolorMuscularIzq.includes("24")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="24"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="25"
-                    checked={formData.dolorMuscularIzq.includes("25")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="25"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="26"
-                    checked={formData.dolorMuscularIzq.includes("26")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="26"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="27"
-                    checked={formData.dolorMuscularIzq.includes("27")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularIzq")
-                    }
-                  />
-                }
-                label="27"
-              />
-            </FormGroup>
-          </FormControl>
+        <Grid item xs={12}>
+          <Typography variant="h6" align="left" gutterBottom>
+            Izquierda
+          </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Derecha:</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="1"
-                    checked={formData.dolorMuscularDer.includes("1")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="1"
+        <Grid container spacing={2} item xs={6} style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {formData.dolorMuscularIzq.map((value, index) => (
+            <Grid item xs={2} key={index}>
+              <TextField
+                name="dolorMuscularIzq"
+                label={index + 1}
+                value={value}
+                onChange={(e) => handleArrayInputChange(e, index)}
+                variant="outlined"
+                size="small"
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="2"
-                    checked={formData.dolorMuscularDer.includes("2")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="2"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="3"
-                    checked={formData.dolorMuscularDer.includes("3")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="3"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="4"
-                    checked={formData.dolorMuscularDer.includes("4")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="4"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="5"
-                    checked={formData.dolorMuscularDer.includes("5")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="5"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="6"
-                    checked={formData.dolorMuscularDer.includes("6")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="6"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="7"
-                    checked={formData.dolorMuscularDer.includes("7")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="7"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="8"
-                    checked={formData.dolorMuscularDer.includes("8")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="8"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="9"
-                    checked={formData.dolorMuscularDer.includes("9")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="9"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="10"
-                    checked={formData.dolorMuscularDer.includes("10")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="10"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="11"
-                    checked={formData.dolorMuscularDer.includes("11")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="11"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="12"
-                    checked={formData.dolorMuscularDer.includes("12")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="12"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="13"
-                    checked={formData.dolorMuscularDer.includes("13")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="13"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="14"
-                    checked={formData.dolorMuscularDer.includes("14")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="14"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="15"
-                    checked={formData.dolorMuscularDer.includes("15")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="15"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="16"
-                    checked={formData.dolorMuscularDer.includes("16")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="16"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="17"
-                    checked={formData.dolorMuscularDer.includes("17")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="17"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="18"
-                    checked={formData.dolorMuscularDer.includes("18")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="18"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="19"
-                    checked={formData.dolorMuscularDer.includes("19")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="19"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="20"
-                    checked={formData.dolorMuscularDer.includes("20")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="20"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="21"
-                    checked={formData.dolorMuscularDer.includes("21")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="21"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="22"
-                    checked={formData.dolorMuscularDer.includes("22")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="22"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="23"
-                    checked={formData.dolorMuscularDer.includes("23")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="23"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="24"
-                    checked={formData.dolorMuscularDer.includes("24")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="24"
-              />
-            </FormGroup>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="25"
-                    checked={formData.dolorMuscularDer.includes("25")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="25"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="26"
-                    checked={formData.dolorMuscularDer.includes("26")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="26"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="27"
-                    checked={formData.dolorMuscularDer.includes("27")}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorMuscularDer")
-                    }
-                  />
-                }
-                label="27"
-              />
-            </FormGroup>
-          </FormControl>
+            </Grid>
+          ))}
         </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" align="left" gutterBottom>
+            Derecha
+          </Typography>
+        </Grid>
+
+        <Grid container spacing={2} item xs={6} style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {formData.dolorMuscularDer.map((value, index) => (
+            <Grid item xs={2} key={index}>
+              <TextField
+                name="dolorMuscularDer"
+                label={index + 1}
+                value={value}
+                onChange={(e) => handleArrayInputChange(e, index)}
+                variant="outlined"
+                size="small"
+              />
+            </Grid>
+          ))}
+        </Grid>
+        
+        
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend"></FormLabel>

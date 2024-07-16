@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -10,6 +10,7 @@ import {
   Container,
   Paper
 } from '@mui/material';
+import { useEndodonticTreatments } from '../../hooks/useEndodonticTreatments';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -35,11 +36,21 @@ function a11yProps(index) {
 }
 
 const EndodonticTreatmentsDetails = ({ 
-  patientId, 
-  endodonticTreatments,
-  createEndodonticTreatment,
-  updateEndodonticTreatment,
+  patientId
 }) => {
+
+  const {
+    endodonticTreatments,
+    createEndodonticTreatment,
+    updateEndodonticTreatment,
+    fetchEndodonticTreatmentsByPatientId
+  } = useEndodonticTreatments();
+
+  // Cargar los tratamientos de endodoncia del paciente al montar el componente
+  useEffect(() => {
+    fetchEndodonticTreatmentsByPatientId(patientId);
+  }, [patientId]);
+
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {

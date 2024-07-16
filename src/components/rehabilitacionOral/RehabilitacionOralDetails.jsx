@@ -22,10 +22,8 @@ const RehabilitacionOralDetails = ({ patientId }) => {
       );
       if (rehabilitacionOral) {
         setRehabilitacionOral(rehabilitacionOral);
-        console.log(rehabilitacionOral);
       } else {
         setRehabilitacionOral(null);
-        console.log(rehabilitacionOral);
       }
     }
   }, [rehabilitacionOralList, patientId]);

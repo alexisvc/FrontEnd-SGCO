@@ -29,9 +29,7 @@ const OrtodonciaDetails = ({
   // Buscar las evoluciones de la ortodoncia
   useEffect(() => {
     if (ortodoncia) {
-      console.log(ortodoncia.id);
       fetchEvolucionesByOrtodonciaId(ortodoncia.id);
-      console.log(evoluciones);
     }
   }, [ortodoncia]);
 
