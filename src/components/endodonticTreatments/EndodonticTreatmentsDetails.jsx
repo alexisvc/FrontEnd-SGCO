@@ -36,15 +36,14 @@ function a11yProps(index) {
 }
 
 const EndodonticTreatmentsDetails = ({ 
-  patientId
-}) => {
-
-  const {
-    endodonticTreatments,
+  patientId,
+  endodonticTreatments,
     createEndodonticTreatment,
     updateEndodonticTreatment,
     fetchEndodonticTreatmentsByPatientId
-  } = useEndodonticTreatments();
+}) => {
+
+  
 
   // Cargar los tratamientos de endodoncia del paciente al montar el componente
   useEffect(() => {

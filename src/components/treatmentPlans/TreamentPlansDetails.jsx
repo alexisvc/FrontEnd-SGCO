@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import EditTreatmentForm from "./EditTreatmentForm";
 import CreateTreatmentForm from "./CreateTreatmentForm";
 import {
@@ -14,16 +14,15 @@ import {
 } from "@mui/material";
 import usePatientTreatments from "../../hooks/usePatientTreatments";
 
-const TreamentPlansDetails = ({ patientId }) => {
-  const {
-    patientTreatments,
-    createPatientTreatment,
-    updatePatientTreatment,
-    getPatientTreatmentsByPatientId,
-  } = usePatientTreatments();
-
+const TreamentPlansDetails = ({
+  patientId,
+  patientTreatments,
+  createPatientTreatment,
+  updatePatientTreatment,
+  getPatientTreatmentsByPatientId,
+}) => {
   // Cargar los tratamientos del paciente al montar el componente
-  React.useEffect(() => {
+  useEffect(() => {
     getPatientTreatmentsByPatientId(patientId);
   }, [patientId]);
 

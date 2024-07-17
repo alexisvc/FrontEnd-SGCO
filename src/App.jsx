@@ -39,6 +39,24 @@ function App() {
     updatePatient,
     setPatient,
   } = usePatients();
+  const {
+    patientTreatments,
+    createPatientTreatment,
+    updatePatientTreatment,
+    getPatientTreatmentsByPatientId,
+  } = usePatientTreatments();
+  const {
+    evolutionCharts,
+    createEvolutionChart,
+    updateEvolutionChart,
+    fetchEvolutionChartsByPatientId,
+  } = useEvolutionCharts();
+  const {
+    endodonticTreatments,
+    createEndodonticTreatment,
+    updateEndodonticTreatment,
+    fetchEndodonticTreatmentsByPatientId
+  } = useEndodonticTreatments();
   
 
   const isLoggedIn = !!user;
@@ -80,6 +98,23 @@ function App() {
               element={
                 <PatientAndMedicalRecordDetails
                   updatePatient={updatePatient}
+
+                  patientTreatments={patientTreatments}
+                  createPatientTreatment={createPatientTreatment}
+                  updatePatientTreatment={updatePatientTreatment}
+                  getPatientTreatmentsByPatientId={getPatientTreatmentsByPatientId}
+
+                  evolutionCharts={evolutionCharts}
+                  createEvolutionChart={createEvolutionChart}
+                  updateEvolutionChart={updateEvolutionChart}
+                  fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
+
+                  endodonticTreatments={endodonticTreatments}
+                  createEndodonticTreatment={createEndodonticTreatment}
+                  updateEndodonticTreatment={updateEndodonticTreatment}
+                  fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
+
+
                 />
               }
             />

@@ -1,13 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import CreatePeriodonticTreatmentsForm from './CreatePeriodonticTreatmentsForm';
-import EditPeriodonticTreatmentsForm from './EditPeriodonticTreatmentsForm';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { usePeriodonticTreatments } from '../../hooks/usePeriodonticTreatments';
+import React, { useEffect, useState } from "react";
+import CreatePeriodonticTreatmentsForm from "./CreatePeriodonticTreatmentsForm";
+import EditPeriodonticTreatmentsForm from "./EditPeriodonticTreatmentsForm";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import { usePeriodonticTreatments } from "../../hooks/usePeriodonticTreatments";
 
-const PeriodonticTreatmentsDetails = ({ 
-  patientId
-}) => {
-  const { periodonticTreatments, createPeriodonticTreatment, updatePeriodonticTreatment } = usePeriodonticTreatments();
+const PeriodonticTreatmentsDetails = ({ patientId }) => {
+  const {
+    periodonticTreatments,
+    createPeriodonticTreatment,
+    updatePeriodonticTreatment,
+  } = usePeriodonticTreatments();
   const [periodonticTreatment, setPeriodonticTreatment] = useState(null);
 
   useEffect(() => {

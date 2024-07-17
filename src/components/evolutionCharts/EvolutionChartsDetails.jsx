@@ -17,13 +17,10 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import useEvolutionCharts from "../../hooks/useEvolutionCharts";
 
-const EvolutionChartsDetails = ({ patientId }) => {
-  const {
-    evolutionCharts,
-    createEvolutionChart,
-    updateEvolutionChart,
-    fetchEvolutionChartsByPatientId,
-  } = useEvolutionCharts();
+const EvolutionChartsDetails = ({ patientId, evolutionCharts,
+  createEvolutionChart,
+  updateEvolutionChart,
+  fetchEvolutionChartsByPatientId, }) => {
 
   // Cargar los cuadros de evolución del paciente al montar el componente
   React.useEffect(() => {

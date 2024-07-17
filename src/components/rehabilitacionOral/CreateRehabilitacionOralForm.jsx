@@ -148,7 +148,7 @@ const CreateRehabilitacionOralForm = ({
       <Typography variant="h5" align="center" gutterBottom>
         Editar Rehabilitación Oral
       </Typography>
-      <Grid container spacing={2} sx={12}>
+      <Grid container spacing={2} xs={12}>
         <Typography variant="h6" align="center" gutterBottom>
           Examen Extra Oral
         </Typography>
@@ -1029,7 +1029,7 @@ const CreateRehabilitacionOralForm = ({
           <TextField
             fullWidth
             label="Cuales"
-            name="coronaDentalCuales"
+            name="espigosCuales"
             value={formData.espigosCuales}
             onChange={handleInputChange}
           />

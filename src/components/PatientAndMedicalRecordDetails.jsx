@@ -40,7 +40,19 @@ function a11yProps(index) {
 }
 
 const PatientAndMedicalRecordDetails = ({
-  updatePatient
+  updatePatient,
+  patientTreatments,
+  createPatientTreatment,
+  updatePatientTreatment,
+  getPatientTreatmentsByPatientId,
+  evolutionCharts,
+  createEvolutionChart,
+  updateEvolutionChart,
+  fetchEvolutionChartsByPatientId,
+  endodonticTreatments,
+    createEndodonticTreatment,
+    updateEndodonticTreatment,
+    fetchEndodonticTreatmentsByPatientId
 }) => {
   // Tomamos el patientId de la URL
   const { patientId } = useParams();
@@ -100,11 +112,23 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
-          <TreamentPlansDetails patientId={patientId} />
+          <TreamentPlansDetails
+            patientId={patientId}
+            patientTreatments={patientTreatments}
+            createPatientTreatment={createPatientTreatment}
+            updatePatientTreatment={updatePatientTreatment}
+            getPatientTreatmentsByPatientId={getPatientTreatmentsByPatientId}
+          />
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={2}>
-          <EvolutionChartsDetails patientId={patientId} />
+          <EvolutionChartsDetails 
+          patientId={patientId} 
+          evolutionCharts={evolutionCharts}
+          createEvolutionChart={createEvolutionChart}
+          updateEvolutionChart={updateEvolutionChart}
+          fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
+          />
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={3}>
@@ -112,8 +136,12 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={4}>
-          <EndodonticTreamentsDetails
-            patientId={patientId}
+          <EndodonticTreamentsDetails 
+          patientId={patientId} 
+          endodonticTreatments={endodonticTreatments}
+          createEndodonticTreatment={createEndodonticTreatment}
+          updateEndodonticTreatment={updateEndodonticTreatment}
+          fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
           />
         </CustomTabPanel>
 
