@@ -48,31 +48,37 @@ export function useMedicalRecords() {
       });
   };
 
-  const createMedicalRecord = (newMedicalRecord) => {
-    setLoading(true);
-    medicalRecordsService.createMedicalRecord(newMedicalRecord)
-      .then(data => {
-        setMedicalRecords([...medicalRecords, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createMedicalRecord = async (newMedicalRecord) => {
+    try {
+      setLoading(true);
+      const data = await medicalRecordsService.createMedicalRecord(newMedicalRecord);
+      setMedicalRecords([...medicalRecords, data]);
+      setLoading(false);
+      return data;
+    } catch (err) {
+      setLoading(false);
+      setError(err);
+      console.error("Error al crear el registro médico:", err);
+      throw err; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
+    }
   };
+  
 
-  const updateMedicalRecord = (id, updatedMedicalRecord) => {
-    setLoading(true);
-    medicalRecordsService.updateMedicalRecord(id, updatedMedicalRecord)
-      .then(data => {
-        setMedicalRecords(medicalRecords.map(record => record.id === id ? data : record));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updateMedicalRecord = async (id, updatedMedicalRecord) => {
+    try {
+      setLoading(true);
+      const data = await medicalRecordsService.updateMedicalRecord(id, updatedMedicalRecord);
+      setMedicalRecords(medicalRecords.map(record => record.id === id ? data : record));
+      setLoading(false);
+      return data;
+    } catch (err) {
+      setLoading(false);
+      setError(err);
+      console.error("Error al actualizar el registro médico:", err);
+      throw err; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
+    }
   };
+  
 
   const deleteMedicalRecord = (id) => {
     setLoading(true);

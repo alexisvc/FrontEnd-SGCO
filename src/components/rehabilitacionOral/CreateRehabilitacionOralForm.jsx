@@ -16,9 +16,10 @@ import {
   Checkbox,
   IconButton,
   FormGroup,
-  Paper
+  Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const CreateRehabilitacionOralForm = ({
   patientId,
@@ -91,56 +92,70 @@ const CreateRehabilitacionOralForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newData = {
-      ...formData,
-      paciente: patientId,
-    };
 
-    await createRehabilitacionOral(newData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-      refHorizontal: [],
-      refVertical: [],
-      longitudLabio: [],
-      formaLabio: [],
-      exposicionSonrisa: [],
-      corredorBucal: [],
-      orientacionPlanoOclusalAnt: [],
-      visibilidadBordeSup: "",
-      orientacionPlanoOclusalPost: [],
-      anchoIncisivoCentalSup: "",
-      longitud: "",
-      colorDientes: "",
-      simetriaGingival: [],
-      biotipoPeriodental: [],
-      numeroDiente: [],
-      perdidaHuesoPeriodental: [],
-      otrasPatologiasOseas: "",
-      restriccionViasRespiratorias: "",
-      relacionIncisal: [],
-      overbite: [],
-      overjet: [],
-      tinitus: [],
-      puedeRepetirMordida: "",
-      restauracionesDefectuosas: false,
-      restauracionesDefectuosasCuales: "",
-      lesionesCariosas: false,
-      lesionesCariosasCuales: "",
-      dientesFaltantes: false,
-      dientesFaltantesCuales: "",
-      coronaDental: false,
-      coronaDentalCuales: "",
-      espigos: false,
-      espigosCuales: "",
-      espigos2: [],
-      implantes: false,
-      implantesCuales: "",
-      edentuloParcial: [],
-      clasificacionDeKenedy: "",
-      edentuloTotal: "",
-      diagnosticoOclusal: "",
-    });
-    
+    try {
+      const newData = {
+        ...formData,
+        paciente: patientId,
+      };
+
+      await createRehabilitacionOral(newData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        refHorizontal: [],
+        refVertical: [],
+        longitudLabio: [],
+        formaLabio: [],
+        exposicionSonrisa: [],
+        corredorBucal: [],
+        orientacionPlanoOclusalAnt: [],
+        visibilidadBordeSup: "",
+        orientacionPlanoOclusalPost: [],
+        anchoIncisivoCentalSup: "",
+        longitud: "",
+        colorDientes: "",
+        simetriaGingival: [],
+        biotipoPeriodental: [],
+        numeroDiente: [],
+        perdidaHuesoPeriodental: [],
+        otrasPatologiasOseas: "",
+        restriccionViasRespiratorias: "",
+        relacionIncisal: [],
+        overbite: [],
+        overjet: [],
+        tinitus: [],
+        puedeRepetirMordida: "",
+        restauracionesDefectuosas: false,
+        restauracionesDefectuosasCuales: "",
+        lesionesCariosas: false,
+        lesionesCariosasCuales: "",
+        dientesFaltantes: false,
+        dientesFaltantesCuales: "",
+        coronaDental: false,
+        coronaDentalCuales: "",
+        espigos: false,
+        espigosCuales: "",
+        espigos2: [],
+        implantes: false,
+        implantesCuales: "",
+        edentuloParcial: [],
+        clasificacionDeKenedy: "",
+        edentuloTotal: "",
+        diagnosticoOclusal: "",
+      });
+      // Notificación de éxito
+      toast.success("Rehabilitación Oral creada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear la Rehabilitación Oral.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -918,7 +933,7 @@ const CreateRehabilitacionOralForm = ({
               />
             </FormGroup>
           </FormControl>
-        </Grid> 
+        </Grid>
 
         <Typography variant="h6" align="center" gutterBottom>
           Condición Dental
@@ -992,7 +1007,9 @@ const CreateRehabilitacionOralForm = ({
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación de corona dental</FormLabel>
+            <FormLabel component="legend">
+              Colocación de corona dental
+            </FormLabel>
             <RadioGroup
               row
               aria-label="coronaDental"
@@ -1073,7 +1090,9 @@ const CreateRehabilitacionOralForm = ({
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación sobre implantes dientes</FormLabel>
+            <FormLabel component="legend">
+              Colocación sobre implantes dientes
+            </FormLabel>
             <RadioGroup
               row
               aria-label="implantes"

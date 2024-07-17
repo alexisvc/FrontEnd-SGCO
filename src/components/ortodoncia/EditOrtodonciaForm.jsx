@@ -5,6 +5,7 @@ import { Typography, Grid, Box, Button, Container } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
 import EvolucionOrtodonciaDetails from "../evolucionOrtodoncia/EvolucionOrtodonciaDetails";
+import { toast } from "react-toastify";
 
 const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createEvolucion, updateEvolucion }) => {
   const [formData, setFormData] = useState({
@@ -28,8 +29,22 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateOrtodoncia(ortodoncia.id, formData);
-    navigate("/patients");
+  
+    try {
+      await updateOrtodoncia(ortodoncia.id, formData);
+      // Notificación de éxito
+      toast.success("Ortodoncia actualizada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Ortodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import React, { useEffect, useState } from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
 import EditEndodonticTreatmentsForm from "./EditEndodonticTreatmentsForm";
 import CreateEndodonticTreatmentsForm from "./CreateEndodonticTreatmentsForm";
-import { 
-  Button, 
-  Typography, 
-  Container,
-  Paper
-} from '@mui/material';
-import { useEndodonticTreatments } from '../../hooks/useEndodonticTreatments';
+import { Button, Typography, Container, Paper } from "@mui/material";
+import { useEndodonticTreatments } from "../../hooks/useEndodonticTreatments";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -31,20 +26,17 @@ function CustomTabPanel(props) {
 function a11yProps(index) {
   return {
     id: `tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
+    "aria-controls": `tabpanel-${index}`,
   };
 }
 
-const EndodonticTreatmentsDetails = ({ 
+const EndodonticTreatmentsDetails = ({
   patientId,
   endodonticTreatments,
-    createEndodonticTreatment,
-    updateEndodonticTreatment,
-    fetchEndodonticTreatmentsByPatientId
+  createEndodonticTreatment,
+  updateEndodonticTreatment,
+  fetchEndodonticTreatmentsByPatientId,
 }) => {
-
-  
-
   // Cargar los tratamientos de endodoncia del paciente al montar el componente
   useEffect(() => {
     fetchEndodonticTreatmentsByPatientId(patientId);
@@ -71,19 +63,27 @@ const EndodonticTreatmentsDetails = ({
   return (
     <>
       <Container component={Paper}>
-        <Typography align='center' variant="h4" sx={{ margin: 3 }}>Endodoncias</Typography>
-        <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', overflow: 'auto' }}>
-            <Tabs 
-              value={value} 
-              onChange={handleChange} 
-              aria-label="endodontic treatments tabs" 
-              variant="scrollable" 
+        <Typography align="center" variant="h4" sx={{ margin: 3 }}>
+          Endodoncias
+        </Typography>
+        <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{ borderBottom: 1, borderColor: "divider", overflow: "auto" }}
+          >
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="endodontic treatments tabs"
+              variant="scrollable"
               scrollButtons="auto"
             >
               <Tab label="Crear Endodoncia" {...a11yProps(0)} />
               {endodonticTreatments.map((treatment, index) => (
-                <Tab label={`Endodoncia ${index + 1}`} {...a11yProps(index + 1)} key={treatment.id} />
+                <Tab
+                  label={`Endodoncia ${index + 1}`}
+                  {...a11yProps(index + 1)}
+                  key={treatment.id}
+                />
               ))}
             </Tabs>
           </Box>
@@ -95,7 +95,7 @@ const EndodonticTreatmentsDetails = ({
           </CustomTabPanel>
           {endodonticTreatments.map((treatment, index) => (
             <CustomTabPanel value={value} index={index + 1} key={treatment.id}>
-              <EditEndodonticTreatmentsForm 
+              <EditEndodonticTreatmentsForm
                 endodonticTreatmentsId={treatment.id}
                 endodonticTreatmentsData={{
                   dienteEnd: treatment.dienteEnd,
@@ -119,7 +119,7 @@ const EndodonticTreatmentsDetails = ({
                   conductometriaDefinitiva: treatment.conductometriaDefinitiva,
                   tecnicaInstrumentacion: treatment.tecnicaInstrumentacion,
                   medicacionIntra: treatment.medicacionIntra,
-                }} 
+                }}
                 updateEndodonticTreatments={handleUpdateEndodonticTreatments}
               />
             </CustomTabPanel>

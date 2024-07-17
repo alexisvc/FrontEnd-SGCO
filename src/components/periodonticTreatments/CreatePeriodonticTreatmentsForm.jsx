@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   TextField,
   Typography,
@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router";
-
+import { toast } from "react-toastify";
 
 const CreatePeriodonticTreatmentsForm = ({
   patientId,
@@ -64,22 +64,24 @@ const CreatePeriodonticTreatmentsForm = ({
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newPeriodonticTreatmentData = {
-      ...formData,
-      paciente: patientId,
-    };
-    
-    await createPeriodonticTreatment(newPeriodonticTreatmentData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-        diagnosticoPer:  "",
-        observacionPer:  "",
+
+    try {
+      const newPeriodonticTreatmentData = {
+        ...formData,
+        paciente: patientId,
+      };
+
+      await createPeriodonticTreatment(newPeriodonticTreatmentData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        diagnosticoPer: "",
+        observacionPer: "",
         movilidadInferior: [],
         furcaInferior: [],
         sangradoInferior: [],
@@ -99,9 +101,22 @@ const CreatePeriodonticTreatmentsForm = ({
         nivelInsercionSuperiorA: [],
         mrgGingivalSuperiorB: [],
         profundidadSondajeSuperiorB: [],
-        nivelInsercionSuperiorB: []
-    });
-    navigate("/patients");
+        nivelInsercionSuperiorB: [],
+      });
+
+      // Notificación de éxito
+      toast.success("Periodoncia actualizada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Periodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -446,7 +461,7 @@ const CreatePeriodonticTreatmentsForm = ({
             Superior
           </Typography>
         </Grid>
-        <TableContainer >
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>

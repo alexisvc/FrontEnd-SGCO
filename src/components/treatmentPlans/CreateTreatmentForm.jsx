@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IconButton, TableRow, TableCell, TextField } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { toast } from "react-toastify";
 
 const CreateTreatmentForm = ({
   patientId,
@@ -23,18 +24,33 @@ const CreateTreatmentForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newTreatmentData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createPatientTreatment(newTreatmentData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-      cita: "",
-      actividadPlanTrat: "",
-      fechaPlanTrat: "",
-      montoAbono: "",
-    });
+  
+    try {
+      const newTreatmentData = {
+        ...formData,
+        paciente: patientId,
+      };
+      await createPatientTreatment(newTreatmentData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        cita: "",
+        actividadPlanTrat: "",
+        fechaPlanTrat: "",
+        montoAbono: "",
+      });
+      // Notificación de éxito
+      toast.success("Plan de tratamiento creado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear el Plan de tratamiento.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

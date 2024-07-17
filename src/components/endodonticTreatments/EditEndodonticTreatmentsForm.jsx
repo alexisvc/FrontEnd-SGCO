@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SaveIcon from '@mui/icons-material/Save';
+import { toast } from "react-toastify";
 
 const EditEndodonticTreatmentsForm = ({
     endodonticTreatmentsId,
@@ -77,10 +78,24 @@ const EditEndodonticTreatmentsForm = ({
     });
   };
   
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateEndodonticTreatments(endodonticTreatmentsId, formData);
+  
+    try {
+        await updateEndodonticTreatments(endodonticTreatmentsId, formData);
+      // Notificación de éxito
+      toast.success("Endodoncia actualizada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Endodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
  

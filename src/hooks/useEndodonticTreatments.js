@@ -47,31 +47,37 @@ export function useEndodonticTreatments() {
       });
   };
 
-  const createEndodonticTreatment = (newEndodonticTreatment) => {
-    setLoading(true);
-    endodonticTreatmentService.createEndodonticTreatment(newEndodonticTreatment)
-      .then(data => {
-        setEndodonticTreatments([...endodonticTreatments, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createEndodonticTreatment = async (newEndodonticTreatment) => {
+    try {
+      setLoading(true);
+      const data = await endodonticTreatmentService.createEndodonticTreatment(newEndodonticTreatment);
+      setEndodonticTreatments([...endodonticTreatments, data]);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al crear el tratamiento endodóntico:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
-  const updateEndodonticTreatment = (id, updatedEndodonticTreatment) => {
-    setLoading(true);
-    endodonticTreatmentService.updateEndodonticTreatment(id, updatedEndodonticTreatment)
-      .then(data => {
-        setEndodonticTreatments(endodonticTreatments.map(treatment => treatment.id === id ? data : treatment));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updateEndodonticTreatment = async (id, updatedEndodonticTreatment) => {
+    try {
+      setLoading(true);
+      const data = await endodonticTreatmentService.updateEndodonticTreatment(id, updatedEndodonticTreatment);
+      setEndodonticTreatments(endodonticTreatments.map(treatment => treatment.id === id ? data : treatment));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al actualizar el tratamiento endodóntico:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
   const deleteEndodonticTreatment = (id) => {
     setLoading(true);

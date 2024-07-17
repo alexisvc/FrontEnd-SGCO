@@ -14,11 +14,12 @@ import {
   Checkbox,
   IconButton,
   FormGroup,
-  Paper
+  Paper,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const EditRehabilitacionOralForm = ({
   rehabilitacionOral,
@@ -45,7 +46,8 @@ const EditRehabilitacionOralForm = ({
     perdidaHuesoPeriodental:
       rehabilitacionOral?.perdidaHuesoPeriodental || false,
     otrasPatologiasOseas: rehabilitacionOral?.otrasPatologiasOseas || "",
-    restriccionViasRespiratorias: rehabilitacionOral?.restriccionViasRespiratorias || "",
+    restriccionViasRespiratorias:
+      rehabilitacionOral?.restriccionViasRespiratorias || "",
     relacionIncisal: rehabilitacionOral?.relacionIncisal || false,
     overbite: rehabilitacionOral?.overbite || false,
     overjet: rehabilitacionOral?.overjet || false,
@@ -53,7 +55,8 @@ const EditRehabilitacionOralForm = ({
     puedeRepetirMordida: rehabilitacionOral?.puedeRepetirMordida || "",
     restauracionesDefectuosas:
       rehabilitacionOral?.restauracionesDefectuosas || false,
-    restauracionesDefectuosasCuales: rehabilitacionOral?.restauracionesDefectuosasCuales || "",
+    restauracionesDefectuosasCuales:
+      rehabilitacionOral?.restauracionesDefectuosasCuales || "",
     lesionesCariosas: rehabilitacionOral?.lesionesCariosas || false,
     lesionesCariosasCuales: rehabilitacionOral?.lesionesCariosasCuales || "",
     dientesFaltantes: rehabilitacionOral?.dientesFaltantes || false,
@@ -103,8 +106,22 @@ const EditRehabilitacionOralForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateRehabilitacionOral(rehabilitacionOral.id, formData);
-    navigate("/patients");
+
+    try {
+      await updateRehabilitacionOral(rehabilitacionOral.id, formData);
+      // Notificación de éxito
+      toast.success("Rehabilitación Oral actualizada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Rehabilitación Oral.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -882,7 +899,7 @@ const EditRehabilitacionOralForm = ({
               />
             </FormGroup>
           </FormControl>
-        </Grid> 
+        </Grid>
 
         <Typography variant="h6" align="center" gutterBottom>
           Condición Dental
@@ -956,7 +973,9 @@ const EditRehabilitacionOralForm = ({
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación de corona dental</FormLabel>
+            <FormLabel component="legend">
+              Colocación de corona dental
+            </FormLabel>
             <RadioGroup
               row
               aria-label="coronaDental"
@@ -1037,7 +1056,9 @@ const EditRehabilitacionOralForm = ({
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">Colocación sobre implantes dientes</FormLabel>
+            <FormLabel component="legend">
+              Colocación sobre implantes dientes
+            </FormLabel>
             <RadioGroup
               row
               aria-label="implantes"

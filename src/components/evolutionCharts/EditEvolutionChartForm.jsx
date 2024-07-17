@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Typography, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SaveIcon from '@mui/icons-material/Save';
+import { toast } from "react-toastify";
 
 const EditEvolutionChartForm = ({
   evolutionChartId,
@@ -24,9 +25,25 @@ const EditEvolutionChartForm = ({
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateEvolutionChart(evolutionChartId, formData);
+  
+    try {
+      await updateEvolutionChart(evolutionChartId, formData);
+      // Notificación de éxito
+      toast.success("Cuadro de evolución actualizado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar el Cuadro de evolución.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

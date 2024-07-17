@@ -19,6 +19,7 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const EditDisfuncionMandibularForm = ({
   disfuncionMandibular,
@@ -84,8 +85,22 @@ const EditDisfuncionMandibularForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateDisfuncionMandibular(disfuncionMandibular.id, formData);
-    navigate("/patients");
+
+    try {
+      await updateDisfuncionMandibular(disfuncionMandibular.id, formData);
+      // Notificación de éxito
+      toast.success("Disfunción Mandibular actualizada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Disfunción Mandibular.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

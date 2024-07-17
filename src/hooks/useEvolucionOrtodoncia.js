@@ -47,31 +47,37 @@ export function useEvolucionOrtodoncia() {
       });
   };
 
-  const createEvolucion = (newEvolucion) => {
-    setLoading(true);
-    evolucionOrtodonciaService.create(newEvolucion)
-      .then(data => {
-        setEvoluciones([...evoluciones, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createEvolucion = async (newEvolucion) => {
+    try {
+      setLoading(true);
+      const data = await evolucionOrtodonciaService.create(newEvolucion);
+      setEvoluciones([...evoluciones, data]);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al crear la evolución:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
-  const updateEvolucion = (id, updatedEvolucion) => {
-    setLoading(true);
-    evolucionOrtodonciaService.update(id, updatedEvolucion)
-      .then(data => {
-        setEvoluciones(evoluciones.map(evolucion => evolucion.id === id ? data : evolucion));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updateEvolucion = async (id, updatedEvolucion) => {
+    try {
+      setLoading(true);
+      const data = await evolucionOrtodonciaService.update(id, updatedEvolucion);
+      setEvoluciones(evoluciones.map(evolucion => evolucion.id === id ? data : evolucion));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al actualizar la evolución:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
   const deleteEvolucion = (id) => {
     setLoading(true);

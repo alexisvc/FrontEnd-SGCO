@@ -37,19 +37,27 @@ const usePatientTreatments = () => {
     try {
       const data = await patientTreatmentService.create(newTreatment);
       setPatientTreatments([...patientTreatments, data]);
+      return data;
     } catch (error) {
       setError(error.response ? error.response.data.error : 'Error creating patient treatment');
+      console.error("Error al crear el tratamiento del paciente:", error);
+      throw error; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
     }
   };
+  
 
   const updatePatientTreatment = async (id, updatedTreatment) => {
     try {
       const data = await patientTreatmentService.update(id, updatedTreatment);
       setPatientTreatments(patientTreatments.map(treatment => treatment.id === id ? data : treatment));
+      return data;
     } catch (error) {
       setError(error.response ? error.response.data.error : 'Error updating patient treatment');
+      console.error("Error al actualizar el tratamiento del paciente:", error);
+      throw error; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
     }
   };
+  
 
   const deletePatientTreatment = async (id) => {
     try {

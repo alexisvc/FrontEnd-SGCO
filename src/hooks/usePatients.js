@@ -46,31 +46,36 @@ export function usePatients() {
       });
   };
 
-  const createPatient = (newPatient) => {
-    setLoading(true);
-    patientsService.createPatient(newPatient)
-      .then(data => {
-        setPatients([...patients, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createPatient = async (newPatient) => {
+    try {
+      setLoading(true);
+      const data = await patientsService.createPatient(newPatient);
+      setPatients([...patients, data]);
+      setLoading(false);
+      return data;
+    } catch (err) {
+      setLoading(false);
+      setError(err);
+      console.error("Error al crear el pictograma:", err);
+      throw err;  // Lanzar el error para que pueda ser capturado por el bloque catch en handleCreateSubmit
+    }
   };
+  
 
-  const updatePatient = (id, updatedPatient) => {
-    setLoading(true);
-    patientsService.updatePatient(id, updatedPatient)
-      .then(data => {
-        setPatients(patients.map(patient => patient.id === id ? data : patient));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updatePatient = async (id, updatedPatient) => {
+    try {
+      setLoading(true);
+      const data = await patientsService.updatePatient(id, updatedPatient);
+      setPatients(patients.map(patient => patient.id === id ? data : patient));
+      setLoading(false);
+      return data;
+    } catch (err) {
+      setLoading(false);
+      setError(err);
+      throw err; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
+    }
   };
+  
 
   const deletePatient = (id) => {
     setLoading(true);

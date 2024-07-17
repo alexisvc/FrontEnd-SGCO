@@ -11,6 +11,7 @@ import {
   Container,
   Paper,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 const PatientDetails = ({ updatePatient }) => {
   const location = useLocation();
@@ -28,10 +29,26 @@ const PatientDetails = ({ updatePatient }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updatePatient(patient.id, editablePatient);
-    navigate("/patients");
+  
+    try {
+      await updatePatient(patient.id, editablePatient);
+      // Notificación de éxito
+      toast.success("Paciente actualizado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+
+    } catch (error) {
+      setEditablePatient({ ...patient });
+      // Notificación de error
+      toast.error("Error al crear el paciente.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

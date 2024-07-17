@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
   const [formData, setFormData] = useState({
@@ -33,21 +34,36 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newTreatmentData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createOrtodoncia(newTreatmentData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-      diagnostico: "",
-      objetivo: "",
-      tiempoAproximado: "",
-      tipoBracket: "",
-      aparatoOrtopedico: "",
-      observaciones: "",
-    });
-    
+  
+    try {
+      const newTreatmentData = {
+        ...formData,
+        paciente: patientId,
+      };
+      await createOrtodoncia(newTreatmentData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        diagnostico: "",
+        objetivo: "",
+        tiempoAproximado: "",
+        tipoBracket: "",
+        aparatoOrtopedico: "",
+        observaciones: "",
+      });
+      // Notificación de éxito
+      toast.success("Ortodoncia creada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate('/patients');
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Ortodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

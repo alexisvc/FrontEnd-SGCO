@@ -49,31 +49,37 @@ export function usePeriodonticTreatments() {
       });
   };
 
-  const createPeriodonticTreatment = (newPeriodonticTreatment) => {
-    setLoading(true);
-    periodonticTreatmentService.createPeriodonticTreatment(newPeriodonticTreatment)
-      .then(data => {
-        setPeriodonticTreatments([...periodonticTreatments, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createPeriodonticTreatment = async (newPeriodonticTreatment) => {
+    try {
+      setLoading(true);
+      const data = await periodonticTreatmentService.createPeriodonticTreatment(newPeriodonticTreatment);
+      setPeriodonticTreatments([...periodonticTreatments, data]);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al crear el tratamiento periodontal:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
-  const updatePeriodonticTreatment = (id, updatedPeriodonticTreatment) => {
-    setLoading(true);
-    periodonticTreatmentService.updatePeriodonticTreatment(id, updatedPeriodonticTreatment)
-      .then(data => {
-        setPeriodonticTreatments(periodonticTreatments.map(treatment => treatment.id === id ? data : treatment));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updatePeriodonticTreatment = async (id, updatedPeriodonticTreatment) => {
+    try {
+      setLoading(true);
+      const data = await periodonticTreatmentService.updatePeriodonticTreatment(id, updatedPeriodonticTreatment);
+      setPeriodonticTreatments(periodonticTreatments.map(treatment => treatment.id === id ? data : treatment));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al actualizar el tratamiento periodontal:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
   const deletePeriodonticTreatment = (id) => {
     setLoading(true);

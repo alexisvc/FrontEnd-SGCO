@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
   const [formData, setFormData] = useState({
@@ -31,23 +32,39 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createCirugiaPatologia(newData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-      antecedentesCirPat: "",
-      alergiasMedCirPat: "",
-      patologiaTejBland: "",
-      patologiaTejDuros: "",
-      diagRadiografico: "",
-      localizacionPatologia: "",
-    });
-    
+  
+    try {
+      const newData = {
+        ...formData,
+        paciente: patientId,
+      };
+      await createCirugiaPatologia(newData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        antecedentesCirPat: "",
+        alergiasMedCirPat: "",
+        patologiaTejBland: "",
+        patologiaTejDuros: "",
+        diagRadiografico: "",
+        localizacionPatologia: "",
+      });
+      // Notificación de éxito
+      toast.success("Cirugía y patología creada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear la Cirugía y patología.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

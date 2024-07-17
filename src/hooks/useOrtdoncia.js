@@ -48,31 +48,37 @@ export function useOrtodoncia() {
       });
   };
 
-  const createOrtodoncia = (newOrtodoncia) => {
-    setLoading(true);
-    ortodonciaService.createOrtodoncia(newOrtodoncia)
-      .then(data => {
-        setOrtodoncias([...ortodoncias, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createOrtodoncia = async (newOrtodoncia) => {
+    try {
+      setLoading(true);
+      const data = await ortodonciaService.createOrtodoncia(newOrtodoncia);
+      setOrtodoncias([...ortodoncias, data]);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al crear la ortodoncia:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
-  const updateOrtodoncia = (id, updatedOrtodoncia) => {
-    setLoading(true);
-    ortodonciaService.updateOrtodoncia(id, updatedOrtodoncia)
-      .then(data => {
-        setOrtodoncias(ortodoncias.map(ortodoncia => ortodoncia.id === id ? data : ortodoncia));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updateOrtodoncia = async (id, updatedOrtodoncia) => {
+    try {
+      setLoading(true);
+      const data = await ortodonciaService.updateOrtodoncia(id, updatedOrtodoncia);
+      setOrtodoncias(ortodoncias.map(ortodoncia => ortodoncia.id === id ? data : ortodoncia));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al actualizar la ortodoncia:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
   const deleteOrtodoncia = (id) => {
     setLoading(true);

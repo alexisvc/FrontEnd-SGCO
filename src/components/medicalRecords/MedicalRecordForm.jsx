@@ -16,6 +16,7 @@ import {
   Box,
   Paper
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecord }) => {
   const [newMedicalRecord, setNewMedicalRecord] = useState({
@@ -72,10 +73,25 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateMedicalRecord(patientMedicalRecord.id, newMedicalRecord);
-    navigate("/patients");
+  
+    try {
+      await updateMedicalRecord(patientMedicalRecord.id, newMedicalRecord);
+      // Notificación de éxito
+      toast.success("Detalle Médico actualizado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate('/patients');
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar el detalle Médico.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   const handleCheckboxChange = (e, listName) => {

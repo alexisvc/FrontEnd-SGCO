@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IconButton, TableRow, TableCell, TextField } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { toast } from "react-toastify";
 
 const CreateEvolucionOrtodonciaForm = ({
   ortodonciaId,
@@ -22,17 +23,32 @@ const CreateEvolucionOrtodonciaForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newEvolucionData = {
-      ...formData,
-      ortodoncia: ortodonciaId,
-    };
-    await createEvolucion(newEvolucionData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-      fechaEvolucion: "",
-      evolucion: "",
-      arcoEvolucion: ""
-    });
+  
+    try {
+      const newEvolucionData = {
+        ...formData,
+        ortodoncia: ortodonciaId,
+      };
+      await createEvolucion(newEvolucionData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        fechaEvolucion: "",
+        evolucion: "",
+        arcoEvolucion: ""
+      });
+      // Notificación de éxito
+      toast.success("Evolución Ortodoncia creada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear la Evolución Ortodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

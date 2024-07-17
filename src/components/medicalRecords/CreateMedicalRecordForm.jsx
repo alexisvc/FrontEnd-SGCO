@@ -16,6 +16,7 @@ import {
   Box,
   Paper
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
   const [newMedicalRecord, setNewMedicalRecord] = useState({
@@ -72,12 +73,28 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    createMedicalRecord(newMedicalRecord);
-    navigate('/patients');
-  };
   
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      await createMedicalRecord(newMedicalRecord);
+      // Notificación de éxito
+      toast.success("Detalle Médico creado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate('/patients');
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear el detalle Médico.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  };
+
   const handleCheckboxChange = (e, listName) => {
     const { name, checked } = e.target;
     const updatedList = checked

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Typography, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SaveIcon from '@mui/icons-material/Save';
+import { toast } from "react-toastify";
 
 
 const CreateEvolutionChartForm = ({
@@ -26,19 +27,34 @@ const CreateEvolutionChartForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newEvolutionChartData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createEvolutionChart(newEvolutionChartData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-        fechaCuadEvol: "",
-        actividadCuadEvol: "",
-        recomendacionCuadEvol: "",
-        firmaOdon: "",
-        firmaPaciente: "",
-    });
+  
+    try {
+      const newEvolutionChartData = {
+        ...formData,
+        paciente: patientId,
+      };
+      await createEvolutionChart(newEvolutionChartData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+          fechaCuadEvol: "",
+          actividadCuadEvol: "",
+          recomendacionCuadEvol: "",
+          firmaOdon: "",
+          firmaPaciente: "",
+      });
+      // Notificación de éxito
+      toast.success("Cuadro de evolución creado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear el Cuadro de evolución.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

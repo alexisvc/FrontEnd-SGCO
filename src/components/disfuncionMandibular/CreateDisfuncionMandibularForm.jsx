@@ -19,6 +19,7 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const CreateDisfuncionMandibularForm = ({
   patientId,
@@ -79,34 +80,48 @@ const CreateDisfuncionMandibularForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newData = {
-      ...formData,
-      paciente: patientId,
-    };
 
-    await createDisfuncionMandibular(newData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-      huesoCortical: "",
-      espacioArticular: "",
-      condillo: "",
-      desviacionLineaMedia: "",
-      conReduccion: "",
-      sinReduccion: "",
-      clickArticular: "",
-      crepitacion: "",
-      subluxacion: "",
-      dolorArticularDer: Array(3).fill(""),
-      dolorArticularIzq: Array(3).fill(""),
-      dolorMuscularIzq: Array(27).fill(""),
-      dolorMuscularDer: Array(27).fill(""),
-      dolorMuscular: [],
-      dolorMuscularDescripcion: "",
-      dolorOrofacialComunMuscular: [],
-      mallampati: [],
-      dolorOrofacialComunApnea: [],
-    });
-    navigate("/patients");
+    try {
+      const newData = {
+        ...formData,
+        paciente: patientId,
+      };
+
+      await createDisfuncionMandibular(newData);
+      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      setFormData({
+        huesoCortical: "",
+        espacioArticular: "",
+        condillo: "",
+        desviacionLineaMedia: "",
+        conReduccion: "",
+        sinReduccion: "",
+        clickArticular: "",
+        crepitacion: "",
+        subluxacion: "",
+        dolorArticularDer: Array(3).fill(""),
+        dolorArticularIzq: Array(3).fill(""),
+        dolorMuscularIzq: Array(27).fill(""),
+        dolorMuscularDer: Array(27).fill(""),
+        dolorMuscular: [],
+        dolorMuscularDescripcion: "",
+        dolorOrofacialComunMuscular: [],
+        mallampati: [],
+        dolorOrofacialComunApnea: [],
+      });
+      // Notificación de éxito
+      toast.success("Disfunción Mandibular creada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear la Disfunción Mandibular.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

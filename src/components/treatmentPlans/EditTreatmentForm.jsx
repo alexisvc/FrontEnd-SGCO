@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TableRow, TableCell, TextField, IconButton } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import { toast } from "react-toastify";
 
 const EditTreatmentForm = ({
   treatmentId,
@@ -24,7 +25,22 @@ const EditTreatmentForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updatePatientTreatment(treatmentId, formData);
+  
+    try {
+      await updatePatientTreatment(treatmentId, formData);
+      // Notificación de éxito
+      toast.success("Plan de tratamiento actualizado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar el Plan de tratamiento.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

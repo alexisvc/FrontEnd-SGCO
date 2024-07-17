@@ -77,35 +77,16 @@ const Patients = ({
 
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
+  
     try {
       await createPatient(newPatient);
-      setNewPatient({
-        nombrePaciente: "",
-        edadPaciente: "",
-        fechaNacimiento: "",
-        correoPaciente: "",
-        direccionPaciente: "",
-        generoPaciente: "",
-        numeroCedula: "",
-        ocupacion: "",
-        telefono: "",
-        telContactoEmergencia: "",
-        afinidadContactoEmergencia: "",
-      });
-      toast.success("Creación exitoso.", {
+      // Notificación de éxito
+      toast.success("Paciente creado exitosamente", {
         position: "top-right",
         autoClose: 3000,
       });
-      setShowCreateForm(false);
-    } catch (error) {
-      console.error("Error al ingresar:", error);
-      toast.error(
-        "Error al crear el Paciente. Inténtalo de nuevo.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
+  
+      // Limpiar los campos del formulario
       setNewPatient({
         nombrePaciente: "",
         edadPaciente: "",
@@ -119,9 +100,17 @@ const Patients = ({
         telContactoEmergencia: "",
         afinidadContactoEmergencia: "",
       });
+  
+      setShowCreateForm(false);
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear el paciente.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
-    
   };
+  
 
   const handleViewPatient = (patient) => {
     navigate(`/prueba/${patient.id}`, { state: { patient } });

@@ -17,6 +17,7 @@ import {
     IconButton,
     FormGroup,
 } from '@mui/material';
+import { toast } from "react-toastify";
 
 
 const CreateEndodonticTreatmentsForm = ({
@@ -75,39 +76,54 @@ const CreateEndodonticTreatmentsForm = ({
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newEndodonticTreatmentData = {
-      ...formData,
-      paciente: patientId,
-    };
-    
-    await createEndodonticTreatment(newEndodonticTreatmentData);
-    // Lógica para limpiar el formulario o mostrar un mensaje de éxito
-    setFormData({
-        dienteEnd:  "",
-        grapaEnd:  "",
-        diagDental:  "",
-        diagPulpar:  "",
-        intervencionIndicada:  "",
-        tecnicaObturacion:  "",
-        numConductos:  "",
-        obsAnatomicas: "",
-        etiologia:  [],
-        dolor:  [],
-        pruebasClinicas:  [],
-        pruebasVitalidad:  [],
-        camaraPulpar:  [],
-        conductosRadiculares:  [],
-        foramen:  [],
-        ligamentoPeriodontal: [],
-        otrosHallazgos:  "",
-        conductometriaTentativa:  "",
-        conductometriaDefinitiva:  "",
-        tecnicaInstrumentacion:  "",
-        medicacionIntra:  "",
-    });
-    
+  
+    try {
+        const newEndodonticTreatmentData = {
+            ...formData,
+            paciente: patientId,
+          };
+          
+          await createEndodonticTreatment(newEndodonticTreatmentData);
+          // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+          setFormData({
+              dienteEnd:  "",
+              grapaEnd:  "",
+              diagDental:  "",
+              diagPulpar:  "",
+              intervencionIndicada:  "",
+              tecnicaObturacion:  "",
+              numConductos:  "",
+              obsAnatomicas: "",
+              etiologia:  [],
+              dolor:  [],
+              pruebasClinicas:  [],
+              pruebasVitalidad:  [],
+              camaraPulpar:  [],
+              conductosRadiculares:  [],
+              foramen:  [],
+              ligamentoPeriodontal: [],
+              otrosHallazgos:  "",
+              conductometriaTentativa:  "",
+              conductometriaDefinitiva:  "",
+              tecnicaInstrumentacion:  "",
+              medicacionIntra:  "",
+          });
+      // Notificación de éxito
+      toast.success("Endodoncia creada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al crear la Endodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

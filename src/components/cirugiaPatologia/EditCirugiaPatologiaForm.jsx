@@ -4,6 +4,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { Typography, Grid, Box, Button, Container } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const EditCirugiaPatologiaForm = ({
   cirugiaPatologia,
@@ -30,8 +31,22 @@ const EditCirugiaPatologiaForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateCirugiaPatologia(cirugiaPatologia.id, formData);
-    navigate("/patients");
+  
+    try {
+      await updateCirugiaPatologia(cirugiaPatologia.id, formData);
+      // Notificación de éxito
+      toast.success("Cirugía y patología actualizado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Cirugía y patología.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

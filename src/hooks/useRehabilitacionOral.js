@@ -48,31 +48,36 @@ export function useRehabilitacionOral() {
       });
   };
 
-  const createRehabilitacionOral = (newRehabilitacionOral) => {
-    setLoading(true);
-    rehabilitacionOralService.createRehabilitacionOral(newRehabilitacionOral)
-      .then(data => {
-        setRehabilitacionOralList([...rehabilitacionOralList, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createRehabilitacionOral = async (newRehabilitacionOral) => {
+    try {
+      setLoading(true);
+      const data = await rehabilitacionOralService.createRehabilitacionOral(newRehabilitacionOral);
+      setRehabilitacionOralList([...rehabilitacionOralList, data]);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al crear la rehabilitación oral:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
 
-  const updateRehabilitacionOral = (id, updatedRehabilitacionOral) => {
-    setLoading(true);
-    rehabilitacionOralService.updateRehabilitacionOral(id, updatedRehabilitacionOral)
-      .then(data => {
-        setRehabilitacionOralList(rehabilitacionOralList.map(item => item.id === id ? data : item));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const updateRehabilitacionOral = async (id, updatedRehabilitacionOral) => {
+    try {
+      setLoading(true);
+      const data = await rehabilitacionOralService.updateRehabilitacionOral(id, updatedRehabilitacionOral);
+      setRehabilitacionOralList(rehabilitacionOralList.map(item => item.id === id ? data : item));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al actualizar la rehabilitación oral:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
   const deleteRehabilitacionOral = (id) => {
     setLoading(true);

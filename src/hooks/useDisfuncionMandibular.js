@@ -48,31 +48,36 @@ export function useDisfuncionMandibular() {
       });
   };
 
-  const createDisfuncionMandibular = (newDisfuncionMandibular) => {
-    setLoading(true);
-    disfuncionMandibularService.createDisfuncionMandibular(newDisfuncionMandibular)
-      .then(data => {
-        setDisfuncionMandibularList([...disfuncionMandibularList, data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const createDisfuncionMandibular = async (newDisfuncionMandibular) => {
+    try {
+      setLoading(true);
+      const data = await disfuncionMandibularService.createDisfuncionMandibular(newDisfuncionMandibular);
+      setDisfuncionMandibularList([...disfuncionMandibularList, data]);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al crear la disfunción mandibular:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
-
-  const updateDisfuncionMandibular = (id, updatedDisfuncionMandibular) => {
-    setLoading(true);
-    disfuncionMandibularService.updateDisfuncionMandibular(id, updatedDisfuncionMandibular)
-      .then(data => {
-        setDisfuncionMandibularList(disfuncionMandibularList.map(item => item.id === id ? data : item));
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  
+  const updateDisfuncionMandibular = async (id, updatedDisfuncionMandibular) => {
+    try {
+      setLoading(true);
+      const data = await disfuncionMandibularService.updateDisfuncionMandibular(id, updatedDisfuncionMandibular);
+      setDisfuncionMandibularList(disfuncionMandibularList.map(item => item.id === id ? data : item));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      console.error("Error al actualizar la disfunción mandibular:", error);
+      throw error; // Propagar el error al llamador
+    }
   };
+  
 
   const deleteDisfuncionMandibular = (id) => {
     setLoading(true);

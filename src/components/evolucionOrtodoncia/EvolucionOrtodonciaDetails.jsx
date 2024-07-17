@@ -2,7 +2,6 @@ import React from "react";
 import EditEvolucionOrtodonciaForm from "./EditEvolucionOrtodonciaForm";
 import CreateEvolucionOrtodonciaForm from "./CreateEvolucionOrtdonciaForm";
 import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import EditEvolutionChartForm from "../evolutionCharts/EditEvolutionChartForm";
 
 
 const EvolucionOrtodonciaDetails = ({

@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const EditPeriodonticTreatmentsForm = ({
   periodonticTreatment,
@@ -82,8 +83,23 @@ const EditPeriodonticTreatmentsForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updatePeriodonticTreatment(periodonticTreatment.id, formData);
-    navigate("/patients");
+
+    try {
+      await updatePeriodonticTreatment(periodonticTreatment.id, formData);
+
+      // Notificación de éxito
+      toast.success("Plan de tratamiento actualizado exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/patients");
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar el Plan de tratamiento.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

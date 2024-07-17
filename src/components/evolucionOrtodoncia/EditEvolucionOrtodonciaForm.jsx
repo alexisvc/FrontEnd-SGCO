@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TableRow, TableCell, TextField, IconButton } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import { toast } from "react-toastify";
 
 const EditEvolucionOrtodonciaForm = ({
   evolucionId,
@@ -23,7 +24,22 @@ const EditEvolucionOrtodonciaForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateEvolucion(evolucionId, formData);
+  
+    try {
+      await updateEvolucion(evolucionId, formData);
+      // Notificación de éxito
+      toast.success("Evolución Ortodoncia actualizada exitosamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+    } catch (error) {
+      // Notificación de error
+      toast.error("Error al actualizar la Evolución Ortodoncia.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
