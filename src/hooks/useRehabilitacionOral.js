@@ -28,6 +28,7 @@ export function useRehabilitacionOral() {
         setLoading(false);
       })
       .catch(err => {
+        setRehabilitacionOral(null);
         setError(err);
         setLoading(false);
       });
@@ -41,6 +42,7 @@ export function useRehabilitacionOral() {
         setLoading(false);
       })
       .catch(err => {
+        setRehabilitacionOral(null);
         setError(err);
         setLoading(false);
       });

@@ -28,6 +28,7 @@ export function useMedicalRecords() {
         setLoading(false);
       })
       .catch(err => {
+        setMedicalRecord(null);
         setError(err);
         setLoading(false);
       });
@@ -41,6 +42,7 @@ export function useMedicalRecords() {
         setLoading(false);
       })
       .catch(err => {
+        setMedicalRecord(null);
         setError(err);
         setLoading(false);
       });

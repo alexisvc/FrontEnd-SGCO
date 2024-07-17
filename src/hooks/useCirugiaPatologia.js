@@ -28,6 +28,7 @@ export function useCirugiaPatologia() {
         setLoading(false);
       })
       .catch(err => {
+        setCirugiaPatologia(null);
         setError(err);
         setLoading(false);
       });
@@ -41,9 +42,9 @@ export function useCirugiaPatologia() {
         setLoading(false);
       })
       .catch(err => {
+        setCirugiaPatologia(null);
         setError(err);
         setLoading(false);
-        setCirugiaPatologia(null);
       });
   };
 

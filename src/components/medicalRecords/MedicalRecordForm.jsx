@@ -706,7 +706,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
 
           <Grid item xs={12} container justifyContent="center">
             <Button type="submit" variant="contained" color="primary">
-              Guardar Historia Clínica
+              Actualizar Historia Clínica
             </Button>
           </Grid>
         </Grid>

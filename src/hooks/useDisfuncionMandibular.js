@@ -28,6 +28,7 @@ export function useDisfuncionMandibular() {
         setLoading(false);
       })
       .catch(err => {
+        setDisfuncionMandibular(null);
         setError(err);
         setLoading(false);
       });
@@ -41,6 +42,7 @@ export function useDisfuncionMandibular() {
         setLoading(false);
       })
       .catch(err => {
+        setDisfuncionMandibular(null);
         setError(err);
         setLoading(false);
       });

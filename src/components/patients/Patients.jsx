@@ -23,6 +23,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SearchIcon from "@mui/icons-material/Search";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { toast } from "react-toastify";
 
 const Patients = ({
   patients,
@@ -33,7 +34,7 @@ const Patients = ({
   setPatient
 }) => {
   const navigate = useNavigate();
-  //const { patients, patient, loading, error, fetchPatientById, fetchPatientByCedula, createPatient, updatePatient } = usePatients();
+  
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
   const [searchId, setSearchId] = useState("");
@@ -74,23 +75,52 @@ const Patients = ({
     setNewPatient((prevPatient) => ({ ...prevPatient, [name]: value }));
   };
 
-  const handleCreateSubmit = (e) => {
+  const handleCreateSubmit = async (e) => {
     e.preventDefault();
-    createPatient(newPatient);
-    setNewPatient({
-      nombrePaciente: "",
-      edadPaciente: "",
-      fechaNacimiento: "",
-      correoPaciente: "",
-      direccionPaciente: "",
-      generoPaciente: "",
-      numeroCedula: "",
-      ocupacion: "",
-      telefono: "",
-      telContactoEmergencia: "",
-      afinidadContactoEmergencia: "",
-    });
-    setShowCreateForm(false);
+    try {
+      await createPatient(newPatient);
+      setNewPatient({
+        nombrePaciente: "",
+        edadPaciente: "",
+        fechaNacimiento: "",
+        correoPaciente: "",
+        direccionPaciente: "",
+        generoPaciente: "",
+        numeroCedula: "",
+        ocupacion: "",
+        telefono: "",
+        telContactoEmergencia: "",
+        afinidadContactoEmergencia: "",
+      });
+      toast.success("Creación exitoso.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setShowCreateForm(false);
+    } catch (error) {
+      console.error("Error al ingresar:", error);
+      toast.error(
+        "Error al crear el Paciente. Inténtalo de nuevo.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+      setNewPatient({
+        nombrePaciente: "",
+        edadPaciente: "",
+        fechaNacimiento: "",
+        correoPaciente: "",
+        direccionPaciente: "",
+        generoPaciente: "",
+        numeroCedula: "",
+        ocupacion: "",
+        telefono: "",
+        telContactoEmergencia: "",
+        afinidadContactoEmergencia: "",
+      });
+    }
+    
   };
 
   const handleViewPatient = (patient) => {

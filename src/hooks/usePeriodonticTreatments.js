@@ -29,6 +29,7 @@ export function usePeriodonticTreatments() {
         setLoading(false);
       })
       .catch(err => {
+        setPeriodonticTreatment(null);
         setError(err);
         setLoading(false);
       });
@@ -42,6 +43,7 @@ export function usePeriodonticTreatments() {
         setLoading(false);
       })
       .catch(err => {
+        setPeriodonticTreatment(null);
         setError(err);
         setLoading(false);
       });

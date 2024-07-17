@@ -28,6 +28,7 @@ export function useOrtodoncia() {
         setLoading(false);
       })
       .catch(err => {
+        setOrtodoncia(null);
         setError(err);
         setLoading(false);
       });
@@ -37,15 +38,13 @@ export function useOrtodoncia() {
     setLoading(true);
     ortodonciaService.getOrtodonciasByPatientId(patientId)
       .then(data => {
-        //setOrtodoncias(data);
         setOrtodoncia(data);
         setLoading(false);
       })
       .catch(err => {
+        setOrtodoncia(null);
         setError(err);
         setLoading(false);
-        //setOrtodoncias([]);
-        setOrtodoncia(null);
       });
   };
 
