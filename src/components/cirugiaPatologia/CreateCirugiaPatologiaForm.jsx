@@ -47,7 +47,7 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
       diagRadiografico: "",
       localizacionPatologia: "",
     });
-    navigate("/patients");
+    
   };
 
   return (

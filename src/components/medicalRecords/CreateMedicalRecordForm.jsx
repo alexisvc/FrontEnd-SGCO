@@ -75,7 +75,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     createMedicalRecord(newMedicalRecord);
-    navigate("/patients");
+    
   };
   
   const handleCheckboxChange = (e, listName) => {

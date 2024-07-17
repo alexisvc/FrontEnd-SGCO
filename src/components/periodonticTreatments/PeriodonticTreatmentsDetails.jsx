@@ -16,26 +16,15 @@ import { usePeriodonticTreatments } from "../../hooks/usePeriodonticTreatments";
 
 const PeriodonticTreatmentsDetails = ({ patientId }) => {
   const {
-    periodonticTreatments,
+    periodonticTreatment,
     createPeriodonticTreatment,
     updatePeriodonticTreatment,
+    fetchPeriodonticTreatmentsByPatientId
   } = usePeriodonticTreatments();
-  const [periodonticTreatment, setPeriodonticTreatment] = useState(null);
 
   useEffect(() => {
-    if (periodonticTreatments && periodonticTreatments.length > 0) {
-      const periodonticTreatment = periodonticTreatments.find(
-        (periodonticTreatment) =>
-          periodonticTreatment.paciente &&
-          periodonticTreatment.paciente.id === patientId
-      );
-      if (periodonticTreatment) {
-        setPeriodonticTreatment(periodonticTreatment);
-      } else {
-        setPeriodonticTreatment(null);
-      }
-    }
-  }, [periodonticTreatments, patientId]);
+    fetchPeriodonticTreatmentsByPatientId(patientId);
+  }, [patientId]);
 
   return (
     <>

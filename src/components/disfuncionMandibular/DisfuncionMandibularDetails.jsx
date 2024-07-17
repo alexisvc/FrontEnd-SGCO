@@ -6,22 +6,11 @@ import CreateDisfuncionMandibularForm from "./CreateDisfuncionMandibularForm";
 
 const DisfuncionMandibularDetails = ({ patientId }) => {
 
-  const { disfuncionMandibularList, createDisfuncionMandibular, updateDisfuncionMandibular } = useDisfuncionMandibular();
-  const [disfuncionMandibular, setDisfuncionMandibular] = useState(null);
+  const { disfuncionMandibular, createDisfuncionMandibular, updateDisfuncionMandibular, fetchDisfuncionMandibularByPatientId } = useDisfuncionMandibular();
 
-  // Buscar si el paciente tiene una ortodoncia
   useEffect(() => {
-    if (disfuncionMandibularList && disfuncionMandibularList.length > 0) {
-      const disfuncionMandibular = disfuncionMandibularList.find(
-        (disfuncionMandibular) => disfuncionMandibular.paciente && disfuncionMandibular.paciente.id === patientId
-      );
-      if (disfuncionMandibular) {
-        setDisfuncionMandibular(disfuncionMandibular);
-      } else {
-        setDisfuncionMandibular(null);
-      }
-    }
-  }, [disfuncionMandibularList, patientId]);
+    fetchDisfuncionMandibularByPatientId(patientId);
+  }, [patientId]);
 
   return (
   <>

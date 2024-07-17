@@ -8,23 +8,13 @@ const OrtodonciaDetails = ({
   patientId
 }) => {
   
-  const {ortodoncias, createOrtodoncia, updateOrtodoncia} = useOrtodoncia();
-  const [ortodoncia, setOrtodoncia] = useState(null);
+  const {ortodoncia, createOrtodoncia, updateOrtodoncia, fetchOrtodonciasByPatientId} = useOrtodoncia();
   const {evoluciones, fetchEvolucionesByOrtodonciaId, createEvolucion, updateEvolucion} = useEvolucionOrtodoncia();
 
-  // Buscar si el paciente tiene una ortodoncia
+  // Buscar la ortodoncia del paciente
   useEffect(() => {
-    if (ortodoncias && ortodoncias.length > 0) {
-      const ortodoncia = ortodoncias.find(
-        (ortodoncia) => ortodoncia.paciente && ortodoncia.paciente.id === patientId
-      );
-      if (ortodoncia) {
-        setOrtodoncia(ortodoncia);
-      } else {
-        setOrtodoncia(null);
-      }
-    }
-  }, [ortodoncias, patientId]);
+    fetchOrtodonciasByPatientId(patientId);
+  }, [patientId]);
 
   // Buscar las evoluciones de la ortodoncia
   useEffect(() => {

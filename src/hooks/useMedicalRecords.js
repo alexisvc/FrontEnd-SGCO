@@ -37,7 +37,7 @@ export function useMedicalRecords() {
     setLoading(true);
     medicalRecordsService.getMedicalRecordsByPatientId(patientId)
       .then(data => {
-        setMedicalRecords(data);
+        setMedicalRecord(data);
         setLoading(false);
       })
       .catch(err => {

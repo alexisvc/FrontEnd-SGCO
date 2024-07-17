@@ -6,27 +6,15 @@ import CreateRehabilitacionOralForm from "./CreateRehabilitacionOralForm";
 
 const RehabilitacionOralDetails = ({ patientId }) => {
   const {
-    rehabilitacionOralList,
+    rehabilitacionOral,
     createRehabilitacionOral,
     updateRehabilitacionOral,
+    fetchRehabilitacionOralByPatientId
   } = useRehabilitacionOral();
-  const [rehabilitacionOral, setRehabilitacionOral] = useState(null);
 
-  // Buscar si el paciente tiene una ortodoncia
   useEffect(() => {
-    if (rehabilitacionOralList && rehabilitacionOralList.length > 0) {
-      const rehabilitacionOral = rehabilitacionOralList.find(
-        (rehabilitacionOral) =>
-          rehabilitacionOral.paciente &&
-          rehabilitacionOral.paciente.id === patientId
-      );
-      if (rehabilitacionOral) {
-        setRehabilitacionOral(rehabilitacionOral);
-      } else {
-        setRehabilitacionOral(null);
-      }
-    }
-  }, [rehabilitacionOralList, patientId]);
+    fetchRehabilitacionOralByPatientId(patientId);
+  }, [patientId]);
 
   return (
     <>

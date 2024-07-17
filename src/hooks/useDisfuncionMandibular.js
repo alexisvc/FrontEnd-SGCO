@@ -37,7 +37,7 @@ export function useDisfuncionMandibular() {
     setLoading(true);
     disfuncionMandibularService.getDisfuncionMandibularByPatientId(patientId)
       .then(data => {
-        setDisfuncionMandibularList(data);
+        setDisfuncionMandibular(data);
         setLoading(false);
       })
       .catch(err => {

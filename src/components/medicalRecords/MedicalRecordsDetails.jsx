@@ -6,29 +6,19 @@ import { useMedicalRecords } from "../../hooks/useMedicalRecords";
 import MedicalRecordForm from "./MedicalRecordForm";
 
 const MedicalRecordDetails = ({ patientId }) => {
-  const { medicalRecords, createMedicalRecord, updateMedicalRecord } =
+  const { medicalRecord, fetchMedicalRecordsByPatientId, createMedicalRecord, updateMedicalRecord } =
     useMedicalRecords();
-  const [patientMedicalRecord, setPatientMedicalRecord] = useState(null);
 
   useEffect(() => {
-    if (medicalRecords && medicalRecords.length > 0) {
-      const record = medicalRecords.find(
-        (record) => record.paciente && record.paciente.id === patientId
-      );
-      if (record) {
-        setPatientMedicalRecord(record);
-      } else {
-        setPatientMedicalRecord(null); // Otra acción en caso de que no se encuentre el registro médico
-      }
-    }
-  }, [medicalRecords, patientId]);
+    fetchMedicalRecordsByPatientId(patientId);
+  }, [patientId]);
 
   return (
     <>
-      {patientMedicalRecord ? (
+      {medicalRecord ? (
         <MedicalRecordForm
           patientId={patientId}
-          patientMedicalRecord={patientMedicalRecord}
+          patientMedicalRecord={medicalRecord}
           updateMedicalRecord={updateMedicalRecord}
         />
       ) : (

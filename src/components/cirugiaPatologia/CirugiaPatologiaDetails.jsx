@@ -6,22 +6,11 @@ import CreateCirugiaPatologiaForm from "./CreateCirugiaPatologiaForm";
 
 const CirugiaPatologiaDetails = ({ patientId }) => {
 
-  const { cirugiaPatologias, createCirugiaPatologia, updateCirugiaPatologia } = useCirugiaPatologia();
-  const [cirugiaPatologia, setCirugiaPatologia] = useState(null);
+  const { cirugiaPatologia, createCirugiaPatologia, updateCirugiaPatologia, fetchCirugiaPatologiaByPatientId } = useCirugiaPatologia();
 
-  // Buscar si el paciente tiene una ortodoncia
   useEffect(() => {
-    if (cirugiaPatologias && cirugiaPatologias.length > 0) {
-      const cirugiaPatologia = cirugiaPatologias.find(
-        (cirugiaPatologia) => cirugiaPatologia.paciente && cirugiaPatologia.paciente.id === patientId
-      );
-      if (cirugiaPatologia) {
-        setCirugiaPatologia(cirugiaPatologia);
-      } else {
-        setCirugiaPatologia(null);
-      }
-    }
-  }, [cirugiaPatologias, patientId]);
+    fetchCirugiaPatologiaByPatientId(patientId);
+  }, [patientId]);
 
   return (
   <>

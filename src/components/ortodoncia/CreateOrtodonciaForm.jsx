@@ -47,7 +47,7 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
       aparatoOrtopedico: "",
       observaciones: "",
     });
-    navigate("/patients");
+    
   };
 
   return (

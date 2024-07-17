@@ -140,7 +140,7 @@ const CreateRehabilitacionOralForm = ({
       edentuloTotal: "",
       diagnosticoOclusal: "",
     });
-    navigate("/patients");
+    
   };
 
   return (

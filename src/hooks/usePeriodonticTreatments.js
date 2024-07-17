@@ -38,7 +38,7 @@ export function usePeriodonticTreatments() {
     setLoading(true);
     periodonticTreatmentService.getPeriodonticTreatmentsByPatientId(patientId)
       .then(data => {
-        setPeriodonticTreatments(data);
+        setPeriodonticTreatment(data);
         setLoading(false);
       })
       .catch(err => {

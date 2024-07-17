@@ -37,7 +37,7 @@ export function useRehabilitacionOral() {
     setLoading(true);
     rehabilitacionOralService.getRehabilitacionOralByPatientId(patientId)
       .then(data => {
-        setRehabilitacionOralList(data);
+        setRehabilitacionOral(data);
         setLoading(false);
       })
       .catch(err => {
