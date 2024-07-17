@@ -3,16 +3,27 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginForm.css";
-import {
-  FaArrowCircleLeft,
-  FaBook,
-  FaBookOpen,
-  FaHome,
-  FaQuestion,
-  FaYoutube,
-} from "react-icons/fa";
+import LoginIcon from '@mui/icons-material/Login';
 import PopUpHelp from "../extras/PopUpHelp";
 import PopUpInstructions from "../extras/PopUpInstructions";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import HomeIcon from '@mui/icons-material/Home';
+import {
+  Button,
+  Typography,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TextField,
+  Container,
+  Box,
+} from "@mui/material";
 
 export const LoginForm = ({ login }) => {
   const [username, setUsername] = useState("");
@@ -50,62 +61,49 @@ export const LoginForm = ({ login }) => {
 
   return (
     <div className="login-content">
-      <ToastContainer />
-      {isPopUpOpen && (
-        <PopUpHelp
-          onClose={() => {
-            setIsPopUpOpen(false);
-          }}
-          url={"https://www.youtube.com/watch?v=vPZLE8mEOFw"}
-        />
-      )}
-      {isPopUpOpenInstructions && (
-        <PopUpInstructions
-          instructions={"Para iniciar sesión ingresa tu correo y contraseña."}
-          url={"public/instructions/login-message.png"}
-          onClose={() => {
-            setIsPopUpOpenInstructions(false);
-          }}
-        />
-      )}
-      <div className="app-navigation">
-        <button
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <FaArrowCircleLeft />
-          <span>Atrás</span>
-        </button>
-        <button
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <FaHome />
-          <span>Inicio</span>
-        </button>
-        <h1>MP Especialdiades Odontológicas</h1>
-          {/*
-        <button
-          onClick={() => {
-            setIsPopUpOpenInstructions(true);
-          }}
-        >
-          <FaQuestion />
+      <Container maxWidth={false} direction="row">
+        
+          {/* Cabecera con botones y título */}
+          <Grid >
+              {/* Botones */}
+              <Grid container justifyContent="flex-start" sx={{marginTop:1}}>
+                <Button
+                  variant="outlined"
+                  sx={{marginRight: 2}}
+                  startIcon={<ArrowBackIcon />}
+                  size="large"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Atrás
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<HomeIcon />}
+                  size="large"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Inicio
+                </Button>
+              </Grid>
+              
+                {/* Título */}
+                <Grid item xs>
+                  <h1 style={{ textAlign: "center" }}>MP Especialidades Odontológicas</h1>
+                </Grid>
+                
+                
+              
+    
+            </Grid>
+              
 
-          <span>Indicaciones</span>
-        </button>
-        <button
-          onClick={() => {
-            setIsPopUpOpen(true);
-          }}
-        >
-          <FaYoutube />
-          <span>Ayuda</span>
-        </button>
-        */}
-      </div>
+      </Container>
+      
+
       <div className="login">
         <div className="login-form">
           <h2 className="login-heading">Iniciar Sesión</h2>
@@ -116,10 +114,11 @@ export const LoginForm = ({ login }) => {
               <label htmlFor="username">
               <p>Correo Electrónico:</p>
               </label>
-              <input
+              <TextField
+              fullWidth
               id="username"
                 type="text"
-                placeholder="Ingresa tu correo electrónico. Ej: alexis@correo.com"
+                placeholder="Ingresa tu correo electrónico."
                 value={username}
                 name="username"
                 onChange={(e) => setUsername(e.target.value)}
@@ -133,7 +132,8 @@ export const LoginForm = ({ login }) => {
               <p>Contraseña:</p>
               </label>
               <div className="password-field">
-                <input
+                <TextField
+                //fullWidth
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Ingresa tu contraseña"
@@ -152,8 +152,23 @@ export const LoginForm = ({ login }) => {
                 </button>
               </div>
             </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <div>
-              <button className="login-button">Ingresar</button>
+              <Button 
+              type="submit"
+              variant="contained"
+              color="primary"
+              startIcon={<LoginIcon />}
+              className="login-button"
+              size="large"
+              >
+                Ingresar
+                </Button>
             </div>
           </form>
 {/*

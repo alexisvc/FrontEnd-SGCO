@@ -10,7 +10,7 @@
     background-repeat: no-repeat;
     background-position: center;
     height: 100%;
-    font-family: 'Satisfy', cursive;
+    font-family: 'Century';
 }
 
 .login {
@@ -24,7 +24,7 @@
     background-position: center;
     height: 90%;
     width: 100%;
-    font-family: 'Satisfy';
+    font-family: 'Century';
 }
 
 .login-title {
@@ -33,7 +33,7 @@
 }
 
 .login-title h1 {
-    font-family: 'Satisfy', cursive;
+    font-family: 'Century';
     font-size: 10vh;
     color: #383434;
     margin: 0;
@@ -65,7 +65,7 @@
     margin: 2vh auto;
     padding: 10px;
     background-color: #383434;
-    font-family: 'Satisfy';
+    font-family: 'Century';
     color: #EAF2E3;
     border: none;
     border-radius: 5px;

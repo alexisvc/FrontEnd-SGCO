@@ -1,4 +1,4 @@
-.welcome {
+.home {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -11,8 +11,8 @@
   height: 100%;
 }
 
-.welcome h1 {
-  font-family: 'Pacifico', cursive;;
+.home h1 {
+  font-family: 'Century';;
   font-size: 13vh;
   color: #383434;
   margin: 0;
@@ -22,8 +22,8 @@
   -webkit-text-fill-color: transparent;
 }
 
-.welcome h2 {
-  font-family: 'Satisfy', cursive;
+.home h2 {
+  font-family: 'Century';
   font-size: 9.5vh;
   color: orange;
   margin: 0;
@@ -33,7 +33,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-.buttons-welcome {
+.buttons-home {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -42,10 +42,10 @@
   width: 100%;
 }
 
-.welcome button {
+.home button {
   margin: auto 5vh;
   padding: 1.5vh 2.5vh;
-  font-family: 'Satisfy';
+  font-family: 'Century';
   color: #EAF2E3;
   border: none;
   border-radius: 5px;
@@ -59,7 +59,7 @@
   align-items: center;
 }
 
-.welcome button:hover {
+.home button:hover {
   transform: scale(1.1);
   background-color: #000000;
 }
@@ -73,7 +73,7 @@
 
 .img-home {
   height: 60vh;
-  margin: 1.6vh auto;
+  margin: 1vh auto;
 }
 
 
@@ -92,11 +92,11 @@
   color: #383434;
   
   margin: 0.5vh auto;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Century', Times, serif;
 }
 
 .app-navigation button {
-  font-family: 'Satisfy';
+  font-family: 'Century';
   padding: 1.5vh;
   margin: 1vh;
   color: #EAF2E3;
@@ -161,14 +161,14 @@
 }
 
 .footer-button button {
-  font-family: 'Satisfy';
+  font-family: 'Century';
   margin: 1vh;
-  padding: 1vh 2vh;
+  padding: 1vh 1vh;
   color: #EAF2E3;
   background-color: #383434;
   border: none;
   border-radius: 5px;
-  font-size: 5vh;
+  font-size: 1vh;
   cursor: pointer;
   height: fit-content;
   width: fit-content;
@@ -179,7 +179,7 @@
 
 .footer-button button span {
   margin-top: 0.5vh;
-  font-size: 2vh;
+  font-size: 1vh;
   font-weight: bold;
   color: #EAF2E3;
   border: none;
@@ -188,11 +188,11 @@
 
 .footer-button button:hover {
   background-color: #000000;
-  scale: 1.1;
+  scale: 1;
 }
 
 .user{
-  font-family: 'Satisfy', cursive;
+  font-family: 'Century';
   margin: 1vh;
   padding: 1.5vh 2vh;
   color: #EAF2E3;

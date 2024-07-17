@@ -11,6 +11,26 @@ import {
   FaUserAlt,
 } from "react-icons/fa";
 import PopUpExit from "./extras/PopUpExit";
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import LogoutIcon from '@mui/icons-material/Logout';
+import {
+  Button,
+  Typography,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TextField,
+  Container,
+  Box,
+} from "@mui/material";
 
 function Welcome({ user, logout, isGuestUser }) {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -28,15 +48,27 @@ function Welcome({ user, logout, isGuestUser }) {
         />
       )}
       <div
-        className="app-navigation"
-        style={{ display: "flex", justifyContent: "flex-end", marginTop: "-8rem" }}
+        //className="app-navigation"
+        //style={{ display: "flex", justifyContent: "flex-end", marginTop: "-8rem" }}
+        style={{ display: "flex", justifyContent: "flex-end" , marginLeft: 'auto', marginRight: '0.5%', marginTop: "-6%"}}
+          
       >
         {isLoggedIn && (
           <>
-            <button onClick={() => setIsPopUpOpen(true)}>
-              <FaSignOutAlt />
-              <span>Salir</span>
-            </button>
+            <Button 
+            startIcon={<LogoutIcon />}
+            
+            variant="contained"
+              color="primary"
+            style={{
+              fontSize: '20px', // Aumenta el tamaño del texto
+              padding: '15px 30px', // Aumenta el relleno para hacer el botón más grande
+              marginLeft: 'auto', // Mueve el botón a la derecha
+            }}
+            onClick={() => setIsPopUpOpen(true)}>
+              
+              Salir
+            </Button>
           </>
         )}
       </div>
@@ -49,21 +81,46 @@ function Welcome({ user, logout, isGuestUser }) {
       {isLoggedIn && (
         <div className="buttons-welcome">
           <Link to="/patients" className="link-button">
-            <button>
-              <span>Historias Clinicas</span>
-            </button>
+            <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AutoStoriesIcon />}
+            style={{
+              fontSize: '15px', // Aumenta el tamaño del texto
+              padding: '10px 20px', // Aumenta el relleno para hacer el botón más grande
+              margin:'3%',
+            }}
+            >
+              Historias Clinicas
+            </Button>
           </Link>
 
           <Link to="/acc-menu" className="link-button">
-            <button>
-              <span>Agendamiento</span>
-            </button>
+            <Button
+            variant="contained"
+            color="primary"
+            startIcon={<CalendarMonthIcon />}
+            style={{
+              fontSize: '15px', // Aumenta el tamaño del texto
+              padding: '10px 20px', // Aumenta el relleno para hacer el botón más grande
+              margin:'3%',
+           }}>
+              Agendamiento de Citas
+            </Button>
           </Link>
 
           <Link to="/game-menu" className="link-button">
-            <button>
-              <span>Planificación y Presupuesto</span>
-            </button>
+            <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AccountBalanceWalletIcon />}
+            style={{
+              fontSize: '15px', // Aumenta el tamaño del texto
+              padding: '10px 20px', // Aumenta el relleno para hacer el botón más grande
+              margin:'3%',
+            }}>
+              Planificación y Presupuesto
+            </Button>
           </Link>
         </div>
       )}

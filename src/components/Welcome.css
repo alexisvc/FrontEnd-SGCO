@@ -13,7 +13,7 @@
   }
   
   .welcome h1 {
-    font-family: 'Pacifico';;
+    font-family: 'Century';;
     font-size: 13vh;
     color: #383434;
     margin: 0;
@@ -24,7 +24,7 @@
   }
   
   .welcome h2 {
-    font-family: 'Satisfy';
+    font-family: 'Century';
     font-size: 9.5vh;
     color: orange;
     margin: 0;
@@ -43,10 +43,11 @@
     width: 100%;
   }
   
+  /*
   .welcome button {
     margin: auto 5vh;
     padding: 1.5vh 2.5vh;
-    font-family: 'Satisfy';
+    font-family: 'Century';
     color: #EAF2E3;
     border: none;
     border-radius: 5px;
@@ -64,6 +65,7 @@
     transform: scale(1.1);
     background-color: #000000;
   }
+  */
   
   .link-button {
     text-decoration: none;
@@ -96,6 +98,7 @@
     font-family: 'Times New Roman', Times, serif;
   }
   
+  /*
   .app-navigation button {
     font-family: 'Satisfy';
     padding: 1.5vh;
@@ -123,7 +126,9 @@
     transform: scale(1.1);
     background-color: #000000;
   }
-  
+    
+  */
+
   .home-content {
     display: flex;
     align-items: center;
@@ -136,6 +141,9 @@
     height: 70vh;
   }
   
+
+  
+
   .footer{
     display: grid;
     grid-template-columns: 1fr 50% 1fr;
@@ -162,7 +170,7 @@
   }
   
   .footer-button button {
-    font-family: 'Satisfy';
+    font-family: 'Century';
     margin: 1vh;
     padding: 1vh 2vh;
     color: #EAF2E3;
@@ -191,9 +199,11 @@
     background-color: #406834;
     scale: 1.1;
   }
+
   
+
   .user{
-    font-family: 'Satisfy', cursive;
+    font-family: 'Century', cursive;
     margin: 1vh;
     padding: 1.5vh 2vh;
     color: #EAF2E3;
