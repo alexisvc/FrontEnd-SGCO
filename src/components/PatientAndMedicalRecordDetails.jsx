@@ -15,6 +15,7 @@ import OrtodonciaDetails from "./ortodoncia/OrtodonciaDetails";
 import CirugiaPatologiaDetails from "./cirugiaPatologia/CirugiaPatologiaDetails";
 import RehabilitacionOralDetails from "./rehabilitacionOral/RehabilitacionOralDetails";
 import DisfuncionMandibularDetails from "./disfuncionMandibular/DisfuncionMandibularDetails";
+import ConsentimientoDetails from "./consentimiento/ConsentimientoDetails";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,6 +105,7 @@ const PatientAndMedicalRecordDetails = ({
             <Tab label="Rehabilitación Oral" {...a11yProps(6)} />
             <Tab label="Disfunción Mandibular" {...a11yProps(7)} />
             <Tab label="Periodoncia" {...a11yProps(8)} />
+            <Tab label="Consentimiento" {...a11yProps(8)} />
           </Tabs>
         </Box>
 
@@ -159,6 +161,10 @@ const PatientAndMedicalRecordDetails = ({
 
         <CustomTabPanel value={value} index={8}>
           <PeriodonticTreatmentsDetails patientId={patientId} />
+        </CustomTabPanel>
+
+        <CustomTabPanel value={value} index={9}>
+          <ConsentimientoDetails patientId={patientId} />
         </CustomTabPanel>
       </Box>
     </>
