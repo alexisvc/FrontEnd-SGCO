@@ -48,10 +48,10 @@ export function useCirugiaPatologia() {
       });
   };
 
-  const createCirugiaPatologia = async (newCirugiaPatologia) => {
+  const createCirugiaPatologia = async (newCirugiaPatologia, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await cirugiaPatologiaService.createCirugiaPatologia(newCirugiaPatologia);
+      const data = await cirugiaPatologiaService.createCirugiaPatologia(newCirugiaPatologia, archivo1, archivo2);
       setCirugiaPatologias([...cirugiaPatologias, data]);
       setLoading(false);
       return data;
@@ -63,12 +63,11 @@ export function useCirugiaPatologia() {
     }
   };
   
-
-  const updateCirugiaPatologia = async (id, updatedCirugiaPatologia) => {
+  const updateCirugiaPatologia = async (id, updatedCirugiaPatologia, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await cirugiaPatologiaService.updateCirugiaPatologia(id, updatedCirugiaPatologia);
-      setCirugiaPatologias(cirugiaPatologias.map(cirugia => cirugia.id === id ? data : cirugia));
+      const data = await cirugiaPatologiaService.updateCirugiaPatologia(id, updatedCirugiaPatologia, archivo1, archivo2);
+      setCirugiaPatologias(cirugiaPatologias.map(cirugia => cirugia._id === id ? data : cirugia));
       setLoading(false);
       return data;
     } catch (error) {
@@ -79,12 +78,11 @@ export function useCirugiaPatologia() {
     }
   };
   
-
   const deleteCirugiaPatologia = (id) => {
     setLoading(true);
     cirugiaPatologiaService.deleteCirugiaPatologia(id)
       .then(() => {
-        setCirugiaPatologias(cirugiaPatologias.filter(cirugia => cirugia.id !== id));
+        setCirugiaPatologias(cirugiaPatologias.filter(cirugia => cirugia._id !== id));
         setLoading(false);
       })
       .catch(err => {

@@ -97,15 +97,15 @@ const PatientAndMedicalRecordDetails = ({
             scrollButtons="auto"
           >
             <Tab label="Detalles Médicos" {...a11yProps(0)} />
-            <Tab label="Plan de Tratamiento" {...a11yProps(1)} />
-            <Tab label="Cuadro de Evolución" {...a11yProps(2)} />
-            <Tab label="Cirugía y Patología" {...a11yProps(3)} />
-            <Tab label="Endodoncia" {...a11yProps(4)} />
-            <Tab label="Ortodoncia" {...a11yProps(5)} />
-            <Tab label="Rehabilitación Oral" {...a11yProps(6)} />
-            <Tab label="Disfunción Mandibular" {...a11yProps(7)} />
-            <Tab label="Periodoncia" {...a11yProps(8)} />
-            <Tab label="Consentimiento" {...a11yProps(8)} />
+            <Tab label="Consentimiento" {...a11yProps(1)} />
+            <Tab label="Plan de Tratamiento" {...a11yProps(2)} />
+            <Tab label="Cuadro de Evolución" {...a11yProps(3)} />
+            <Tab label="Cirugía y Patología" {...a11yProps(4)} />
+            <Tab label="Endodoncia" {...a11yProps(5)} />
+            <Tab label="Ortodoncia" {...a11yProps(6)} />
+            <Tab label="Rehabilitación Oral" {...a11yProps(7)} />
+            <Tab label="Disfunción Mandibular" {...a11yProps(8)} />
+            <Tab label="Periodoncia" {...a11yProps(9)} />
           </Tabs>
         </Box>
 
@@ -114,6 +114,10 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
+          <ConsentimientoDetails patientId={patientId} />
+        </CustomTabPanel>
+
+        <CustomTabPanel value={value} index={2}>
           <TreamentPlansDetails
             patientId={patientId}
             patientTreatments={patientTreatments}
@@ -123,7 +127,7 @@ const PatientAndMedicalRecordDetails = ({
           />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={2}>
+        <CustomTabPanel value={value} index={3}>
           <EvolutionChartsDetails 
           patientId={patientId} 
           evolutionCharts={evolutionCharts}
@@ -133,11 +137,11 @@ const PatientAndMedicalRecordDetails = ({
           />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={3}>
+        <CustomTabPanel value={value} index={4}>
           <CirugiaPatologiaDetails patientId={patientId} />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={4}>
+        <CustomTabPanel value={value} index={5}>
           <EndodonticTreamentsDetails 
           patientId={patientId} 
           endodonticTreatments={endodonticTreatments}
@@ -147,25 +151,23 @@ const PatientAndMedicalRecordDetails = ({
           />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={5}>
+        <CustomTabPanel value={value} index={6}>
           <OrtodonciaDetails patientId={patientId} />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={6}>
+        <CustomTabPanel value={value} index={7}>
           <RehabilitacionOralDetails patientId={patientId} />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={7}>
+        <CustomTabPanel value={value} index={8}>
           <DisfuncionMandibularDetails patientId={patientId} />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={8}>
+        <CustomTabPanel value={value} index={9}>
           <PeriodonticTreatmentsDetails patientId={patientId} />
         </CustomTabPanel>
 
-        <CustomTabPanel value={value} index={9}>
-          <ConsentimientoDetails patientId={patientId} />
-        </CustomTabPanel>
+        
       </Box>
     </>
   );

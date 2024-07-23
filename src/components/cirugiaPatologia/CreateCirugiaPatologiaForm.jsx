@@ -21,6 +21,8 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
     diagRadiografico: "",
     localizacionPatologia: "",
   });
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
 
   const navigate = useNavigate();
 
@@ -32,17 +34,23 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
     });
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const newData = {
         ...formData,
         paciente: patientId,
       };
-      await createCirugiaPatologia(newData);
-      // Lógica para limpiar el formulario o mostrar un mensaje de éxito
+      await createCirugiaPatologia(newData, archivo1, archivo2);
       setFormData({
         antecedentesCirPat: "",
         alergiasMedCirPat: "",
@@ -51,15 +59,14 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
         diagRadiografico: "",
         localizacionPatologia: "",
       });
-      // Notificación de éxito
+      setArchivo1(null);
+      setArchivo2(null);
       toast.success("Cirugía y patología creada exitosamente", {
         position: "top-right",
         autoClose: 3000,
       });
       navigate("/patients");
-
     } catch (error) {
-      // Notificación de error
       toast.error("Error al crear la Cirugía y patología.", {
         position: "top-right",
         autoClose: 3000,
@@ -72,7 +79,8 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
       <Typography variant="h5" align="center" gutterBottom>
         Crear Cirugía y Patología Oral
       </Typography>
-      <Grid container spacing={2} sx={12}>
+      <Grid container spacing={2}>
+        {/* Campos de texto */}
         <Grid item xs={12}>
           <TextField
             fullWidth
@@ -138,6 +146,46 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
             variant="outlined"
             required
           />
+        </Grid>
+        <Grid item xs={12}>
+          <label htmlFor="archivo1-input">
+            <input
+              id="archivo1-input"
+              name="archivo1"
+              type="file"
+              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <Button
+              variant="contained"
+              component="span"
+              color="primary"
+              startIcon={<AddCircleIcon />}
+            >
+              Subir Archivo 1
+            </Button>
+          </label>
+        </Grid>
+        <Grid item xs={12}>
+          <label htmlFor="archivo2-input">
+            <input
+              id="archivo2-input"
+              name="archivo2"
+              type="file"
+              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <Button
+              variant="contained"
+              component="span"
+              color="primary"
+              startIcon={<AddCircleIcon />}
+            >
+              Subir Archivo 2
+            </Button>
+          </label>
         </Grid>
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">

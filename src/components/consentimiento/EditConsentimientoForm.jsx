@@ -47,16 +47,6 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
     }
   };
 
-  if (!consentimiento) {
-    return (
-      <Container component={Paper} sx={{ padding: 2 }}>
-        <Typography variant="h5" align="center">
-          Consentimiento no encontrado
-        </Typography>
-      </Container>
-    );
-  }
-
   return (
     <Container component={Paper} sx={{ padding: 2 }}>
       <Typography variant="h5" align="center" gutterBottom>
