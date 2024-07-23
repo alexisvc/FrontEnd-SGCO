@@ -16,7 +16,6 @@ const CirugiaPatologiaDetails = ({ patientId }) => {
   <>
     {cirugiaPatologia ? (
         <EditCirugiaPatologiaForm
-            patientId={patientId}
             cirugiaPatologia={cirugiaPatologia}
             updateCirugiaPatologia={updateCirugiaPatologia}
         />

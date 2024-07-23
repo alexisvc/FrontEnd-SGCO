@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Grid, Box, Button, Container, Paper } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -57,23 +58,35 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <label htmlFor="archivo-input">
-            <input
-              id="archivo-input"
-              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              type="file"
-              onChange={handleFileChange}
-              style={{ display: "none" }} // Ocultar el input file original
-            />
-            <Button
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              Subir Archivo
-            </Button>
-          </label>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <label htmlFor="archivo-input">
+              <input
+                id="archivo-input"
+                accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                type="file"
+                onChange={handleFileChange}
+                style={{ display: "none" }} // Ocultar el input file original
+              />
+              <Button
+                variant="contained"
+                component="span"
+                color="primary"
+                startIcon={<AddCircleIcon />}
+              >
+                Editar Archivo
+              </Button>
+            </label>
+            {consentimiento.archivo && (
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<DownloadIcon />}
+                onClick={() => window.open(consentimiento.archivoUrl, "_blank")}
+              >
+                Ver Consentimiento
+              </Button>
+            )}
+          </Box>
         </Grid>
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
@@ -83,19 +96,6 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
             </Button>
           </Box>
         </Grid>
-        {consentimiento.archivoUrl && (
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => window.open(consentimiento.archivoUrl, "_blank")}
-              >
-                Ver Consentimiento
-              </Button>
-            </Box>
-          </Grid>
-        )}
       </Grid>
     </Container>
   );

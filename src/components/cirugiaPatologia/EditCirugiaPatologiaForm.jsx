@@ -9,6 +9,7 @@ import {
   TextField
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -21,8 +22,8 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
     diagRadiografico: "",
     localizacionPatologia: ""
   });
-  const [archivo1, setArchivo1] = useState(cirugiaPatologia?.archivo1);
-  const [archivo2, setArchivo2] = useState(cirugiaPatologia?.archivo2);
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
 
   useEffect(() => {
     if (cirugiaPatologia) {
@@ -34,6 +35,8 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
         diagRadiografico: cirugiaPatologia.diagRadiografico || "",
         localizacionPatologia: cirugiaPatologia.localizacionPatologia || ""
       });
+      setArchivo1(cirugiaPatologia?.archivo1);
+      setArchivo2(cirugiaPatologia?.archivo2);
     }
   }, [cirugiaPatologia]);
 
@@ -79,6 +82,73 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
         Editar Cirugía y Patología Oral
       </Typography>
       <Grid container spacing={2}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box display="flex" alignItems="center" mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+              {cirugiaPatologia?.archivo1Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(cirugiaPatologia.archivo1Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  RX
+                </Button>
+              )}
+            </Box>
+            <Box display="flex" alignItems="center">
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+              {cirugiaPatologia?.archivo2Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(cirugiaPatologia.archivo2Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  CS
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Grid>
         {/* Campos de texto */}
         <Grid item xs={12}>
           <TextField
@@ -146,70 +216,9 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
             required
           />
         </Grid>
+        {/* Botón de enviar */}
         <Grid item xs={12}>
-          <label htmlFor="archivo1-input">
-            <input
-              id="archivo1-input"
-              name="archivo1"
-              type="file"
-              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
-            />
-            <Button
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              Subir Archivo 1
-            </Button>
-          </label>
-          {/* Botón de visualización para archivo1 */}
-          {cirugiaPatologia?.archivo1 && (
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => window.open(cirugiaPatologia.archivo1Url, "_blank")}
-              style={{ marginLeft: "8px" }}
-            >
-              Ver Archivo 1
-            </Button>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <label htmlFor="archivo2-input">
-            <input
-              id="archivo2-input"
-              name="archivo2"
-              type="file"
-              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
-            />
-            <Button
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              Subir Archivo 2
-            </Button>
-          </label>
-          {/* Botón de visualización para archivo2 */}
-          {cirugiaPatologia?.archivo2Url && (
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => window.open(cirugiaPatologia.archivo2Url, "_blank")}
-              style={{ marginLeft: "8px" }}
-            >
-              Ver Archivo 2
-            </Button>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <Box display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center" mt={2}>
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               <AddCircleIcon fontSize="large" />
               Actualizar Cirugía y Patología Oral

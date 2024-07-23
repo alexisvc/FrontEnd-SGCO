@@ -75,11 +75,56 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
   };
 
   return (
-    <Container component={Paper}>
+    <Container component={Paper} sx={{ padding: 2 }}>
       <Typography variant="h5" align="center" gutterBottom>
         Crear Cirugía y Patología Oral
       </Typography>
       <Grid container spacing={2}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+            </Box>
+            <Box>
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+            </Box>
+          </Box>
+        </Grid>
         {/* Campos de texto */}
         <Grid item xs={12}>
           <TextField
@@ -147,48 +192,9 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
             required
           />
         </Grid>
+        {/* Botón de enviar */}
         <Grid item xs={12}>
-          <label htmlFor="archivo1-input">
-            <input
-              id="archivo1-input"
-              name="archivo1"
-              type="file"
-              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
-            />
-            <Button
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              Subir Archivo 1
-            </Button>
-          </label>
-        </Grid>
-        <Grid item xs={12}>
-          <label htmlFor="archivo2-input">
-            <input
-              id="archivo2-input"
-              name="archivo2"
-              type="file"
-              accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
-            />
-            <Button
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              Subir Archivo 2
-            </Button>
-          </label>
-        </Grid>
-        <Grid item xs={12}>
-          <Box display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center" mt={2}>
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               <AddCircleIcon fontSize="large" />
               Crear Cirugía y Patología Oral
