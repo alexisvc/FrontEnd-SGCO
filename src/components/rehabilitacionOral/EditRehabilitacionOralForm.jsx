@@ -1057,7 +1057,7 @@ const EditRehabilitacionOralForm = ({
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">
-              Colocación sobre implantes dientes
+              Tipo de prótesis sobre implantes dientes
             </FormLabel>
             <RadioGroup
               row

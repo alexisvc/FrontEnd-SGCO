@@ -29,7 +29,7 @@
 }
 
 .popup-content p{
-  font-family: 'Satisfy', cursive;
+  font-family: 'Century Gothic'; 
   font-size: 6vh;
   color: orange;
   margin: 0;
@@ -37,11 +37,11 @@
 }
 
 .popup-content span {
-  font-family: 'Satisfy', cursive;
+  font-family: 'Century Gothic'; 
   font-size: 4vh;
   color: #333;
   margin: 0;
-  -webkit-text-stroke: 1px black;
+  
 }
 
 .buttons-exit {
@@ -54,17 +54,17 @@
 .buttons-exit button{
   font-size: 3vh;
   padding: 10px 20px;
-  background-color: #FF637D;
+  background-color: #1976d2;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin: auto;
-  font-family: 'Satisfy', cursive;
+  font-family: 'Century Gothic'; 
 }
 
 .buttons-exit button:hover {
-  background-color: #66D7D1;
+  background-color: #1565c0;
   scale: 1.1;
 }
 
@@ -115,13 +115,13 @@
 .popup-btns button{
     font-size: 3vh;
     padding: 10px 20px;
-    background-color: #FF637D;
+    background-color: #1565c0;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin: auto;
-    font-family: 'Satisfy', cursive;
+    font-family: 'Century Gothic';'; ';
 }
 
 .popup-btns button:hover {

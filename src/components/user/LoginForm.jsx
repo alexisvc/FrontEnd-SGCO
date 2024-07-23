@@ -92,7 +92,7 @@ export const LoginForm = ({ login }) => {
               
                 {/* Título */}
                 <Grid item xs>
-                  <h1 style={{ textAlign: "center" }}>MP Especialidades Odontológicas</h1>
+                  <h1 style={{ textAlign: "center" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
                 </Grid>
                 
                 

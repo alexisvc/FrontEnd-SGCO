@@ -42,7 +42,7 @@
 .titulo-instructions {
   text-align: center;
   margin: 0;
-  font-family: 'Satisfy', cursive;
+  font-family: 'Century';
   font-size: 6vh;
   color: orange;
   margin: 0;
@@ -68,7 +68,7 @@
 }
 
 .close-button-instructions span{
-  font-family: 'Satisfy', cursive;
+  font-family: 'Century';
   font-size: 1.5vh;
   color: black;
   margin: 0;
