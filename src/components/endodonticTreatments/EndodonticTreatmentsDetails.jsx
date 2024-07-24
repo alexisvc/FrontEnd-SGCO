@@ -48,18 +48,6 @@ const EndodonticTreatmentsDetails = ({
     setValue(newValue);
   };
 
-  const handleCreateEndodonticTreatments = async (formData) => {
-    const newEndodonticTreamentData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createEndodonticTreatment(newEndodonticTreamentData);
-  };
-
-  const handleUpdateEndodonticTreatments = async (id, formData) => {
-    await updateEndodonticTreatment(id, formData);
-  };
-
   return (
     <>
       <Container component={Paper}>
@@ -90,37 +78,14 @@ const EndodonticTreatmentsDetails = ({
           <CustomTabPanel value={value} index={0}>
             <CreateEndodonticTreatmentsForm
               patientId={patientId}
-              createEndodonticTreatment={handleCreateEndodonticTreatments}
+              createEndodonticTreatment={createEndodonticTreatment}
             />
           </CustomTabPanel>
           {endodonticTreatments.map((treatment, index) => (
             <CustomTabPanel value={value} index={index + 1} key={treatment.id}>
               <EditEndodonticTreatmentsForm
-                endodonticTreatmentsId={treatment.id}
-                endodonticTreatmentsData={{
-                  dienteEnd: treatment.dienteEnd,
-                  grapaEnd: treatment.grapaEnd,
-                  diagDental: treatment.diagDental,
-                  diagPulpar: treatment.diagPulpar,
-                  intervencionIndicada: treatment.intervencionIndicada,
-                  tecnicaObturacion: treatment.tecnicaObturacion,
-                  numConductos: treatment.numConductos,
-                  obsAnatomicas: treatment.obsAnatomicas,
-                  etiologia: treatment.etiologia,
-                  dolor: treatment.dolor,
-                  pruebasClinicas: treatment.pruebasClinicas,
-                  pruebasVitalidad: treatment.pruebasVitalidad,
-                  camaraPulpar: treatment.camaraPulpar,
-                  conductosRadiculares: treatment.conductosRadiculares,
-                  foramen: treatment.foramen,
-                  ligamentoPeriodontal: treatment.ligamentoPeriodontal,
-                  otrosHallazgos: treatment.otrosHallazgos,
-                  conductometriaTentativa: treatment.conductometriaTentativa,
-                  conductometriaDefinitiva: treatment.conductometriaDefinitiva,
-                  tecnicaInstrumentacion: treatment.tecnicaInstrumentacion,
-                  medicacionIntra: treatment.medicacionIntra,
-                }}
-                updateEndodonticTreatments={handleUpdateEndodonticTreatments}
+                endodonticTreatment={treatment}
+                updateEndodonticTreatments={updateEndodonticTreatment}
               />
             </CustomTabPanel>
           ))}

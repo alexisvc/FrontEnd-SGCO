@@ -94,7 +94,7 @@ function App() {
             />
 
             <Route
-              path="/prueba/:patientId"
+              path="/patients/:patientId"
               element={
                 <PatientAndMedicalRecordDetails
                   updatePatient={updatePatient}

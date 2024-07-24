@@ -113,7 +113,7 @@ const Patients = ({
   
 
   const handleViewPatient = (patient) => {
-    navigate(`/prueba/${patient.id}`, { state: { patient } });
+    navigate(`/patients/${patient.id}`, { state: { patient } });
     setShowSearchForm(false);
   };
 
