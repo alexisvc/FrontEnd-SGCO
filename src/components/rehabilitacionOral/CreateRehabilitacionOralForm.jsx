@@ -69,6 +69,7 @@ const CreateRehabilitacionOralForm = ({
   });
   const [archivo1, setArchivo1] = useState(null);
   const [archivo2, setArchivo2] = useState(null);
+  const [archivo3, setArchivo3] = useState(null);
 
   const navigate = useNavigate();
 
@@ -77,6 +78,8 @@ const CreateRehabilitacionOralForm = ({
       setArchivo1(e.target.files[0]);
     } else if (e.target.name === "archivo2") {
       setArchivo2(e.target.files[0]);
+    } else if (e.target.name === "archivo3") {
+      setArchivo3(e.target.files[0]);
     }
   };
 
@@ -109,7 +112,7 @@ const CreateRehabilitacionOralForm = ({
         paciente: patientId,
       };
 
-      await createRehabilitacionOral(newData, archivo1, archivo2);
+      await createRehabilitacionOral(newData, archivo1, archivo2, archivo3);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
         refHorizontal: [],
@@ -155,6 +158,7 @@ const CreateRehabilitacionOralForm = ({
       });
       setArchivo1(null);
       setArchivo2(null);
+      setArchivo3(null);
       // Notificación de éxito
       toast.success("Rehabilitación Oral creada exitosamente", {
         position: "top-right",
@@ -216,6 +220,26 @@ const CreateRehabilitacionOralForm = ({
                   startIcon={<AddCircleIcon />}
                 >
                   CS
+                </Button>
+              </label>
+            </Box>
+            <Box>
+              <label htmlFor="archivo3-input">
+                <input
+                  id="archivo3-input"
+                  name="archivo3"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  C
                 </Button>
               </label>
             </Box>

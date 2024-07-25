@@ -76,6 +76,7 @@ const EditRehabilitacionOralForm = ({
   });
   const [archivo1, setArchivo1] = useState(null);
   const [archivo2, setArchivo2] = useState(null);
+  const [archivo3, setArchivo3] = useState(null);
 
   useEffect(() => {
     if (rehabilitacionOral) {
@@ -129,6 +130,7 @@ const EditRehabilitacionOralForm = ({
       });
       setArchivo1(rehabilitacionOral?.archivo1);
       setArchivo2(rehabilitacionOral?.archivo2);
+      setArchivo3(rehabilitacionOral?.archivo3);
     }
   }, [rehabilitacionOral]);
 
@@ -139,6 +141,8 @@ const EditRehabilitacionOralForm = ({
       setArchivo1(e.target.files[0]);
     } else if (e.target.name === "archivo2") {
       setArchivo2(e.target.files[0]);
+    } else if (e.target.name === "archivo3") {
+      setArchivo3(e.target.files[0]);
     }
   };
 
@@ -166,7 +170,7 @@ const EditRehabilitacionOralForm = ({
     e.preventDefault();
 
     try {
-      await updateRehabilitacionOral(rehabilitacionOral._id, formData, archivo1, archivo2);
+      await updateRehabilitacionOral(rehabilitacionOral._id, formData, archivo1, archivo2, archivo3);
       // Notificación de éxito
       toast.success("Rehabilitación Oral actualizada exitosamente", {
         position: "top-right",
@@ -222,7 +226,7 @@ const EditRehabilitacionOralForm = ({
                 </Button>
               )}
             </Box>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" mr={2}>
               <label htmlFor="archivo2-input">
                 <input
                   id="archivo2-input"
@@ -250,6 +254,37 @@ const EditRehabilitacionOralForm = ({
                   sx={{ ml: 2 }} // Margin left to create space
                 >
                   CS
+                </Button>
+              )}
+            </Box>
+            <Box display="flex" alignItems="center" mr={2}>
+              <label htmlFor="archivo3-input">
+                <input
+                  id="archivo3-input"
+                  name="archivo3"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  C
+                </Button>
+              </label>
+              {rehabilitacionOral?.archivo3Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(rehabilitacionOral.archivo3Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  C
                 </Button>
               )}
             </Box>

@@ -17,7 +17,7 @@ const getRehabilitacionOralByPatientId = async (patientId) => {
   return response.data;
 };
 
-const createRehabilitacionOral = async (newRehabilitacionOral, archivo1, archivo2) => {
+const createRehabilitacionOral = async (newRehabilitacionOral, archivo1, archivo2, archivo3) => {
   const formData = new FormData();
   
   // Agregar campos del formulario
@@ -34,6 +34,10 @@ const createRehabilitacionOral = async (newRehabilitacionOral, archivo1, archivo
     formData.append('archivo2', archivo2);
   }
 
+  if (archivo3) {
+    formData.append('archivo3', archivo3);
+  }
+
   const response = await axios.post(baseUrl, formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -42,7 +46,7 @@ const createRehabilitacionOral = async (newRehabilitacionOral, archivo1, archivo
   return response.data;
 };
 
-const updateRehabilitacionOral = async (id, updatedRehabilitacionOral, archivo1, archivo2) => {
+const updateRehabilitacionOral = async (id, updatedRehabilitacionOral, archivo1, archivo2, archivo3) => {
   const formData = new FormData();
   
   // Agregar campos del formulario
@@ -57,6 +61,10 @@ const updateRehabilitacionOral = async (id, updatedRehabilitacionOral, archivo1,
   
   if (archivo2) {
     formData.append('archivo2', archivo2);
+  }
+
+  if (archivo3) {
+    formData.append('archivo3', archivo3);
   }
 
   const response = await axios.put(`${baseUrl}/${id}`, formData, {
