@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Typography,
@@ -17,6 +17,7 @@ import {
   Paper,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -73,15 +74,72 @@ const EditRehabilitacionOralForm = ({
     edentuloTotal: rehabilitacionOral?.edentuloTotal || "",
     diagnosticoOclusal: rehabilitacionOral?.diagnosticoOclusal || "",
   });
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
+
+  useEffect(() => {
+    if (rehabilitacionOral) {
+      setFormData({
+        refHorizontal: rehabilitacionOral?.refHorizontal || false,
+    refVertical: rehabilitacionOral?.refVertical || false,
+    longitudLabio: rehabilitacionOral?.longitudLabio || false,
+    formaLabio: rehabilitacionOral?.formaLabio || false,
+    exposicionSonrisa: rehabilitacionOral?.exposicionSonrisa || false,
+    corredorBucal: rehabilitacionOral?.corredorBucal || false,
+    orientacionPlanoOclusalAnt:
+      rehabilitacionOral?.orientacionPlanoOclusalAnt || false,
+    visibilidadBordeSup: rehabilitacionOral?.visibilidadBordeSup || "",
+    orientacionPlanoOclusalPost:
+      rehabilitacionOral?.orientacionPlanoOclusalPost || false,
+    anchoIncisivoCentalSup: rehabilitacionOral?.anchoIncisivoCentalSup || "",
+    longitud: rehabilitacionOral?.longitud || "",
+    colorDientes: rehabilitacionOral?.colorDientes || "",
+    simetriaGingival: rehabilitacionOral?.simetriaGingival || false,
+    biotipoPeriodental: rehabilitacionOral?.biotipoPeriodental || false,
+    numeroDiente: rehabilitacionOral?.numeroDiente || false,
+    perdidaHuesoPeriodental:
+      rehabilitacionOral?.perdidaHuesoPeriodental || false,
+    otrasPatologiasOseas: rehabilitacionOral?.otrasPatologiasOseas || "",
+    restriccionViasRespiratorias:
+      rehabilitacionOral?.restriccionViasRespiratorias || "",
+    relacionIncisal: rehabilitacionOral?.relacionIncisal || false,
+    overbite: rehabilitacionOral?.overbite || false,
+    overjet: rehabilitacionOral?.overjet || false,
+    tinitus: rehabilitacionOral?.tinitus || false,
+    puedeRepetirMordida: rehabilitacionOral?.puedeRepetirMordida || "",
+    restauracionesDefectuosas:
+      rehabilitacionOral?.restauracionesDefectuosas || false,
+    restauracionesDefectuosasCuales:
+      rehabilitacionOral?.restauracionesDefectuosasCuales || "",
+    lesionesCariosas: rehabilitacionOral?.lesionesCariosas || false,
+    lesionesCariosasCuales: rehabilitacionOral?.lesionesCariosasCuales || "",
+    dientesFaltantes: rehabilitacionOral?.dientesFaltantes || false,
+    dientesFaltantesCuales: rehabilitacionOral?.dientesFaltantesCuales || "",
+    coronaDental: rehabilitacionOral?.coronaDental || false,
+    coronaDentalCuales: rehabilitacionOral?.coronaDentalCuales || "",
+    espigos: rehabilitacionOral?.espigos || false,
+    espigosCuales: rehabilitacionOral?.espigosCuales || "",
+    espigos2: rehabilitacionOral?.espigos2 || false,
+    implantes: rehabilitacionOral?.implantes || false,
+    implantesCuales: rehabilitacionOral?.implantesCuales || "",
+    edentuloParcial: rehabilitacionOral?.edentuloParcial || false,
+    clasificacionDeKenedy: rehabilitacionOral?.clasificacionDeKenedy || "",
+    edentuloTotal: rehabilitacionOral?.edentuloTotal || "",
+    diagnosticoOclusal: rehabilitacionOral?.diagnosticoOclusal || ""
+      });
+      setArchivo1(rehabilitacionOral?.archivo1);
+      setArchivo2(rehabilitacionOral?.archivo2);
+    }
+  }, [rehabilitacionOral]);
 
   const navigate = useNavigate();
 
-  const handleInputChangee = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    }
   };
 
   const handleCheckboxChange = (e, listName) => {
@@ -108,7 +166,7 @@ const EditRehabilitacionOralForm = ({
     e.preventDefault();
 
     try {
-      await updateRehabilitacionOral(rehabilitacionOral.id, formData);
+      await updateRehabilitacionOral(rehabilitacionOral._id, formData, archivo1, archivo2);
       // Notificación de éxito
       toast.success("Rehabilitación Oral actualizada exitosamente", {
         position: "top-right",
@@ -130,6 +188,73 @@ const EditRehabilitacionOralForm = ({
         Editar Rehabilitación Oral
       </Typography>
       <Grid container spacing={2} xs={12}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box display="flex" alignItems="center" mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+              {rehabilitacionOral?.archivo1Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(rehabilitacionOral.archivo1Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  RX
+                </Button>
+              )}
+            </Box>
+            <Box display="flex" alignItems="center">
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+              {rehabilitacionOral?.archivo2Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(rehabilitacionOral.archivo2Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  CS
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Grid>
         <Typography variant="h6" align="center" gutterBottom>
           Examen Extra Oral
         </Typography>

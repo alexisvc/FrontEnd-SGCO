@@ -67,8 +67,18 @@ const CreateRehabilitacionOralForm = ({
     edentuloTotal: "",
     diagnosticoOclusal: "",
   });
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
 
   const navigate = useNavigate();
+
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    }
+  };
 
   const handleCheckboxChange = (e, listName) => {
     const { name, checked } = e.target;
@@ -99,7 +109,7 @@ const CreateRehabilitacionOralForm = ({
         paciente: patientId,
       };
 
-      await createRehabilitacionOral(newData);
+      await createRehabilitacionOral(newData, archivo1, archivo2);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
         refHorizontal: [],
@@ -143,6 +153,8 @@ const CreateRehabilitacionOralForm = ({
         edentuloTotal: "",
         diagnosticoOclusal: "",
       });
+      setArchivo1(null);
+      setArchivo2(null);
       // Notificación de éxito
       toast.success("Rehabilitación Oral creada exitosamente", {
         position: "top-right",
@@ -164,6 +176,51 @@ const CreateRehabilitacionOralForm = ({
         Editar Rehabilitación Oral
       </Typography>
       <Grid container spacing={2} xs={12}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+            </Box>
+            <Box>
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+            </Box>
+          </Box>
+        </Grid>
         <Typography variant="h6" align="center" gutterBottom>
           Examen Extra Oral
         </Typography>

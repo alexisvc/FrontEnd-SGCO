@@ -48,10 +48,10 @@ export function useRehabilitacionOral() {
       });
   };
 
-  const createRehabilitacionOral = async (newRehabilitacionOral) => {
+  const createRehabilitacionOral = async (newRehabilitacionOral, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await rehabilitacionOralService.createRehabilitacionOral(newRehabilitacionOral);
+      const data = await rehabilitacionOralService.createRehabilitacionOral(newRehabilitacionOral, archivo1, archivo2);
       setRehabilitacionOralList([...rehabilitacionOralList, data]);
       setLoading(false);
       return data;
@@ -63,10 +63,10 @@ export function useRehabilitacionOral() {
     }
   };
 
-  const updateRehabilitacionOral = async (id, updatedRehabilitacionOral) => {
+  const updateRehabilitacionOral = async (id, updatedRehabilitacionOral, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await rehabilitacionOralService.updateRehabilitacionOral(id, updatedRehabilitacionOral);
+      const data = await rehabilitacionOralService.updateRehabilitacionOral(id, updatedRehabilitacionOral, archivo1, archivo2);
       setRehabilitacionOralList(rehabilitacionOralList.map(item => item.id === id ? data : item));
       setLoading(false);
       return data;
