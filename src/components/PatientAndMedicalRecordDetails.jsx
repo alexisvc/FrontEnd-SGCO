@@ -16,6 +16,8 @@ import CirugiaPatologiaDetails from "./cirugiaPatologia/CirugiaPatologiaDetails"
 import RehabilitacionOralDetails from "./rehabilitacionOral/RehabilitacionOralDetails";
 import DisfuncionMandibularDetails from "./disfuncionMandibular/DisfuncionMandibularDetails";
 import ConsentimientoDetails from "./consentimiento/ConsentimientoDetails";
+import DownloadIcon from "@mui/icons-material/Download";
+import { generatePDF } from "../resources/pdf/pdfUtils";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,9 +53,9 @@ const PatientAndMedicalRecordDetails = ({
   updateEvolutionChart,
   fetchEvolutionChartsByPatientId,
   endodonticTreatments,
-    createEndodonticTreatment,
-    updateEndodonticTreatment,
-    fetchEndodonticTreatmentsByPatientId
+  createEndodonticTreatment,
+  updateEndodonticTreatment,
+  fetchEndodonticTreatmentsByPatientId,
 }) => {
   // Tomamos el patientId de la URL
   const { patientId } = useParams();
@@ -77,6 +79,17 @@ const PatientAndMedicalRecordDetails = ({
       >
         Atrás
       </Button>
+
+      <Box sx={{ width: "100%", display: 'flex', justifyContent: 'center'}}>
+        <Button
+          variant="contained"
+          startIcon={<DownloadIcon />}
+          onClick={() => generatePDF(patientId)}
+          sx={{ my: 3 }}
+        >
+          Generar PDF
+        </Button>
+      </Box>
 
       <PatientDetails patient={patient} updatePatient={updatePatient} />
 
@@ -128,12 +141,12 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={3}>
-          <EvolutionChartsDetails 
-          patientId={patientId} 
-          evolutionCharts={evolutionCharts}
-          createEvolutionChart={createEvolutionChart}
-          updateEvolutionChart={updateEvolutionChart}
-          fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
+          <EvolutionChartsDetails
+            patientId={patientId}
+            evolutionCharts={evolutionCharts}
+            createEvolutionChart={createEvolutionChart}
+            updateEvolutionChart={updateEvolutionChart}
+            fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
           />
         </CustomTabPanel>
 
@@ -142,12 +155,14 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={5}>
-          <EndodonticTreamentsDetails 
-          patientId={patientId} 
-          endodonticTreatments={endodonticTreatments}
-          createEndodonticTreatment={createEndodonticTreatment}
-          updateEndodonticTreatment={updateEndodonticTreatment}
-          fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
+          <EndodonticTreamentsDetails
+            patientId={patientId}
+            endodonticTreatments={endodonticTreatments}
+            createEndodonticTreatment={createEndodonticTreatment}
+            updateEndodonticTreatment={updateEndodonticTreatment}
+            fetchEndodonticTreatmentsByPatientId={
+              fetchEndodonticTreatmentsByPatientId
+            }
           />
         </CustomTabPanel>
 
@@ -166,8 +181,6 @@ const PatientAndMedicalRecordDetails = ({
         <CustomTabPanel value={value} index={9}>
           <PeriodonticTreatmentsDetails patientId={patientId} />
         </CustomTabPanel>
-
-        
       </Box>
     </>
   );
