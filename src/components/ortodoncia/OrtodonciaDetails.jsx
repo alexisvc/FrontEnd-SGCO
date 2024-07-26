@@ -19,7 +19,7 @@ const OrtodonciaDetails = ({
   // Buscar las evoluciones de la ortodoncia
   useEffect(() => {
     if (ortodoncia) {
-      fetchEvolucionesByOrtodonciaId(ortodoncia.id);
+      fetchEvolucionesByOrtodonciaId(ortodoncia._id);
     }
   }, [ortodoncia]);
 

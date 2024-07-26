@@ -22,7 +22,21 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
     observaciones: "",
   });
 
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
+  const [archivo3, setArchivo3] = useState(null);
+
   const navigate = useNavigate();
+
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    } else if (e.target.name === "archivo3") {
+      setArchivo3(e.target.files[0]);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +54,7 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         ...formData,
         paciente: patientId,
       };
-      await createOrtodoncia(newTreatmentData);
+      await createOrtodoncia(newTreatmentData, archivo1, archivo2, archivo3);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
         diagnostico: "",
@@ -50,6 +64,9 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         aparatoOrtopedico: "",
         observaciones: "",
       });
+      setArchivo1(null);
+      setArchivo2(null);
+      setArchivo3(null);
       // Notificación de éxito
       toast.success("Ortodoncia creada exitosamente", {
         position: "top-right",
@@ -72,6 +89,71 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         Crear Ortodoncia
       </Typography>
       <Grid container spacing={2} sx={12}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+            </Box>
+            <Box mr={2}>
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+            </Box>
+            <Box mr={2}>
+              <label htmlFor="archivo3-input">
+                <input
+                  id="archivo3-input"
+                  name="archivo3"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  C
+                </Button>
+              </label>
+            </Box>
+          </Box>
+        </Grid>
         <Grid item xs={12}>
           <TextField
             fullWidth

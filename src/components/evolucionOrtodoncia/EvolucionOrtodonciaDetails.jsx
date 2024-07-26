@@ -15,7 +15,7 @@ const EvolucionOrtodonciaDetails = ({
   const handleCreateEvolucion = async (formData) => {
     const newTreatmentData = {
       ...formData,
-      ortodoncia: ortodoncia.id,
+      ortodoncia: ortodoncia._id,
     };
     await createEvolucion(newTreatmentData);
     
@@ -54,7 +54,7 @@ const EvolucionOrtodonciaDetails = ({
 
         {/* Fila para crear un nuevo tratamiento */}
         <CreateEvolucionOrtodonciaForm
-          ortodonciaId={ortodoncia.id}
+          ortodonciaId={ortodoncia._id}
           createEvolucion={handleCreateEvolucion}
         />
       </TableBody>

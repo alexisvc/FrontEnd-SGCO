@@ -48,10 +48,10 @@ export function useOrtodoncia() {
       });
   };
 
-  const createOrtodoncia = async (newOrtodoncia) => {
+  const createOrtodoncia = async (newOrtodoncia, archivo1, archivo2, archivo3) => {
     try {
       setLoading(true);
-      const data = await ortodonciaService.createOrtodoncia(newOrtodoncia);
+      const data = await ortodonciaService.createOrtodoncia(newOrtodoncia, archivo1, archivo2, archivo3);
       setOrtodoncias([...ortodoncias, data]);
       setLoading(false);
       return data;
@@ -64,10 +64,10 @@ export function useOrtodoncia() {
   };
   
 
-  const updateOrtodoncia = async (id, updatedOrtodoncia) => {
+  const updateOrtodoncia = async (id, updatedOrtodoncia, archivo1, archivo2, archivo3) => {
     try {
       setLoading(true);
-      const data = await ortodonciaService.updateOrtodoncia(id, updatedOrtodoncia);
+      const data = await ortodonciaService.updateOrtodoncia(id, updatedOrtodoncia, archivo1, archivo2, archivo3);
       setOrtodoncias(ortodoncias.map(ortodoncia => ortodoncia.id === id ? data : ortodoncia));
       setLoading(false);
       return data;
