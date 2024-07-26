@@ -48,7 +48,18 @@ const CreatePeriodonticTreatmentsForm = ({
     nivelInsercionSuperiorB: Array(16).fill(""),
   });
 
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
+
   const navigate = useNavigate();
+  
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    }
+  };
 
   const handleArrayInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -77,7 +88,7 @@ const CreatePeriodonticTreatmentsForm = ({
         paciente: patientId,
       };
 
-      await createPeriodonticTreatment(newPeriodonticTreatmentData);
+      await createPeriodonticTreatment(newPeriodonticTreatmentData, archivo1, archivo2);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
         diagnosticoPer: "",
@@ -125,6 +136,51 @@ const CreatePeriodonticTreatmentsForm = ({
         Crear Periodoncia
       </Typography>
       <Grid container spacing={3}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+            </Box>
+            <Box>
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+            </Box>
+          </Box>
+        </Grid>
         <Grid item xs={12}>
           <TextField
             fullWidth

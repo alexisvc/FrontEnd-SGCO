@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Typography,
@@ -15,6 +15,8 @@ import {
   Paper,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
@@ -60,8 +62,50 @@ const EditPeriodonticTreatmentsForm = ({
     nivelInsercionSuperiorB:
       periodonticTreatment?.nivelInsercionSuperiorB || Array(16).fill(""),
   });
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
+
+  useEffect(() => {
+    if (periodonticTreatment) {
+      setFormData({
+        diagnosticoPer: periodonticTreatment.diagnosticoPer || "",
+        observacionPer: periodonticTreatment.observacionPer || "",
+        movilidadInferior: periodonticTreatment.movilidadInferior || Array(16).fill(""),
+        furcaInferior: periodonticTreatment.furcaInferior || Array(16).fill(""),
+        sangradoInferior: periodonticTreatment.sangradoInferior || false,
+        placaInferior: periodonticTreatment.placaInferior || false,
+        mrgGingivalInferiorA: periodonticTreatment.mrgGingivalInferiorA || Array(16).fill(""),
+        profundidadSondajeInferiorA: periodonticTreatment.profundidadSondajeInferiorA || Array(16).fill(""),
+        nivelInsercionInferiorA: periodonticTreatment.nivelInsercionInferiorA || Array(16).fill(""),
+        mrgGingivalInferiorB: periodonticTreatment.mrgGingivalInferiorB || Array(16).fill(""),
+        profundidadSondajeInferiorB: periodonticTreatment.profundidadSondajeInferiorB || Array(16).fill(""),
+        nivelInsercionInferiorB: periodonticTreatment.nivelInsercionInferiorB || Array(16).fill(""),
+        movilidadSuperior: periodonticTreatment.movilidadSuperior || Array(16).fill(""),
+        furcaSuperior: periodonticTreatment.furcaSuperior || Array(16).fill(""),
+        sangradoSuperior: periodonticTreatment.sangradoSuperior || false,
+        placaSuperior: periodonticTreatment.placaSuperior || false,
+        mrgGingivalSuperiorA: periodonticTreatment.mrgGingivalSuperiorA || Array(16).fill(""),
+        profundidadSondajeSuperiorA: periodonticTreatment.profundidadSondajeSuperiorA || Array(16).fill(""),
+        nivelInsercionSuperiorA: periodonticTreatment.nivelInsercionSuperiorA || Array(16).fill(""),
+        mrgGingivalSuperiorB: periodonticTreatment.mrgGingivalSuperiorB || Array(16).fill(""),
+        profundidadSondajeSuperiorB: periodonticTreatment.profundidadSondajeSuperiorB || Array(16).fill(""),
+        nivelInsercionSuperiorB: periodonticTreatment.nivelInsercionSuperiorB || Array(16).fill(""),
+      });
+      setArchivo1(periodonticTreatment?.archivo1);
+      setArchivo2(periodonticTreatment?.archivo2);
+    }
+  }, [periodonticTreatment]);
+
 
   const navigate = useNavigate();
+
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    }
+  };
 
   const handleArrayInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -85,7 +129,7 @@ const EditPeriodonticTreatmentsForm = ({
     e.preventDefault();
 
     try {
-      await updatePeriodonticTreatment(periodonticTreatment.id, formData);
+      await updatePeriodonticTreatment(periodonticTreatment._id, formData, archivo1, archivo2);
 
       // Notificación de éxito
       toast.success("Plan de tratamiento actualizado exitosamente", {
@@ -108,6 +152,73 @@ const EditPeriodonticTreatmentsForm = ({
         Editar Historia de Periodoncia
       </Typography>
       <Grid container spacing={3}>
+        {/* Botones de archivo */}
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Box display="flex" alignItems="center" mr={2}>
+              <label htmlFor="archivo1-input">
+                <input
+                  id="archivo1-input"
+                  name="archivo1"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  RX
+                </Button>
+              </label>
+              {periodonticTreatment?.archivo1Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(periodonticTreatment.archivo1Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  RX
+                </Button>
+              )}
+            </Box>
+            <Box display="flex" alignItems="center">
+              <label htmlFor="archivo2-input">
+                <input
+                  id="archivo2-input"
+                  name="archivo2"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  startIcon={<AddCircleIcon />}
+                >
+                  CS
+                </Button>
+              </label>
+              {periodonticTreatment?.archivo2Url && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.open(periodonticTreatment.archivo2Url, "_blank")}
+                  startIcon={<DownloadIcon />}
+                  sx={{ ml: 2 }} // Margin left to create space
+                >
+                  CS
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Grid>
         <Grid item xs={12}>
           <TextField
             fullWidth

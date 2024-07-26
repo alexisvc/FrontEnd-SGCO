@@ -49,10 +49,10 @@ export function usePeriodonticTreatments() {
       });
   };
 
-  const createPeriodonticTreatment = async (newPeriodonticTreatment) => {
+  const createPeriodonticTreatment = async (newPeriodonticTreatment, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await periodonticTreatmentService.createPeriodonticTreatment(newPeriodonticTreatment);
+      const data = await periodonticTreatmentService.createPeriodonticTreatment(newPeriodonticTreatment, archivo1, archivo2);
       setPeriodonticTreatments([...periodonticTreatments, data]);
       setLoading(false);
       return data;
@@ -65,10 +65,10 @@ export function usePeriodonticTreatments() {
   };
   
 
-  const updatePeriodonticTreatment = async (id, updatedPeriodonticTreatment) => {
+  const updatePeriodonticTreatment = async (id, updatedPeriodonticTreatment, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await periodonticTreatmentService.updatePeriodonticTreatment(id, updatedPeriodonticTreatment);
+      const data = await periodonticTreatmentService.updatePeriodonticTreatment(id, updatedPeriodonticTreatment, archivo1, archivo2);
       setPeriodonticTreatments(periodonticTreatments.map(treatment => treatment.id === id ? data : treatment));
       setLoading(false);
       return data;
