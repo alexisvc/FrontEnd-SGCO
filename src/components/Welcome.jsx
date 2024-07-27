@@ -109,7 +109,8 @@ function Welcome({ user, logout, isGuestUser }) {
             </Button>
           </Link>
 
-          <Link to="/game-menu" className="link-button">
+           { user.username=='admin' && (
+            <Link to="/game-menu" className="link-button">
             <Button
             variant="contained"
             color="primary"
@@ -122,6 +123,8 @@ function Welcome({ user, logout, isGuestUser }) {
               Planificación y Presupuesto
             </Button>
           </Link>
+           )}
+          
         </div>
       )}
       
