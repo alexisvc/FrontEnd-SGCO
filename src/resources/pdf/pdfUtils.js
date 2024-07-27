@@ -495,27 +495,28 @@ export const generatePDF = async (patientId) => {
                     yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
                 }
             });
-
+            
             const fieldsInferiorEspeciales = [
                 { label: 'Sangrado', values: periodoncia.sangradoInferior },
                 { label: 'Placa', values: periodoncia.placaInferior },
             ];
             
             // Crear datos para la tabla agrupada
-            const tableDataEspeciales = fieldsInferiorEspeciales.map(field => {
+            const tableDataInferiorEspeciales = fieldsInferiorEspeciales.map(field => {
                 const row = [field.label];
                 const data = field.values;
-                
+            
                 // Crear filas agrupando los datos en 3 por columna
                 for (let i = 0; i < 16; i++) {
                     const index = i * 3;
-                    row.push(
+                    const cellData = [
                         data[index] || '',
                         data[index + 1] || '',
                         data[index + 2] || ''
-                    );
+                    ].join(', '); // Concatenar los tres elementos en una sola cadena
+                    row.push(cellData);
                 }
-                
+            
                 return row;
             });
             
@@ -524,12 +525,13 @@ export const generatePDF = async (patientId) => {
                 head: [
                     ['', '4.8', '4.7', '4.6', '4.5', '4.4', '4.3', '4.2', '4.1', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8']
                 ],
-                body: tableDataEspeciales,
+                body: tableDataInferiorEspeciales,
                 startY: yPos,
                 didDrawPage: function (data) {
                     yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
                 }
             });
+            
 
             doc.setFontSize(18);
             addText('Superior', 10);
@@ -560,6 +562,42 @@ export const generatePDF = async (patientId) => {
                     ['', '4.8', '4.7', '4.6', '4.5', '4.4', '4.3', '4.2', '4.1', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8']
                 ],
                 body: tableDataSuperior,
+                startY: yPos,
+                didDrawPage: function (data) {
+                    yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
+                }
+            });
+
+            const fieldsSuperiorEspeciales = [
+                { label: 'Sangrado', values: periodoncia.sangradoSuperior },
+                { label: 'Placa', values: periodoncia.placaSuperior },
+            ];
+            
+            // Crear datos para la tabla agrupada
+            const tableDataSuperiorEspeciales = fieldsSuperiorEspeciales.map(field => {
+                const row = [field.label];
+                const data = field.values;
+            
+                // Crear filas agrupando los datos en 3 por columna
+                for (let i = 0; i < 16; i++) {
+                    const index = i * 3;
+                    const cellData = [
+                        data[index] || '',
+                        data[index + 1] || '',
+                        data[index + 2] || ''
+                    ].join(', '); // Concatenar los tres elementos en una sola cadena
+                    row.push(cellData);
+                }
+            
+                return row;
+            });
+            
+            // Agregar la tabla al PDF
+            autoTable(doc, {
+                head: [
+                    ['', '4.8', '4.7', '4.6', '4.5', '4.4', '4.3', '4.2', '4.1', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8']
+                ],
+                body: tableDataSuperiorEspeciales,
                 startY: yPos,
                 didDrawPage: function (data) {
                     yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
