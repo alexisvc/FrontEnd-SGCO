@@ -8,6 +8,9 @@ import cirugiaPatologiaService from '../../services/cirugiaPatologiaService';
 import endodonticTreatmentService from '../../services/endodonticTreatmentService';
 import ortodonciaService from '../../services/ortodonciaService';
 import evolucionOrtodonciaService from '../../services/evolucionOrtodonciaService';
+import rehabilitacionOralService from '../../services/rehabilitacionOralService';
+import disfuncionMandibularService from '../../services/disfuncionMandibularService';
+import periodonticTreatmentService from '../../services/periodonticTreatmentService';
 
 
 export const generatePDF = async (patientId) => {
@@ -80,6 +83,7 @@ export const generatePDF = async (patientId) => {
             }
         }
 
+        // Obtener ortodoncia del paciente
         let ortodoncia = null;
         try {
             ortodoncia = await ortodonciaService.getOrtodonciasByPatientId(patientId);
@@ -91,6 +95,7 @@ export const generatePDF = async (patientId) => {
                 throw error;  // Rethrow if it's a different error
             }
         }
+
         // Obtener planes de tratamiento del paciente
         let evolucionesOrtodoncia = [];
         try {
@@ -100,6 +105,45 @@ export const generatePDF = async (patientId) => {
                 console.warn("endodonticTreatments not found for patient ID:", patientId);
             } else {
                 console.error("Error fetching endodonticTreatments:", error);
+                throw error;  // Rethrow if it's a different error
+            }
+        }
+
+        // Obtener ortodoncia del paciente
+        let rehabilitacionOral = null;
+        try {
+            rehabilitacionOral = await rehabilitacionOralService.getRehabilitacionOralByPatientId(patientId);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                console.warn("rehabilitacionOral not found for patient ID:", patientId);
+            } else {
+                console.error("Error fetching rehabilitacionOral:", error);
+                throw error;  // Rethrow if it's a different error
+            }
+        }
+
+        // Obtener ortodoncia del paciente
+        let disfuncionMandibular = null;
+        try {
+            disfuncionMandibular = await disfuncionMandibularService.getDisfuncionMandibularByPatientId(patientId);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                console.warn("rehabilitacionOral not found for patient ID:", patientId);
+            } else {
+                console.error("Error fetching rehabilitacionOral:", error);
+                throw error;  // Rethrow if it's a different error
+            }
+        }
+
+        // Obtener ortodoncia del paciente
+        let periodoncia = null;
+        try {
+            periodoncia = await periodonticTreatmentService.getPeriodonticTreatmentsByPatientId(patientId);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                console.warn("periodoncia not found for patient ID:", patientId);
+            } else {
+                console.error("Error fetching periodoncia:", error);
                 throw error;  // Rethrow if it's a different error
             }
         }
@@ -312,8 +356,220 @@ export const generatePDF = async (patientId) => {
             yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
         }
 
+        // Agregar detalles de rehabilitación oral si existe
+        if (rehabilitacionOral) {
+            doc.setFontSize(20);
+            addText("Rehabilitación Oral", 10);
 
+            // Agregar detalles de cada campo de rehabilitación oral
+            doc.setFontSize(12);
+            addText(`Referencias Horizontales: ${rehabilitacionOral.refHorizontal.join(', ')}`, 10);
+            addText(`Referencias Verticales: ${rehabilitacionOral.refVertical.join(', ')}`, 10);
+            addText(`Longitud del Labio: ${rehabilitacionOral.longitudLabio.join(', ')}`, 10);
+            addText(`Forma del Labio: ${rehabilitacionOral.formaLabio.join(', ')}`, 10);
+            addText(`Exposición de la Sonrisa: ${rehabilitacionOral.exposicionSonrisa.join(', ')}`, 10);
+            addText(`Corredor Bucal: ${rehabilitacionOral.corredorBucal.join(', ')}`, 10);
+            addText(`Orientación del Plano Oclusal Anterior: ${rehabilitacionOral.orientacionPlanoOclusalAnt.join(', ')}`, 10);
+            addText(`Visibilidad del Borde Superior: ${rehabilitacionOral.visibilidadBordeSup}`, 10);
+            addText(`Orientación del Plano Oclusal Posterior: ${rehabilitacionOral.orientacionPlanoOclusalPost.join(', ')}`, 10);
+            addText(`Ancho del Incisivo Central Superior: ${rehabilitacionOral.anchoIncisivoCentalSup}`, 10);
+            addText(`Longitud: ${rehabilitacionOral.longitud}`, 10);
+            addText(`Color de los Dientes: ${rehabilitacionOral.colorDientes}`, 10);
+            addText(`Simetría Gingival: ${rehabilitacionOral.simetriaGingival.join(', ')}`, 10);
+            addText(`Biotipo Periodontal: ${rehabilitacionOral.biotipoPeriodental.join(', ')}`, 10);
+            addText(`Número de Dientes: ${rehabilitacionOral.numeroDiente.join(', ')}`, 10);
+            addText(`Pérdida de Hueso Periodontal: ${rehabilitacionOral.perdidaHuesoPeriodental.join(', ')}`, 10);
+            addText(`Otras Patologías Óseas: ${rehabilitacionOral.otrasPatologiasOseas}`, 10);
+            addText(`Restricción de Vías Respiratorias: ${rehabilitacionOral.restriccionViasRespiratorias}`, 10);
+            addText(`Relación Incisal: ${rehabilitacionOral.relacionIncisal.join(', ')}`, 10);
+            addText(`Overbite: ${rehabilitacionOral.overbite.join(', ')}`, 10);
+            addText(`Overjet: ${rehabilitacionOral.overjet.join(', ')}`, 10);
+            addText(`Tinitus: ${rehabilitacionOral.tinitus.join(', ')}`, 10);
+            addText(`Puede Repetir la Mordida: ${rehabilitacionOral.puedeRepetirMordida.join(', ')}`, 10);
+            addText(`Restauraciones Defectuosas: ${rehabilitacionOral.restauracionesDefectuosas ? 'Sí' : 'No'}`, 10);
+            if (rehabilitacionOral.restauracionesDefectuosas) {
+                addText(`Restauraciones Defectuosas Cuáles: ${rehabilitacionOral.restauracionesDefectuosasCuales}`, 10);
+            }
+            addText(`Lesiones Cariosas: ${rehabilitacionOral.lesionesCariosas ? 'Sí' : 'No'}`, 10);
+            if (rehabilitacionOral.lesionesCariosas) {
+                addText(`Lesiones Cariosas Cuáles: ${rehabilitacionOral.lesionesCariosasCuales}`, 10);
+            }
+            addText(`Dientes Faltantes: ${rehabilitacionOral.dientesFaltantes ? 'Sí' : 'No'}`, 10);
+            if (rehabilitacionOral.dientesFaltantes) {
+                addText(`Dientes Faltantes Cuáles: ${rehabilitacionOral.dientesFaltantesCuales}`, 10);
+            }
+            addText(`Corona Dental: ${rehabilitacionOral.coronaDental ? 'Sí' : 'No'}`, 10);
+            if (rehabilitacionOral.coronaDental) {
+                addText(`Corona Dental Cuáles: ${rehabilitacionOral.coronaDentalCuales}`, 10);
+            }
+            addText(`Espigos: ${rehabilitacionOral.espigos ? 'Sí' : 'No'}`, 10);
+            if (rehabilitacionOral.espigos) {
+                addText(`Espigos Cuáles: ${rehabilitacionOral.espigosCuales}`, 10);
+            }
+            addText(`Espigos 2: ${rehabilitacionOral.espigos2.join(', ')}`, 10);
+            addText(`Implantes: ${rehabilitacionOral.implantes ? 'Sí' : 'No'}`, 10);
+            if (rehabilitacionOral.implantes) {
+                addText(`Implantes Cuáles: ${rehabilitacionOral.implantesCuales}`, 10);
+            }
+            addText(`Edéntulo Parcial: ${rehabilitacionOral.edentuloParcial.join(', ')}`, 10);
+            addText(`Clasificación de Kennedy: ${rehabilitacionOral.clasificacionDeKenedy}`, 10);
+            addText(`Edéntulo Total: ${rehabilitacionOral.edentuloTotal.join(', ')}`, 10);
+            addText(`Diagnóstico Oclusal: ${rehabilitacionOral.diagnosticoOclusal}`, 10);
+            addText(`Archivo RX: ${rehabilitacionOral.archivo1Url}`, 10);
+            addText(`Archivo CS: ${rehabilitacionOral.archivo2Url}`, 10);
+            addText(`Archivo C: ${rehabilitacionOral.archivo3Url}`, 10);
+        }
 
+        //Agregar disfuncion mandibular si existe
+        if (disfuncionMandibular) {
+            doc.setFontSize(20);
+            addText("Disfunción Mandibular", 10);
+
+            // Agregar detalles de cada campo de disfunción mandibular
+            doc.setFontSize(12);
+            addText(`Hueso Cortical: ${disfuncionMandibular.huesoCortical ? 'Sí' : 'No'}`, 10);
+            addText(`Espacio Articular: ${disfuncionMandibular.espacioArticular ? 'Sí' : 'No'}`, 10);
+            addText(`Cóndilo: ${disfuncionMandibular.condillo ? 'Sí' : 'No'}`, 10);
+            addText(`Desviación de la Línea Media: ${disfuncionMandibular.desviacionLineaMedia ? 'Sí' : 'No'}`, 10);
+            addText(`Con Reducción: ${disfuncionMandibular.conReduccion ? 'Sí' : 'No'}`, 10);
+            addText(`Sin Reducción: ${disfuncionMandibular.sinReduccion ? 'Sí' : 'No'}`, 10);
+            addText(`Click Articular: ${disfuncionMandibular.clickArticular ? 'Sí' : 'No'}`, 10);
+            addText(`Crepitación: ${disfuncionMandibular.crepitacion ? 'Sí' : 'No'}`, 10);
+            addText(`Subluxación: ${disfuncionMandibular.subluxacion ? 'Sí' : 'No'}`, 10);
+            addText(`Dolor Articular Derecho: ${disfuncionMandibular.dolorArticularDer.join(', ')}`, 10);
+            addText(`Dolor Articular Izquierdo: ${disfuncionMandibular.dolorArticularIzq.join(', ')}`, 10);
+            addText(`Dolor Muscular Izquierdo: ${disfuncionMandibular.dolorMuscularIzq.join(', ')}`, 10);
+            addText(`Dolor Muscular Derecho: ${disfuncionMandibular.dolorMuscularDer.join(', ')}`, 10);
+            addText(`Dolor Muscular: ${disfuncionMandibular.dolorMuscular.join(', ')}`, 10);
+            addText(`Descripción del Dolor Muscular: ${disfuncionMandibular.dolorMuscularDescripcion}`, 10);
+            addText(`Dolor Orofacial Común Muscular: ${disfuncionMandibular.dolorOrofacialComunMuscular.join(', ')}`, 10);
+            addText(`Mallampati: ${disfuncionMandibular.mallampati.join(', ')}`, 10);
+            addText(`Dolor Orofacial Común Apnea: ${disfuncionMandibular.dolorOrofacialComunApnea.join(', ')}`, 10);
+        }
+
+        // Agregar detalles de periodoncia si existen
+        if (periodoncia) {
+            doc.setFontSize(20);
+            addText("Periodoncia", 10);
+        
+            // Detalles individuales
+            doc.setFontSize(12);
+            addText(`Diagnóstico: ${periodoncia.diagnosticoPer}`, 10);
+            addText(`Observación: ${periodoncia.observacionPer}`, 10);
+            addText(`Archivo 1: ${periodoncia.archivo1Url}`, 10);
+            addText(`Archivo 2: ${periodoncia.archivo2Url}`, 10);
+        
+            yPos += 40; // Ajustar posición después de los textos individuales
+            
+            doc.setFontSize(18);
+            addText('Inferior', 10); // Espacio entre texto y tabla
+            // Datos para los campos con 16 columnas
+            const fieldsInferior = [
+                { label: 'Movilidad', values: periodoncia.movilidadInferior },
+                { label: 'Furca', values: periodoncia.furcaInferior },
+                { label: 'Margen Gingival', values: periodoncia.mrgGingivalInferiorA },
+                { label: 'Profundidad de Sondaje', values: periodoncia.profundidadSondajeInferiorA },
+                { label: 'Nivel de Inserción', values: periodoncia.nivelInsercionInferiorA },
+                { label: 'Margen Gingival', values: periodoncia.mrgGingivalInferiorB },
+                { label: 'Profundidad de Sondaje', values: periodoncia.profundidadSondajeInferiorB },
+                { label: 'Nivel de Inserción', values: periodoncia.nivelInsercionInferiorB }
+            ];
+        
+            // Crear datos para la tabla agrupada
+            const tableData = fieldsInferior.map(field => {
+                const row = [field.label];
+                for (let i = 0; i < 16; i++) {
+                    row.push(field.values[i] || ''); // Agregar datos o celdas vacías si no hay más datos
+                }
+                return row;
+            });
+        
+            // Agregar la tabla al PDF
+            autoTable(doc, {
+                head: [
+                    ['', '4.8', '4.7', '4.6', '4.5', '4.4', '4.3', '4.2', '4.1', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8']
+                ],
+                body: tableData,
+                startY: yPos,
+                didDrawPage: function (data) {
+                    yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
+                }
+            });
+
+            const fieldsInferiorEspeciales = [
+                { label: 'Sangrado', values: periodoncia.sangradoInferior },
+                { label: 'Placa', values: periodoncia.placaInferior },
+            ];
+            
+            // Crear datos para la tabla agrupada
+            const tableDataEspeciales = fieldsInferiorEspeciales.map(field => {
+                const row = [field.label];
+                const data = field.values;
+                
+                // Crear filas agrupando los datos en 3 por columna
+                for (let i = 0; i < 16; i++) {
+                    const index = i * 3;
+                    row.push(
+                        data[index] || '',
+                        data[index + 1] || '',
+                        data[index + 2] || ''
+                    );
+                }
+                
+                return row;
+            });
+            
+            // Agregar la tabla al PDF
+            autoTable(doc, {
+                head: [
+                    ['', '4.8', '4.7', '4.6', '4.5', '4.4', '4.3', '4.2', '4.1', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8']
+                ],
+                body: tableDataEspeciales,
+                startY: yPos,
+                didDrawPage: function (data) {
+                    yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
+                }
+            });
+
+            doc.setFontSize(18);
+            addText('Superior', 10);
+            // Datos para los campos con 16 columnas
+            const fieldsSuperior = [
+                { label: 'Movilidad', values: periodoncia.movilidadSuperior },
+                { label: 'Furca', values: periodoncia.furcaSuperior },
+                { label: 'Margen Gingival', values: periodoncia.mrgGingivalSuperiorA },
+                { label: 'Profundidad de Sondaje', values: periodoncia.profundidadSondajeSuperiorA },
+                { label: 'Nivel de Inserción', values: periodoncia.nivelInsercionSuperiorA },
+                { label: 'Margen Gingival', values: periodoncia.mrgGingivalSuperiorB },
+                { label: 'Profundidad de Sondaje', values: periodoncia.profundidadSondajeSuperiorB },
+                { label: 'Nivel de Inserción', values: periodoncia.nivelInsercionSuperiorB }
+            ];
+        
+            // Crear datos para la tabla agrupada
+            const tableDataSuperior = fieldsSuperior.map(field => {
+                const row = [field.label];
+                for (let i = 0; i < 16; i++) {
+                    row.push(field.values[i] || ''); // Agregar datos o celdas vacías si no hay más datos
+                }
+                return row;
+            });
+        
+            // Agregar la tabla al PDF
+            autoTable(doc, {
+                head: [
+                    ['', '4.8', '4.7', '4.6', '4.5', '4.4', '4.3', '4.2', '4.1', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8']
+                ],
+                body: tableDataSuperior,
+                startY: yPos,
+                didDrawPage: function (data) {
+                    yPos = data.cursor.y + 10;  // Ajustar posición después de la tabla
+                }
+            });
+        
+            yPos = doc.lastAutoTable.finalY + 10; // Ajustar yPos si la tabla se divide en varias páginas
+    
+        }
+    
         // Guardar el documento PDF
         doc.save(`Patient_Details_${patientId}.pdf`);
     } catch (error) {
