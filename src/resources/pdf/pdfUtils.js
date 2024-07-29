@@ -16,7 +16,7 @@ import periodonticTreatmentService from '../../services/periodonticTreatmentServ
 export const generatePDF = async (patientId) => {
     try {
         // Obtener detalles del paciente
-        const patient = await patientsService.getPatientById(patientId);
+        let patient = await patientsService.getPatientById(patientId);
 
         // Obtener registros médicos del paciente
         let medicalRecord = null;
@@ -83,29 +83,31 @@ export const generatePDF = async (patientId) => {
             }
         }
 
-        // Obtener ortodoncia del paciente
+       // Obtener ortodoncia del paciente
         let ortodoncia = null;
         try {
             ortodoncia = await ortodonciaService.getOrtodonciasByPatientId(patientId);
         } catch (error) {
             if (error.response && error.response.status === 404) {
-                console.warn("ortodoncia not found for patient ID:", patientId);
+                console.warn("Ortodoncia not found for patient ID:", patientId);
             } else {
                 console.error("Error fetching ortodoncia:", error);
                 throw error;  // Rethrow if it's a different error
             }
         }
 
-        // Obtener planes de tratamiento del paciente
+        // Obtener planes de tratamiento del paciente solo si existe la ortodoncia
         let evolucionesOrtodoncia = [];
-        try {
-            evolucionesOrtodoncia = await evolucionOrtodonciaService.getByOrtodonciaId(ortodoncia._id);
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-                console.warn("endodonticTreatments not found for patient ID:", patientId);
-            } else {
-                console.error("Error fetching endodonticTreatments:", error);
-                throw error;  // Rethrow if it's a different error
+        if (ortodoncia) {
+            try {
+                evolucionesOrtodoncia = await evolucionOrtodonciaService.getByOrtodonciaId(ortodoncia._id);
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    console.warn("Evoluciones de ortodoncia not found for ortodoncia ID:", ortodoncia._id);
+                } else {
+                    console.error("Error fetching evoluciones de ortodoncia:", error);
+                    throw error;  // Rethrow if it's a different error
+                }
             }
         }
 
@@ -274,6 +276,8 @@ export const generatePDF = async (patientId) => {
             addText("Cirugía y Patología Oral", 10);
             // Agregar detalles de cada tratamiento de endodoncia
             doc.setFontSize(12);
+            cirugiaPatologia.forEach((cirugiaPatologia, index) => {
+                addText(`Cirugía y Patología Oral ${index + 1}:`, 10);
             addText(`Antecedentes: ${cirugiaPatologia.antecedentesCirPat}`, 10);
             addText(`Alergias Médicas: ${cirugiaPatologia.alergiasMedCirPat}`, 10);
             addText(`Patología de Tejidos Blandos: ${cirugiaPatologia.patologiaTejBland}`, 10);
@@ -282,6 +286,7 @@ export const generatePDF = async (patientId) => {
             addText(`Localización de la Patología: ${cirugiaPatologia.localizacionPatologia}`, 10);
             addText(`Archivo RX: ${cirugiaPatologia.archivo1Url}`, 10);
             addText(`Archivo CS: ${cirugiaPatologia.archivo2Url}`, 10);
+            });
         }
 
         // Agregar endodoncias si existen

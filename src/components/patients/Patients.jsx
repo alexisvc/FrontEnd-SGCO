@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePatients } from "../../hooks/usePatients";
 import { useNavigate } from "react-router-dom";
 import { FaArrowCircleLeft } from "react-icons/fa";
@@ -18,6 +18,10 @@ import {
   TextField,
   Container,
   Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -28,16 +32,22 @@ import { toast } from "react-toastify";
 const Patients = ({
   patients,
   patient,
-  fetchPatientById,
+  fetchPatients,
   fetchPatientByCedula,
+  fetchPatientByName,
   createPatient,
   setPatient
 }) => {
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
   const navigate = useNavigate();
   
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
-  const [searchId, setSearchId] = useState("");
+  const [searchType, setSearchType] = useState("cedula");
+  const [searchName, setSearchName] = useState("");
   const [searchCedula, setSearchCedula] = useState("");
   const [newPatient, setNewPatient] = useState({
     nombrePaciente: "",
@@ -53,8 +63,8 @@ const Patients = ({
     afinidadContactoEmergencia: "",
   });
 
-  const handleSearchIdChange = (e) => {
-    setSearchId(e.target.value);
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
   };
 
   const handleSearchCedulaChange = (e) => {
@@ -63,9 +73,9 @@ const Patients = ({
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchId) {
-      fetchPatientById(searchId);
-    } else if (searchCedula) {
+    if (searchType === "name" && searchName) {
+      fetchPatientByName(searchName);
+    } else if (searchType === "cedula" && searchCedula) {
       fetchPatientByCedula(searchCedula);
     }
   };
@@ -169,6 +179,7 @@ const Patients = ({
         </Grid>
       </Grid>
 
+      {/* Formulario de creación */}
       {showCreateForm && (
         <PatientForm
           newPatient={newPatient}
@@ -176,7 +187,8 @@ const Patients = ({
           handleCreateSubmit={handleCreateSubmit}
         />
       )}
-
+      
+      {/* Formulario de búsqueda */}
       {showSearchForm && (
         <>
           <Typography
@@ -194,15 +206,40 @@ const Patients = ({
             sx={{ mt: 2 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  label="Ingrese Número de Cédula del paciente"
-                  value={searchCedula}
-                  onChange={handleSearchCedulaChange}
-                />
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Tipo de Búsqueda</InputLabel>
+                  <Select
+                    value={searchType}
+                    onChange={(e) => setSearchType(e.target.value)}
+                    label="Tipo de Búsqueda"
+                  >
+                    <MenuItem value="cedula">Cédula</MenuItem>
+                    <MenuItem value="name">Nombre</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
+              {searchType === "cedula" ? (
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    label="Ingrese Número de Cédula del paciente"
+                    value={searchCedula}
+                    onChange={handleSearchCedulaChange}
+                  />
+                </Grid>
+              ) : (
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    label="Ingrese Nombre del paciente"
+                    value={searchName}
+                    onChange={handleSearchNameChange}
+                  />
+                </Grid>
+              )}
               <Grid item xs={12} container justifyContent="center">
                 <Grid item xs={2}>
                   <Button
@@ -218,162 +255,10 @@ const Patients = ({
               </Grid>
             </Grid>
           </Container>
-
-          {patient && (
-            <Container>
-              <Typography
-                variant="h5"
-                align="center"
-                gutterBottom
-                sx={{ margin: 5 }}
-              >
-                Detalles del Paciente
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Nombre del Paciente"
-                    name="nombrePaciente"
-                    value={patient.nombrePaciente}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    label="Edad del Paciente"
-                    name="edadPaciente"
-                    value={patient.edadPaciente}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    type="date"
-                    label="Fecha de Nacimiento"
-                    name="fechaNacimiento"
-                    value={patient.fechaNacimiento.split("T")[0]}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    type="email"
-                    label="Correo electrónico"
-                    name="correoPaciente"
-                    value={patient.correoPaciente}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Dirección"
-                    name="direccionPaciente"
-                    value={patient.direccionPaciente}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Género"
-                    name="generoPaciente"
-                    value={patient.generoPaciente}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Número de Cédula"
-                    name="numeroCedula"
-                    value={patient.numeroCedula}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Ocupación"
-                    name="ocupacion"
-                    value={patient.ocupacion}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Teléfono"
-                    name="telefono"
-                    value={patient.telefono}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Teléfono de Contacto de Emergencia"
-                    name="telContactoEmergencia"
-                    value={patient.telContactoEmergencia}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Afinidad de Contacto de Emergencia"
-                    name="afinidadContactoEmergencia"
-                    value={patient.afinidadContactoEmergencia}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} container justifyContent="center">
-                  <Grid item xs={2}>
-                    <Button
-                      onClick={() => handleViewPatient(patient)}
-                      variant="contained"
-                      color="primary"
-                      startIcon={<VisibilityIcon />}
-                      fullWidth
-                    >
-                      Ver HC
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Container>
-          )}
         </>
       )}
 
+      {/* Lista de pacientes */}
       <>
         <Typography
           variant="h5"

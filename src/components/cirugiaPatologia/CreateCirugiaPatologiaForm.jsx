@@ -50,6 +50,9 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
         ...formData,
         paciente: patientId,
       };
+      console.log(newData);
+      console.log(archivo1);
+      console.log(archivo2);
       await createCirugiaPatologia(newData, archivo1, archivo2);
       setFormData({
         antecedentesCirPat: "",

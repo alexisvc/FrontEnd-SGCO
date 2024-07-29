@@ -26,6 +26,7 @@ import { usePatients } from "./hooks/usePatients";
 import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
+import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
 
 
 function App() {
@@ -33,8 +34,9 @@ function App() {
   const {
     patients,
     patient,
-    fetchPatientById,
+    fetchPatients,
     fetchPatientByCedula,
+    fetchPatientByName,
     createPatient,
     updatePatient,
     setPatient,
@@ -57,6 +59,12 @@ function App() {
     updateEndodonticTreatment,
     fetchEndodonticTreatmentsByPatientId
   } = useEndodonticTreatments();
+  const {
+    cirugiaPatologias,
+    createCirugiaPatologia,
+    updateCirugiaPatologia,
+    fetchCirugiaPatologiaByPatientId,
+  } = useCirugiaPatologia();
   
 
   const isLoggedIn = !!user;
@@ -81,8 +89,9 @@ function App() {
                   <Patients
                     patients={patients}
                     patient={patient}
-                    fetchPatientById={fetchPatientById}
+                    fetchPatients={fetchPatients}
                     fetchPatientByCedula={fetchPatientByCedula}
+                    fetchPatientByName={fetchPatientByName}
                     createPatient={createPatient}
                     updatePatient={updatePatient}
                     setPatient={setPatient}
@@ -97,6 +106,7 @@ function App() {
               path="/patients/:patientId"
               element={
                 <PatientAndMedicalRecordDetails
+                  fetchPatients={fetchPatients}
                   updatePatient={updatePatient}
 
                   patientTreatments={patientTreatments}
@@ -114,6 +124,10 @@ function App() {
                   updateEndodonticTreatment={updateEndodonticTreatment}
                   fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
 
+                  cirugiaPatologias={cirugiaPatologias}
+                  createCirugiaPatologia={createCirugiaPatologia}
+                  updateCirugiaPatologia={updateCirugiaPatologia}
+                  fetchCirugiaPatologiaByPatientId={fetchCirugiaPatologiaByPatientId}
 
                 />
               }

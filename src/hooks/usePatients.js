@@ -20,6 +20,19 @@ export function usePatients() {
       });
   }, []);
 
+  const fetchPatients = () => {
+    setLoading(true);
+    patientsService.getAllPatients()
+      .then(data => {
+        setPatients(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  }
+
   const fetchPatientById = (id) => {
     setLoading(true);
     patientsService.getPatientById(id)
@@ -38,6 +51,20 @@ export function usePatients() {
     patientsService.getPatientByCedula(numeroCedula)
       .then(data => {
         setPatient(data);
+        setPatients([data]);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchPatientByName = (name) => {
+    setLoading(true);
+    patientsService.getPatientByName(name)
+      .then(data => {
+        setPatients(data);
         setLoading(false);
       })
       .catch(err => {
@@ -95,8 +122,10 @@ export function usePatients() {
     patient,
     loading,
     error,
+    fetchPatients,
     fetchPatientById,
     fetchPatientByCedula,
+    fetchPatientByName,
     createPatient,
     updatePatient,
     deletePatient,

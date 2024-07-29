@@ -43,6 +43,7 @@ function a11yProps(index) {
 }
 
 const PatientAndMedicalRecordDetails = ({
+  fetchPatients,
   updatePatient,
   patientTreatments,
   createPatientTreatment,
@@ -56,6 +57,10 @@ const PatientAndMedicalRecordDetails = ({
   createEndodonticTreatment,
   updateEndodonticTreatment,
   fetchEndodonticTreatmentsByPatientId,
+  cirugiaPatologias,
+  createCirugiaPatologia,
+  updateCirugiaPatologia,
+  fetchCirugiaPatologiaByPatientId,
 }) => {
   // Tomamos el patientId de la URL
   const { patientId } = useParams();
@@ -74,13 +79,15 @@ const PatientAndMedicalRecordDetails = ({
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate("/patients")}
+        onClick={() => {
+          navigate("/patients");
+        }}
         sx={{ mb: 2 }}
       >
         Atrás
       </Button>
 
-      <Box sx={{ width: "100%", display: 'flex', justifyContent: 'center'}}>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <Button
           variant="contained"
           startIcon={<DownloadIcon />}
@@ -151,7 +158,13 @@ const PatientAndMedicalRecordDetails = ({
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={4}>
-          <CirugiaPatologiaDetails patientId={patientId} />
+          <CirugiaPatologiaDetails
+            patientId={patientId}
+            cirugiaPatologias={cirugiaPatologias}
+            createCirugiaPatologia={createCirugiaPatologia}
+            updateCirugiaPatologia={updateCirugiaPatologia}
+            fetchCirugiaPatologiaByPatientId={fetchCirugiaPatologiaByPatientId}
+          />
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={5}>

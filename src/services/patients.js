@@ -13,6 +13,10 @@ const getPatientByCedula = (numeroCedula) => {
   return axios.get(`${baseUrl}/cedula/${numeroCedula}`).then((response) => response.data);
 };
 
+const getPatientByName = (name) => {
+  return axios.get(`${baseUrl}/nombre/${name}`).then((response) => response.data);
+};
+
 const createPatient = (newPatient) => {
   return axios.post(baseUrl, newPatient).then((response) => response.data);
 };
@@ -29,6 +33,7 @@ export default {
   getAllPatients,
   getPatientById,
   getPatientByCedula,
+  getPatientByName,
   createPatient,
   updatePatient,
   deletePatient,

@@ -38,11 +38,11 @@ export function useCirugiaPatologia() {
     setLoading(true);
     cirugiaPatologiaService.getCirugiaPatologiaByPatientId(patientId)
       .then(data => {
-        setCirugiaPatologia(data);
+        setCirugiaPatologias(data);
         setLoading(false);
       })
       .catch(err => {
-        setCirugiaPatologia(null);
+        //setCirugiaPatologias(null);
         setError(err);
         setLoading(false);
       });
