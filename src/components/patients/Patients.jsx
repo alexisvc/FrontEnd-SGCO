@@ -161,52 +161,54 @@ const Patients = ({
       >
         Atrás
       </Button>
-      <Typography
-        variant="h3"
-        align="center"
-        gutterBottom
-        sx={{ marginTop: 5, marginBottom: 4 }}
-      >
-        Pacientes
-      </Typography>
-
-      <Grid
-        container
-        spacing={2}
-        justifyContent="center"
-        sx={{ marginBottom: 4 }}
-      >
-        <Grid item>
-          <Button
-            variant="outlined"
-            startIcon={<PersonAddIcon />}
-            onClick={() => {
-              setShowCreateForm(!showCreateForm);
-              setShowSearchForm(false);
-              fetchPatients();
-            }}
-          >
-            {showCreateForm ? "Ocultar Crear Paciente" : "Crear Paciente"}
-          </Button>
+      <Container>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ marginTop: 5, marginBottom: 4 }}
+        >
+          Pacientes
+        </Typography>
+      </Container>
+      <Container>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          sx={{ marginBottom: 4 }}
+        >
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<PersonAddIcon />}
+              onClick={() => {
+                setShowCreateForm(!showCreateForm);
+                setShowSearchForm(false);
+                fetchPatients();
+              }}
+            >
+              {showCreateForm ? "Ocultar Crear Paciente" : "Crear Paciente"}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<SearchIcon />}
+              onClick={() => {
+                setShowSearchForm(!showSearchForm);
+                setShowCreateForm(false);
+                setSearchCedula("");
+                setSearchName("");          
+                setPatient(null);
+                fetchPatients();
+              }}
+            >
+              {showSearchForm ? "Ocultar Buscar Paciente" : "Buscar Paciente"}
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            startIcon={<SearchIcon />}
-            onClick={() => {
-              setShowSearchForm(!showSearchForm);
-              setShowCreateForm(false);
-              setSearchCedula("");
-              setSearchName("");          
-              setPatient(null);
-              fetchPatients();
-            }}
-          >
-            {showSearchForm ? "Ocultar Buscar Paciente" : "Buscar Paciente"}
-          </Button>
-        </Grid>
-      </Grid>
-
+      </Container>
       {/* Formulario de creación */}
       {showCreateForm && (
         <PatientForm
@@ -229,9 +231,9 @@ const Patients = ({
           </Typography>
 
           <Container
-            component="form"
+            component={Paper}
             onSubmit={handleSearchSubmit}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2 , mb: 4}}
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -274,6 +276,7 @@ const Patients = ({
                     type="submit"
                     variant="contained"
                     color="primary"
+                    sx={{ m: 2 }}
                     startIcon={<SearchIcon />}
                     fullWidth
                   >
@@ -289,7 +292,7 @@ const Patients = ({
       {/* Lista de pacientes */}
       <>
         <TableContainer component={Paper}>
-          <Table>
+          <Table >
             <TableHead>
               <TableRow>
                 <TableCell align="center">
@@ -299,7 +302,7 @@ const Patients = ({
                   <Typography variant="h6">Edad</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography variant="h6">Fecha de Nacimiento</Typography>
+                  <Typography variant="h8">Fecha de Nacimiento</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Typography variant="h6">Correo</Typography>

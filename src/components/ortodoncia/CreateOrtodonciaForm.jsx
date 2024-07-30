@@ -220,9 +220,10 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
             required
           />
         </Grid>
+        
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button sx = {{mb:2}} variant="contained" color="primary" onClick={handleSubmit}>
               <AddCircleIcon fontSize="large" />
               Crear HC Ortodoncia
             </Button>

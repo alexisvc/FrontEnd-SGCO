@@ -4,6 +4,17 @@ import { FaArrowCircleLeft } from "react-icons/fa";
 import CreateMedicalRecordForm from "./CreateMedicalRecordForm";
 import { useMedicalRecords } from "../../hooks/useMedicalRecords";
 import MedicalRecordForm from "./MedicalRecordForm";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 const MedicalRecordDetails = ({ patientId }) => {
   const { medicalRecord, fetchMedicalRecordsByPatientId, createMedicalRecord, updateMedicalRecord } =
@@ -14,7 +25,7 @@ const MedicalRecordDetails = ({ patientId }) => {
   }, [patientId]);
 
   return (
-    <>
+    <Container component={Paper}>
       {medicalRecord ? (
         <MedicalRecordForm
           patientId={patientId}
@@ -27,7 +38,7 @@ const MedicalRecordDetails = ({ patientId }) => {
           createMedicalRecord={createMedicalRecord}
         />
       )}
-    </>
+    </Container>
   );
 };
 

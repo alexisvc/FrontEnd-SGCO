@@ -115,8 +115,8 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
   };
 
   return (
-    <Container component={Paper}>
-      <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
+    <Container component={Paper} sx ={{mt:2, mb:2}}>
+      <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 2, marginBottom: 4}}>
         Historia Clínica
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -569,7 +569,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
 
             <Grid container spacing={2}>
 
-              <Grid item xs={5} sx = {{ marginRight: 12}}>
+              <Grid item xs={4.5} sx = {{ marginRight: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de la Lengua:"
@@ -581,7 +581,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
                 />
               </Grid>
 
-              <Grid item xs={5} sx = {{ marginLeft: 12}}>
+              <Grid item xs={4.5} sx = {{ marginLeft: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de los Labios:"
@@ -595,7 +595,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
             </Grid>
 
             <Grid container spacing={2}>
-              <Grid item xs={5} sx = {{ marginRight: 12}}>
+              <Grid item xs={4.5} sx = {{ marginRight: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de los Carrillos:"
@@ -606,7 +606,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
                   sx={{ margin: 1 }}
                 />
               </Grid>
-              <Grid item xs={5} sx = {{ marginLeft: 12}}>
+              <Grid item xs={4.5} sx = {{ marginLeft: 12}}>
                 <TextField
                   fullWidth
                   label="Estado del Piso de la Boca:"
@@ -620,7 +620,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
             </Grid>
 
             <Grid container spacing={2}>
-              <Grid item xs={5} sx = {{ marginRight: 12}}>
+              <Grid item xs={4.5} sx = {{ marginRight: 12}}>
                 <TextField
                   fullWidth
                   label="Estado Gingivo-Periodontal:"
@@ -631,7 +631,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
                   sx={{ margin: 1 }}
                 />
                 </Grid>
-                <Grid item xs={5} sx = {{ marginLeft: 12}}>
+                <Grid item xs={4.5} sx = {{ marginLeft: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de Enfermedad Periodontal:"
@@ -720,7 +720,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
             </Grid>
           </Grid>
 
-          <Grid item xs={12} container justifyContent="center">
+          <Grid item xs={12} sx={{ mb: 2 }} container justifyContent="center">
             <Button type="submit" variant="contained" color="primary">
               Actualizar Historia Clínica
             </Button>

@@ -51,8 +51,8 @@ const TreamentPlansDetails = ({
         Tratamientos
       </Typography>
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} >
+        <Table sx = {{mb:1}}>
           <TableHead>
             <TableRow>
               <TableCell align="center">

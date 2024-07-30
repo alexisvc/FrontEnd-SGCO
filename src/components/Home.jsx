@@ -48,9 +48,11 @@ function Home({ user, logout }) {
                 //variant="contained"
                 color="primary"
                 startIcon={<LoginIcon />}
+                sx={{ m: 2 }}
                 style={{
                   fontSize: "20px", // Aumenta el tamaño del texto
                   padding: "15px 30px", // Aumenta el relleno para hacer el botón más grande
+                  
                 }}
               >
                 Iniciar Sesión
@@ -75,10 +77,11 @@ function Home({ user, logout }) {
               onClick={() => setIsPopUpOpen(true)}
               variant="contained"
               color="primary"
+              sx={{ m: 2 }}
               style={{
-                fontSize: "20px", // Aumenta el tamaño del texto
-                padding: "15px 30px", // Aumenta el relleno para hacer el botón más grande
-                marginLeft: "auto", // Mueve el botón a la derecha
+                fontSize: '15px', // Aumenta el tamaño del texto
+                padding: '7px 20px', // Aumenta el relleno para hacer el botón más grande
+                marginLeft: 'auto', // Mueve el botón a la derecha
               }}
             >
               Salir
@@ -95,6 +98,7 @@ function Home({ user, logout }) {
                 variant="contained"
                 color="primary"
                 startIcon={<StartIcon />}
+                sx={{ m: 2 }}
                 style={{
                   fontSize: "20px", // Aumenta el tamaño del texto
                   padding: "15px 30px", // Aumenta el relleno para hacer el botón más grande

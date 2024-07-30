@@ -14,6 +14,7 @@ import PopUpExit from "./extras/PopUpExit";
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import TimelineIcon from '@mui/icons-material/Timeline';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
   Button,
@@ -50,40 +51,11 @@ function Welcome({ user, logout, isGuestUser }) {
           logout={logout}
         />
       )}
-      <div
-        //className="app-navigation"
-        //style={{ display: "flex", justifyContent: "flex-end", marginTop: "-8rem" }}
-        style={{ display: "flex", justifyContent: "flex-end" , marginLeft: 'auto', marginRight: '0.5%', marginTop: "-6%"}}
-          
-      >
-        {isLoggedIn && (
-          <>
-            <Button 
-            startIcon={<LogoutIcon />}
-            
-            variant="contained"
-              color="primary"
-            style={{
-              fontSize: '20px', // Aumenta el tamaño del texto
-              padding: '15px 30px', // Aumenta el relleno para hacer el botón más grande
-              marginLeft: 'auto', // Mueve el botón a la derecha
-            }}
-            onClick={() => setIsPopUpOpen(true)}>
-              
-              Salir
-            </Button>
-          </>
-        )}
-      </div>
-      {/*<img
-        className="img-home"
-        src="public\credits\home.png"
-        alt="imagen de la aventura"
-      />*/}
 
-      {isLoggedIn && (
-        <>
-          <Button
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", position: "fixed", top: 0, padding: 8 }}>
+  {isLoggedIn && (
+    <>
+      <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/")}
@@ -91,51 +63,105 @@ function Welcome({ user, logout, isGuestUser }) {
       >
         Atrás
       </Button>
-          <div className="buttons-welcome">
-          <Link to="/patients" className="link-button">
-            <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AutoStoriesIcon />}
-            style={{
-              fontSize: '15px', // Aumenta el tamaño del texto
-              padding: '10px 20px', // Aumenta el relleno para hacer el botón más grande
-              margin:'3%',
-            }}
-            >
-              Historias Clinicas
-            </Button>
-          </Link>
+    </>
+  )}
 
-          <Link to="/acc-menu" className="link-button">
-            <Button
-            variant="contained"
-            color="primary"
-            startIcon={<CalendarMonthIcon />}
-            style={{
-              fontSize: '15px', // Aumenta el tamaño del texto
-              padding: '10px 20px', // Aumenta el relleno para hacer el botón más grande
-              margin:'3%',
-           }}>
-              Agendamiento de Citas
-            </Button>
-          </Link>
+  {isLoggedIn && (
+    <>
+      <Button
+        startIcon={<LogoutIcon />}
+        variant="contained"
+        color="primary"
+        onClick={() => setIsPopUpOpen(true)}
+        sx={{ m: 2 }}
+      >
+        Salir
+      </Button>
+    </>
+  )}
+</div>
 
-           { user.username=='admin' && (
-            <Link to="/game-menu" className="link-button">
-            <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AccountBalanceWalletIcon />}
-            style={{
-              fontSize: '15px', // Aumenta el tamaño del texto
-              padding: '10px 20px', // Aumenta el relleno para hacer el botón más grande
-              margin:'3%',
-            }}>
-              Planificación y Presupuesto
-            </Button>
-          </Link>
-           )}
+
+      
+      {/*<img
+        className="img-home"
+        src="public\credits\home.png"
+        alt="imagen de la aventura"
+      />*/}
+      <div></div>
+
+      {isLoggedIn && (
+        <>
+          <div>
+            <div className="buttons-welcome">
+              <Link to="/patients" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
+                <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AutoStoriesIcon style={{ fontSize: 40, marginRight: "140"}}/>}
+                style={{
+                  fontSize: '18px', 
+                  padding: '20px', 
+                  margin: '5%',
+                  width: '100%', 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center', 
+                  textAlign: 'center', 
+                }}
+                >
+                  Historias Clinicas
+                </Button>
+              </Link>
+            </div>
+            <br></br>
+
+            <div>
+              <Link to="/main-menu" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
+                <Button
+                variant="contained"
+                color="primary"
+                startIcon={<CalendarMonthIcon style={{ fontSize: 40, marginRight: "90" }}/>}
+                style={{
+                  fontSize: '18px', 
+                  padding: '20px', 
+                  margin: '5%',
+                  width: '100%', 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  alignItems: 'center', 
+                  textAlign: 'center', 
+                }}
+                >
+                    Agendamiento de Citas
+                  </Button>
+                </Link>
+            </div>
+            <br></br>
+            <div>
+              {user.username === 'admin' && (
+                <Link to="/main-menu" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<TimelineIcon style={{ fontSize: 40, marginRight: "45" }}/>}
+                    style={{
+                      fontSize: '18px', 
+                      padding: '20px', 
+                      margin: '5%',
+                      width: '100%', 
+                      display: 'flex', 
+                      justifyContent: 'center', 
+                      alignItems: 'center', 
+                      textAlign: 'center', 
+                    }}
+                  >
+                    PLANIFICACIÓN Y PRESUPUESTO
+                  </Button>
+                </Link>
+              )}
+            </div>
+
         </div>
         </>
         

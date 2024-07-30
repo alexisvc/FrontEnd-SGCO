@@ -253,7 +253,7 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
 
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button sx = {{mb:2}} variant="contained" color="primary" onClick={handleSubmit}>
               <AddCircleIcon fontSize="large" />
               Editar HC Ortodoncia
             </Button>

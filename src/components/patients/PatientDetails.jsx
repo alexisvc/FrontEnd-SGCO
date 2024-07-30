@@ -52,7 +52,7 @@ const PatientDetails = ({ updatePatient }) => {
   };
 
   return (
-    <Container component={Paper} >
+    <Container component={Paper} sx={{mb: 4}}>
       <Typography variant="h4" align="center" gutterBottom>
         Detalles del Paciente
       </Typography>
@@ -172,7 +172,7 @@ const PatientDetails = ({ updatePatient }) => {
               required
             />
           </Grid>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
+          <Grid item xs={12} sx = {{m: 2}} style={{ textAlign: "center" }}>
             <Button type="submit" variant="contained" color="primary">
               Actualizar Paciente
             </Button>

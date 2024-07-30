@@ -3,6 +3,17 @@ import CreateOrtodonciaForm from "./CreateOrtodonciaForm";
 import EditOrtodonciaForm from "./EditOrtodonciaForm";
 import { useOrtodoncia } from "../../hooks/useOrtdoncia";
 import { useEvolucionOrtodoncia } from "../../hooks/useEvolucionOrtodoncia";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 const OrtodonciaDetails = ({
   patientId
@@ -25,7 +36,7 @@ const OrtodonciaDetails = ({
 
 
   return (
-    <>
+    <Container>
       {ortodoncia ? (
         <EditOrtodonciaForm
           patientId={patientId}
@@ -41,7 +52,7 @@ const OrtodonciaDetails = ({
           createOrtodoncia={createOrtodoncia}
         />
       )}
-    </>
+    </Container>
   );
 };
 

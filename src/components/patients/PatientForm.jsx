@@ -1,10 +1,10 @@
 import React from 'react';
-import { Grid, TextField, Button, Box, Typography, Container } from '@mui/material';
+import { Grid, TextField, Button, Box, Typography, Container, Paper } from '@mui/material';
 
 
 const PatientForm = ({ newPatient, handleCreateChange, handleCreateSubmit }) => {
   return (
-   <Container>
+   <Container component={Paper} style={{marginBottom: "10px"}}>
       <Typography variant="h6" align="center" sx = {{ marginBottom: 4 }} gutterBottom>
         Crear Paciente
       </Typography>
@@ -124,7 +124,7 @@ const PatientForm = ({ newPatient, handleCreateChange, handleCreateSubmit }) => 
               required
             />
           </Grid>
-          <Grid item xs={12} style={{ textAlign: 'center' }}>
+          <Grid item xs={12} sx={{ m: 2 }} style={{ textAlign: 'center',}}>
             <Button type="submit" variant="contained" color="primary">
               Crear Paciente
             </Button>

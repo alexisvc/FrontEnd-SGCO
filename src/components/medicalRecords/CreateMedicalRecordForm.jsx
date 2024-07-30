@@ -116,7 +116,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
   };
 
   return (
-    <Container component={Paper}>
+    <Container component={Paper} sx = {{mt:2, mb: 2}}>
       <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
         Historia Clínica
       </Typography>
@@ -570,7 +570,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
 
             <Grid container spacing={2}>
 
-              <Grid item xs={5} sx = {{ marginRight: 12}}>
+              <Grid item xs={4.5} sx = {{ marginRight: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de la Lengua:"
@@ -582,7 +582,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
                 />
               </Grid>
 
-              <Grid item xs={5} sx = {{ marginLeft: 12}}>
+              <Grid item xs={4.5} sx = {{ marginLeft: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de los Labios:"
@@ -596,7 +596,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
             </Grid>
 
             <Grid container spacing={2}>
-              <Grid item xs={5} sx = {{ marginRight: 12}}>
+              <Grid item xs={4.5} sx = {{ marginRight: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de los Carrillos:"
@@ -607,7 +607,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
                   sx={{ margin: 1 }}
                 />
               </Grid>
-              <Grid item xs={5} sx = {{ marginLeft: 12}}>
+              <Grid item xs={4.5} sx = {{ marginLeft: 12}}>
                 <TextField
                   fullWidth
                   label="Estado del Piso de la Boca:"
@@ -621,7 +621,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
             </Grid>
 
             <Grid container spacing={2}>
-              <Grid item xs={5} sx = {{ marginRight: 12}}>
+              <Grid item xs={4.5} sx = {{ marginRight: 12}}>
                 <TextField
                   fullWidth
                   label="Estado Gingivo-Periodontal:"
@@ -632,7 +632,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
                   sx={{ margin: 1 }}
                 />
                 </Grid>
-                <Grid item xs={5} sx = {{ marginLeft: 12}}>
+                <Grid item xs={4.5} sx = {{ marginLeft: 12}}>
                 <TextField
                   fullWidth
                   label="Estado de Enfermedad Periodontal:"
@@ -721,7 +721,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} container justifyContent="center">
+          <Grid item xs={12} sx={{ margin: 2 }} container justifyContent="center">
             <Button type="submit" variant="contained" color="primary">
               Crear Historia Clínica
             </Button>

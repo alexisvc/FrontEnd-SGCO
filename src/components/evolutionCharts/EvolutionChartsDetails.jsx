@@ -52,7 +52,7 @@ const EvolutionChartsDetails = ({ patientId, evolutionCharts,
         Cuadro de Evolución
       </Typography>
       <TableContainer component={Paper}>
-        <Table>
+        <Table sx = {{mb:1}}>
           <TableHead>
             <TableRow>
               <TableCell align="center">
