@@ -76,23 +76,24 @@ const PatientAndMedicalRecordDetails = ({
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<ArrowBackIcon />}
-        onClick={() => {
-          navigate("/patients");
-        }}
-        sx={{ mb: 2 }}
+      <Box
+        sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
-        Atrás
-      </Button>
-
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => {
+            navigate("/patients");
+          }}
+          sx={{ m: 2 }}
+        >
+          Atrás
+        </Button>
         <Button
           variant="contained"
           startIcon={<DownloadIcon />}
           onClick={() => generatePDF(patientId)}
-          sx={{ my: 3 }}
+          sx={{ m: 2 }}
         >
           Generar PDF
         </Button>

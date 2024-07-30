@@ -31,9 +31,12 @@ import {
   Container,
   Box,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function Welcome({ user, logout, isGuestUser }) {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const navigate = useNavigate();
 
   const isLoggedIn = !!user;
 
@@ -79,7 +82,16 @@ function Welcome({ user, logout, isGuestUser }) {
       />*/}
 
       {isLoggedIn && (
-        <div className="buttons-welcome">
+        <>
+          <Button
+        variant="outlined"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate("/")}
+        sx={{ m: 2 }}
+      >
+        Atrás
+      </Button>
+          <div className="buttons-welcome">
           <Link to="/patients" className="link-button">
             <Button
             variant="contained"
@@ -124,8 +136,9 @@ function Welcome({ user, logout, isGuestUser }) {
             </Button>
           </Link>
            )}
-          
         </div>
+        </>
+        
       )}
       
       <div className="footer">

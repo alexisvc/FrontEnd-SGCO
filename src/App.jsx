@@ -173,7 +173,7 @@ function App() {
             />
             <Route
               path="/"
-              element={<Home user={user} logout={logout} login={login} />}
+              element={<Home user={user} logout={logout} />}
             />
           </Routes>
         </div>

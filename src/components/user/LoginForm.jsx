@@ -131,9 +131,8 @@ export const LoginForm = ({ login }) => {
               <label htmlFor="password">
               <p>Contraseña:</p>
               </label>
-              <div className="password-field">
                 <TextField
-                //fullWidth
+                  fullWidth
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Ingresa tu contraseña"
@@ -143,14 +142,6 @@ export const LoginForm = ({ login }) => {
                   required
                   className="input-field"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="eye-icon"
-                >
-                  {showPassword ? "👁️" : "🔒"}
-                </button>
-              </div>
             </div>
             <br />
             <br />

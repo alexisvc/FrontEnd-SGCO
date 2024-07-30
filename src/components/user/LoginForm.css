@@ -98,8 +98,8 @@
 }
 
 .img-form img {
-    width: 60%;
-    height: 60%;
+    width: 40%;
+    height: 100%;
     object-fit: cover;
     border: none;
     margin: 5vh;

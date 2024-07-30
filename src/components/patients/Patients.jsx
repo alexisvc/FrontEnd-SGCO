@@ -146,7 +146,6 @@ const Patients = ({
     }
   };
   
-
   const handleViewPatient = (patient) => {
     navigate(`/patients/${patient.id}`, { state: { patient } });
     setShowSearchForm(false);
@@ -158,6 +157,7 @@ const Patients = ({
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/main-menu")}
+        sx={{ m: 2 }}
       >
         Atrás
       </Button>
