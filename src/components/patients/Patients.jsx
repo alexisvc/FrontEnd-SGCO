@@ -260,15 +260,6 @@ const Patients = ({
 
       {/* Lista de pacientes */}
       <>
-        <Typography
-          variant="h5"
-          align="center"
-          gutterBottom
-          sx={{ marginTop: 5, marginBottom: 4 }}
-        >
-          Lista de Pacientes
-        </Typography>
-
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
