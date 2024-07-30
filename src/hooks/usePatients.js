@@ -46,31 +46,33 @@ export function usePatients() {
       });
   };
 
-  const fetchPatientByCedula = (numeroCedula) => {
-    setLoading(true);
-    patientsService.getPatientByCedula(numeroCedula)
-      .then(data => {
-        setPatient(data);
-        setPatients([data]);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const fetchPatientByCedula = async (numeroCedula) => {
+    try {
+      setLoading(true);
+      const data = await patientsService.getPatientByCedula(numeroCedula);
+      setPatient(data);
+      setPatients([data]);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+      console.error("Error al buscar:", err);
+      throw err;  // Lanzar el error para que pueda ser capturado por el bloque catch en handleCreateSubmit
+    }
   };
 
-  const fetchPatientByName = (name) => {
-    setLoading(true);
-    patientsService.getPatientByName(name)
-      .then(data => {
-        setPatients(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+  const fetchPatientByName = async (name) => {
+    try {
+      setLoading(true);
+      const data = await patientsService.getPatientByName(name);
+      setPatients(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+      console.error("Error al buscar:", err);
+      throw err;  // Lanzar el error para que pueda ser capturado por el bloque catch en handleCreateSubmit
+    }
   };
 
   const createPatient = async (newPatient) => {
@@ -83,7 +85,7 @@ export function usePatients() {
     } catch (err) {
       setLoading(false);
       setError(err);
-      console.error("Error al crear el pictograma:", err);
+      console.error("Error al crear:", err);
       throw err;  // Lanzar el error para que pueda ser capturado por el bloque catch en handleCreateSubmit
     }
   };

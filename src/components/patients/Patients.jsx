@@ -71,12 +71,36 @@ const Patients = ({
     setSearchCedula(e.target.value);
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
     if (searchType === "name" && searchName) {
-      fetchPatientByName(searchName);
+      try{
+        await fetchPatientByName(searchName);
+        toast.success("Paciente encontrado exitosamente", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } catch (error) {
+        toast.error("Error al buscar el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      setSearchName("");
     } else if (searchType === "cedula" && searchCedula) {
-      fetchPatientByCedula(searchCedula);
+      try{
+        await fetchPatientByCedula(searchCedula);
+        toast.success("Paciente encontrado exitosamente", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } catch (error) {
+        toast.error("Error al buscar el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      setSearchCedula("");
     }
   };
 
@@ -112,6 +136,7 @@ const Patients = ({
       });
   
       setShowCreateForm(false);
+      fetchPatients();
     } catch (error) {
       // Notificación de error
       toast.error("Error al crear el paciente.", {
@@ -158,6 +183,7 @@ const Patients = ({
             onClick={() => {
               setShowCreateForm(!showCreateForm);
               setShowSearchForm(false);
+              fetchPatients();
             }}
           >
             {showCreateForm ? "Ocultar Crear Paciente" : "Crear Paciente"}
@@ -170,8 +196,10 @@ const Patients = ({
             onClick={() => {
               setShowSearchForm(!showSearchForm);
               setShowCreateForm(false);
-              setSearchCedula("");            
+              setSearchCedula("");
+              setSearchName("");          
               setPatient(null);
+              fetchPatients();
             }}
           >
             {showSearchForm ? "Ocultar Buscar Paciente" : "Buscar Paciente"}
