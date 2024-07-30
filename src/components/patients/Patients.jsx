@@ -230,62 +230,62 @@ const Patients = ({
             Buscar Paciente
           </Typography>
 
-          <Container
-            component={Paper}
-            onSubmit={handleSearchSubmit}
-            sx={{ mt: 2 , mb: 4}}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Tipo de Búsqueda</InputLabel>
-                  <Select
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                    label="Tipo de Búsqueda"
-                  >
-                    <MenuItem value="cedula">Cédula</MenuItem>
-                    <MenuItem value="name">Nombre</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              {searchType === "cedula" ? (
+          <Box component="form" onSubmit={handleSearchSubmit} sx={{ mt: 2, mb: 4 }}>
+            <Container
+              component={Paper}
+            >
+              <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    label="Ingrese Número de Cédula del paciente"
-                    value={searchCedula}
-                    onChange={handleSearchCedulaChange}
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel>Tipo de Búsqueda</InputLabel>
+                    <Select
+                      value={searchType}
+                      onChange={(e) => setSearchType(e.target.value)}
+                      label="Tipo de Búsqueda"
+                    >
+                      <MenuItem value="cedula">Cédula</MenuItem>
+                      <MenuItem value="name">Nombre</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
-              ) : (
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    label="Ingrese Nombre del paciente"
-                    value={searchName}
-                    onChange={handleSearchNameChange}
-                  />
-                </Grid>
-              )}
-              <Grid item xs={12} container justifyContent="center">
-                <Grid item xs={2}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    sx={{ m: 2 }}
-                    startIcon={<SearchIcon />}
-                    fullWidth
-                  >
-                    Buscar
-                  </Button>
+                {searchType === "cedula" ? (
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Ingrese Número de Cédula del paciente"
+                      value={searchCedula}
+                      onChange={handleSearchCedulaChange}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Ingrese Nombre del paciente"
+                      value={searchName}
+                      onChange={handleSearchNameChange}
+                    />
+                  </Grid>
+                )}
+                <Grid item xs={12} container justifyContent="center">
+                  <Grid item xs={2}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      sx={{ m: 2 }}
+                      startIcon={<SearchIcon />}
+                      fullWidth
+                    >
+                      Buscar
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </Container>
+            </Container>
+          </Box>
         </>
       )}
 
