@@ -34,8 +34,8 @@ const EvolutionChartsDetails = ({
       <Typography
         variant="h4"
         gutterBottom
-        sx={{ marginBottom: 3, marginTop: 5 }}
         align="center"
+        sx={{ pb: 2 }}
       >
         Cuadro de Evolución
       </Typography>

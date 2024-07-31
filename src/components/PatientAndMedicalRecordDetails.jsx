@@ -75,7 +75,7 @@ const PatientAndMedicalRecordDetails = ({
   };
 
   return (
-    <>
+    <div style={{ backgroundColor: '#fffbf8' }}>
       <Box
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
@@ -196,7 +196,7 @@ const PatientAndMedicalRecordDetails = ({
           <PeriodonticTreatmentsDetails patientId={patientId} />
         </CustomTabPanel>
       </Box>
-    </>
+    </div>
   );
 };
 

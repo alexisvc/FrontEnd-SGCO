@@ -4,7 +4,7 @@ import { Grid, TextField, Button, Box, Typography, Container, Paper } from '@mui
 
 const PatientForm = ({ newPatient, handleCreateChange, handleCreateSubmit }) => {
   return (
-   <Container component={Paper} style={{marginBottom: "10px"}}>
+   <Container component={Paper} sx={{my: 2, py: 2}}>
       <Typography variant="h6" align="center" sx = {{ marginBottom: 4 }} gutterBottom>
         Crear Paciente
       </Typography>

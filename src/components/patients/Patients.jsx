@@ -37,14 +37,14 @@ const Patients = ({
   fetchPatientByCedula,
   fetchPatientByName,
   createPatient,
-  setPatient
+  setPatient,
 }) => {
   useEffect(() => {
     fetchPatients();
   }, []);
 
   const navigate = useNavigate();
-  
+
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showSearchForm, setShowSearchForm] = useState(false);
   const [searchType, setSearchType] = useState("cedula");
@@ -75,7 +75,7 @@ const Patients = ({
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
     if (searchType === "name" && searchName) {
-      try{
+      try {
         await fetchPatientByName(searchName);
         toast.success("Paciente encontrado exitosamente", {
           position: "top-right",
@@ -89,7 +89,7 @@ const Patients = ({
       }
       setSearchName("");
     } else if (searchType === "cedula" && searchCedula) {
-      try{
+      try {
         await fetchPatientByCedula(searchCedula);
         toast.success("Paciente encontrado exitosamente", {
           position: "top-right",
@@ -112,7 +112,7 @@ const Patients = ({
 
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       await createPatient(newPatient);
       // Notificación de éxito
@@ -120,7 +120,7 @@ const Patients = ({
         position: "top-right",
         autoClose: 3000,
       });
-  
+
       // Limpiar los campos del formulario
       setNewPatient({
         nombrePaciente: "",
@@ -135,7 +135,7 @@ const Patients = ({
         telContactoEmergencia: "",
         afinidadContactoEmergencia: "",
       });
-  
+
       setShowCreateForm(false);
       fetchPatients();
     } catch (error) {
@@ -146,7 +146,7 @@ const Patients = ({
       });
     }
   };
-  
+
   const handleViewPatient = (patient) => {
     navigate(`/patients/${patient.id}`, { state: { patient } });
     setShowSearchForm(false);
@@ -154,7 +154,7 @@ const Patients = ({
 
   return (
     <div className="Patients">
-      <Button    
+      <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/main-menu")}
@@ -200,7 +200,7 @@ const Patients = ({
                 setShowSearchForm(!showSearchForm);
                 setShowCreateForm(false);
                 setSearchCedula("");
-                setSearchName("");          
+                setSearchName("");
                 setPatient(null);
                 fetchPatients();
               }}
@@ -218,23 +218,24 @@ const Patients = ({
           handleCreateSubmit={handleCreateSubmit}
         />
       )}
-      
+
       {/* Formulario de búsqueda */}
       {showSearchForm && (
         <>
-          <Typography
-            variant="h6"
-            align="center"
-            gutterBottom
-            sx={{ marginTop: 5, marginBottom: 4 }}
+          <Box
+            component="form"
+            onSubmit={handleSearchSubmit}
+            sx={{ mt: 2, mb: 4 }}
           >
-            Buscar Paciente
-          </Typography>
-
-          <Box component="form" onSubmit={handleSearchSubmit} sx={{ mt: 2, mb: 4 }}>
-            <Container
-              component={Paper}
-            >
+            <Container component={Paper} sx={{ py:1 }}  >
+              <Typography
+                variant="h6"
+                align="center"
+                gutterBottom
+                sx={{ marginBottom: 4 }}
+              >
+                Buscar Paciente
+              </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
@@ -293,7 +294,7 @@ const Patients = ({
       {/* Lista de pacientes */}
       <>
         <TableContainer component={Paper}>
-          <Table >
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell align="center">

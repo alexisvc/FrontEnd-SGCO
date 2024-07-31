@@ -118,8 +118,8 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
 
   return (
     <Container component={Paper} sx = {{mt:2, mb: 2}}>
-      <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 5, marginBottom: 4}}>
-        Historia Clínica
+      <Typography variant="h5" align="center" gutterBottom sx = {{ marginTop: 2, marginBottom: 4}}>
+        Crear Historia Clínica
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={4}>

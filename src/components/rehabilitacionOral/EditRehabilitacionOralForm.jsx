@@ -188,7 +188,12 @@ const EditRehabilitacionOralForm = ({
 
   return (
     <Container component={Paper}>
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography
+          variant="h4"
+          gutterBottom
+          align="center"
+          sx={{ pt: 1, pb: 1 }}
+        >
         Editar Rehabilitación Oral
       </Typography>
       <Grid container spacing={2} xs={12}>

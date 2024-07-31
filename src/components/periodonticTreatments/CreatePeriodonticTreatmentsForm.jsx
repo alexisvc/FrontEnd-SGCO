@@ -133,7 +133,11 @@ const CreatePeriodonticTreatmentsForm = ({
 
   return (
     <Box component={Paper} sx={{width: '90%', padding:8 }}>
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+        align="center"
+      >
         Crear Periodoncia
       </Typography>
       <Grid container spacing={3}>

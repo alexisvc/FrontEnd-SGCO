@@ -51,7 +51,12 @@ const CirugiaPatologiaDetails = ({
   return (
     <>
       <Container component={Paper}>
-        <Typography align="center" variant="h4" sx={{ margin: 3 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          align="center"
+          sx={{ pt: 2, pb: 1 }}
+        >
           Cirugías y Patologías
         </Typography>
         <Box sx={{ width: "100%" }}>

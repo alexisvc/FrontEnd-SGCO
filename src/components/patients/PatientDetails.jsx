@@ -54,8 +54,8 @@ const PatientDetails = ({ updatePatient }) => {
 
   return (
     
-    <Container component={Paper} sx={{mb: 4}}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Container component={Paper} sx={{mb: 4, py: 2}}>
+      <Typography variant="h4" align="center" gutterBottom sx={{mb: 3}}>
         Detalles del Paciente
       </Typography>
       <form onSubmit={handleSubmit}>

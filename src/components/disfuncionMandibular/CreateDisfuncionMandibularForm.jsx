@@ -130,8 +130,12 @@ const CreateDisfuncionMandibularForm = ({
 
   return (
     <Container component={Paper}>
-      <Typography variant="h5" align="center" gutterBottom>
-        Disfunción Temporo Mandibular
+      <Typography
+        variant="h4"
+        gutterBottom
+        align="center"
+      >
+        Crear Disfunción Temporo Mandibular
       </Typography>
       <Grid container spacing={2} sx={12}>
         <Grid item xs={12} sx={{mt:5}}>

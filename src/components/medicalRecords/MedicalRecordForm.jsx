@@ -117,8 +117,13 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
 
   return (
     <Container component={Paper} sx ={{mt:2, mb:2}}>
-      <Typography variant="h4" align="center" gutterBottom sx = {{ marginTop: 2, marginBottom: 4}}>
-        Historia Clínica
+      <Typography
+        variant="h4"
+        gutterBottom
+        align="center"
+        sx={{ pb: 2 }}
+      >
+        Editar Historia Clínica
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={4}>

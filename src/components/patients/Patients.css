@@ -5,6 +5,7 @@
 button.MuiButton-root {
     color: white !important;
     background-color: #8ba082 !important;
+    border: none !important;
   }
   
   button.MuiButton-root:hover {

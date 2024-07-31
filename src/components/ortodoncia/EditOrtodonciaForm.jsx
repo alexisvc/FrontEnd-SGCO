@@ -75,7 +75,12 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
 
   return (
     <Container component={Paper}>
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography
+          variant="h4"
+          gutterBottom
+          align="center"
+          sx={{ pt: 2, pb: 1 }}
+        >
         Editar Ortodoncia
       </Typography>
       <Grid container spacing={2} sx={12}>

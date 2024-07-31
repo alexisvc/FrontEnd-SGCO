@@ -45,8 +45,8 @@ const TreamentPlansDetails = ({
       <Typography
         variant="h4"
         gutterBottom
-        sx={{ marginBottom: 3, marginTop: 5 }}
         align="center"
+        sx={{ pt: 2, pb: 1 }}
       >
         Tratamientos
       </Typography>

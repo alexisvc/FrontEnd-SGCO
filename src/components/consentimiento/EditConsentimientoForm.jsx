@@ -52,7 +52,11 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
 
   return (
     <Container component={Paper} sx={{ padding: 2 }}>
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+        align="center"
+      >
         Editar Consentimiento
       </Typography>
       <Typography variant="body1" align="center" gutterBottom>
