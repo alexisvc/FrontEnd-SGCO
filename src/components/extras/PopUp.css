@@ -54,7 +54,7 @@
 .buttons-exit button{
   font-size: 3vh;
   padding: 10px 20px;
-  background-color: #1976d2;
+  background-color: #8ba082;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -64,7 +64,7 @@
 }
 
 .buttons-exit button:hover {
-  background-color: #1565c0;
+  background-color: #5d6c56;
   scale: 1.1;
 }
 
@@ -115,16 +115,15 @@
 .popup-btns button{
     font-size: 3vh;
     padding: 10px 20px;
-    background-color: #1565c0;
+    background-color: #8ba082;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin: auto;
-    font-family: 'Century Gothic';'; ';
+    font-family: 'Century Gothic';
 }
 
 .popup-btns button:hover {
-    background-color: #66D7D1;
-    scale: 1.1;
+    background-color: #5d6c56;
 }

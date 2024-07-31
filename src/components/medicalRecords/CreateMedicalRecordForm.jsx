@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   Container,
   Typography,
@@ -723,6 +724,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
 
           <Grid item xs={12} sx={{ margin: 2 }} container justifyContent="center">
             <Button type="submit" variant="contained" color="primary">
+            <AddCircleIcon fontSize="large" />
               Crear Historia Clínica
             </Button>
           </Grid>

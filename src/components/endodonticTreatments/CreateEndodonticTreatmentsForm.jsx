@@ -552,7 +552,7 @@ const CreateEndodonticTreatmentsForm = ({
                     onChange={(e) => handleCheckboxChange(e, "pruebasClinicas")}
                   />
                 }
-                label="Exploración Polorosa"
+                label="Exploración Dolorosa"
               />
 
               <FormControlLabel

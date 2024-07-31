@@ -237,6 +237,7 @@ const CreateRehabilitacionOralForm = ({
                   variant="contained"
                   component="span"
                   color="primary"
+                  sx={{ marginLeft: 2 }}
                   startIcon={<AddCircleIcon />}
                 >
                   C
@@ -260,7 +261,7 @@ const CreateRehabilitacionOralForm = ({
                     onChange={(e) => handleCheckboxChange(e, "refHorizontal")}
                   />
                 }
-                label="Caries"
+                label="Bipupilar"
               />
 
               <FormControlLabel
@@ -1173,7 +1174,7 @@ const CreateRehabilitacionOralForm = ({
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">
-              Colocación sobre implantes dientes
+              Colocación de implantes en dientes
             </FormLabel>
             <RadioGroup
               row

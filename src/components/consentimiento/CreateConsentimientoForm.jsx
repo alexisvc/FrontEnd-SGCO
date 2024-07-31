@@ -3,6 +3,7 @@ import { Typography, Grid, Box, Button, Container, Paper } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import './Consentimiento.css';
 
 const CreateConsentimientoForm = ({ patientId, createConsentimiento }) => {
   const [formData, setFormData] = useState({
@@ -59,6 +60,13 @@ const CreateConsentimientoForm = ({ patientId, createConsentimiento }) => {
               style={{ display: "none" }} // Ocultar el input file original
             />
             <Button
+            sx={{
+              color: 'white',
+              backgroundColor: "#8ba082",
+              '&:hover': {
+                backgroundColor: "#5d6c56", 
+              },
+            }}
               variant="contained"
               component="span"
               color="primary"

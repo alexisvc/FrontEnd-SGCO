@@ -305,7 +305,7 @@ const EditRehabilitacionOralForm = ({
                     onChange={(e) => handleCheckboxChange(e, "refHorizontal")}
                   />
                 }
-                label="Caries"
+                label="Bipupilar"
               />
 
               <FormControlLabel
@@ -1217,7 +1217,7 @@ const EditRehabilitacionOralForm = ({
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">
-              Tipo de prótesis sobre implantes dientes
+              Colocación de implantes en dientes
             </FormLabel>
             <RadioGroup
               row

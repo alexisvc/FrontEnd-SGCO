@@ -4,7 +4,7 @@
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  background-image: url("../../backgrounds/main.png");
+  background-image: url("../../backgrounds/mainBackSinLogo.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -12,7 +12,7 @@
 }
 
 .home h1 {
-  font-family: 'Century';;
+  font-family: 'Century Gothic';;
   font-size: 13vh;
   color: #383434;
   margin: 0;
@@ -23,7 +23,7 @@
 }
 
 .home h2 {
-  font-family: 'Century';
+  font-family: 'Century Gothic';
   font-size: 9.5vh;
   color: orange;
   margin: 0;
@@ -45,7 +45,7 @@
 .home button {
   margin: auto 5vh;
   padding: 1.5vh 2.5vh;
-  font-family: 'Century';
+  font-family: 'Century Gothic';
   color: #EAF2E3;
   border: none;
   border-radius: 5px;
@@ -92,11 +92,11 @@
   color: #383434;
   
   margin: 0.5vh auto;
-  font-family: 'Century', Times, serif;
+  font-family: 'Century Gothic', Times, serif;
 }
 
 .app-navigation button {
-  font-family: 'Century';
+  font-family: 'Century Gothic';
   padding: 1.5vh;
   margin: 1vh;
   color: #EAF2E3;
@@ -161,7 +161,7 @@
 }
 
 .footer-button button {
-  font-family: 'Century';
+  font-family: 'Century Gothic';
   margin: 1vh;
   padding: 1vh 1vh;
   color: #EAF2E3;
@@ -192,7 +192,7 @@
 }
 
 .user{
-  font-family: 'Century';
+  font-family: 'Century Gothic';
   margin: 1vh;
   padding: 1.5vh 2vh;
   color: #EAF2E3;
@@ -213,3 +213,15 @@
   font-weight: bold;
 }
 
+.img-form {
+  justify-content: center;
+  align-items: center;
+}
+
+.img-form img {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  
+}

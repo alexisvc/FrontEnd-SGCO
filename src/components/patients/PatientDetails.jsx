@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./Patients.css";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { usePatients } from "../../hooks/usePatients";
 import {
@@ -52,6 +53,7 @@ const PatientDetails = ({ updatePatient }) => {
   };
 
   return (
+    
     <Container component={Paper} sx={{mb: 4}}>
       <Typography variant="h4" align="center" gutterBottom>
         Detalles del Paciente

@@ -68,8 +68,14 @@ export const LoginForm = ({ login }) => {
               {/* Botones */}
               <Grid container justifyContent="flex-start" sx={{marginTop:1}}>
                 <Button
-                  variant="outlined"
-                  sx={{marginRight: 2}}
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    marginRight: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   startIcon={<ArrowBackIcon />}
                   size="large"
                   onClick={() => {
@@ -79,7 +85,14 @@ export const LoginForm = ({ login }) => {
                   Atrás
                 </Button>
                 <Button
-                  variant="outlined"
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    marginLeft: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   startIcon={<HomeIcon />}
                   size="large"
                   onClick={() => {
@@ -112,7 +125,7 @@ export const LoginForm = ({ login }) => {
           <form onSubmit={handleLogin}>
             <div className="form-input">
               <label htmlFor="username">
-              <p>Correo Electrónico:</p>
+              <p>Usuario:</p>
               </label>
               <TextField
               fullWidth
@@ -149,14 +162,15 @@ export const LoginForm = ({ login }) => {
             <br />
             <br />
             <br />
-            <div>
+            <div className="login-button">
               <Button 
               type="submit"
-              variant="contained"
-              color="primary"
+              //variant="contained"
+              //color="primary"
               startIcon={<LoginIcon />}
               className="login-button"
               size="large"
+              style={{ color: 'white' }}
               >
                 Ingresar
                 </Button>
@@ -178,7 +192,7 @@ export const LoginForm = ({ login }) => {
         <div className="img-form">
           <img
             src="public\backgrounds\main.png"
-            alt="Andino"
+            alt="MP"
           />
         </div>
         

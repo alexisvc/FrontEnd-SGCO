@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Typography, Grid, Box, Button, Container, Paper } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DownloadIcon from "@mui/icons-material/Download";
+import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import "./Consentimiento.css";
 
 const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
   const [formData, setFormData] = useState({
@@ -91,7 +93,7 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
             <Button variant="contained" color="primary" onClick={handleSubmit}>
-              <AddCircleIcon fontSize="large" />
+              <SaveIcon fontSize="large" />
               Editar Consentimiento
             </Button>
           </Box>

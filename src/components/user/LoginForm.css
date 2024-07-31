@@ -55,18 +55,18 @@
 .login-heading {
     font-size: 6vh;
     color: #383434;
-    
+    font-family: 'Century Gothic';
     margin: 0.5vh auto;
 }
 
 .login-button {
+    color: #ffffff;
     font-size: 2.25vh;
     width: 50%;
     margin: 2vh auto;
     padding: 10px;
-    background-color: #383434;
-    font-family: 'Century Gothic';
-    color: #EAF2E3;
+    background-color: #8ba082;
+    font-family: 'Century Gothic'; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -74,7 +74,7 @@
 }
 
 .login-button:hover {
-    background-color: #000000;
+    background-color: #5d6c56;
 }
 
 .footer-login {
@@ -98,7 +98,7 @@
 }
 
 .img-form img {
-    width: 40%;
+    width: 80%;
     height: 100%;
     object-fit: cover;
     border: none;

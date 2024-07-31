@@ -18,6 +18,7 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import "./PeriodonticTreatments.css";
 
 const CreatePeriodonticTreatmentsForm = ({
   patientId,
@@ -183,6 +184,7 @@ const CreatePeriodonticTreatmentsForm = ({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            
             fullWidth
             label="Diagnóstico"
             name="diagnosticoPer"
@@ -192,6 +194,7 @@ const CreatePeriodonticTreatmentsForm = ({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            
             fullWidth
             label="Observaciones"
             name="observacionPer"
@@ -828,8 +831,8 @@ const CreatePeriodonticTreatmentsForm = ({
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
             <Button sx = {{mb:2}} variant="contained" color="primary" onClick={handleSubmit}>
-              <SaveIcon fontSize="large" />
-              Guardar
+              <AddCircleIcon fontSize="large" />
+              Crear Periodoncia
             </Button>
           </Box>
         </Grid>

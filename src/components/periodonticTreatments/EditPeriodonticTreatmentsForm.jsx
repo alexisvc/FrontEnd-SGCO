@@ -19,6 +19,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import "./PeriodonticTreatments.css";
 
 const EditPeriodonticTreatmentsForm = ({
   periodonticTreatment,
@@ -221,6 +222,7 @@ const EditPeriodonticTreatmentsForm = ({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            //className="textFieldNormal"
             fullWidth
             label="Diagnóstico"
             name="diagnosticoPer"
@@ -230,6 +232,7 @@ const EditPeriodonticTreatmentsForm = ({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            //className="textFieldNormal"
             fullWidth
             label="Observaciones"
             name="observacionPer"
@@ -237,6 +240,7 @@ const EditPeriodonticTreatmentsForm = ({
             onChange={handleInputChange}
           />
         </Grid>
+        
         <Grid item xs={12}>
           <Typography variant="h6" align="center" gutterBottom>
             Inferior
@@ -862,12 +866,12 @@ const EditPeriodonticTreatmentsForm = ({
             </TableHead>
           </Table>
         </TableContainer>
-
+        
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
             <Button sx = {{mb:2}} variant="contained" color="primary" onClick={handleSubmit}>
               <SaveIcon fontSize="large" />
-              Guardar
+              Guardar Periodoncia
             </Button>
           </Box>
         </Grid>

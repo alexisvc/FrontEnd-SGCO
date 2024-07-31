@@ -3,6 +3,7 @@ import { Typography, Container, Paper } from "@mui/material";
 import { useConsentimiento } from "../../hooks/useConsentimiento";
 import EditConsentimientoForm from "./EditConsentimientoForm";
 import CreateConsentimientoForm from "./CreateConsentimientoForm";
+import "./Consentimiento.css";
 
 const ConsentimientoDetails = ({ patientId }) => {
   const { consentimiento, fetchConsentimientoByPatientId, createConsentimiento, updateConsentimiento } = useConsentimiento();

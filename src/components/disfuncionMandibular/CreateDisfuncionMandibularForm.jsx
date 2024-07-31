@@ -130,9 +130,11 @@ const CreateDisfuncionMandibularForm = ({
         Disfunción Temporo Mandibular
       </Typography>
       <Grid container spacing={2} sx={12}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Análisis de ATM
-        </Typography>
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Análisis de ATM
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Erosión de hueso cortical</FormLabel>
@@ -231,9 +233,11 @@ const CreateDisfuncionMandibularForm = ({
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Typography variant="h6" align="center" gutterBottom>
-          Desplazamiento discal
-        </Typography>
+        <Grid item xs = {12}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Desplazamiento discal
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Con reducción</FormLabel>
@@ -350,15 +354,15 @@ const CreateDisfuncionMandibularForm = ({
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" align="center" gutterBottom>
             Dolor Articular
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} container justifyContent="center" alignItems="center">
           <img
             src="/public/resources/images/dolorArticular.png"
             alt="dolor articular"
-            style={{ width: "40%" }}
+            style={{ width: "40%", display: "block", margin: "auto" }}
           />
         </Grid>
 
@@ -399,10 +403,12 @@ const CreateDisfuncionMandibularForm = ({
         ))}
 
         <Grid item xs={12}>
-          <Typography variant="h6" align="left" gutterBottom>
+          <Typography variant="h6" align="center" gutterBottom>
             Dolor Muscular
           </Typography>
         </Grid>
+
+        <Grid container align="center">
         <Grid item xs={6}>
           <img
             src="/public/resources/images/dolorMuscularIzq.png"
@@ -418,32 +424,36 @@ const CreateDisfuncionMandibularForm = ({
           />
         </Grid>
 
-        <Grid item xs={12}>
-          <Typography variant="h6" align="left" gutterBottom>
-            Izquierda
-          </Typography>
-        </Grid>
-        <Grid
-          container
-          spacing={2}
-          item
-          xs={6}
-          style={{ display: "flex", flexWrap: "wrap" }}
-        >
-          {formData.dolorMuscularIzq.map((value, index) => (
-            <Grid item xs={2} key={index}>
-              <TextField
-                name="dolorMuscularIzq"
-                label={index + 1}
-                value={value}
-                onChange={(e) => handleArrayInputChange(e, index)}
-                variant="outlined"
-                size="small"
-              />
-            </Grid>
-          ))}
-        </Grid>
 
+        <Grid container align="center">
+          <Grid item xs = {6}>
+            <Grid item xs={12}>
+              <Typography variant="h6" align="left" gutterBottom>
+                Izquierda
+              </Typography>
+            </Grid>
+            <Grid
+              container
+              spacing={2}
+              item
+              xs={8}
+              style={{ display: "flex", flexWrap: "wrap" }}
+            >
+              {formData.dolorMuscularIzq.map((value, index) => (
+                <Grid item xs={2} key={index}>
+                  <TextField
+                    name="dolorMuscularIzq"
+                    label={index + 1}
+                    value={value}
+                    onChange={(e) => handleArrayInputChange(e, index)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+              ))}
+            </Grid>
+        </Grid>
+        <Grid item xs = {6}>
         <Grid item xs={12}>
           <Typography variant="h6" align="left" gutterBottom>
             Derecha
@@ -454,7 +464,7 @@ const CreateDisfuncionMandibularForm = ({
           container
           spacing={2}
           item
-          xs={6}
+          xs={8}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
           {formData.dolorMuscularDer.map((value, index) => (
@@ -469,7 +479,11 @@ const CreateDisfuncionMandibularForm = ({
               />
             </Grid>
           ))}
+          </Grid>
+          </Grid>
         </Grid>
+        </Grid>
+
 
         <Grid item xs={12}>
           <FormControl component="fieldset">
@@ -600,7 +614,7 @@ const CreateDisfuncionMandibularForm = ({
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h6" align="left" gutterBottom>
+          <Typography variant="h6" align="center" gutterBottom>
             Apnea Obstructiva del Sueño
           </Typography>
           <Typography variant="h7" align="left" gutterBottom>
@@ -608,11 +622,11 @@ const CreateDisfuncionMandibularForm = ({
           </Typography>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} container justifyContent="center" alignItems="center">
           <img
             src="/public/resources/images/mallampati.png"
             alt="dolor articular"
-            style={{ width: "40%" }}
+            style={{ width: "40%", display: "block", margin: "auto" }}
           />
         </Grid>
 
@@ -731,8 +745,8 @@ const CreateDisfuncionMandibularForm = ({
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
             <Button sx = {{mb:2}} variant="contained" color="primary" onClick={handleSubmit}>
-              <SaveIcon fontSize="large" />
-              Guardar
+              <AddCircleIcon fontSize="large" />
+              Crear Disfunción Mandibular
             </Button>
           </Box>
         </Grid>

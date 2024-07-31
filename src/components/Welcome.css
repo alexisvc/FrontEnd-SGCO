@@ -223,5 +223,18 @@
     font-size: 2vh;
     font-weight: bold;
   }
+
+  .img-form {
+    justify-content: center;
+    align-items: center;
+}
+
+.img-form img {
+    width: 55%;
+    height: 90%;
+    object-fit: cover;
+    border: none;
+    margin: 5vh;
+}
   
   

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DownloadIcon from "@mui/icons-material/Download";
+import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -223,7 +224,7 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center" mt={2}>
             <Button variant="contained" color="primary" onClick={handleSubmit}>
-              <AddCircleIcon fontSize="large" />
+              <SaveIcon fontSize="large" />
               Actualizar Cirugía y Patología Oral
             </Button>
           </Box>

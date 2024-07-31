@@ -16,6 +16,7 @@ import {
   Box,
   Paper
 } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
 import { toast } from "react-toastify";
 
 const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecord }) => {
@@ -722,6 +723,7 @@ const MedicalRecordForm = ({ patientId, updateMedicalRecord, patientMedicalRecor
 
           <Grid item xs={12} sx={{ mb: 2 }} container justifyContent="center">
             <Button type="submit" variant="contained" color="primary">
+            <SaveIcon fontSize="large" />
               Actualizar Historia Clínica
             </Button>
           </Grid>

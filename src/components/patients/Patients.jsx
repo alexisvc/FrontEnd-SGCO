@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./Patients.css";
 import { usePatients } from "../../hooks/usePatients";
 import { useNavigate } from "react-router-dom";
 import { FaArrowCircleLeft } from "react-icons/fa";
@@ -152,8 +153,8 @@ const Patients = ({
   };
 
   return (
-    <>
-      <Button
+    <div className="Patients">
+      <Button    
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/main-menu")}
@@ -166,7 +167,7 @@ const Patients = ({
           variant="h4"
           align="center"
           gutterBottom
-          sx={{ marginTop: 5, marginBottom: 4 }}
+          sx={{ marginBottom: 4 }}
         >
           Pacientes
         </Typography>
@@ -302,7 +303,7 @@ const Patients = ({
                   <Typography variant="h6">Edad</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography variant="h8">Fecha de Nacimiento</Typography>
+                  <Typography variant="h6">Fecha de Nacimiento</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Typography variant="h6">Correo</Typography>
@@ -367,7 +368,7 @@ const Patients = ({
           </Table>
         </TableContainer>
       </>
-    </>
+    </div>
   );
 };
 

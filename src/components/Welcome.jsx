@@ -56,10 +56,17 @@ function Welcome({ user, logout, isGuestUser }) {
   {isLoggedIn && (
     <>
       <Button
-        variant="outlined"
+        variant="contained"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/")}
-        sx={{ m: 2 }}
+        sx={{
+          color: 'white',
+          backgroundColor: "#8ba082",
+          margin: 2,
+          '&:hover': {
+            backgroundColor: "#5d6c56", 
+          },
+        }}
       >
         Atrás
       </Button>
@@ -71,9 +78,15 @@ function Welcome({ user, logout, isGuestUser }) {
       <Button
         startIcon={<LogoutIcon />}
         variant="contained"
-        color="primary"
         onClick={() => setIsPopUpOpen(true)}
-        sx={{ m: 2 }}
+        sx={{
+          color: 'white',
+          backgroundColor: "#8ba082",
+          margin: 2,
+          '&:hover': {
+            backgroundColor: "#5d6c56", 
+          },
+        }}
       >
         Salir
       </Button>
@@ -109,6 +122,13 @@ function Welcome({ user, logout, isGuestUser }) {
                   alignItems: 'center', 
                   textAlign: 'center', 
                 }}
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#8ba082",
+                  '&:hover': {
+                    backgroundColor: "#5d6c56", 
+                  },
+                }}
                 >
                   Historias Clinicas
                 </Button>
@@ -132,6 +152,13 @@ function Welcome({ user, logout, isGuestUser }) {
                   alignItems: 'center', 
                   textAlign: 'center', 
                 }}
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#8ba082",
+                  '&:hover': {
+                    backgroundColor: "#5d6c56", 
+                  },
+                }}
                 >
                     Agendamiento de Citas
                   </Button>
@@ -154,6 +181,13 @@ function Welcome({ user, logout, isGuestUser }) {
                       justifyContent: 'center', 
                       alignItems: 'center', 
                       textAlign: 'center', 
+                    }}
+                    sx={{
+                      color: 'white',
+                      backgroundColor: "#8ba082",
+                      '&:hover': {
+                        backgroundColor: "#5d6c56", 
+                      },
                     }}
                   >
                     PLANIFICACIÓN Y PRESUPUESTO

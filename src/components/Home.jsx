@@ -42,13 +42,26 @@ function Home({ user, logout }) {
           {/* Componente de LOGIN */}
           <div style={{ display: "flex", justifyContent: "flex-end" }}></div>
           <div>
+          <div className="img-form">
+            <img
+              src="public\backgrounds\main.png"
+              alt="MP"
+            />
+          </div>
+
+
             <Link to="/login">
-              <Button
-                variant="outlined"
-                //variant="contained"
+              <Button      
                 color="primary"
                 startIcon={<LoginIcon />}
-                sx={{ m: 2 }}
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#8ba082",
+                  marginBottom: 5,
+                  '&:hover': {
+                    backgroundColor: "#5d6c56", 
+                  },
+                }}
                 style={{
                   fontSize: "20px", // Aumenta el tamaño del texto
                   padding: "15px 30px", // Aumenta el relleno para hacer el botón más grande
@@ -77,7 +90,14 @@ function Home({ user, logout }) {
               onClick={() => setIsPopUpOpen(true)}
               variant="contained"
               color="primary"
-              sx={{ m: 2 }}
+              sx={{
+                color: 'white',
+                backgroundColor: "#8ba082",
+                margin: 2,
+                '&:hover': {
+                  backgroundColor: "#5d6c56", 
+                },
+              }}
               style={{
                 fontSize: '15px', // Aumenta el tamaño del texto
                 padding: '7px 20px', // Aumenta el relleno para hacer el botón más grande
@@ -98,7 +118,14 @@ function Home({ user, logout }) {
                 variant="contained"
                 color="primary"
                 startIcon={<StartIcon />}
-                sx={{ m: 2 }}
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#8ba082",
+                  margin: 2,
+                  '&:hover': {
+                    backgroundColor: "#5d6c56", 
+                  },
+                }}
                 style={{
                   fontSize: "20px", // Aumenta el tamaño del texto
                   padding: "15px 30px", // Aumenta el relleno para hacer el botón más grande
