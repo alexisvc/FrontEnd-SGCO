@@ -156,12 +156,21 @@ export const generatePDF = async (patientId) => {
 
         // Función para agregar texto y manejar salto de página si es necesario
         const addText = (text, yOffset) => {
-            if (yPos + yOffset > 280) {  // Ajustar este valor según el margen que quieras en el borde inferior
-                doc.addPage();
-                yPos = 20;  // Reiniciar posición para nueva página
-            }
-            doc.text(text, 20, yPos);
-            yPos += yOffset;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const margin = 8;
+            const maxLineWidth = pageWidth - margin * 2;
+            
+            // Dividir el texto en líneas que se ajusten al ancho de la página
+            const lines = doc.splitTextToSize(text, maxLineWidth);
+
+            lines.forEach(line => {
+                if (yPos + yOffset > 280) {  // Ajustar este valor según el margen que quieras en el borde inferior
+                    doc.addPage();
+                    yPos = 20;  // Reiniciar posición para nueva página
+                }
+                doc.text(line, margin, yPos);
+                yPos += yOffset;
+            });
         };
 
         // Agregar título
