@@ -103,6 +103,14 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -123,6 +131,14 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -143,6 +159,14 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"

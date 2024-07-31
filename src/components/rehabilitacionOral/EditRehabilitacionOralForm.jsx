@@ -206,6 +206,14 @@ const EditRehabilitacionOralForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -216,11 +224,19 @@ const EditRehabilitacionOralForm = ({
               </label>
               {rehabilitacionOral?.archivo1Url && (
                 <Button
-                  variant="outlined"
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#5d6c56",
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: "#8ba082", 
+                    },
+                  }}  
+                  //variant="outlined"
                   color="secondary"
                   onClick={() => window.open(rehabilitacionOral.archivo1Url, "_blank")}
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   RX
                 </Button>
@@ -237,6 +253,14 @@ const EditRehabilitacionOralForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -247,11 +271,19 @@ const EditRehabilitacionOralForm = ({
               </label>
               {rehabilitacionOral?.archivo2Url && (
                 <Button
-                  variant="outlined"
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#5d6c56",
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: "#8ba082", 
+                    },
+                  }}  
+                  //variant="outlined"
                   color="secondary"
                   onClick={() => window.open(rehabilitacionOral.archivo2Url, "_blank")}
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   CS
                 </Button>
@@ -268,6 +300,14 @@ const EditRehabilitacionOralForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -278,11 +318,19 @@ const EditRehabilitacionOralForm = ({
               </label>
               {rehabilitacionOral?.archivo3Url && (
                 <Button
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#5d6c56",
+                  ml: 2,
+                  '&:hover': {
+                    backgroundColor: "#8ba082", 
+                  },
+                }}
                   variant="outlined"
                   color="secondary"
                   onClick={() => window.open(rehabilitacionOral.archivo3Url, "_blank")}
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   C
                 </Button>

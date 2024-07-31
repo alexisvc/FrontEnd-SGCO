@@ -74,6 +74,14 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
                 component="span"
                 color="primary"
                 startIcon={<AddCircleIcon />}
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#8ba082",
+                  //margin: 2,
+                  '&:hover': {
+                    backgroundColor: "#5d6c56", 
+                  },
+                }}
               >
                 Editar Archivo
               </Button>

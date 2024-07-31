@@ -102,6 +102,14 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -112,11 +120,19 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
               </label>
               {cirugiaPatologia?.archivo1Url && (
                 <Button
-                  variant="outlined"
-                  color="secondary"
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#5d6c56",
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: "#8ba082", 
+                    },
+                  }}
+                  //variant="outlined"
+                  //color="secondary"
                   onClick={() => window.open(cirugiaPatologia.archivo1Url, "_blank")}
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   RX
                 </Button>
@@ -133,6 +149,14 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -143,11 +167,19 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
               </label>
               {cirugiaPatologia?.archivo2Url && (
                 <Button
-                  variant="outlined"
-                  color="secondary"
+                sx={{
+                  color: 'white',
+                  backgroundColor: "#5d6c56",
+                  ml: 2,
+                  '&:hover': {
+                    backgroundColor: "#8ba082", 
+                  },
+                }}
+                  //variant="outlined"
+                  //color="secondary"
                   onClick={() => window.open(cirugiaPatologia.archivo2Url, "_blank")}
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   CS
                 </Button>

@@ -194,6 +194,14 @@ const CreateRehabilitacionOralForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -214,6 +222,14 @@ const CreateRehabilitacionOralForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -234,10 +250,18 @@ const CreateRehabilitacionOralForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
-                  sx={{ marginLeft: 2 }}
+                  
                   startIcon={<AddCircleIcon />}
                 >
                   C

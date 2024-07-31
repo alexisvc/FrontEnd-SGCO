@@ -102,6 +102,14 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
                   variant="contained"
                   component="span"
                   color="primary"
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   startIcon={<AddCircleIcon />}
                 >
                   RX
@@ -119,6 +127,14 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"

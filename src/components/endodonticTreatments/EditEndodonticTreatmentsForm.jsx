@@ -164,6 +164,14 @@ const EditEndodonticTreatmentsForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -174,13 +182,21 @@ const EditEndodonticTreatmentsForm = ({
               </label>
               {endodonticTreatment?.archivo1Url && (
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#5d6c56",
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: "#8ba082", 
+                    },
+                  }}  
                   variant="outlined"
                   color="secondary"
                   onClick={() =>
                     window.open(endodonticTreatment.archivo1Url, "_blank")
                   }
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   RX
                 </Button>
@@ -197,6 +213,14 @@ const EditEndodonticTreatmentsForm = ({
                   style={{ display: "none" }}
                 />
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    //margin: 2,
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
                   variant="contained"
                   component="span"
                   color="primary"
@@ -207,13 +231,21 @@ const EditEndodonticTreatmentsForm = ({
               </label>
               {endodonticTreatment?.archivo2Url && (
                 <Button
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#5d6c56",
+                    ml: 2,
+                    '&:hover': {
+                      backgroundColor: "#8ba082", 
+                    },
+                  }}  
                   variant="outlined"
                   color="secondary"
                   onClick={() =>
                     window.open(endodonticTreatment.archivo2Url, "_blank")
                   }
                   startIcon={<DownloadIcon />}
-                  sx={{ ml: 2 }} // Margin left to create space
+                  
                 >
                   CS
                 </Button>
