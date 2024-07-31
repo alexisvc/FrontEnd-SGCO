@@ -54,10 +54,10 @@ const useEvolutionCharts = () => {
     }
   };
 
-  const createEvolutionChart = async (evolutionChart) => {
+  const createEvolutionChart = async (evolutionChart, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await evolutionChartService.createEvolutionChart(evolutionChart);
+      const data = await evolutionChartService.createEvolutionChart(evolutionChart, archivo1, archivo2);
       setEvolutionCharts([...evolutionCharts, data]);
       setLoading(false);
       return data;
@@ -70,10 +70,10 @@ const useEvolutionCharts = () => {
   };
   
 
-  const updateEvolutionChart = async (evolutionChartId, evolutionChart) => {
+  const updateEvolutionChart = async (evolutionChartId, evolutionChart, archivo1, archivo2) => {
     try {
       setLoading(true);
-      const data = await evolutionChartService.updateEvolutionChart(evolutionChartId, evolutionChart);
+      const data = await evolutionChartService.updateEvolutionChart(evolutionChartId, evolutionChart, archivo1, archivo2);
       setEvolutionCharts(evolutionCharts.map(chart => (chart.id === evolutionChartId ? data : chart)));
       setLoading(false);
       return data;
@@ -91,7 +91,7 @@ const useEvolutionCharts = () => {
       await evolutionChartService.deleteEvolutionChart(evolutionChartId);
       setEvolutionCharts(evolutionCharts.filter(chart => chart.id !== evolutionChartId));
     } catch (error) {
-      throw error; // Propagate the error to the caller
+      throw error; 
     }
   };
 

@@ -1,21 +1,42 @@
 import React, { useState } from "react";
-import { Typography, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SaveIcon from '@mui/icons-material/Save';
+import {
+  Typography,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TextField,
+  Box,
+  Button,
+} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SaveIcon from "@mui/icons-material/Save";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
-
-const CreateEvolutionChartForm = ({
-  patientId,
-  createEvolutionChart,
-}) => {
+const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
   const [formData, setFormData] = useState({
     fechaCuadEvol: "",
     actividadCuadEvol: "",
     recomendacionCuadEvol: "",
-    firmaOdon: "",
-    firmaPaciente: "",
   });
+  const [archivo1, setArchivo1] = useState(null);
+  const [archivo2, setArchivo2] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleFileChange = (e) => {
+    if (e.target.name === "archivo1") {
+      setArchivo1(e.target.files[0]);
+    } else if (e.target.name === "archivo2") {
+      setArchivo2(e.target.files[0]);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,27 +48,27 @@ const CreateEvolutionChartForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const newEvolutionChartData = {
         ...formData,
         paciente: patientId,
       };
-      await createEvolutionChart(newEvolutionChartData);
+      await createEvolutionChart(newEvolutionChartData, archivo1, archivo2);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
-          fechaCuadEvol: "",
-          actividadCuadEvol: "",
-          recomendacionCuadEvol: "",
-          firmaOdon: "",
-          firmaPaciente: "",
+        fechaCuadEvol: "",
+        actividadCuadEvol: "",
+        recomendacionCuadEvol: "",
       });
+      setArchivo1(null);
+      setArchivo2(null);
       // Notificación de éxito
       toast.success("Cuadro de evolución creado exitosamente", {
         position: "top-right",
         autoClose: 3000,
       });
-
+      navigate("/patients");
     } catch (error) {
       // Notificación de error
       toast.error("Error al crear el Cuadro de evolución.", {
@@ -88,24 +109,66 @@ const CreateEvolutionChartForm = ({
         />
       </TableCell>
       <TableCell>
-        <TextField
-          name="firmaOdon"
-          value={formData.firmaOdon}
-          onChange={handleInputChange}
-          variant="outlined"
-          size="small"
-        />
+        <Box mr={2}>
+          <label htmlFor="archivo1-input">
+            <input
+              id="archivo1-input"
+              name="archivo1"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <Button
+              variant="contained"
+              component="span"
+              color="primary"
+              sx={{
+                color: "white",
+                backgroundColor: "#8ba082",
+                //margin: 2,
+                "&:hover": {
+                  backgroundColor: "#5d6c56",
+                },
+              }}
+              startIcon={<AddCircleIcon />}
+            >
+              RX
+            </Button>
+          </label>
+        </Box>
       </TableCell>
       <TableCell>
-        <TextField
-          name="firmaPaciente"
-          value={formData.firmaPaciente}
-          onChange={handleInputChange}
-          variant="outlined"
-          size="small"
-        />
+        <Box>
+          <label htmlFor="archivo2-input">
+            <input
+              id="archivo2-input"
+              name="archivo2"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <Button
+              sx={{
+                color: "white",
+                backgroundColor: "#8ba082",
+                //margin: 2,
+                "&:hover": {
+                  backgroundColor: "#5d6c56",
+                },
+              }}
+              variant="contained"
+              component="span"
+              color="primary"
+              startIcon={<AddCircleIcon />}
+            >
+              CS
+            </Button>
+          </label>
+        </Box>
       </TableCell>
-      <TableCell align='center'>
+      <TableCell align="center">
         <IconButton onClick={handleSubmit}>
           <AddCircleIcon />
         </IconButton>

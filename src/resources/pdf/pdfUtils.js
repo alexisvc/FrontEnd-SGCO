@@ -252,20 +252,29 @@ export const generatePDF = async (patientId) => {
         // Agregar cuadros de evolución si existen
         if (evolutionCharts.length > 0) {
             addText("Cuadro de evolución:", 10);
-            // Preparar datos para la tabla
             const tableData = evolutionCharts.map(evolution => [
                 new Date(evolution.fechaCuadEvol).toLocaleDateString(),
                 evolution.actividadCuadEvol,
                 evolution.recomendacionCuadEvol,
-                evolution.firmaOdon,
-                evolution.firmaPaciente
+                evolution.archivo1Url,
+                evolution.archivo2Url
             ]);
-
-            // Agregar tabla al PDF
+        
             autoTable(doc, {
-                head: [['Fecha', 'Actividad Clínica	', 'Recomendación', 'Firma Odontólogo', 'Firma Paciente']],
+                head: [['Fecha', 'Actividad Clínica', 'Recomendación', 'Firma Odontólogo', 'Firma Paciente']],
                 body: tableData,
-                startY: yPos
+                startY: yPos,
+                didDrawCell: function (data) {
+                    // Para la columna 3 (Firma Odontólogo) y columna 4 (Firma Paciente)
+                    if (data.column.index === 3 || data.column.index === 4) {
+                        const url = data.cell.raw;
+                        const img = new Image();
+                        img.src = url;
+                        img.onload = function() {
+                            doc.addImage(img, 'JPEG', data.cell.x + 2, data.cell.y + 2, data.cell.height - 4, data.cell.height - 4);
+                        };
+                    }
+                }
             });
             yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
         }

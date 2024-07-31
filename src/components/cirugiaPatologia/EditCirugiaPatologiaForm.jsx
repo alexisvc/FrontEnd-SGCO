@@ -65,9 +65,6 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
     e.preventDefault();
 
     try {
-      console.log("formData", formData);
-      console.log("archivo1", archivo1);
-      console.log("archivo2", archivo2);
       await updateCirugiaPatologia(cirugiaPatologia._id, formData, archivo1, archivo2);
       toast.success("Cirugía y patología actualizada exitosamente", {
         position: "top-right",

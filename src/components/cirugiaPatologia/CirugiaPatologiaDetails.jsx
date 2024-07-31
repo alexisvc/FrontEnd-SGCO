@@ -40,7 +40,6 @@ const CirugiaPatologiaDetails = ({
 
   useEffect(() => {
     fetchCirugiaPatologiaByPatientId(patientId);
-    console.log(cirugiaPatologias);
   }, [patientId]);
 
   const [value, setValue] = useState(0);

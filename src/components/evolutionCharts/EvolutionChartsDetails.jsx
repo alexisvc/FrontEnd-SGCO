@@ -17,29 +17,17 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import useEvolutionCharts from "../../hooks/useEvolutionCharts";
 
-const EvolutionChartsDetails = ({ patientId, evolutionCharts,
+const EvolutionChartsDetails = ({
+  patientId,
+  evolutionCharts,
   createEvolutionChart,
   updateEvolutionChart,
-  fetchEvolutionChartsByPatientId, }) => {
-
+  fetchEvolutionChartsByPatientId,
+}) => {
   // Cargar los cuadros de evolución del paciente al montar el componente
   React.useEffect(() => {
     fetchEvolutionChartsByPatientId(patientId);
   }, [patientId]);
-
-  // Función para manejar la creación de un nuevo tratamiento
-  const handleCreateEvolutionCharts = async (formData) => {
-    const newEvolutionChartData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createEvolutionChart(newEvolutionChartData);
-  };
-
-  // Función para manejar la actualización de un tratamiento existente
-  const handleUpdateEvolutionCharts = async (id, formData) => {
-    await updateEvolutionChart(id, formData);
-  };
 
   return (
     <Container component={Paper}>
@@ -52,7 +40,7 @@ const EvolutionChartsDetails = ({ patientId, evolutionCharts,
         Cuadro de Evolución
       </Typography>
       <TableContainer component={Paper}>
-        <Table sx = {{mb:1}}>
+        <Table sx={{ mb: 1 }}>
           <TableHead>
             <TableRow>
               <TableCell align="center">
@@ -80,22 +68,15 @@ const EvolutionChartsDetails = ({ patientId, evolutionCharts,
             {evolutionCharts.map((chart) => (
               <EditEvolutionChartForm
                 key={chart.id}
-                evolutionChartId={chart.id}
-                evolutionChartData={{
-                  fechaCuadEvol: chart.fechaCuadEvol.split("T")[0],
-                  actividadCuadEvol: chart.actividadCuadEvol,
-                  recomendacionCuadEvol: chart.recomendacionCuadEvol,
-                  firmaOdon: chart.firmaOdon,
-                  firmaPaciente: chart.firmaPaciente,
-                }}
-                updateEvolutionChart={handleUpdateEvolutionCharts}
+                evolutionChart={chart}
+                updateEvolutionChart={updateEvolutionChart}
               />
             ))}
 
             {/* Fila para crear un nuevo cuadro de evolución */}
             <CreateEvolutionChartForm
               patientId={patientId}
-              createEvolutionChart={handleCreateEvolutionCharts}
+              createEvolutionChart={createEvolutionChart}
             />
           </TableBody>
         </Table>
