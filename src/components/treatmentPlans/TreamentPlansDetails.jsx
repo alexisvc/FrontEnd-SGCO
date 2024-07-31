@@ -41,7 +41,7 @@ const TreamentPlansDetails = ({
   };
 
   return (
-    <Container component={Paper}>
+    <Container component={Paper} sx={{pb:2}}>
       <Typography
         variant="h4"
         gutterBottom
@@ -56,19 +56,19 @@ const TreamentPlansDetails = ({
           <TableHead>
             <TableRow>
               <TableCell align="center">
-                <Typography variant="h7">Cita</Typography>
+                <Typography variant="h6">Cita</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Actividad Plan Tratamiento</Typography>
+                <Typography variant="h6">Actividad Plan Tratamiento</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Fecha Plan Tratamiento</Typography>
+                <Typography variant="h6">Fecha Plan Tratamiento</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Monto Abono</Typography>
+                <Typography variant="h6">Monto Abono</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Acciones</Typography>
+                <Typography variant="h6">Acciones</Typography>
               </TableCell>
             </TableRow>
           </TableHead>

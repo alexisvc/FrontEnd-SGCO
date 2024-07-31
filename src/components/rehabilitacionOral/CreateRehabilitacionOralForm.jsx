@@ -270,9 +270,11 @@ const CreateRehabilitacionOralForm = ({
             </Box>
           </Box>
         </Grid>
-        <Typography variant="h6" align="center" gutterBottom>
-          Examen Extra Oral
-        </Typography>
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Examen Extra Oral
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Referencia horizontal:</FormLabel>
@@ -343,11 +345,11 @@ const CreateRehabilitacionOralForm = ({
             </FormGroup>
           </FormControl>
         </Grid>
-
-        <Typography variant="h6" align="center" gutterBottom>
-          Análisis de sonrisa:
-        </Typography>
-
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Análisis de sonrisa:
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Longitud del labio:</FormLabel>
@@ -540,11 +542,11 @@ const CreateRehabilitacionOralForm = ({
             </FormGroup>
           </FormControl>
         </Grid>
-
-        <Typography variant="h6" align="center" gutterBottom>
-          Análisis dentolabial:
-        </Typography>
-
+        <Grid item xs={12} sx={{mt:5}}>      
+          <Typography variant="h6" align="center" gutterBottom>
+            Análisis dentolabial:
+          </Typography>
+        </Grid>        
         <Grid item xs={12} sx={{ marginRight: 0 }}>
           <TextField
             fullWidth
@@ -626,11 +628,11 @@ const CreateRehabilitacionOralForm = ({
             variant="outlined"
           />
         </Grid>
-
-        <Typography variant="h6" align="center" gutterBottom>
-          Análisis Gingival
-        </Typography>
-
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Análisis Gingival
+          </Typography>
+        </Grid>  
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">
@@ -708,11 +710,11 @@ const CreateRehabilitacionOralForm = ({
             </FormGroup>
           </FormControl>
         </Grid>
-
-        <Typography variant="h6" align="center" gutterBottom>
-          Análisis Radiográficos
-        </Typography>
-
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Análisis Radiográficos
+          </Typography>
+        </Grid>  
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Número de Diente:</FormLabel>
@@ -862,11 +864,11 @@ const CreateRehabilitacionOralForm = ({
             variant="outlined"
           />
         </Grid>
-
-        <Typography variant="h6" align="center" gutterBottom>
-          Análisis Oclusión
-        </Typography>
-
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Análisis Oclusión
+          </Typography>
+        </Grid>  
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Relación Incisal:</FormLabel>
@@ -1040,11 +1042,11 @@ const CreateRehabilitacionOralForm = ({
             </FormGroup>
           </FormControl>
         </Grid>
-
-        <Typography variant="h6" align="center" gutterBottom>
-          Condición Dental
-        </Typography>
-
+        <Grid item xs={12} sx={{mt:5}}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Condición Dental
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Restauraciones defectuosas</FormLabel>

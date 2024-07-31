@@ -132,7 +132,7 @@ const CreatePeriodonticTreatmentsForm = ({
   };
 
   return (
-    <Container component={Paper}>
+    <Box component={Paper} sx={{width: '90%', padding:8 }}>
       <Typography variant="h5" align="center" gutterBottom>
         Crear Periodoncia
       </Typography>
@@ -853,7 +853,7 @@ const CreatePeriodonticTreatmentsForm = ({
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

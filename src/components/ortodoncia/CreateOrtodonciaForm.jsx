@@ -7,6 +7,7 @@ import {
   Button,
   Container,
   Paper,
+  TextareaAutosize,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router";

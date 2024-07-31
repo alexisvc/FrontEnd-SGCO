@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
 } from "@mui/material";
 import { usePeriodonticTreatments } from "../../hooks/usePeriodonticTreatments";
 
@@ -27,7 +28,7 @@ const PeriodonticTreatmentsDetails = ({ patientId }) => {
   }, [patientId]);
 
   return (
-    <>
+    <Box component={Paper} container align="center" sx={{pt:3, pb:3, width: '100%', maxWidth: 'none', m:0, pr:0, pl:0}}>
       {periodonticTreatment ? (
         <EditPeriodonticTreatmentsForm
           periodonticTreatment={periodonticTreatment}
@@ -39,7 +40,7 @@ const PeriodonticTreatmentsDetails = ({ patientId }) => {
           createPeriodonticTreatment={createPeriodonticTreatment}
         />
       )}
-    </>
+    </Box>
   );
 };
 

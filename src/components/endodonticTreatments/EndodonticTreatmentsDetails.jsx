@@ -50,7 +50,7 @@ const EndodonticTreatmentsDetails = ({
 
   return (
     <>
-      <Container component={Paper}>
+      <Container component={Paper} sx={{pb:3}}>
         <Typography align="center" variant="h4" sx={{ margin: 3 }}>
           Endodoncias
         </Typography>

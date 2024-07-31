@@ -30,7 +30,7 @@ const EvolutionChartsDetails = ({
   }, [patientId]);
 
   return (
-    <Container component={Paper}>
+    <Container component={Paper} sx={{pt:2, pb:3}}>
       <Typography
         variant="h4"
         gutterBottom
@@ -44,22 +44,22 @@ const EvolutionChartsDetails = ({
           <TableHead>
             <TableRow>
               <TableCell align="center">
-                <Typography variant="h7">Fecha</Typography>
+                <Typography variant="h6">Fecha</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Actividad Clínica</Typography>
+                <Typography variant="h6">Actividad Clínica</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Recomendación</Typography>
+                <Typography variant="h6">Recomendación</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Firma Odontólogo</Typography>
+                <Typography variant="h6">Firma Odontólogo</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Firma Paciente</Typography>
+                <Typography variant="h6">Firma Paciente</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="h7">Acciones</Typography>
+                <Typography variant="h6">Acciones</Typography>
               </TableCell>
             </TableRow>
           </TableHead>

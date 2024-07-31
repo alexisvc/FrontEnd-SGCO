@@ -13,6 +13,7 @@ import {
   TextField,
   Box,
   Button,
+  TextareaAutosize,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
@@ -91,21 +92,37 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
         />
       </TableCell>
       <TableCell>
-        <TextField
+        <TextareaAutosize
           name="actividadCuadEvol"
           value={formData.actividadCuadEvol}
           onChange={handleInputChange}
-          variant="outlined"
-          size="small"
+          //variant="outlined"
+          minRows={3}
+          style={{ 
+            width: '100%', 
+            padding: '4px', 
+            fontSize: '14px', 
+            fontFamily: 'Roboto',
+            borderRadius: '4px',
+          }}
+          size="large"
         />
       </TableCell>
       <TableCell>
-        <TextField
+        <TextareaAutosize
           name="recomendacionCuadEvol"
           value={formData.recomendacionCuadEvol}
           onChange={handleInputChange}
-          variant="outlined"
-          size="small"
+          //variant="outlined"
+          minRows={3}
+          style={{ 
+            width: '100%', 
+            padding: '4px', 
+            fontSize: '14px', 
+            fontFamily: 'Roboto',
+            borderRadius: '4px',
+          }}
+          size="large"
         />
       </TableCell>
       <TableCell>

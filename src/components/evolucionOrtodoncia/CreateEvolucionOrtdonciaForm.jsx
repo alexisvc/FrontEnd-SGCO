@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconButton, TableRow, TableCell, TextField } from '@mui/material';
+import { IconButton, TableRow, TableCell, TextField, TextareaAutosize } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { toast } from "react-toastify";
 
@@ -64,12 +64,20 @@ const CreateEvolucionOrtodonciaForm = ({
         />
       </TableCell>
       <TableCell>
-        <TextField
+        <TextareaAutosize
           name="evolucion"
           value={formData.evolucion}
           onChange={handleInputChange}
-          variant="outlined"
-          size="small"
+          //variant="outlined"
+          minRows={3}
+          style={{ 
+            width: '100%', 
+            padding: '4px', 
+            fontSize: '14px', 
+            fontFamily: 'Roboto',
+            borderRadius: '4px',
+          }}
+          size="large"
         />
       </TableCell>
       <TableCell>

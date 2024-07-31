@@ -25,7 +25,7 @@ const MedicalRecordDetails = ({ patientId }) => {
   }, [patientId]);
 
   return (
-    <Container component={Paper}>
+    <Container component={Paper} sx={{pt:2, pb:2}}>
       {medicalRecord ? (
         <MedicalRecordForm
           patientId={patientId}

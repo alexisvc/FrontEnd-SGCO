@@ -17,7 +17,7 @@ const RehabilitacionOralDetails = ({ patientId }) => {
   }, [patientId]);
 
   return (
-    <>
+    <Container component={Paper} sx={{pt:3, pb:3}}>
       {rehabilitacionOral ? (
         <EditRehabilitacionOralForm
           rehabilitacionOral={rehabilitacionOral}
@@ -29,7 +29,7 @@ const RehabilitacionOralDetails = ({ patientId }) => {
           createRehabilitacionOral={createRehabilitacionOral}
         />
       )}
-    </>
+    </Container>
   );
 };
 

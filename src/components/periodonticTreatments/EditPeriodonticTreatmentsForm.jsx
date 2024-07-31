@@ -148,7 +148,7 @@ const EditPeriodonticTreatmentsForm = ({
   };
 
   return (
-    <Container component={Paper}>
+    <Box component={Paper} sx={{width: '90%', padding:8 }}>
       <Typography variant="h5" align="center" gutterBottom>
         Editar Historia de Periodoncia
       </Typography>
@@ -908,7 +908,7 @@ const EditPeriodonticTreatmentsForm = ({
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

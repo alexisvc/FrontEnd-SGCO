@@ -27,14 +27,15 @@ const EvolucionOrtodonciaDetails = ({
   };
 
   return (
-    <Container >
+    <Container component={Paper} sx={{m:2, mt:4}}>
       <TableContainer >
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell align='center'><Typography variant='h7'>Fecha</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h7'>Evolución</Typography></TableCell>
-          <TableCell align='center'><Typography variant='h7'>Arco</Typography></TableCell>
+          <TableCell align='center'><Typography variant='h6'>Fecha</Typography></TableCell>
+          <TableCell align='center'><Typography variant='h6'>Evolución</Typography></TableCell>
+          <TableCell align='center'><Typography variant='h6'>Arco</Typography></TableCell>
+          <TableCell align='center'><Typography variant='h6'>Acción</Typography></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

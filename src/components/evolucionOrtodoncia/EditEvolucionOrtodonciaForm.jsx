@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TableRow, TableCell, TextField, IconButton } from '@mui/material';
+import { TableRow, TableCell, TextField, IconButton, TextareaAutosize } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { toast } from "react-toastify";
 
@@ -55,12 +55,20 @@ const EditEvolucionOrtodonciaForm = ({
         />
       </TableCell>
       <TableCell>
-        <TextField
+        <TextareaAutosize
           name="evolucion"
           value={formData.evolucion}
           onChange={handleInputChange}
-          variant="outlined"
-          size="small"
+          //variant="outlined"
+          minRows={3}
+          style={{ 
+            width: '100%', 
+            padding: '4px', 
+            fontSize: '14px', 
+            fontFamily: 'Roboto',
+            borderRadius: '4px',
+          }}
+          size="large"
         />
       </TableCell>
       <TableCell>
