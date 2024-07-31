@@ -20,6 +20,7 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
     patologiaTejDuros: "",
     diagRadiografico: "",
     localizacionPatologia: "",
+    extraccionDental: "",
   });
   const [archivo1, setArchivo1] = useState(null);
   const [archivo2, setArchivo2] = useState(null);
@@ -61,6 +62,7 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
         patologiaTejDuros: "",
         diagRadiografico: "",
         localizacionPatologia: "",
+        extraccionDental: "",
       });
       setArchivo1(null);
       setArchivo2(null);
@@ -190,6 +192,17 @@ const CreateCirugiaPatologiaForm = ({ patientId, createCirugiaPatologia }) => {
             label="Localización de la Patología"
             name="localizacionPatologia"
             value={formData.localizacionPatologia}
+            onChange={handleInputChange}
+            variant="outlined"
+            required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Extracción Dental"
+            name="extraccionDental"
+            value={formData.extraccionDental}
             onChange={handleInputChange}
             variant="outlined"
             required

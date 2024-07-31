@@ -1079,13 +1079,16 @@ const EditRehabilitacionOralForm = ({
               <FormControlLabel value="false" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            fullWidth
-            label="Cuales"
-            name="restauracionesDefectuosasCuales"
-            value={formData.restauracionesDefectuosasCuales}
-            onChange={handleInputChange}
-          />
+          
+          {formData.restauracionesDefectuosas && (
+            <TextField
+              fullWidth
+              label="Cuales"
+              name="restauracionesDefectuosasCuales"
+              value={formData.restauracionesDefectuosasCuales}
+              onChange={handleInputChange}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
@@ -1101,13 +1104,15 @@ const EditRehabilitacionOralForm = ({
               <FormControlLabel value="false" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            fullWidth
-            label="Cuales"
-            name="lesionesCariosasCuales"
-            value={formData.lesionesCariosasCuales}
-            onChange={handleInputChange}
-          />
+          {formData.lesionesCariosas && (
+            <TextField
+              fullWidth
+              label="Cuales"
+              name="lesionesCariosasCuales"
+              value={formData.lesionesCariosasCuales}
+              onChange={handleInputChange}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
@@ -1123,13 +1128,15 @@ const EditRehabilitacionOralForm = ({
               <FormControlLabel value="false" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            fullWidth
-            label="Cuales"
-            name="dientesFaltantesCuales"
-            value={formData.dientesFaltantesCuales}
-            onChange={handleInputChange}
-          />
+          {formData.dientesFaltantes && (
+            <TextField
+              fullWidth
+              label="Cuales"
+              name="dientesFaltantesCuales"
+              value={formData.dientesFaltantesCuales}
+              onChange={handleInputChange}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
@@ -1147,13 +1154,15 @@ const EditRehabilitacionOralForm = ({
               <FormControlLabel value="false" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            fullWidth
-            label="Cuales"
-            name="coronaDentalCuales"
-            value={formData.coronaDentalCuales}
-            onChange={handleInputChange}
-          />
+          {formData.coronaDental && (
+            <TextField
+              fullWidth
+              label="Cuales"
+              name="coronaDentalCuales"
+              value={formData.coronaDentalCuales}
+              onChange={handleInputChange}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
@@ -1169,13 +1178,15 @@ const EditRehabilitacionOralForm = ({
               <FormControlLabel value="false" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            fullWidth
-            label="Cuales"
-            name="espigosCuales"
-            value={formData.espigosCuales}
-            onChange={handleInputChange}
-          />
+          {formData.espigos && (
+            <TextField
+              fullWidth
+              label="Cuales"
+              name="espigosCuales"
+              value={formData.espigosCuales}
+              onChange={handleInputChange}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset">
@@ -1230,13 +1241,15 @@ const EditRehabilitacionOralForm = ({
               <FormControlLabel value="false" control={<Radio />} label="No" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            fullWidth
-            label="Cuales"
-            name="implantesCuales"
-            value={formData.implantesCuales}
-            onChange={handleInputChange}
-          />
+          {formData.implantes && (
+            <TextField
+              fullWidth
+              label="Cuales"
+              name="implantesCuales"
+              value={formData.implantesCuales}
+              onChange={handleInputChange}
+            />
+          )}
         </Grid>
 
         <Grid item xs={12}>

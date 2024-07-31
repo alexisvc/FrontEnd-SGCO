@@ -21,7 +21,8 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
     patologiaTejBland: "",
     patologiaTejDuros: "",
     diagRadiografico: "",
-    localizacionPatologia: ""
+    localizacionPatologia: "",
+    extraccionDental: "",
   });
   const [archivo1, setArchivo1] = useState(null);
   const [archivo2, setArchivo2] = useState(null);
@@ -34,7 +35,8 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
         patologiaTejBland: cirugiaPatologia.patologiaTejBland || "",
         patologiaTejDuros: cirugiaPatologia.patologiaTejDuros || "",
         diagRadiografico: cirugiaPatologia.diagRadiografico || "",
-        localizacionPatologia: cirugiaPatologia.localizacionPatologia || ""
+        localizacionPatologia: cirugiaPatologia.localizacionPatologia || "",
+        extraccionDental: cirugiaPatologia.extraccionDental || ""
       });
       setArchivo1(cirugiaPatologia?.archivo1);
       setArchivo2(cirugiaPatologia?.archivo2);
@@ -215,6 +217,17 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
             label="Localización de la Patología"
             name="localizacionPatologia"
             value={formData.localizacionPatologia}
+            onChange={handleInputChange}
+            variant="outlined"
+            required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Extracción Dental"
+            name="extraccionDental"
+            value={formData.extraccionDental}
             onChange={handleInputChange}
             variant="outlined"
             required

@@ -30,6 +30,7 @@ const EditDisfuncionMandibularForm = ({
     espacioArticular: disfuncionMandibular?.espacioArticular || false,
     condillo: disfuncionMandibular?.condillo || false,
     desviacionLineaMedia: disfuncionMandibular?.desviacionLineaMedia || false,
+    desplazamientoLineaMedia: disfuncionMandibular?.desplazamientoLineaMedia || "",
     conReduccion: disfuncionMandibular?.conReduccion || false,
     sinReduccion: disfuncionMandibular?.sinReduccion || false,
     clickArticular: disfuncionMandibular?.clickArticular || false,
@@ -46,6 +47,7 @@ const EditDisfuncionMandibularForm = ({
       disfuncionMandibular?.dolorMuscularDescripcion || "",
     dolorOrofacialComunMuscular:
       disfuncionMandibular?.dolorOrofacialComunMuscular || false,
+    otroDolorOrofacialComunMuscular:disfuncionMandibular?.otroDolorOrofacialComunMuscular || "",
     mallampati: disfuncionMandibular?.mallampati || false,
     dolorOrofacialComunApnea:
       disfuncionMandibular?.dolorOrofacialComunApnea || false,
@@ -115,102 +117,132 @@ const EditDisfuncionMandibularForm = ({
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">Erosión de hueso cortical</FormLabel>
-            <RadioGroup
-              row
-              aria-label="huesoCortical"
-              name="huesoCortical"
-              value={formData.huesoCortical}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.huesoCortical.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "huesoCortical")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.huesoCortical.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "huesoCortical")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
         </Grid>
+
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">
               Estrechamiento del espacio articular
             </FormLabel>
-            <RadioGroup
-              row
-              aria-label="espacioArticular"
-              name="espacioArticular"
-              value={formData.espacioArticular}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.espacioArticular.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "espacioArticular")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.espacioArticular.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "espacioArticular")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
+          
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">
               Espacio anormal del cóndilo
             </FormLabel>
-            <RadioGroup
-              row
-              aria-label="condillo"
-              name="condillo"
-              value={formData.condillo}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.condillo.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "condillo")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.condillo.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "condillo")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
+
+          
         </Grid>
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">
-              Desviación de la línea media
-            </FormLabel>
-            <RadioGroup
-              row
-              aria-label="desviacionLineaMedia"
-              name="desviacionLineaMedia"
-              value={formData.desviacionLineaMedia}
+        <Grid item container xs={12}>
+          <Grid item xs={3}>
+            
+              <FormLabel component="legend">
+                Desviación de la línea media
+              </FormLabel>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="Izquierda"
+                      checked={formData.desviacionLineaMedia.includes("Izquierda")}
+                      onChange={(e) => handleCheckboxChange(e, "desviacionLineaMedia")}
+                    />
+                  }
+                  label="Izquierda"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="Derecha"
+                      checked={formData.desviacionLineaMedia.includes("Derecha")}
+                      onChange={(e) => handleCheckboxChange(e, "desviacionLineaMedia")}
+                    />
+                  }
+                  label="Derecha"
+                />
+              </FormGroup>
+            
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              fullWidth
+              label="Desplazamiento de la línea media"
+              name="desplazamientoLineaMedia"
+              value={formData.desplazamientoLineaMedia}
               onChange={handleInputChange}
-            >
-              <FormControlLabel
-                value="true"
-                control={<Radio />}
-                label="Izquierda"
-              />
-              <FormControlLabel
-                value="false"
-                control={<Radio />}
-                label="Derecha"
-              />
-            </RadioGroup>
-          </FormControl>
+              variant="outlined"
+            />
+
+          </Grid>
         </Grid>
         <Grid item xs = {12}>
           <Typography variant="h6" align="center" gutterBottom>
@@ -218,119 +250,135 @@ const EditDisfuncionMandibularForm = ({
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">Con reducción</FormLabel>
-            <RadioGroup
-              row
-              aria-label="conReduccion"
-              name="conReduccion"
-              value={formData.conReduccion}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.conReduccion.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "conReduccion")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.conReduccion.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "conReduccion")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">Sin reducción</FormLabel>
-            <RadioGroup
-              row
-              aria-label="sinReduccion"
-              name="sinReduccion"
-              value={formData.sinReduccion}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.sinReduccion.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "sinReduccion")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.sinReduccion.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "sinReduccion")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">Click Articular</FormLabel>
-            <RadioGroup
-              row
-              aria-label="clickArticular"
-              name="clickArticular"
-              value={formData.clickArticular}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.clickArticular.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "clickArticular")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.clickArticular.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "clickArticular")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
+          
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+          
             <FormLabel component="legend">Crepitación</FormLabel>
-            <RadioGroup
-              row
-              aria-label="crepitacion"
-              name="crepitacion"
-              value={formData.crepitacion}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.crepitacion.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "crepitacion")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.crepitacion.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "crepitacion")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
+         
             <FormLabel component="legend">Subluxación</FormLabel>
-            <RadioGroup
-              row
-              aria-label="subluxacion"
-              name="subluxacion"
-              value={formData.subluxacion}
-              onChange={handleInputChange}
-            >
+            <FormGroup row>
               <FormControlLabel
-                value="true"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Izquierda"
+                    checked={formData.subluxacion.includes("Izquierda")}
+                    onChange={(e) => handleCheckboxChange(e, "subluxacion")}
+                  />
+                }
                 label="Izquierda"
               />
               <FormControlLabel
-                value="false"
-                control={<Radio />}
+                control={
+                  <Checkbox
+                    name="Derecha"
+                    checked={formData.subluxacion.includes("Derecha")}
+                    onChange={(e) => handleCheckboxChange(e, "subluxacion")}
+                  />
+                }
                 label="Derecha"
               />
-            </RadioGroup>
-          </FormControl>
+            </FormGroup>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" align="center" gutterBottom>
@@ -517,68 +565,81 @@ const EditDisfuncionMandibularForm = ({
           />
         </Grid>
 
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Dolor Orofacial Común</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Dolor Tensional"
-                    checked={formData.dolorOrofacialComunMuscular.includes(
-                      "Dolor Tensional"
-                    )}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorOrofacialComunMuscular")
-                    }
-                  />
-                }
-                label="Dolor Tensional"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Dolor Neuropático"
-                    checked={formData.dolorOrofacialComunMuscular.includes(
-                      "Dolor Neuropático"
-                    )}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorOrofacialComunMuscular")
-                    }
-                  />
-                }
-                label="Dolor Neuropático"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Migraña"
-                    checked={formData.dolorOrofacialComunMuscular.includes(
-                      "Migraña"
-                    )}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorOrofacialComunMuscular")
-                    }
-                  />
-                }
-                label="Migraña"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="Dolor psicógeno"
-                    checked={formData.dolorOrofacialComunMuscular.includes(
-                      "Dolor psicógeno"
-                    )}
-                    onChange={(e) =>
-                      handleCheckboxChange(e, "dolorOrofacialComunMuscular")
-                    }
-                  />
-                }
-                label="Dolor psicógeno"
-              />
-            </FormGroup>
-          </FormControl>
+        <Grid item container xs={12}>
+          <Grid item xs={7}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Dolor Orofacial Común</FormLabel>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="Dolor Tensional"
+                      checked={formData.dolorOrofacialComunMuscular.includes(
+                        "Dolor Tensional"
+                      )}
+                      onChange={(e) =>
+                        handleCheckboxChange(e, "dolorOrofacialComunMuscular")
+                      }
+                    />
+                  }
+                  label="Dolor Tensional"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="Dolor Neuropático"
+                      checked={formData.dolorOrofacialComunMuscular.includes(
+                        "Dolor Neuropático"
+                      )}
+                      onChange={(e) =>
+                        handleCheckboxChange(e, "dolorOrofacialComunMuscular")
+                      }
+                    />
+                  }
+                  label="Dolor Neuropático"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="Migraña"
+                      checked={formData.dolorOrofacialComunMuscular.includes(
+                        "Migraña"
+                      )}
+                      onChange={(e) =>
+                        handleCheckboxChange(e, "dolorOrofacialComunMuscular")
+                      }
+                    />
+                  }
+                  label="Migraña"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="Dolor psicógeno"
+                      checked={formData.dolorOrofacialComunMuscular.includes(
+                        "Dolor psicógeno"
+                      )}
+                      onChange={(e) =>
+                        handleCheckboxChange(e, "dolorOrofacialComunMuscular")
+                      }
+                    />
+                  }
+                  label="Dolor psicógeno"
+                />
+              </FormGroup>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={3}>
+            <TextField
+              fullWidth
+              label="Otro"
+              name="otroDolorOrofacialComunMuscular"
+              value={formData.otroDolorOrofacialComunMuscular}
+              onChange={handleInputChange}
+              variant="outlined"
+            />
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>
