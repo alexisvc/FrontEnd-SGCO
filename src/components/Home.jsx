@@ -54,6 +54,7 @@ function Home({ user, logout }) {
               <Button      
                 color="primary"
                 startIcon={<LoginIcon />}
+                size = "large"
                 sx={{
                   color: 'white',
                   backgroundColor: "#8ba082",
@@ -90,6 +91,7 @@ function Home({ user, logout }) {
               onClick={() => setIsPopUpOpen(true)}
               variant="contained"
               color="primary"
+              size = "large"
               sx={{
                 color: 'white',
                 backgroundColor: "#8ba082",
@@ -118,10 +120,11 @@ function Home({ user, logout }) {
                 variant="contained"
                 color="primary"
                 startIcon={<StartIcon />}
+                size = "large"
                 sx={{
                   color: 'white',
                   backgroundColor: "#8ba082",
-                  margin: 2,
+                  margin: 5,
                   '&:hover': {
                     backgroundColor: "#5d6c56", 
                   },

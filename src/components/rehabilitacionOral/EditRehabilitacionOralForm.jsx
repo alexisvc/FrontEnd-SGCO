@@ -166,6 +166,14 @@ const EditRehabilitacionOralForm = ({
     });
   };
 
+  const handleRadioChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(formData => ({
+      ...formData,
+      [name]: value === 'true'
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -1129,7 +1137,7 @@ const EditRehabilitacionOralForm = ({
               aria-label="restauracionesDefectuosas"
               name="restauracionesDefectuosas"
               value={formData.restauracionesDefectuosas}
-              onChange={handleInputChange}
+              onChange={handleRadioChange}
             >
               <FormControlLabel value="true" control={<Radio />} label="Si" />
               <FormControlLabel value="false" control={<Radio />} label="No" />
@@ -1154,7 +1162,7 @@ const EditRehabilitacionOralForm = ({
               aria-label="lesionesCariosas"
               name="lesionesCariosas"
               value={formData.lesionesCariosas}
-              onChange={handleInputChange}
+              onChange={handleRadioChange}
             >
               <FormControlLabel value="true" control={<Radio />} label="Si" />
               <FormControlLabel value="false" control={<Radio />} label="No" />
@@ -1178,7 +1186,7 @@ const EditRehabilitacionOralForm = ({
               aria-label="dientesFaltantes"
               name="dientesFaltantes"
               value={formData.dientesFaltantes}
-              onChange={handleInputChange}
+              onChange={handleRadioChange}
             >
               <FormControlLabel value="true" control={<Radio />} label="Si" />
               <FormControlLabel value="false" control={<Radio />} label="No" />
@@ -1204,7 +1212,7 @@ const EditRehabilitacionOralForm = ({
               aria-label="coronaDental"
               name="coronaDental"
               value={formData.coronaDental}
-              onChange={handleInputChange}
+              onChange={handleRadioChange}
             >
               <FormControlLabel value="true" control={<Radio />} label="Si" />
               <FormControlLabel value="false" control={<Radio />} label="No" />
@@ -1228,7 +1236,7 @@ const EditRehabilitacionOralForm = ({
               aria-label="espigos"
               name="espigos"
               value={formData.espigos}
-              onChange={handleInputChange}
+              onChange={handleRadioChange}
             >
               <FormControlLabel value="true" control={<Radio />} label="Si" />
               <FormControlLabel value="false" control={<Radio />} label="No" />
@@ -1291,7 +1299,7 @@ const EditRehabilitacionOralForm = ({
               aria-label="implantes"
               name="implantes"
               value={formData.implantes}
-              onChange={handleInputChange}
+              onChange={handleRadioChange}
             >
               <FormControlLabel value="true" control={<Radio />} label="Si" />
               <FormControlLabel value="false" control={<Radio />} label="No" />

@@ -139,7 +139,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
           <Grid item xs={7}>
             <TextField
               fullWidth
-              label="Descripción"
+              label="Antecedentes del problema:"
               name="description"
               value={newMedicalRecord.description}
               onChange={handleChange}
@@ -150,9 +150,11 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Motivo y Expectativa
-            </Typography>
+            <Grid container justifyContent="center">
+              <Typography variant="h6" gutterBottom>
+                Motivo y Expectativa
+              </Typography>
+            </Grid>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -181,10 +183,11 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Riesgos y Enfermedades Sistémicas
-            </Typography>
-
+            <Grid container justifyContent="center">
+              <Typography variant="h6" gutterBottom>
+                Riesgos y Enfermedades Sistémicas
+              </Typography>
+            </Grid>
             <TextField
               fullWidth
               label="Enfermedad Sistémica"
@@ -376,10 +379,11 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Estomatológico
-            </Typography>
-
+            <Grid container justifyContent="center" >
+              <Typography variant="h6" gutterBottom>
+                Estomatológico
+              </Typography>
+            </Grid>
             <TextField
               fullWidth
               label="Última Visita al Dentista"
@@ -417,7 +421,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
                 </RadioGroup>
               </FormControl>
 
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 {newMedicalRecord.reaccionesAdversasInfiltracion && (
                   <TextField
                     fullWidth
@@ -431,7 +435,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
               </Grid>
             </Grid>
             <Grid container spacing={2} sx = {{ margin: 1}}>
-              <Grid item xs={3} sx ={{ marginLeft: -1, marginRight: 1 }}>
+              <Grid item xs={3} sx ={{ marginLeft: -1, marginRight: 2 }}>
 
                 <FormControl component="fieldset" > 
                   <FormLabel component="legend">Exodoncia o cirugías bucales o maxilares previas?:</FormLabel>
@@ -447,7 +451,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={3} sx = {{ marginLeft: -3, marginRight: 3}}>
+              <Grid item xs={3} sx = {{ marginLeft: -3, marginRight: 5}}>
                 <FormControl component="fieldset"> 
                   <FormLabel component="legend">Ha tenido complicaciones luego de las cirugías?:</FormLabel>
                   <RadioGroup
@@ -462,7 +466,7 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={5} sx = {{ marginLeft: 10, marginTop: 2 }}>
+              <Grid item xs={4} sx = {{ marginLeft: 10, marginTop: 2 }}>
                 {newMedicalRecord.complicacionesLuegoCirugias && (
                   <TextField
                     fullWidth
@@ -565,10 +569,11 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Estado de Tejidos Blandos
-            </Typography>
-
+            <Grid container justifyContent="center">
+              <Typography variant="h6" gutterBottom>
+                Estado de Tejidos Blandos
+              </Typography>
+            </Grid>
             <Grid container spacing={2}>
 
               <Grid item xs={4.5} sx = {{ marginRight: 12}}>
@@ -648,10 +653,11 @@ const CreateMedicalRecordForm = ({ patientId, createMedicalRecord }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Análisis Oclusal
-            </Typography>
-
+            <Grid container justifyContent="center">
+              <Typography variant="h6" gutterBottom>
+                Análisis Oclusal
+              </Typography>
+            </Grid>
             <Grid container spacing={2}>
               <Grid item xs={3}>
                 <TextField

@@ -9,7 +9,10 @@
     background-size: 50%;
     background-repeat: no-repeat;
     background-position: right;
-    height: 100%;
+    width: 100vw; /* Asegura que el contenedor ocupe el 100% del ancho de la ventana */
+    height: 100vh;
+    margin: 0; /* Elimina cualquier margen predeterminado */
+    padding: 0; 
   }
   
   .welcome h1 {

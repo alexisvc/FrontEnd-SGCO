@@ -154,7 +154,7 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
               color="primary"
               startIcon={<AddCircleIcon />}
             >
-              RX
+              FD
             </Button>
           </label>
           {evolutionChart?.archivo1Url && (
@@ -172,7 +172,7 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
               onClick={() => window.open(evolutionChart.archivo1Url, "_blank")}
               startIcon={<DownloadIcon />}
             >
-              RX
+              FD
             </Button>
           )}
         </Box>
@@ -202,7 +202,7 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
               color="primary"
               startIcon={<AddCircleIcon />}
             >
-              CS
+              FP
             </Button>
           </label>
           {evolutionChart?.archivo2Url && (
@@ -220,7 +220,7 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
               onClick={() => window.open(evolutionChart.archivo2Url, "_blank")}
               startIcon={<DownloadIcon />}
             >
-              CS
+              FP
             </Button>
           )}
         </Box>

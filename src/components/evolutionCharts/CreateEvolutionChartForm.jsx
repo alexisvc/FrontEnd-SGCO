@@ -150,7 +150,7 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
               }}
               startIcon={<AddCircleIcon />}
             >
-              RX
+              FD
             </Button>
           </label>
         </Box>
@@ -180,7 +180,7 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
               color="primary"
               startIcon={<AddCircleIcon />}
             >
-              CS
+              FP
             </Button>
           </label>
         </Box>

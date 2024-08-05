@@ -389,12 +389,11 @@ const EditDisfuncionMandibularForm = ({
             Dolor Articular
           </Typography>
         </Grid>
-        <Grid item xs={12} container justifyContent="center" alignItems="center">
+        <Grid item xs={12} container justifyContent="center" alignItems="center" sx={{mb:3}}>
           <img
             src="/public/resources/images/dolorArticular.png"
             alt="dolor articular"
-            style={{ width: "40%" }}
-          />
+            style={{ width: "40%"}} />
         </Grid>
 
         <Grid item xs={4}>
@@ -433,7 +432,7 @@ const EditDisfuncionMandibularForm = ({
           </Grid>
         ))}
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx = {{m:3}}>
           <Typography variant="h6" align="center" gutterBottom>
             Dolor Muscular
           </Typography>
@@ -456,7 +455,7 @@ const EditDisfuncionMandibularForm = ({
           </Grid>
 
 
-          <Grid container align="center">
+          <Grid container align="center" sx={{mt:3}}>
             <Grid item xs = {6}>
               <Grid item xs={12}>
                 <Typography variant="h6" align="left" gutterBottom>

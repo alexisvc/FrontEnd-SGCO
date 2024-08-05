@@ -57,6 +57,7 @@ function Welcome({ user, logout, isGuestUser }) {
     <>
       <Button
         variant="contained"
+        size = "large"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/")}
         sx={{
@@ -78,6 +79,7 @@ function Welcome({ user, logout, isGuestUser }) {
       <Button
         startIcon={<LogoutIcon />}
         variant="contained"
+        size = "large"
         onClick={() => setIsPopUpOpen(true)}
         sx={{
           color: 'white',
