@@ -429,6 +429,19 @@ const CreatePeriodonticTreatmentsForm = ({
               </TableRow>
               {/* Add more imgs here */}
               <TableRow>
+                <TableCell colSpan={17} style={{ padding: "0px" }}>
+                  <Grid container justify="left">
+                    <Grid item xs={12}>
+                      <img
+                        src="/public/resources/images/periodonciaInferior.png"
+                        alt="periodonciaInferior"
+                        style={{ width: "100%", aspectRatio: "5 / 1" }}
+                      />
+                    </Grid>
+                  </Grid>
+                </TableCell>
+              </TableRow>
+              <TableRow>
                 <TableCell align="center">
                   <Typography variant="h7">Margen Gingival</Typography>
                 </TableCell>
@@ -741,6 +754,19 @@ const CreatePeriodonticTreatmentsForm = ({
                 ))}
               </TableRow>
               {/* Add more imgs here */}
+              <TableRow>
+                <TableCell colSpan={17} style={{ padding: "0px" }}>
+                  <Grid container justify="left">
+                    <Grid item xs={12}>
+                      <img
+                        src="/public/resources/images/periodonciaSuperior.png"
+                        alt="periodonciaSuperior"
+                        style={{ width: "100%", aspectRatio: "5 / 1" }}
+                      />
+                    </Grid>
+                  </Grid>
+                </TableCell>
+              </TableRow>
               <TableRow>
                 <TableCell align="center">
                   <Typography variant="h7">Margen Gingival</Typography>

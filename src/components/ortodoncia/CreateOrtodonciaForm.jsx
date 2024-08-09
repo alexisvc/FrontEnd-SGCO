@@ -178,7 +178,7 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                   color="primary"
                   startIcon={<AddCircleIcon />}
                 >
-                  C
+                  Fotos
                 </Button>
               </label>
             </Box>

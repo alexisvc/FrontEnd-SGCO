@@ -162,7 +162,7 @@ function Welcome({ user, logout, isGuestUser }) {
                   },
                 }}
                 >
-                    Agendamiento de Citas
+                    Agenda de Citas
                   </Button>
                 </Link>
             </div>
