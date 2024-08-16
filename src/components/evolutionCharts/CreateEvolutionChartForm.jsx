@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
+import SaveIcon from "@mui/icons-material/Save";
 import SignatureCanvas from "react-signature-canvas";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
@@ -82,13 +83,6 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Guardar las firmas
-    saveSignature1();
-    saveSignature2();
-
-    // Esperar para asegurarse de que las firmas se hayan guardado
-    await new Promise((resolve) => setTimeout(resolve, 100));
 
     if (!archivo1 || !archivo2) {
       toast.error("Por favor, asegúrate de que ambas firmas estén completadas.", {
@@ -185,9 +179,11 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
               height: 100,
               style: { border: "2px solid #000", borderRadius: "4px" },
             }}
-            onEnd={saveSignature1}
           />
           <Box display="flex" justifyContent="center" mt={1}>
+            <IconButton onClick={saveSignature1}>
+              <SaveIcon />
+            </IconButton>
             <IconButton onClick={clearSignature1}>
               <ClearIcon />
             </IconButton>
@@ -204,9 +200,11 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
               height: 100,
               style: { border: "2px solid #000", borderRadius: "4px" },
             }}
-            onEnd={saveSignature2}
           />
           <Box display="flex" justifyContent="center" mt={1}>
+            <IconButton onClick={saveSignature2}>
+              <SaveIcon />
+            </IconButton>
             <IconButton onClick={clearSignature2}>
               <ClearIcon />
             </IconButton>
