@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Typography,
   Container,
@@ -18,6 +18,8 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
+import ClearIcon from "@mui/icons-material/Clear";
+import SignatureCanvas from "react-signature-canvas";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
@@ -29,6 +31,11 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
   });
   const [archivo1, setArchivo1] = useState(null);
   const [archivo2, setArchivo2] = useState(null);
+  const [signature1, setSignature1] = useState(null);
+  const [signature2, setSignature2] = useState(null);
+
+  const sigCanvas1 = useRef(null);
+  const sigCanvas2 = useRef(null);
 
   const navigate = useNavigate();
 
@@ -39,6 +46,8 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
         actividadCuadEvol: evolutionChart.actividadCuadEvol || "",
         recomendacionCuadEvol: evolutionChart.recomendacionCuadEvol || "",
       });
+      setSignature1(evolutionChart.archivo1Url);
+      setSignature2(evolutionChart.archivo2Url);
     }
   }, [evolutionChart]);
 
@@ -50,12 +59,22 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
     });
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.name === "archivo1") {
-      setArchivo1(e.target.files[0]);
-    } else if (e.target.name === "archivo2") {
-      setArchivo2(e.target.files[0]);
+  const saveSignature = (sigCanvas, setArchivo) => {
+    const dataURL = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
+    const file = dataURLtoFile(dataURL, `firma_${Date.now()}.png`);
+    setArchivo(file);
+  };
+
+  const dataURLtoFile = (dataurl, filename) => {
+    const arr = dataurl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
     }
+    return new File([u8arr], filename, { type: mime });
   };
 
   const handleSubmit = async (e) => {
@@ -100,128 +119,106 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
           name="actividadCuadEvol"
           value={formData.actividadCuadEvol}
           onChange={handleInputChange}
-          //variant="outlined"
           minRows={3}
-          style={{ 
-            width: '100%', 
-            padding: '4px', 
-            fontSize: '14px', 
-            fontFamily: 'Roboto',
-            borderRadius: '4px',
+          style={{
+            width: "100%",
+            padding: "4px",
+            fontSize: "14px",
+            fontFamily: "Roboto",
+            borderRadius: "4px",
           }}
           size="large"
         />
       </TableCell>
       <TableCell>
-        <TextareaAutosize 
+        <TextareaAutosize
           name="recomendacionCuadEvol"
           value={formData.recomendacionCuadEvol}
           onChange={handleInputChange}
-          //variant="outlined"
           minRows={3}
-          style={{ 
-            width: '100%', 
-            padding: '4px', 
-            fontSize: '14px', 
-            fontFamily: 'Roboto',
-            borderRadius: '4px',
+          style={{
+            width: "100%",
+            padding: "4px",
+            fontSize: "14px",
+            fontFamily: "Roboto",
+            borderRadius: "4px",
           }}
           size="large"
         />
       </TableCell>
       <TableCell>
-        <Box display="flex" alignItems="center" mr={2}>
-          <label htmlFor="archivo1-input">
-            <input
-              id="archivo1-input"
-              name="archivo1"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
+        <Box>
+          {signature1 ? (
+            <img
+              src={signature1}
+              alt="Firma Odontólogo"
+              style={{
+                border: "1px solid #ccc",
+                width: "200px",
+                height: "100px",
+              }}
             />
-            <Button
-              sx={{
-                color: "white",
-                backgroundColor: "#8ba082",
-                //margin: 2,
-                "&:hover": {
-                  backgroundColor: "#5d6c56",
-                },
-              }}
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              FD
-            </Button>
-          </label>
-          {evolutionChart?.archivo1Url && (
-            <Button
-              sx={{
-                color: "white",
-                backgroundColor: "#5d6c56",
-                ml: 2,
-                "&:hover": {
-                  backgroundColor: "#8ba082",
-                },
-              }}
-              //variant="outlined"
-              //color="secondary"
-              onClick={() => window.open(evolutionChart.archivo1Url, "_blank")}
-              startIcon={<DownloadIcon />}
-            >
-              FD
-            </Button>
+          ) : (
+            <>
+              <SignatureCanvas
+                ref={sigCanvas1}
+                penColor="black"
+                canvasProps={{
+                  width: 200,
+                  height: 100,
+                  className: "sigCanvas",
+                  style: { border: "1px solid #ccc" },
+                }}
+              />
+              <Box display="flex" justifyContent="center" mt={1}>
+                <IconButton
+                  onClick={() => saveSignature(sigCanvas1, setArchivo1)}
+                >
+                  <SaveIcon />
+                </IconButton>
+                <IconButton onClick={() => sigCanvas1.current.clear()}>
+                  <ClearIcon />
+                </IconButton>
+              </Box>
+            </>
           )}
         </Box>
       </TableCell>
       <TableCell>
-        <Box display="flex" alignItems="center">
-          <label htmlFor="archivo2-input">
-            <input
-              id="archivo2-input"
-              name="archivo2"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
+        <Box>
+          {signature2 ? (
+            <img
+              src={signature2}
+              alt="Firma Paciente"
+              style={{
+                border: "1px solid #ccc",
+                width: "200px",
+                height: "100px",
+              }}
             />
-            <Button
-              sx={{
-                color: "white",
-                backgroundColor: "#8ba082",
-                //margin: 2,
-                "&:hover": {
-                  backgroundColor: "#5d6c56",
-                },
-              }}
-              variant="contained"
-              component="span"
-              color="primary"
-              startIcon={<AddCircleIcon />}
-            >
-              FP
-            </Button>
-          </label>
-          {evolutionChart?.archivo2Url && (
-            <Button
-              sx={{
-                color: "white",
-                backgroundColor: "#5d6c56",
-                ml: 2,
-                "&:hover": {
-                  backgroundColor: "#8ba082",
-                },
-              }}
-              //variant="outlined"
-              //color="secondary"
-              onClick={() => window.open(evolutionChart.archivo2Url, "_blank")}
-              startIcon={<DownloadIcon />}
-            >
-              FP
-            </Button>
+          ) : (
+            <>
+              <SignatureCanvas
+                ref={sigCanvas2}
+                penColor="black"
+                canvasProps={{
+                  width: 200,
+                  height: 100,
+                  className: "sigCanvas",
+                  style: { border: "1px solid #ccc" },
+                }}
+              />
+              <Box display="flex" justifyContent="center" mt={1}>
+                <IconButton
+                  onClick={() => saveSignature(sigCanvas2, setArchivo2)}
+                >
+                  <SaveIcon />
+                </IconButton>
+                <IconButton onClick={() => sigCanvas2.current.clear()}>
+                  <ClearIcon />
+                </IconButton>
+              </Box>
+            </>
           )}
         </Box>
       </TableCell>
