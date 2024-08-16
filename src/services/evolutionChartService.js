@@ -17,21 +17,24 @@ const getEvolutionChartsByPatientId = async (patientId) => {
   return response.data;
 };
 
-const createEvolutionChart = async (newCirugiaPatologia, archivo1, archivo2) => {
+const createEvolutionChart = async (newEvolutionChart, archivo1, archivo2) => {
   const formData = new FormData();
   
-  // Agregar campos del formulario
-  for (const key in newCirugiaPatologia) {
-    formData.append(key, newCirugiaPatologia[key]);
+  for (const key in newEvolutionChart) {
+    formData.append(key, newEvolutionChart[key]);
   }
   
-  // Agregar archivos si existen
   if (archivo1) {
-    formData.append('archivo1', archivo1);
+    formData.append('archivo1', archivo1, `firma1_${Date.now()}.png`);
   }
   
   if (archivo2) {
-    formData.append('archivo2', archivo2);
+    formData.append('archivo2', archivo2, `firma2_${Date.now()}.png`);
+  }
+
+  console.log('FormData contents:');
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value);
   }
 
   const response = await axios.post(baseUrl, formData, {

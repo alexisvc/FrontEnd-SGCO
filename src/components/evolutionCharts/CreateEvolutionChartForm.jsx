@@ -43,15 +43,23 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
       const file = dataURLtoFile(dataURL, `firma1_${Date.now()}.png`);
       console.log('Saved Signature 1:', file);
       setArchivo1(file);
+      toast.success("Firma cargada correctamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
-
+  
   const saveSignature2 = () => {
     if (sigCanvas2.current) {
       const dataURL = sigCanvas2.current.getTrimmedCanvas().toDataURL("image/png");
       const file = dataURLtoFile(dataURL, `firma2_${Date.now()}.png`);
       console.log('Saved Signature 2:', file);
       setArchivo2(file);
+      toast.success("Firma cargada correctamente", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -83,7 +91,7 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!archivo1 || !archivo2) {
       toast.error("Por favor, asegúrate de que ambas firmas estén completadas.", {
         position: "top-right",
@@ -91,18 +99,24 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
       });
       return;
     }
-
+  
+    console.log("Archivo 1:", archivo1);
+    console.log("Archivo 2:", archivo2);
+  
     try {
       const newEvolutionChartData = {
         ...formData,
         paciente: patientId,
       };
-
-      console.log("Archivo 1:", archivo1);
-      console.log("Archivo 2:", archivo2);
-
-      await createEvolutionChart(newEvolutionChartData, archivo1, archivo2);
-
+  
+      console.log("Enviando datos:", newEvolutionChartData);
+      console.log("Enviando archivo1:", archivo1);
+      console.log("Enviando archivo2:", archivo2);
+  
+      const result = await createEvolutionChart(newEvolutionChartData, archivo1, archivo2);
+      console.log("Respuesta del servidor:", result);
+  
+      
       // Resetear los estados del formulario y las firmas
       setFormData({
         fechaCuadEvol: "",
@@ -118,10 +132,8 @@ const CreateEvolutionChartForm = ({ patientId, createEvolutionChart }) => {
       });
       navigate("/patients");
     } catch (error) {
-      toast.error("Error al crear el Cuadro de evolución.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      console.error("Error al crear el cuadro de evolución:", error);
+      toast.error("Error al crear el Cuadro de evolución.");
     }
   };
 
