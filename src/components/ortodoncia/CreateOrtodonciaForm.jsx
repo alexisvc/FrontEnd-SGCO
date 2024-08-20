@@ -37,6 +37,10 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
     } else if (e.target.name === "archivo3") {
       setArchivo3(e.target.files[0]);
     }
+    toast.success("Archivo cargada correctamente", {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   const handleInputChange = (e) => {
