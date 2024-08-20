@@ -27,6 +27,10 @@ const EditConsentimientoForm = ({ consentimiento, updateConsentimiento }) => {
       ...formData,
       archivo: e.target.files[0],
     });
+    toast.success("Archivo cargada correctamente", {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   const handleSubmit = async (e) => {

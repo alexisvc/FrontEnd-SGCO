@@ -18,6 +18,7 @@ import DisfuncionMandibularDetails from "./disfuncionMandibular/DisfuncionMandib
 import ConsentimientoDetails from "./consentimiento/ConsentimientoDetails";
 import DownloadIcon from "@mui/icons-material/Download";
 import { generatePDF } from "../resources/pdf/pdfUtils";
+import { toast } from "react-toastify";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -41,6 +42,8 @@ function a11yProps(index) {
     "aria-controls": `tabpanel-${index}`,
   };
 }
+
+
 
 const PatientAndMedicalRecordDetails = ({
   fetchPatients,
@@ -73,7 +76,20 @@ const PatientAndMedicalRecordDetails = ({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const handleGeneratePDF = () => {
+    try {
+      generatePDF(patientId);
+      toast.success("Generando PDF", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      toast.error("Error al generar el PDF", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  }
   return (
     <div style={{ backgroundColor: '#fffbf8' }}>
       <Box
@@ -90,10 +106,10 @@ const PatientAndMedicalRecordDetails = ({
           Atrás
         </Button>
         <Button
-          variant="contained"
-          startIcon={<DownloadIcon />}
-          onClick={() => generatePDF(patientId)}
-          sx={{ m: 2 }}
+        variant="contained"
+        startIcon={<DownloadIcon />}
+        onClick={handleGeneratePDF}
+        sx={{ m: 2 }}
         >
           Generar PDF
         </Button>

@@ -97,6 +97,10 @@ const EditEndodonticTreatmentsForm = ({
       setArchivo2(e.target.files[0]);
       console.log(e.target.files[0]);
     }
+    toast.success("Archivo cargada correctamente", {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   const handleCheckboxChange = (e, listName) => {

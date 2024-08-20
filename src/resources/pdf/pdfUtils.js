@@ -155,92 +155,113 @@ export const generatePDF = async (patientId) => {
         let yPos = 20;  // Posición inicial en la página
 
         // Función para agregar texto y manejar salto de página si es necesario
-        const addText = (text, yOffset) => {
+        const addText = (text, yOffset, centered = false) => {
             const pageWidth = doc.internal.pageSize.getWidth();
-            const margin = 8;
+            const margin = 10;
             const maxLineWidth = pageWidth - margin * 2;
             
             // Dividir el texto en líneas que se ajusten al ancho de la página
             const lines = doc.splitTextToSize(text, maxLineWidth);
-
+        
             lines.forEach(line => {
                 if (yPos + yOffset > 280) {  // Ajustar este valor según el margen que quieras en el borde inferior
                     doc.addPage();
                     yPos = 20;  // Reiniciar posición para nueva página
                 }
-                doc.text(line, margin, yPos);
+                
+                // Centrar el texto horizontalmente si el parámetro centered es true
+                if (centered) {
+                    const textWidth = doc.getTextWidth(line);
+                    const x = (pageWidth - textWidth) / 2;
+                    doc.text(line, x, yPos);
+                } else {
+                    doc.text(line, margin, yPos);
+                }
                 yPos += yOffset;
             });
         };
 
+        // Función para agregar texto con formato
+        const addFormattedText = (label, content, yOffset) => {
+            doc.setFont('helvetica', 'bold');
+            addText(label, yOffset - 4);
+            doc.setFont('helvetica', 'normal');
+            addText(content, yOffset - 2 );
+        }
+
         // Agregar título
         doc.setFontSize(20);
-        addText("MP ESPECIALIDADES ODONTOLÓGICAS", 10);
+        addText("MP ESPECIALIDADES ODONTOLÓGICAS", 10, true);
 
         // Agregar detalles del paciente
-        doc.setFontSize(12);
-        addText("Detalles del Paciente:", 10);
-        addText(`Nombre: ${patient.nombrePaciente}`, 10);
-        addText(`Edad: ${patient.edadPaciente}`, 10);
-        addText(`Fecha de Nacimiento: ${new Date(patient.fechaNacimiento).toLocaleDateString()}`, 10);
-        addText(`Correo: ${patient.correoPaciente}`, 10);
-        addText(`Dirección: ${patient.direccionPaciente}`, 10);
-        addText(`Género: ${patient.generoPaciente}`, 10);
-        addText(`Número de Cédula: ${patient.numeroCedula}`, 10);
-        addText(`Ocupación: ${patient.ocupacion}`, 10);
-        addText(`Teléfono: ${patient.telefono}`, 10);
-        addText(`Teléfono de Contacto de Emergencia: ${patient.telContactoEmergencia}`, 10);
-        addText(`Afinidad de Contacto de Emergencia: ${patient.afinidadContactoEmergencia}`, 10);
+        doc.setFontSize(17);
+        addText("Detalles del Paciente:", 10, true);
+
+        doc.setFontSize(11);
+        addFormattedText("Nombre: ", patient.nombrePaciente, 10);
+        addFormattedText("Edad: ", patient.edadPaciente, 10);
+        addFormattedText("Fecha de Nacimiento: ", new Date(patient.fechaNacimiento).toLocaleDateString(), 10);
+        addFormattedText("Correo: ", patient.correoPaciente, 10);
+        addFormattedText("Dirección: ", patient.direccionPaciente, 10);
+        addFormattedText("Género: ", patient.generoPaciente, 10);
+        addFormattedText("Número de Cédula: ", patient.numeroCedula, 10);
+        addFormattedText("Ocupación: ", patient.ocupacion, 10);
+        addFormattedText("Teléfono: ", patient.telefono, 10);
+        addFormattedText("Teléfono de Contacto de Emergencia: ", patient.telContactoEmergencia, 10);
+        addFormattedText("Afinidad de Contacto de Emergencia: ", patient.afinidadContactoEmergencia, 10);
 
         // Agregar historia clinica si existe
         if (medicalRecord) {
             // Agregar detalles del registro médico
-            addText("Registro Médico:", 10);
-            addText(`Fecha: ${new Date(medicalRecord.date).toLocaleDateString()}`, 10);
-            addText(`Descripción: ${medicalRecord.description}`, 10);
-            addText(`Motivo de Consulta: ${medicalRecord.motivoConsulta || 'N/A'}`, 10);
-            addText(`Expectativa del Paciente: ${medicalRecord.expectativaPaciente || 'N/A'}`, 10);
-            addText(`Enfermedad Sistémica: ${medicalRecord.enfermedadSistemica || 'N/A'}`, 10);
-            addText(`Enfermedad Preexistente: ${medicalRecord.enfermedadPreexistente || 'N/A'}`, 10);
-            addText(`Médico Tratante: ${medicalRecord.medicoTratante || 'N/A'}`, 10);
-            addText(`Teléfono del Médico Tratante: ${medicalRecord.telMedicoTratante || 'N/A'}`, 10);
-            addText(`Medicamentos que Consume: ${medicalRecord.medicamentosConsume || 'N/A'}`, 10);
-            addText(`Alergia a Medicamentos: ${medicalRecord.alergiaMedicamentos || 'N/A'}`, 10);
-            addText(`Hábitos Nocivos: ${medicalRecord.habitosNocivos.join(', ') || 'N/A'}`, 10);
-            addText(`Enfermedades Respiratorias: ${medicalRecord.enfermedadesRespiratorias || 'N/A'}`, 10);
-            addText(`Enfermedades Hormonales: ${medicalRecord.enfermedadesHormonales || 'N/A'}`, 10);
-            addText(`Está Gestando: ${medicalRecord.estaGestando ? 'Sí' : 'No'}`, 10);
-            addText(`Mes de Gestación: ${medicalRecord.mesGestacion || 'N/A'}`, 10);
-            addText(`Es Menor de Edad: ${medicalRecord.esMenorEdad ? 'Sí' : 'No'}`, 10);
-            addText(`Nombre del Representante: ${medicalRecord.nombreRepresentante || 'N/A'}`, 10);
-            addText(`Teléfono del Representante: ${medicalRecord.telRepresentante || 'N/A'}`, 10);
-            addText(`Última Visita al Dentista: ${medicalRecord.ultimaVisitaDentista || 'N/A'}`, 10);
-            addText(`Infiltraciones de Anestesia Previas: ${medicalRecord.infiltracionesAnestesiaPrev ? 'Sí' : 'No'}`, 10);
-            addText(`Reacciones Adversas a Infiltraciones: ${medicalRecord.reaccionesAdversasInfiltracion ? 'Sí' : 'No'}`, 10);
-            addText(`Qué Reacción: ${medicalRecord.queReaccionInfiltracion || 'N/A'}`, 10);
-            addText(`Exodoncia/Cirugía Previas: ${medicalRecord.exodonciaCirugiaPrevias ? 'Sí' : 'No'}`, 10);
-            addText(`Complicaciones Luego de Cirugías: ${medicalRecord.complicacionesLuegoCirugias ? 'Sí' : 'No'}`, 10);
-            addText(`Qué Complicaciones: ${medicalRecord.queComplicacionesCirugias || 'N/A'}`, 10);
-            addText(`Presenta Dificultades: ${medicalRecord.presentaDificultades.join(', ') || 'N/A'}`, 10);
-            addText(`Otra Dificultad: ${medicalRecord.otraDificultad || 'N/A'}`, 10);
-            addText(`Presenta: ${medicalRecord.presenta.join(', ') || 'N/A'}`, 10);
-            addText(`Estado de la Lengua: ${medicalRecord.estadoLengua || 'N/A'}`, 10);
-            addText(`Estado de los Labios: ${medicalRecord.estadoLabios || 'N/A'}`, 10);
-            addText(`Estado de los Carrillos: ${medicalRecord.estadoCarillos || 'N/A'}`, 10);
-            addText(`Estado del Piso de Boca: ${medicalRecord.estadoPisoBoca || 'N/A'}`, 10);
-            addText(`Estado Gingivo-Periodontal: ${medicalRecord.estadoGingivoPerio || 'N/A'}`, 10);
-            addText(`Estado de Enfermedad Periodontal: ${medicalRecord.estadoEnfermedadPerio || 'N/A'}`, 10);
-            addText(`Análisis Oclusal Derecho RM: ${medicalRecord.analisisOclusalDerRM || 'N/A'}`, 10);
-            addText(`Análisis Oclusal Derecho RC: ${medicalRecord.analisisOclusalDerRC || 'N/A'}`, 10);
-            addText(`Análisis Oclusal Izquierdo RM: ${medicalRecord.analisisOclusalIzqRM || 'N/A'}`, 10);
-            addText(`Análisis Oclusal Izquierdo RC: ${medicalRecord.analisisOclusalIzqRC || 'N/A'}`, 10);
-            addText(`Condición Esqueletal: ${medicalRecord.condicionEsqueletal || 'N/A'}`, 10);
-            addText(`Diagnóstico Oclusal: ${medicalRecord.diagnosticoOclusal || 'N/A'}`, 10);
+            doc.setFontSize(17);
+            addText("Registro Médico:", 10, true);
+            doc.setFontSize(11);
+            addFormattedText("Fecha: ", new Date(medicalRecord.date).toLocaleDateString(), 10);
+            addFormattedText("Antecedentes del Problema: ", medicalRecord.description, 10);
+            addFormattedText("Motivo de Consulta: ", medicalRecord.motivoConsulta || 'N/A', 10);
+            addFormattedText("Expectativa del Paciente: ", medicalRecord.expectativaPaciente || 'N/A', 10);
+            addFormattedText("Enfermedad Sistémica: ", medicalRecord.enfermedadSistemica || 'N/A', 10);
+            addFormattedText("Enfermedad Preexistente: ", medicalRecord.enfermedadPreexistente || 'N/A', 10);
+            addFormattedText("Médico Tratante: ", medicalRecord.medicoTratante || 'N/A', 10);
+            addFormattedText("Teléfono del Médico Tratante: ", medicalRecord.telMedicoTratante || 'N/A', 10);
+            addFormattedText("Medicamentos que Consume: ", medicalRecord.medicamentosConsume || 'N/A', 10);
+            addFormattedText("Alergia a Medicamentos: ", medicalRecord.alergiaMedicamentos || 'N/A', 10);
+            addFormattedText("Hábitos Nocivos: ", medicalRecord.habitosNocivos.join(', ') || 'N/A', 10);
+            addFormattedText("Enfermedades Respiratorias: ", medicalRecord.enfermedadesRespiratorias || 'N/A', 10);
+            addFormattedText("Enfermedades Hormonales: ", medicalRecord.enfermedadesHormonales || 'N/A', 10);
+            addFormattedText("Está Gestando: ", medicalRecord.estaGestando ? 'Sí' : 'No', 10);
+            addFormattedText("Mes de Gestación: ", medicalRecord.mesGestacion || 'N/A', 10);
+            addFormattedText("Es Menor de Edad: ", medicalRecord.esMenorEdad ? 'Sí' : 'No', 10);
+            addFormattedText("Nombre del Representante: ", medicalRecord.nombreRepresentante || 'N/A', 10);
+            addFormattedText("Teléfono del Representante: ", medicalRecord.telRepresentante || 'N/A', 10);
+            addFormattedText("Última Visita al Dentista: ", medicalRecord.ultimaVisitaDentista || 'N/A', 10);
+            addFormattedText("Infiltraciones de Anestesia Previas: ", medicalRecord.infiltracionesAnestesiaPrev ? 'Sí' : 'No', 10);
+            addFormattedText("Reacciones Adversas a Infiltraciones: ", medicalRecord.reaccionesAdversasInfiltracion ? 'Sí' : 'No', 10);
+            addFormattedText("Qué Reacción: ", medicalRecord.queReaccionInfiltracion || 'N/A', 10);
+            addFormattedText("Exodoncia/Cirugía Previas: ", medicalRecord.exodonciaCirugiaPrevias ? 'Sí' : 'No', 10);
+            addFormattedText("Complicaciones Luego de Cirugías: ", medicalRecord.complicacionesLuegoCirugias ? 'Sí' : 'No', 10);
+            addFormattedText("Qué Complicaciones: ", medicalRecord.queComplicacionesCirugias || 'N/A', 10);
+            addFormattedText("Presenta Dificultades: ", medicalRecord.presentaDificultades.join(', ') || 'N/A', 10);
+            addFormattedText("Otra Dificultad: ", medicalRecord.otraDificultad || 'N/A', 10);
+            addFormattedText("Presenta: ", medicalRecord.presenta.join(', ') || 'N/A', 10);
+            addFormattedText("Estado de la Lengua: ", medicalRecord.estadoLengua || 'N/A', 10);
+            addFormattedText("Estado de los Labios: ", medicalRecord.estadoLabios || 'N/A', 10);
+            addFormattedText("Estado de los Carrillos: ", medicalRecord.estadoCarillos || 'N/A', 10);
+            addFormattedText("Estado del Piso de Boca: ", medicalRecord.estadoPisoBoca || 'N/A', 10);
+            addFormattedText("Estado Gingivo-Periodontal: ", medicalRecord.estadoGingivoPerio || 'N/A', 10);
+            addFormattedText("Estado de Enfermedad Periodontal: ", medicalRecord.estadoEnfermedadPerio || 'N/A', 10);
+            addFormattedText("Análisis Oclusal Derecho RM: ", medicalRecord.analisisOclusalDerRM || 'N/A', 10);
+            addFormattedText("Análisis Oclusal Derecho RC: ", medicalRecord.analisisOclusalDerRC || 'N/A', 10);
+            addFormattedText("Análisis Oclusal Izquierdo RM: ", medicalRecord.analisisOclusalIzqRM || 'N/A', 10);
+            addFormattedText("Análisis Oclusal Izquierdo RC: ", medicalRecord.analisisOclusalIzqRC || 'N/A', 10);
+            addFormattedText("Condición Esqueletal: ", medicalRecord.condicionEsqueletal || 'N/A', 10);
+            addFormattedText("Diagnóstico Oclusal: ", medicalRecord.diagnosticoOclusal || 'N/A', 10);
         }
 
         // Agregar planes de tratamiento si existen
         if (treatmentPlans.length > 0) {
-            addText("Plan de tratamientos:", 10);
+            doc.setFontSize(17);
+            addText("Plan de tratamientos:", 10, true);
             // Preparar datos para la tabla
             const tableData = treatmentPlans.map(plan => [
                 plan.cita,
@@ -248,7 +269,7 @@ export const generatePDF = async (patientId) => {
                 new Date(plan.fechaPlanTrat).toLocaleDateString(),
                 plan.montoAbono
             ]);
-
+            doc.setFontSize(11);
             // Agregar tabla al PDF
             autoTable(doc, {
                 head: [['Cita', 'Actividad del Plan de Tratamiento', 'Fecha del Plan', 'Monto Abono']],
@@ -258,112 +279,131 @@ export const generatePDF = async (patientId) => {
             yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
         }
 
-        // Agregar cuadros de evolución si existen
-        if (evolutionCharts.length > 0) {
-            addText("Cuadro de evolución:", 10);
-            const tableData = evolutionCharts.map(evolution => [
-                new Date(evolution.fechaCuadEvol).toLocaleDateString(),
-                evolution.actividadCuadEvol,
-                evolution.recomendacionCuadEvol,
-                evolution.archivo1Url,
-                evolution.archivo2Url
-            ]);
+// Agregar cuadros de evolución si existen
+if (evolutionCharts.length > 0) {
+    doc.setFontSize(17);
+    addText("Cuadro de evolución:", 10, true);
+
+    // Estructura separada para almacenar las URLs de las imágenes
+    const imageUrls = evolutionCharts.map(evolution => ({
+        archivo1Url: evolution.archivo1Url,
+        archivo2Url: evolution.archivo2Url
+    }));
+
+    const tableData = evolutionCharts.map(evolution => [
+        new Date(evolution.fechaCuadEvol).toLocaleDateString(),
+        evolution.actividadCuadEvol,
+        evolution.recomendacionCuadEvol
+    ]);
+    doc.setFontSize(11);
+    autoTable(doc, {
+        head: [['Fecha', 'Actividad Clínica', 'Recomendación', 'Firma Odontólogo', 'Firma Paciente']],
+        body: tableData,
+        startY: yPos,
         
-            autoTable(doc, {
-                head: [['Fecha', 'Actividad Clínica', 'Recomendación', 'Firma Odontólogo', 'Firma Paciente']],
-                body: tableData,
-                startY: yPos,
-                didDrawCell: function (data) {
-                    // Para la columna 3 (Firma Odontólogo) y columna 4 (Firma Paciente)
-                    if (data.column.index === 3 || data.column.index === 4) {
-                        const url = data.cell.raw;
-                        const img = new Image();
-                        img.src = url;
-                        img.onload = function() {
-                            doc.addImage(img, 'JPEG', data.cell.x + 2, data.cell.y + 2, data.cell.height - 4, data.cell.height - 4);
-                        };
-                    }
+        didDrawCell: function (data) {
+            // Para la columna 3 (Firma Odontólogo) y columna 4 (Firma Paciente)
+            if (data.section === 'body' && (data.column.index === 3 || data.column.index === 4)) {
+                const rowIndex = data.row.index;
+                const evolution = evolutionCharts[rowIndex];
+                if (evolution && evolution.archivo1Url && evolution.archivo2Url) {
+                    const url = data.column.index === 3 ? evolution.archivo1Url : evolution.archivo2Url;
+                    const img = new Image();
+                    img.src = url;
+                    const imgWidth = 6;  // Ancho fijo de la imagen
+                    const imgHeight = 6; // Alto fijo de la imagen
+                    const xOffset = (data.cell.width - imgWidth) / 2;  // Centrar la imagen horizontalmente
+                    const yOffset = (data.cell.height - imgHeight) / 2; // Centrar la imagen verticalmente
+                    doc.addImage(img, 'JPEG', data.cell.x + xOffset, data.cell.y + yOffset, imgWidth, imgHeight);
                 }
-            });
-            yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
+            }
         }
+    });
+    yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
+}
 
         // Agregar cirugía patología si existe
         if (cirugiaPatologia) {
-            doc.setFontSize(20);
-            addText("Cirugía y Patología Oral", 10);
+            
+            //addFormattedText(`Cirugía y Patología Oral ${index + 1}: `, '', 10);
+            doc.setFontSize(17);
+            addText("Cirugía y Patología Oral", 10, true);
             // Agregar detalles de cada tratamiento de endodoncia
-            doc.setFontSize(12);
+            
             cirugiaPatologia.forEach((cirugiaPatologia, index) => {
-                addText(`Cirugía y Patología Oral ${index + 1}:`, 10);
-            addText(`Antecedentes: ${cirugiaPatologia.antecedentesCirPat}`, 10);
-            addText(`Alergias Médicas: ${cirugiaPatologia.alergiasMedCirPat}`, 10);
-            addText(`Patología de Tejidos Blandos: ${cirugiaPatologia.patologiaTejBland}`, 10);
-            addText(`Patología de Tejidos Duros: ${cirugiaPatologia.patologiaTejDuros}`, 10);
-            addText(`Diagnóstico Radiográfico: ${cirugiaPatologia.diagRadiografico}`, 10);
-            addText(`Localización de la Patología: ${cirugiaPatologia.localizacionPatologia}`, 10);
-            addText(`Archivo RX: ${cirugiaPatologia.archivo1Url}`, 10);
-            addText(`Archivo CS: ${cirugiaPatologia.archivo2Url}`, 10);
+            doc.setFontSize(13);
+            addFormattedText(`Cirugía y Patología Oral ${index + 1}: `, '', 10);
+            doc.setFontSize(11);
+            addFormattedText("Antecedentes: ", cirugiaPatologia.antecedentesCirPat, 10);
+            addFormattedText("Alergias Médicas: ", cirugiaPatologia.alergiasMedCirPat, 10);
+            addFormattedText("Patología de Tejidos Blandos: ", cirugiaPatologia.patologiaTejBland, 10);
+            addFormattedText("Patología de Tejidos Duros: ", cirugiaPatologia.patologiaTejDuros, 10);
+            addFormattedText("Diagnóstico Radiográfico: ", cirugiaPatologia.diagRadiografico, 10);
+            addFormattedText("Localización de la Patología: ", cirugiaPatologia.localizacionPatologia, 10);
+            addFormattedText("Archivo RX: ", cirugiaPatologia.archivo1Url, 10);
+            addFormattedText("Archivo CS: ", cirugiaPatologia.archivo2Url, 10);
             });
         }
 
         // Agregar endodoncias si existen
         if (endodonticTreatments) {
-            doc.setFontSize(20);
-            addText("Tratamientos de Endodoncia", 10);
+            doc.setFontSize(17);
+            addText("Tratamientos de Endodoncia", 10, true);
             // Agregar detalles de cada tratamiento de endodoncia
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             endodonticTreatments.forEach((treatment, index) => {
-                addText(`Tratamiento de Endodoncia ${index + 1}:`, 10);
-                addText(`Diente: ${treatment.dienteEnd}`, 10);
-                addText(`Grapa: ${treatment.grapaEnd}`, 10);
-                addText(`Diagnóstico Dental: ${treatment.diagDental}`, 10);
-                addText(`Diagnóstico Pulpar: ${treatment.diagPulpar}`, 10);
-                addText(`Intervención Indicada: ${treatment.intervencionIndicada}`, 10);
-                addText(`Técnica de Obturación: ${treatment.tecnicaObturacion}`, 10);
-                addText(`Número de Conductos: ${treatment.numConductos}`, 10);
-                addText(`Observaciones Anatómicas: ${treatment.obsAnatomicas}`, 10);
-                addText(`Etiología: ${treatment.etiologia.join(', ')}`, 10);
-                addText(`Dolor: ${treatment.dolor.join(', ')}`, 10);
-                addText(`Pruebas Clínicas: ${treatment.pruebasClinicas.join(', ')}`, 10);
-                addText(`Pruebas de Vitalidad: ${treatment.pruebasVitalidad.join(', ')}`, 10);
-                addText(`Cámara Pulpar: ${treatment.camaraPulpar.join(', ')}`, 10);
-                addText(`Conductos Radiculares: ${treatment.conductosRadiculares.join(', ')}`, 10);
-                addText(`Foramen: ${treatment.foramen.join(', ')}`, 10);
-                addText(`Ligamento Periodontal: ${treatment.ligamentoPeriodontal.join(', ')}`, 10);
-                addText(`Otros Hallazgos: ${treatment.otrosHallazgos}`, 10);
-                addText(`Conductometría Tentativa: ${treatment.conductometriaTentativa}`, 10);
-                addText(`Conductometría Definitiva: ${treatment.conductometriaDefinitiva}`, 10);
-                addText(`Técnica de Instrumentación: ${treatment.tecnicaInstrumentacion}`, 10);
-                addText(`Medicación Intra: ${treatment.medicacionIntra}`, 10);
-                addText(`Archivo RX: ${treatment.archivo1Url}`, 10);
-                addText(`Archivo CS: ${treatment.archivo2Url}`, 10);
+                doc.setFontSize(13);
+                addFormattedText(`Tratamiento de Endodoncia ${index + 1}: `, '', 10);
+                doc.setFontSize(11);
+                addFormattedText("Diente: ", treatment.dienteEnd, 10);
+                addFormattedText("Grapa: ", treatment.grapaEnd, 10);
+                addFormattedText("Diagnóstico Dental: ", treatment.diagDental, 10);
+                addFormattedText("Diagnóstico Pulpar: ", treatment.diagPulpar, 10);
+                addFormattedText("Intervención Indicada: ", treatment.intervencionIndicada, 10);
+                addFormattedText("Técnica de Obturación: ", treatment.tecnicaObturacion, 10);
+                addFormattedText("Número de Conductos: ", treatment.numConductos, 10);
+                addFormattedText("Observaciones Anatómicas: ", treatment.obsAnatomicas, 10);
+                addFormattedText("Etiología: ", treatment.etiologia.join(', '), 10);
+                addFormattedText("Dolor: ", treatment.dolor.join(', '), 10);
+                addFormattedText("Pruebas Clínicas: ", treatment.pruebasClinicas.join(', '), 10);
+                addFormattedText("Pruebas de Vitalidad: ", treatment.pruebasVitalidad.join(', '), 10);
+                addFormattedText("Cámara Pulpar: ", treatment.camaraPulpar.join(', '), 10);
+                addFormattedText("Conductos Radiculares: ", treatment.conductosRadiculares.join(', '), 10);
+                addFormattedText("Foramen: ", treatment.foramen.join(', '), 10);
+                addFormattedText("Ligamento Periodontal: ", treatment.ligamentoPeriodontal.join(', '), 10);
+                addFormattedText("Otros Hallazgos: ", treatment.otrosHallazgos, 10);
+                addFormattedText("Conductometría Tentativa: ", treatment.conductometriaTentativa, 10);
+                addFormattedText("Conductometría Definitiva: ", treatment.conductometriaDefinitiva, 10);
+                addFormattedText("Técnica de Instrumentación: ", treatment.tecnicaInstrumentacion, 10);
+                addFormattedText("Medicación Intra: ", treatment.medicacionIntra, 10);
+                addFormattedText("Archivo RX: ", treatment.archivo1Url, 10);
+                addFormattedText("Archivo CS: ", treatment.archivo2Url, 10);
             });
         }
         
         // Agregar ortodoncia si existe
         if (ortodoncia) {
-            doc.setFontSize(20);
-            addText("Ortodoncia", 10);
+            doc.setFontSize(17);
+            addText("Ortodoncia", 10, true);
             // Agregar detalles de cada tratamiento de endodoncia
-            doc.setFontSize(12);
-            addText(`Diagnóstico: ${ortodoncia.diagnostico}`, 10);
-            addText(`Objetivo: ${ortodoncia.objetivo}`, 10);
-            addText(`Tiempo Aproximado: ${ortodoncia.tiempoAproximado}`, 10);
-            addText(`Tipo de Bracket: ${ortodoncia.tipoBracket}`, 10);
-            addText(`Aparato Ortopédico: ${ortodoncia.aparatoOrtopedico}`, 10);
-            addText(`Observaciones: ${ortodoncia.observaciones}`, 10);
-            addText(`Archivo RX: ${ortodoncia.archivo1Url}`, 10);
-            addText(`Archivo CS: ${ortodoncia.archivo2Url}`, 10);
-            addText(`Archivo C: ${ortodoncia.archivo3Url}`, 10);
+            doc.setFontSize(11);
+            addFormattedText("Diagnóstico: ", ortodoncia.diagnostico, 10);
+            addFormattedText("Objetivo: ", ortodoncia.objetivo, 10);
+            addFormattedText("Tiempo Aproximado: ", ortodoncia.tiempoAproximado, 10);
+            addFormattedText("Tipo de Bracket: ", ortodoncia.tipoBracket, 10);
+            addFormattedText("Aparato Ortopédico: ", ortodoncia.aparatoOrtopedico, 10);
+            addFormattedText("Observaciones: ", ortodoncia.observaciones, 10);
+            addFormattedText("Archivo RX: ", ortodoncia.archivo1Url, 10);
+            addFormattedText("Archivo CS: ", ortodoncia.archivo2Url, 10);
+            addFormattedText("Archivo C: ", ortodoncia.archivo3Url, 10);
         }
 
         // Agregar evoluciones de ortodoncia si existen
         if (evolucionesOrtodoncia.length > 0) {
-            doc.setFontSize(16);
+            doc.setFontSize(14);
             addText("Evoluciones Ortodoncia:", 10);
             // Preparar datos para la tabla
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             const tableData = evolucionesOrtodoncia.map(evolucion => [
                 new Date(evolucion.fechaEvolucion).toLocaleDateString(),
                 evolucion.evolucion,
@@ -381,110 +421,113 @@ export const generatePDF = async (patientId) => {
 
         // Agregar detalles de rehabilitación oral si existe
         if (rehabilitacionOral) {
-            doc.setFontSize(20);
-            addText("Rehabilitación Oral", 10);
+            doc.setFontSize(17);
+            addText("Rehabilitación Oral", 10, true);
 
             // Agregar detalles de cada campo de rehabilitación oral
-            doc.setFontSize(12);
-            addText(`Referencias Horizontales: ${rehabilitacionOral.refHorizontal.join(', ')}`, 10);
-            addText(`Referencias Verticales: ${rehabilitacionOral.refVertical.join(', ')}`, 10);
-            addText(`Longitud del Labio: ${rehabilitacionOral.longitudLabio.join(', ')}`, 10);
-            addText(`Forma del Labio: ${rehabilitacionOral.formaLabio.join(', ')}`, 10);
-            addText(`Exposición de la Sonrisa: ${rehabilitacionOral.exposicionSonrisa.join(', ')}`, 10);
-            addText(`Corredor Bucal: ${rehabilitacionOral.corredorBucal.join(', ')}`, 10);
-            addText(`Orientación del Plano Oclusal Anterior: ${rehabilitacionOral.orientacionPlanoOclusalAnt.join(', ')}`, 10);
-            addText(`Visibilidad del Borde Superior: ${rehabilitacionOral.visibilidadBordeSup}`, 10);
-            addText(`Orientación del Plano Oclusal Posterior: ${rehabilitacionOral.orientacionPlanoOclusalPost.join(', ')}`, 10);
-            addText(`Ancho del Incisivo Central Superior: ${rehabilitacionOral.anchoIncisivoCentalSup}`, 10);
-            addText(`Longitud: ${rehabilitacionOral.longitud}`, 10);
-            addText(`Color de los Dientes: ${rehabilitacionOral.colorDientes}`, 10);
-            addText(`Simetría Gingival: ${rehabilitacionOral.simetriaGingival.join(', ')}`, 10);
-            addText(`Biotipo Periodontal: ${rehabilitacionOral.biotipoPeriodental.join(', ')}`, 10);
-            addText(`Número de Dientes: ${rehabilitacionOral.numeroDiente.join(', ')}`, 10);
-            addText(`Pérdida de Hueso Periodontal: ${rehabilitacionOral.perdidaHuesoPeriodental.join(', ')}`, 10);
-            addText(`Otras Patologías Óseas: ${rehabilitacionOral.otrasPatologiasOseas}`, 10);
-            addText(`Restricción de Vías Respiratorias: ${rehabilitacionOral.restriccionViasRespiratorias}`, 10);
-            addText(`Relación Incisal: ${rehabilitacionOral.relacionIncisal.join(', ')}`, 10);
-            addText(`Overbite: ${rehabilitacionOral.overbite.join(', ')}`, 10);
-            addText(`Overjet: ${rehabilitacionOral.overjet.join(', ')}`, 10);
-            addText(`Tinitus: ${rehabilitacionOral.tinitus.join(', ')}`, 10);
-            addText(`Puede Repetir la Mordida: ${rehabilitacionOral.puedeRepetirMordida.join(', ')}`, 10);
-            addText(`Restauraciones Defectuosas: ${rehabilitacionOral.restauracionesDefectuosas ? 'Sí' : 'No'}`, 10);
+            doc.setFontSize(11);
+            addFormattedText("Referencias Horizontales: ", rehabilitacionOral.refHorizontal.join(', '), 10);
+            addFormattedText("Referencias Verticales: ", rehabilitacionOral.refVertical.join(', '), 10);
+            addFormattedText("Longitud del Labio: ", rehabilitacionOral.longitudLabio.join(', '), 10);
+            addFormattedText("Forma del Labio: ", rehabilitacionOral.formaLabio.join(', '), 10);
+            addFormattedText("Exposición de la Sonrisa: ", rehabilitacionOral.exposicionSonrisa.join(', '), 10);
+            addFormattedText("Corredor Bucal: ", rehabilitacionOral.corredorBucal.join(', '), 10);
+            addFormattedText("Orientación del Plano Oclusal Anterior: ", rehabilitacionOral.orientacionPlanoOclusalAnt.join(', '), 10);
+            addFormattedText("Visibilidad del Borde Superior: ", rehabilitacionOral.visibilidadBordeSup, 10);
+            addFormattedText("Orientación del Plano Oclusal Posterior: ", rehabilitacionOral.orientacionPlanoOclusalPost.join(', '), 10);
+            addFormattedText("Ancho del Incisivo Central Superior: ", rehabilitacionOral.anchoIncisivoCentalSup, 10);
+            addFormattedText("Longitud: ", rehabilitacionOral.longitud, 10);
+            addFormattedText("Color de los Dientes: ", rehabilitacionOral.colorDientes, 10);
+            addFormattedText("Simetría Gingival: ", rehabilitacionOral.simetriaGingival.join(', '), 10);
+            addFormattedText("Biotipo Periodontal: ", rehabilitacionOral.biotipoPeriodental.join(', '), 10);
+            addFormattedText("Número de Dientes: ", rehabilitacionOral.numeroDiente.join(', '), 10);
+            addFormattedText("Pérdida de Hueso Periodontal: ", rehabilitacionOral.perdidaHuesoPeriodental.join(', '), 10);
+            addFormattedText("Otras Patologías Óseas: ", rehabilitacionOral.otrasPatologiasOseas, 10);
+            addFormattedText("Restricción de Vías Respiratorias: ", rehabilitacionOral.restriccionViasRespiratorias, 10);
+            addFormattedText("Relación Incisal: ", rehabilitacionOral.relacionIncisal.join(', '), 10);
+            addFormattedText("Overbite: ", rehabilitacionOral.overbite.join(', '), 10);
+            addFormattedText("Overjet: ", rehabilitacionOral.overjet.join(', '), 10);
+            addFormattedText("Tinitus: ", rehabilitacionOral.tinitus.join(', '), 10);
+            addFormattedText("Puede Repetir la Mordida: ", rehabilitacionOral.puedeRepetirMordida.join(', '), 10);
+            
+            addFormattedText("Restauraciones Defectuosas: ", rehabilitacionOral.restauracionesDefectuosas ? 'Sí' : 'No', 10);
             if (rehabilitacionOral.restauracionesDefectuosas) {
-                addText(`Restauraciones Defectuosas Cuáles: ${rehabilitacionOral.restauracionesDefectuosasCuales}`, 10);
+                addFormattedText("Restauraciones Defectuosas Cuáles: ", rehabilitacionOral.restauracionesDefectuosasCuales, 10);
             }
-            addText(`Lesiones Cariosas: ${rehabilitacionOral.lesionesCariosas ? 'Sí' : 'No'}`, 10);
+            addFormattedText("Lesiones Cariosas: ", rehabilitacionOral.lesionesCariosas ? 'Sí' : 'No', 10);
             if (rehabilitacionOral.lesionesCariosas) {
-                addText(`Lesiones Cariosas Cuáles: ${rehabilitacionOral.lesionesCariosasCuales}`, 10);
+                addFormattedText("Lesiones Cariosas Cuáles: ", rehabilitacionOral.lesionesCariosasCuales, 10);
             }
-            addText(`Dientes Faltantes: ${rehabilitacionOral.dientesFaltantes ? 'Sí' : 'No'}`, 10);
+            addFormattedText("Dientes Faltantes: ", rehabilitacionOral.dientesFaltantes ? 'Sí' : 'No', 10);
             if (rehabilitacionOral.dientesFaltantes) {
-                addText(`Dientes Faltantes Cuáles: ${rehabilitacionOral.dientesFaltantesCuales}`, 10);
+                addFormattedText("Dientes Faltantes Cuáles: ", rehabilitacionOral.dientesFaltantesCuales, 10);
             }
-            addText(`Corona Dental: ${rehabilitacionOral.coronaDental ? 'Sí' : 'No'}`, 10);
+            addFormattedText("Corona Dental: ", rehabilitacionOral.coronaDental ? 'Sí' : 'No', 10);
             if (rehabilitacionOral.coronaDental) {
-                addText(`Corona Dental Cuáles: ${rehabilitacionOral.coronaDentalCuales}`, 10);
+                addFormattedText("Corona Dental Cuáles: ", rehabilitacionOral.coronaDentalCuales, 10);
             }
-            addText(`Espigos: ${rehabilitacionOral.espigos ? 'Sí' : 'No'}`, 10);
+            addFormattedText("Espigos: ", rehabilitacionOral.espigos ? 'Sí' : 'No', 10);
             if (rehabilitacionOral.espigos) {
-                addText(`Espigos Cuáles: ${rehabilitacionOral.espigosCuales}`, 10);
+                addFormattedText("Espigos Cuáles: ", rehabilitacionOral.espigosCuales, 10);
             }
-            addText(`Espigos 2: ${rehabilitacionOral.espigos2.join(', ')}`, 10);
-            addText(`Implantes: ${rehabilitacionOral.implantes ? 'Sí' : 'No'}`, 10);
+
+
+            addFormattedText("Espigos 2: ", rehabilitacionOral.espigos2.join(', '), 10);
+            addFormattedText("Implantes: ", rehabilitacionOral.implantes ? 'Sí' : 'No', 10);
             if (rehabilitacionOral.implantes) {
-                addText(`Implantes Cuáles: ${rehabilitacionOral.implantesCuales}`, 10);
+                addFormattedText("Implantes Cuáles: ", rehabilitacionOral.implantesCuales, 10);
             }
-            addText(`Edéntulo Parcial: ${rehabilitacionOral.edentuloParcial.join(', ')}`, 10);
-            addText(`Clasificación de Kennedy: ${rehabilitacionOral.clasificacionDeKenedy}`, 10);
-            addText(`Edéntulo Total: ${rehabilitacionOral.edentuloTotal.join(', ')}`, 10);
-            addText(`Diagnóstico Oclusal: ${rehabilitacionOral.diagnosticoOclusal}`, 10);
-            addText(`Archivo RX: ${rehabilitacionOral.archivo1Url}`, 10);
-            addText(`Archivo CS: ${rehabilitacionOral.archivo2Url}`, 10);
-            addText(`Archivo C: ${rehabilitacionOral.archivo3Url}`, 10);
+            addFormattedText("Edéntulo Parcial: ", rehabilitacionOral.edentuloParcial.join(', '), 10);
+            addFormattedText("Clasificación de Kennedy: ", rehabilitacionOral.clasificacionDeKenedy, 10);
+            addFormattedText("Edéntulo Total: ", rehabilitacionOral.edentuloTotal.join(', '), 10);
+            addFormattedText("Diagnóstico Oclusal: ", rehabilitacionOral.diagnosticoOclusal, 10);
+            addFormattedText("Archivo RX: ", rehabilitacionOral.archivo1Url, 10);
+            addFormattedText("Archivo CS: ", rehabilitacionOral.archivo2Url, 10);
+            addFormattedText("Archivo C: ", rehabilitacionOral.archivo3Url, 10);
         }
 
         //Agregar disfuncion mandibular si existe
         if (disfuncionMandibular) {
-            doc.setFontSize(20);
-            addText("Disfunción Mandibular", 10);
+            doc.setFontSize(17);
+            addText("Disfunción Mandibular", 10, true);
 
             // Agregar detalles de cada campo de disfunción mandibular
-            doc.setFontSize(12);
-            addText(`Hueso Cortical: ${disfuncionMandibular.huesoCortical ? 'Sí' : 'No'}`, 10);
-            addText(`Espacio Articular: ${disfuncionMandibular.espacioArticular ? 'Sí' : 'No'}`, 10);
-            addText(`Cóndilo: ${disfuncionMandibular.condillo ? 'Sí' : 'No'}`, 10);
-            addText(`Desviación de la Línea Media: ${disfuncionMandibular.desviacionLineaMedia ? 'Sí' : 'No'}`, 10);
-            addText(`Con Reducción: ${disfuncionMandibular.conReduccion ? 'Sí' : 'No'}`, 10);
-            addText(`Sin Reducción: ${disfuncionMandibular.sinReduccion ? 'Sí' : 'No'}`, 10);
-            addText(`Click Articular: ${disfuncionMandibular.clickArticular ? 'Sí' : 'No'}`, 10);
-            addText(`Crepitación: ${disfuncionMandibular.crepitacion ? 'Sí' : 'No'}`, 10);
-            addText(`Subluxación: ${disfuncionMandibular.subluxacion ? 'Sí' : 'No'}`, 10);
-            addText(`Dolor Articular Derecho: ${disfuncionMandibular.dolorArticularDer.join(', ')}`, 10);
-            addText(`Dolor Articular Izquierdo: ${disfuncionMandibular.dolorArticularIzq.join(', ')}`, 10);
-            addText(`Dolor Muscular Izquierdo: ${disfuncionMandibular.dolorMuscularIzq.join(', ')}`, 10);
-            addText(`Dolor Muscular Derecho: ${disfuncionMandibular.dolorMuscularDer.join(', ')}`, 10);
-            addText(`Dolor Muscular: ${disfuncionMandibular.dolorMuscular.join(', ')}`, 10);
-            addText(`Descripción del Dolor Muscular: ${disfuncionMandibular.dolorMuscularDescripcion}`, 10);
-            addText(`Dolor Orofacial Común Muscular: ${disfuncionMandibular.dolorOrofacialComunMuscular.join(', ')}`, 10);
-            addText(`Mallampati: ${disfuncionMandibular.mallampati.join(', ')}`, 10);
-            addText(`Dolor Orofacial Común Apnea: ${disfuncionMandibular.dolorOrofacialComunApnea.join(', ')}`, 10);
+            doc.setFontSize(11);
+            addFormattedText("Hueso Cortical: ", disfuncionMandibular.huesoCortical ? 'Sí' : 'No', 10);
+            addFormattedText("Espacio Articular: ", disfuncionMandibular.espacioArticular ? 'Sí' : 'No', 10);
+            addFormattedText("Cóndilo: ", disfuncionMandibular.condillo ? 'Sí' : 'No', 10);
+            addFormattedText("Desviación de la Línea Media: ", disfuncionMandibular.desviacionLineaMedia ? 'Sí' : 'No', 10);
+            addFormattedText("Con Reducción: ", disfuncionMandibular.conReduccion ? 'Sí' : 'No', 10);
+            addFormattedText("Sin Reducción: ", disfuncionMandibular.sinReduccion ? 'Sí' : 'No', 10);
+            addFormattedText("Click Articular: ", disfuncionMandibular.clickArticular ? 'Sí' : 'No', 10);
+            addFormattedText("Crepitación: ", disfuncionMandibular.crepitacion ? 'Sí' : 'No', 10);
+            addFormattedText("Subluxación: ", disfuncionMandibular.subluxacion ? 'Sí' : 'No', 10);
+            addFormattedText("Dolor Articular Derecho: ", disfuncionMandibular.dolorArticularDer.join(', '), 10);
+            addFormattedText("Dolor Articular Izquierdo: ", disfuncionMandibular.dolorArticularIzq.join(', '), 10);
+            addFormattedText("Dolor Muscular Izquierdo: ", disfuncionMandibular.dolorMuscularIzq.join(', '), 10);
+            addFormattedText("Dolor Muscular Derecho: ", disfuncionMandibular.dolorMuscularDer.join(', '), 10);
+            addFormattedText("Dolor Muscular: ", disfuncionMandibular.dolorMuscular.join(', '), 10);
+            addFormattedText("Descripción del Dolor Muscular: ", disfuncionMandibular.dolorMuscularDescripcion, 10);
+            addFormattedText("Dolor Orofacial Común Muscular: ", disfuncionMandibular.dolorOrofacialComunMuscular.join(', '), 10);
+            addFormattedText("Mallampati: ", disfuncionMandibular.mallampati.join(', '), 10);
+            addFormattedText("Dolor Orofacial Común Apnea: ", disfuncionMandibular.dolorOrofacialComunApnea.join(', '), 10);
         }
 
         // Agregar detalles de periodoncia si existen
         if (periodoncia) {
-            doc.setFontSize(20);
-            addText("Periodoncia", 10);
+            doc.setFontSize(17);
+            addText("Periodoncia", 10, true);
         
             // Detalles individuales
-            doc.setFontSize(12);
-            addText(`Diagnóstico: ${periodoncia.diagnosticoPer}`, 10);
-            addText(`Observación: ${periodoncia.observacionPer}`, 10);
-            addText(`Archivo 1: ${periodoncia.archivo1Url}`, 10);
-            addText(`Archivo 2: ${periodoncia.archivo2Url}`, 10);
+            doc.setFontSize(11);
+            addFormattedText("Diagnóstico: ", periodoncia.diagnosticoPer, 10);
+            addFormattedText("Observación: ", periodoncia.observacionPer, 10);
+            addFormattedText("Archivo 1: ", periodoncia.archivo1Url, 10);
+            addFormattedText("Archivo 2: ", periodoncia.archivo2Url, 10);
         
             yPos += 40; // Ajustar posición después de los textos individuales
             
-            doc.setFontSize(18);
+            doc.setFontSize(16);
             addText('Inferior', 10); // Espacio entre texto y tabla
             // Datos para los campos con 16 columnas
             const fieldsInferior = [
@@ -556,7 +599,7 @@ export const generatePDF = async (patientId) => {
             });
             
 
-            doc.setFontSize(18);
+            doc.setFontSize(16);
             addText('Superior', 10);
             // Datos para los campos con 16 columnas
             const fieldsSuperior = [
