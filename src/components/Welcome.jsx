@@ -34,6 +34,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
 function Welcome({ user, logout, isGuestUser }) {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -139,7 +140,7 @@ function Welcome({ user, logout, isGuestUser }) {
             <br></br>
 
             <div>
-              <Link to="/main-menu" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
+              <Link to="/odontologos" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
                 <Button
                 variant="contained"
                 color="primary"
@@ -170,31 +171,31 @@ function Welcome({ user, logout, isGuestUser }) {
             <div>
               {user.username === 'admin' && (
                 <Link to="/main-menu" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<TimelineIcon style={{ fontSize: 40, marginRight: "45" }}/>}
-                    style={{
-                      fontSize: '18px', 
-                      padding: '20px', 
-                      margin: '5%',
-                      width: '100%', 
-                      display: 'flex', 
-                      justifyContent: 'center', 
-                      alignItems: 'center', 
-                      textAlign: 'center', 
-                    }}
-                    sx={{
-                      color: 'white',
-                      backgroundColor: "#8ba082",
-                      '&:hover': {
-                        backgroundColor: "#5d6c56", 
-                      },
-                    }}
-                  >
-                    PLANIFICACIÓN Y PRESUPUESTO
-                  </Button>
-                </Link>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<TimelineIcon style={{ fontSize: 40, marginRight: "45" }}/>}
+                  style={{
+                    fontSize: '18px', 
+                    padding: '20px', 
+                    margin: '5%',
+                    width: '100%', 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    textAlign: 'center', 
+                  }}
+                  sx={{
+                    color: 'white',
+                    backgroundColor: "#8ba082",
+                    '&:hover': {
+                      backgroundColor: "#5d6c56", 
+                    },
+                  }}
+                >
+                  PLANIFICACIÓN Y PRESUPUESTO
+                </Button>
+              </Link>
               )}
             </div>
 

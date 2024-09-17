@@ -27,6 +27,8 @@ import usePatientTreatments from "./hooks/usePatientTreatments";
 import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
+import { useOdontologos } from "./hooks/useOdontologos";
+import Odontologos from "./components/odontologos/Odontologos";
 
 
 function App() {
@@ -65,6 +67,15 @@ function App() {
     updateCirugiaPatologia,
     fetchCirugiaPatologiaByPatientId,
   } = useCirugiaPatologia();
+  const {
+    odontologos,
+    odontologo,
+    fetchOdontologos,
+    fetchOdontologoById,
+    createOdontologo,
+    updateOdontologo,
+    setOdontologo
+  } = useOdontologos();
   
 
   const isLoggedIn = !!user;
@@ -81,7 +92,6 @@ function App() {
                 isLoggedIn ? <Navigate to="/" /> : <LoginForm login={login} />
               }
             />
-
             <Route
               path="/patients"
               element={
@@ -95,6 +105,24 @@ function App() {
                     createPatient={createPatient}
                     updatePatient={updatePatient}
                     setPatient={setPatient}
+                  />
+                ) : (
+                  <Home />
+                )
+              }
+            />
+            <Route
+              path="/odontologos"
+              element={
+                isLoggedIn ? (
+                  <Odontologos
+                    odontologos={odontologos}
+                    odontologo={odontologo}
+                    fetchOdontologos={fetchOdontologos}
+                    fetchOdontologoById={fetchOdontologoById}
+                    createOdontologo={createOdontologo}
+                    updateOdontologo={updateOdontologo}
+                    setOdontologo={setOdontologo}
                   />
                 ) : (
                   <Home />
