@@ -29,6 +29,7 @@ import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
 import { useOdontologos } from "./hooks/useOdontologos";
 import Odontologos from "./components/odontologos/Odontologos";
+import Appointment from "./components/appointments/Appointment";
 
 
 function App() {
@@ -111,24 +112,6 @@ function App() {
                 )
               }
             />
-            <Route
-              path="/odontologos"
-              element={
-                isLoggedIn ? (
-                  <Odontologos
-                    odontologos={odontologos}
-                    odontologo={odontologo}
-                    fetchOdontologos={fetchOdontologos}
-                    fetchOdontologoById={fetchOdontologoById}
-                    createOdontologo={createOdontologo}
-                    updateOdontologo={updateOdontologo}
-                    setOdontologo={setOdontologo}
-                  />
-                ) : (
-                  <Home />
-                )
-              }
-            />
 
             <Route
               path="/patients/:patientId"
@@ -158,6 +141,31 @@ function App() {
                   fetchCirugiaPatologiaByPatientId={fetchCirugiaPatologiaByPatientId}
 
                 />
+              }
+            />
+
+            <Route
+              path="/odontologos"
+              element={
+                isLoggedIn ? (
+                  <Odontologos
+                    odontologos={odontologos}
+                    odontologo={odontologo}
+                    fetchOdontologos={fetchOdontologos}
+                    fetchOdontologoById={fetchOdontologoById}
+                    createOdontologo={createOdontologo}
+                    updateOdontologo={updateOdontologo}
+                    setOdontologo={setOdontologo}
+                  />
+                ) : (
+                  <Home />
+                )
+              }
+            />
+            <Route
+              path="/odontologos/:odontologoId"
+              element={
+                <Appointment />
               }
             />
 

@@ -101,43 +101,43 @@ const Odontologos = () => {
   };
 
   const handleCreateSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-      await createOdontologo({
-        nombreOdontologo: newOdontologo.nombreOdontologo,
-        edadOdontologo: newOdontologo.edadOdontologo,
-        correoOdontologo: newOdontologo.correoOdontologo,
-        direccionOdontologo: newOdontologo.direccionOdontologo,
-        generoOdontologo: newOdontologo.generoOdontologo,
-        especialidad: newOdontologo.especialidad,
-        telefono: newOdontologo.telefono
-      });
-      toast.success('Odontólogo creado exitosamente', {
-        position: 'top-right',
-        autoClose: 3000,
-      });
-  
-      // Limpiar formulario
-      setNewOdontologo({
-        nombreOdontologo: '',
-        edadOdontologo: '',
-        correoOdontologo: '',
-        direccionOdontologo: '',
-        generoOdontologo: '',
-        especialidad: '',
-        telefono: ''
-      });
-  
-      setShowCreateForm(false);
-      fetchOdontologos();
-    } catch (error) {
-      toast.error('Error al crear el odontólogo.', {
-        position: 'top-right',
-        autoClose: 3000,
-      });
-    }
-  };
+  e.preventDefault();
+
+  try {
+    await createOdontologo({
+      nombreOdontologo: newOdontologo.nombreOdontologo,
+      edadOdontologo: newOdontologo.edadOdontologo,
+      correoOdontologo: newOdontologo.correoOdontologo,
+      direccionOdontologo: newOdontologo.direccionOdontologo,
+      generoOdontologo: newOdontologo.generoOdontologo,
+      especialidad: newOdontologo.especialidad,
+      telefono: newOdontologo.telefono
+    });
+    toast.success('Odontólogo creado exitosamente', {
+      position: 'top-right',
+      autoClose: 3000,
+    });
+
+    // Limpiar formulario
+    setNewOdontologo({
+      nombreOdontologo: '',
+      edadOdontologo: '',
+      correoOdontologo: '',
+      direccionOdontologo: '',
+      generoOdontologo: '',
+      especialidad: '',
+      telefono: ''
+    });
+
+    setShowCreateForm(false);
+    fetchOdontologos();
+  } catch (error) {
+    toast.error('Error al crear el odontólogo.', {
+      position: 'top-right',
+      autoClose: 3000,
+    });
+  }
+};
 
   const handleViewOdontologo = (odontologo) => {
     navigate(`/odontologos/${odontologo.id}`, { state: { odontologo } });
