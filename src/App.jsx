@@ -30,6 +30,8 @@ import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
 import { useOdontologos } from "./hooks/useOdontologos";
 import Odontologos from "./components/odontologos/Odontologos";
 import Appointment from "./components/appointments/Appointment";
+import AppointmentMenu from "./components/appointments/AppointmentMenu";
+import EditOdontologo from "./components/odontologos/EditOdontologo";
 
 
 function App() {
@@ -143,6 +145,12 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/agendamiento"
+              element={
+                <AppointmentMenu />
+              }
+            />
 
             <Route
               path="/odontologos"
@@ -160,6 +168,12 @@ function App() {
                 ) : (
                   <Home />
                 )
+              }
+            />
+            <Route
+              path="/odontologos/editar/:odontologoId"
+              element={
+                <EditOdontologo />
               }
             />
             <Route

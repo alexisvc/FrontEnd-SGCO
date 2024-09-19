@@ -11,11 +11,11 @@ import {
   FaUserAlt,
 } from "react-icons/fa";
 import PopUpExit from "./extras/PopUpExit";
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import LogoutIcon from '@mui/icons-material/Logout';
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Button,
   Typography,
@@ -34,9 +34,8 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
-function Welcome({ user, logout, isGuestUser }) {
+function Welcome({ user, logout }) {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -53,85 +52,95 @@ function Welcome({ user, logout, isGuestUser }) {
         />
       )}
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", position: "fixed", top: 0, padding: 8 }}>
-  {isLoggedIn && (
-    <>
-      <Button
-        variant="contained"
-        size = "large"
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate("/")}
-        sx={{
-          color: 'white',
-          backgroundColor: "#8ba082",
-          margin: 2,
-          '&:hover': {
-            backgroundColor: "#5d6c56", 
-          },
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          position: "fixed",
+          top: 0,
+          padding: 8,
         }}
       >
-        Atrás
-      </Button>
-    </>
-  )}
+        {isLoggedIn && (
+          <>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => navigate("/")}
+              sx={{
+                color: "white",
+                backgroundColor: "#8ba082",
+                margin: 2,
+                "&:hover": {
+                  backgroundColor: "#5d6c56",
+                },
+              }}
+            >
+              Atrás
+            </Button>
+          </>
+        )}
 
-  {isLoggedIn && (
-    <>
-      <Button
-        startIcon={<LogoutIcon />}
-        variant="contained"
-        size = "large"
-        onClick={() => setIsPopUpOpen(true)}
-        sx={{
-          color: 'white',
-          backgroundColor: "#8ba082",
-          margin: 2,
-          '&:hover': {
-            backgroundColor: "#5d6c56", 
-          },
-        }}
-      >
-        Salir
-      </Button>
-    </>
-  )}
-</div>
-
-
-      
-      {/*<img
-        className="img-home"
-        src="public\credits\home.png"
-        alt="imagen de la aventura"
-      />*/}
+        {isLoggedIn && (
+          <>
+            <Button
+              startIcon={<LogoutIcon />}
+              variant="contained"
+              size="large"
+              onClick={() => setIsPopUpOpen(true)}
+              sx={{
+                color: "white",
+                backgroundColor: "#8ba082",
+                margin: 2,
+                "&:hover": {
+                  backgroundColor: "#5d6c56",
+                },
+              }}
+            >
+              Salir
+            </Button>
+          </>
+        )}
+      </div>
       <div></div>
 
       {isLoggedIn && (
         <>
           <div>
             <div className="buttons-welcome">
-              <Link to="/patients" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
+              <Link
+                to="/patients"
+                className="link-button"
+                style={{ textDecoration: "none", width: "100%" }}
+              >
                 <Button
-                variant="contained"
-                color="primary"
-                startIcon={<AutoStoriesIcon style={{ fontSize: 40, marginRight: "140"}}/>}
-                style={{
-                  fontSize: '18px', 
-                  padding: '20px', 
-                  margin: '5%',
-                  width: '100%', 
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  alignItems: 'center', 
-                  textAlign: 'center', 
-                }}
-                sx={{
-                  color: 'white',
-                  backgroundColor: "#8ba082",
-                  '&:hover': {
-                    backgroundColor: "#5d6c56", 
-                  },
-                }}
+                  variant="contained"
+                  color="primary"
+                  startIcon={
+                    <AutoStoriesIcon
+                      style={{ fontSize: 40, marginRight: "140" }}
+                    />
+                  }
+                  style={{
+                    fontSize: "18px",
+                    padding: "20px",
+                    margin: "5%",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                  sx={{
+                    color: "white",
+                    backgroundColor: "#8ba082",
+                    "&:hover": {
+                      backgroundColor: "#5d6c56",
+                    },
+                  }}
                 >
                   Historias Clinicas
                 </Button>
@@ -140,79 +149,90 @@ function Welcome({ user, logout, isGuestUser }) {
             <br></br>
 
             <div>
-              <Link to="/odontologos" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
-                <Button
-                variant="contained"
-                color="primary"
-                startIcon={<CalendarMonthIcon style={{ fontSize: 40, marginRight: "90" }}/>}
-                style={{
-                  fontSize: '18px', 
-                  padding: '20px', 
-                  margin: '5%',
-                  width: '100%', 
-                  display: 'flex', 
-                  justifyContent: 'center',
-                  alignItems: 'center', 
-                  textAlign: 'center', 
-                }}
-                sx={{
-                  color: 'white',
-                  backgroundColor: "#8ba082",
-                  '&:hover': {
-                    backgroundColor: "#5d6c56", 
-                  },
-                }}
-                >
-                    Agenda de Citas
-                  </Button>
-                </Link>
-            </div>
-            <br></br>
-            <div>
-              {user.username === 'admin' && (
-                <Link to="/main-menu" className="link-button" style={{ textDecoration: 'none', width: '100%' }}>
+              <Link
+                to="/agendamiento"
+                className="link-button"
+                style={{ textDecoration: "none", width: "100%" }}
+              >
                 <Button
                   variant="contained"
                   color="primary"
-                  startIcon={<TimelineIcon style={{ fontSize: 40, marginRight: "45" }}/>}
+                  startIcon={
+                    <CalendarMonthIcon
+                      style={{ fontSize: 40, marginRight: "90" }}
+                    />
+                  }
                   style={{
-                    fontSize: '18px', 
-                    padding: '20px', 
-                    margin: '5%',
-                    width: '100%', 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
-                    textAlign: 'center', 
+                    fontSize: "18px",
+                    padding: "20px",
+                    margin: "5%",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
                   }}
                   sx={{
-                    color: 'white',
+                    color: "white",
                     backgroundColor: "#8ba082",
-                    '&:hover': {
-                      backgroundColor: "#5d6c56", 
+                    "&:hover": {
+                      backgroundColor: "#5d6c56",
                     },
                   }}
                 >
-                  PLANIFICACIÓN Y PRESUPUESTO
+                  Agenda de Citas
                 </Button>
               </Link>
+            </div>
+            <br></br>
+            <div>
+              {user.username === "admin" && (
+                <Link
+                  to="/main-menu"
+                  className="link-button"
+                  style={{ textDecoration: "none", width: "100%" }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={
+                      <TimelineIcon
+                        style={{ fontSize: 40, marginRight: "45" }}
+                      />
+                    }
+                    style={{
+                      fontSize: "18px",
+                      padding: "20px",
+                      margin: "5%",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#8ba082",
+                      "&:hover": {
+                        backgroundColor: "#5d6c56",
+                      },
+                    }}
+                  >
+                    PLANIFICACIÓN Y PRESUPUESTO
+                  </Button>
+                </Link>
               )}
             </div>
-
-        </div>
+          </div>
         </>
-        
       )}
-      
+
       <div className="footer">
-        
         <div>
           {/*<p>Realizado por: Vizuete Alexis</p>
           <p>© 2024 PictoAndes</p>*/}
         </div>
-        
       </div>
-      
     </div>
   );
 }
