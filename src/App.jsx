@@ -32,6 +32,7 @@ import Odontologos from "./components/odontologos/Odontologos";
 import Appointment from "./components/appointments/Appointment";
 import AppointmentMenu from "./components/appointments/AppointmentMenu";
 import EditOdontologo from "./components/odontologos/EditOdontologo";
+import AppointmentDetails from "./components/appointments/AppointmentDetails";
 
 
 function App() {
@@ -151,6 +152,12 @@ function App() {
                 <AppointmentMenu />
               }
             />
+            <Route
+              path="/agendamiento/detalles"
+              element={
+                <AppointmentDetails />
+              }
+            />
 
             <Route
               path="/odontologos"
@@ -177,7 +184,7 @@ function App() {
               }
             />
             <Route
-              path="/odontologos/:odontologoId"
+              path="/agendamiento/cita"
               element={
                 <Appointment />
               }

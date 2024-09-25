@@ -84,7 +84,7 @@ const AppointmentMenu = () => {
       </div>
       <div>
         <Link
-          to="/agendamiento"
+          to="/agendamiento/detalles"
           className="link-button"
           style={{ textDecoration: "none", width: "100%" }}
         >
