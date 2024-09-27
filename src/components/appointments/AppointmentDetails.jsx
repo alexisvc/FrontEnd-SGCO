@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   Button,
   Typography,
@@ -100,7 +101,8 @@ const AppointmentDetails = () => {
   };
 
   return (
-    <Container>
+    <div style={{backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+    <Container sx={{m:'auto',  paddingBottom:4, paddingTop:4}}>
       {/* Botón de atrás */}
       <Button
         variant="outlined"
@@ -167,20 +169,20 @@ const AppointmentDetails = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Paciente</TableCell>
-                <TableCell>Odontólogo</TableCell>
-                <TableCell>Fecha</TableCell>
-                <TableCell>Hora</TableCell>
-                <TableCell align="center">Acciones</TableCell>
+                <TableCell> <Typography variant="h6" align="center">Paciente</Typography></TableCell>
+                <TableCell> <Typography variant="h6" align="center">Odontólogo</Typography></TableCell>
+                <TableCell><Typography variant="h6" align="center">Fecha</Typography></TableCell>
+                <TableCell><Typography variant="h6" align="center">Hora</Typography></TableCell>
+                <TableCell align="center"><Typography variant="h6" align="center">Acciones</Typography></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredAppointments.map((appointment) => (
                 <TableRow key={appointment.id}>
-                  <TableCell>{appointment.paciente.nombrePaciente}</TableCell>
-                  <TableCell>{appointment.odontologo.nombreOdontologo}</TableCell>
-                  <TableCell>{appointment.fecha.split("T")[0]}</TableCell>
-                  <TableCell>{appointment.hora}</TableCell>
+                  <TableCell align="center">{appointment.paciente.nombrePaciente}</TableCell>
+                  <TableCell align="center">{appointment.odontologo.nombreOdontologo}</TableCell>
+                  <TableCell align="center">{appointment.fecha.split("T")[0]}</TableCell>
+                  <TableCell align="center">{appointment.hora}</TableCell>
                   <TableCell align="center">
                     <IconButton
                       color="error"
@@ -196,6 +198,7 @@ const AppointmentDetails = () => {
         </TableContainer>
       )}
     </Container>
+    </div>
   );
 };
 

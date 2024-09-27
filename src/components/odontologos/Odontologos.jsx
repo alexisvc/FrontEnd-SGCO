@@ -166,7 +166,7 @@ const Odontologos = () => {
   };
 
   return (
-    <div className="Odontologos">
+    <div className="Odontologos" style={{backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}

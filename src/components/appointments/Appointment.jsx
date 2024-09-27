@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import {
   Button,
   Typography,
@@ -52,6 +53,14 @@ const Appointment = () => {
   const [availableHours, setAvailableHours] = useState([]);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
+  const [selectedHour, setSelectedHour] = useState(null);
+
+  const handleHourClick = (hour) => {
+    setNewAppointment((prev) => ({ ...prev, hora: hour }));
+    setSelectedHour(hour);
+  };
+
+
   useEffect(() => {
     fetchOdontologos(); // Cargar los odontólogos
   }, []);
@@ -75,6 +84,7 @@ const Appointment = () => {
 
     return hours;
   };
+
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
@@ -112,7 +122,7 @@ const Appointment = () => {
         odontologo: selectedOdontologo,
       });
       toast.success("Cita creada exitosamente", { autoClose: 3000 });
-      navigate("/odontologos");
+      navigate("/agendamiento/detalles");
     } catch (error) {
       toast.error("Error al crear la cita", { autoClose: 3000 });
     }
@@ -132,10 +142,11 @@ const Appointment = () => {
   };
 
   return (
-    <Container>
+    <div style={{backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+    <Container style={{margin: 'auto', align:'Center', paddingBottom:4, paddingTop:4}}>
       <Button
         variant="outlined"
-        onClick={() => navigate("/appointment-menu")}
+        onClick={() => navigate("/agendamiento/detalles")}
         sx={{ m: 2 }}
       >
         Atrás
@@ -147,6 +158,9 @@ const Appointment = () => {
 
       {/* Seleccionar Odontólogo */}
       <Box sx={{ my: 3 }}>
+        <Typography variant="h5" gutterBottom>
+              Buscar Odontólogo
+        </Typography>
         <FormControl fullWidth>
           <InputLabel>Seleccionar Odontólogo</InputLabel>
           <Select
@@ -166,8 +180,11 @@ const Appointment = () => {
       {/* Solo mostrar la búsqueda de paciente si se seleccionó el odontólogo */}
       {selectedOdontologo && (
         <>
+        <br/>
+        <hr/>
+        <br/>
           <Box component="form" onSubmit={handleSearchSubmit}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               Buscar Paciente
             </Typography>
             <Grid container spacing={2}>
@@ -209,17 +226,17 @@ const Appointment = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Nombre</TableCell>
-                    <TableCell>Cédula</TableCell>
-                    <TableCell>Seleccionar</TableCell>
+                    <TableCell> <Typography variant="h6" align="center"> Nombre </Typography></TableCell>
+                    <TableCell><Typography variant="h6" align="center">Cédula </Typography></TableCell>
+                    <TableCell><Typography variant="h6" align="center">Seleccionar </Typography></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {patients.map((patient) => (
                     <TableRow key={patient.id}>
-                      <TableCell>{patient.nombrePaciente}</TableCell>
-                      <TableCell>{patient.numeroCedula}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{patient.nombrePaciente}</TableCell>
+                      <TableCell align="center">{patient.numeroCedula}</TableCell>
+                      <TableCell align="center">
                         <Button
                           variant="outlined"
                           onClick={() => setSelectedPatient(patient)}
@@ -239,8 +256,12 @@ const Appointment = () => {
       {/* Solo mostrar la selección de fecha si se seleccionó un paciente */}
       {selectedPatient && (
         <>
+        <br/>
+        <br/>
+        <hr/>
+        
           <Box component="form" sx={{ mt: 4 }}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               Seleccionar Fecha para {selectedPatient.nombrePaciente}
             </Typography>
             <TextField
@@ -261,18 +282,22 @@ const Appointment = () => {
           {/* Selección de Hora */}
           {newAppointment.fecha && (
             <>
-              <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
+            <br/>
+            <br/>
+        <hr/>
+        
+              <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
                 Horas Disponibles para el {newAppointment.fecha}
               </Typography>
+              <br/>
               <Grid container spacing={2}>
                 {availableHours.map((hour, index) => (
-                  <Grid item xs={3} key={index}>
+                  <Grid item xs={1} key={index}>
                     <Button
-                      variant="outlined"
+                      variant={selectedHour === hour ? 'contained' : 'outlined'}
+                      color={selectedHour === hour ? 'secondary' : 'primary'}
                       fullWidth
-                      onClick={() =>
-                        setNewAppointment({ ...newAppointment, hora: hour })
-                      }
+                      onClick={() => handleHourClick(hour)}
                       sx={{
                         padding: 1,
                       }}
@@ -290,21 +315,25 @@ const Appointment = () => {
       {/* Mostrar Resumen y Confirmación */}
       {newAppointment.hora && (
         <>
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="h6" gutterBottom>
+        <br/>
+        <br/>
+        <hr/>
+        <br/>
+          <Box component={Paper} sx={{ mt: 4, p: 4 }}>
+            <Typography variant="h4" align="center" gutterBottom>
               Resumen de la Cita
             </Typography>
-            <p>
+            <p style={{fontFamily: 'Century Gothic'}}>
               <strong>Odontólogo:</strong>{" "}
               {odontologos.find((o) => o.id === selectedOdontologo)?.nombreOdontologo}
             </p>
-            <p>
+            <p style={{fontFamily: 'Century Gothic'}}>
               <strong>Paciente:</strong> {selectedPatient.nombrePaciente}
             </p>
-            <p>
+            <p style={{fontFamily: 'Century Gothic'}}>
               <strong>Fecha:</strong> {newAppointment.fecha}
             </p>
-            <p>
+            <p style={{fontFamily: 'Century Gothic'}}>
               <strong>Hora:</strong> {newAppointment.hora}
             </p>
 
@@ -329,9 +358,9 @@ const Appointment = () => {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="confirm-dialog-description">
-                  ¿Está seguro de que desea crear la cita con los siguientes
-                  datos?
-                  <br />
+                  ¿Está seguro de que desea crear la siguiente cita?
+                  <br/>
+                  <br/>
                   <strong>Odontólogo:</strong>{" "}
                   {
                     odontologos.find((o) => o.id === selectedOdontologo)
@@ -362,6 +391,7 @@ const Appointment = () => {
         </>
       )}
     </Container>
+    </div>
   );
 };
 
