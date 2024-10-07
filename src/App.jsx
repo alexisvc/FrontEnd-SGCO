@@ -33,6 +33,7 @@ import Appointment from "./components/appointments/Appointment";
 import AppointmentMenu from "./components/appointments/AppointmentMenu";
 import EditOdontologo from "./components/odontologos/EditOdontologo";
 import AppointmentDetails from "./components/appointments/AppointmentDetails";
+import EditAppointment from "./components/appointments/EditAppointment";
 
 
 function App() {
@@ -156,6 +157,12 @@ function App() {
               path="/agendamiento/detalles"
               element={
                 <AppointmentDetails />
+              }
+            />
+            <Route
+              path="/agendamiento/cita/editar/:appointmentId"
+              element={
+                <EditAppointment />
               }
             />
 

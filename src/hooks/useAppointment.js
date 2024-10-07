@@ -19,11 +19,37 @@ export function useAppointments() {
     }
   };
 
+  // Obtener una cita por ID
+  const fetchAppointmentById = async (id) => {
+    try {
+      setLoading(true);
+      const data = await appointmentsService.getAppointmentById(id);
+      setLoading(false);
+      return data;
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
   // Obtener citas por odontólogo
   const fetchAppointmentsByOdontologo = async (odontologoId) => {
     try {
       setLoading(true);
       const data = await appointmentsService.getAppointmentsByOdontologo(odontologoId);
+      setAppointments(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
+  // Obtener citas por paciente
+  const fetchAppointmentsByPaciente = async (pacienteId) => {
+    try {
+      setLoading(true);
+      const data = await appointmentsService.getAppointmentsByPaciente(pacienteId);
       setAppointments(data);
       setLoading(false);
     } catch (err) {
@@ -60,13 +86,29 @@ export function useAppointments() {
     }
   };
 
+  // Actualizar una cita
+  const updateAppointment = async (id, updatedAppointment) => {
+    try {
+      setLoading(true);
+      const data = await appointmentsService.updateAppointment(id, updatedAppointment);
+      setAppointments(appointments.map((appointment) => (appointment.id === id ? data : appointment)));
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
   return {
     appointments,
     loading,
     error,
     fetchAppointments,
+    fetchAppointmentById,
     fetchAppointmentsByOdontologo,
+    fetchAppointmentsByPaciente,
     createAppointment,
     deleteAppointment,
+    updateAppointment
   };
 }

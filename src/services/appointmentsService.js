@@ -6,8 +6,16 @@ const getAllAppointments = () => {
   return axios.get(baseUrl).then((response) => response.data);
 };
 
+const getAppointmentById = (id) => {
+  return axios.get(`${baseUrl}/${id}`).then((response) => response.data);
+};
+
 const getAppointmentsByOdontologo = (odontologoId) => {
   return axios.get(`${baseUrl}/odontologo/${odontologoId}`).then((response) => response.data);
+};
+
+const getAppointmentsByPaciente = (pacienteId) => {
+  return axios.get(`${baseUrl}/paciente/${pacienteId}`).then((response) => response.data);
 };
 
 const createAppointment = (newAppointment) => {
@@ -18,9 +26,16 @@ const deleteAppointment = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
 
+const updateAppointment = (id, updatedAppointment) => {
+  return axios.put(`${baseUrl}/${id}`, updatedAppointment).then((response) => response.data);
+};
+
 export default {
   getAllAppointments,
+  getAppointmentById,
   getAppointmentsByOdontologo,
+  getAppointmentsByPaciente,
   createAppointment,
   deleteAppointment,
+  updateAppointment,
 };

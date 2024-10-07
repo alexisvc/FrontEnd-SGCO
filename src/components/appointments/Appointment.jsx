@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
   Button,
   Typography,
@@ -27,20 +26,19 @@ import {
 } from "@mui/material";
 import { useAppointments } from "../../hooks/useAppointment";
 import { usePatients } from "../../hooks/usePatients";
-import { useOdontologos } from "../../hooks/useOdontologos"; // Para obtener los odontólogos
+import { useOdontologos } from "../../hooks/useOdontologos";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 
 const Appointment = () => {
-  const { appointments, createAppointment, fetchAppointmentsByOdontologo } =
-    useAppointments();
+  const { appointments, createAppointment, fetchAppointmentsByOdontologo } = useAppointments();
   const { patients, fetchPatientByCedula, fetchPatientByName } = usePatients();
-  const { odontologos, fetchOdontologos } = useOdontologos(); // Obtener odontólogos
+  const { odontologos, fetchOdontologos } = useOdontologos();
 
   const navigate = useNavigate();
   const today = dayjs().format("YYYY-MM-DD");
 
-  const [selectedOdontologo, setSelectedOdontologo] = useState(""); // Inicializar como string vacío
+  const [selectedOdontologo, setSelectedOdontologo] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("cedula");
@@ -52,7 +50,6 @@ const Appointment = () => {
   });
   const [availableHours, setAvailableHours] = useState([]);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-
   const [selectedHour, setSelectedHour] = useState(null);
 
   const handleHourClick = (hour) => {
@@ -60,14 +57,13 @@ const Appointment = () => {
     setSelectedHour(hour);
   };
 
-
   useEffect(() => {
-    fetchOdontologos(); // Cargar los odontólogos
+    fetchOdontologos();
   }, []);
 
   useEffect(() => {
     if (selectedOdontologo) {
-      fetchAppointmentsByOdontologo(selectedOdontologo); // Obtener citas del odontólogo seleccionado
+      fetchAppointmentsByOdontologo(selectedOdontologo);
     }
   }, [selectedOdontologo]);
 
@@ -84,7 +80,6 @@ const Appointment = () => {
 
     return hours;
   };
-
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
@@ -142,8 +137,7 @@ const Appointment = () => {
   };
 
   return (
-    <div style={{backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-    <Container style={{margin: 'auto', align:'Center', paddingBottom:4, paddingTop:4}}>
+    <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
       <Button
         variant="outlined"
         onClick={() => navigate("/agendamiento/detalles")}
@@ -151,246 +145,243 @@ const Appointment = () => {
       >
         Atrás
       </Button>
-
-      <Typography variant="h4" align="center" gutterBottom>
-        Agendar Citas
-      </Typography>
-
-      {/* Seleccionar Odontólogo */}
-      <Box sx={{ my: 3 }}>
-        <Typography variant="h5" gutterBottom>
-              Buscar Odontólogo
-        </Typography>
-        <FormControl fullWidth>
-          <InputLabel>Seleccionar Odontólogo</InputLabel>
-          <Select
-            value={selectedOdontologo || ""} // Evitar que sea null
-            onChange={(e) => setSelectedOdontologo(e.target.value)}
-            label="Seleccionar Odontólogo"
-          >
-            {odontologos.map((odontologo) => (
-              <MenuItem key={odontologo.id} value={odontologo.id}>
-                {odontologo.nombreOdontologo}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-
-      {/* Solo mostrar la búsqueda de paciente si se seleccionó el odontólogo */}
-      {selectedOdontologo && (
-        <>
-        <br/>
-        <hr/>
-        <br/>
-          <Box component="form" onSubmit={handleSearchSubmit}>
-            <Typography variant="h5" gutterBottom>
-              Buscar Paciente
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Tipo de Búsqueda</InputLabel>
-                  <Select
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                    label="Tipo de Búsqueda"
-                  >
-                    <MenuItem value="cedula">Cédula</MenuItem>
-                    <MenuItem value="name">Nombre</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label={
-                    searchType === "cedula" ? "Ingrese Cédula" : "Ingrese Nombre"
-                  }
-                  name="searchQuery"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button type="submit" variant="contained" fullWidth>
-                  Buscar Paciente
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-
-          {searched && patients.length > 0 && (
-            <TableContainer component={Paper} sx={{ mt: 4 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell> <Typography variant="h6" align="center"> Nombre </Typography></TableCell>
-                    <TableCell><Typography variant="h6" align="center">Cédula </Typography></TableCell>
-                    <TableCell><Typography variant="h6" align="center">Seleccionar </Typography></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {patients.map((patient) => (
-                    <TableRow key={patient.id}>
-                      <TableCell align="center">{patient.nombrePaciente}</TableCell>
-                      <TableCell align="center">{patient.numeroCedula}</TableCell>
-                      <TableCell align="center">
-                        <Button
-                          variant="outlined"
-                          onClick={() => setSelectedPatient(patient)}
-                        >
-                          Seleccionar
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </>
-      )}
-
-      {/* Solo mostrar la selección de fecha si se seleccionó un paciente */}
-      {selectedPatient && (
-        <>
-        <br/>
-        <br/>
-        <hr/>
-        
-          <Box component="form" sx={{ mt: 4 }}>
-            <Typography variant="h5" gutterBottom>
-              Seleccionar Fecha para {selectedPatient.nombrePaciente}
-            </Typography>
-            <TextField
-              fullWidth
-              type="date"
-              label="Fecha"
-              name="fecha"
-              InputLabelProps={{ shrink: true }}
-              value={newAppointment.fecha}
-              onChange={handleDateChange}
-              required
-              inputProps={{
-                min: today,
-              }}
-            />
-          </Box>
-
-          {/* Selección de Hora */}
-          {newAppointment.fecha && (
-            <>
-            <br/>
-            <br/>
-        <hr/>
-        
-              <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-                Horas Disponibles para el {newAppointment.fecha}
-              </Typography>
-              <br/>
-              <Grid container spacing={2}>
-                {availableHours.map((hour, index) => (
-                  <Grid item xs={1} key={index}>
-                    <Button
-                      variant={selectedHour === hour ? 'contained' : 'outlined'}
-                      color={selectedHour === hour ? 'secondary' : 'primary'}
-                      fullWidth
-                      onClick={() => handleHourClick(hour)}
-                      sx={{
-                        padding: 1,
-                      }}
-                    >
-                      {hour}
-                    </Button>
-                  </Grid>
-                ))}
-              </Grid>
-            </>
-          )}
-        </>
-      )}
-
-      {/* Mostrar Resumen y Confirmación */}
-      {newAppointment.hora && (
-        <>
-        <br/>
-        <br/>
-        <hr/>
-        <br/>
-          <Box component={Paper} sx={{ mt: 4, p: 4 }}>
+      <Container style={{align: 'Center', paddingBottom: 4, paddingTop: 4 }}>
+        <Grid container spacing={4}>
+          {/* Primera columna: Formulario */}
+          <Grid item xs={12} md={8}>
             <Typography variant="h4" align="center" gutterBottom>
-              Resumen de la Cita
+              Agendar Citas
             </Typography>
-            <p style={{fontFamily: 'Century Gothic'}}>
-              <strong>Odontólogo:</strong>{" "}
-              {odontologos.find((o) => o.id === selectedOdontologo)?.nombreOdontologo}
-            </p>
-            <p style={{fontFamily: 'Century Gothic'}}>
-              <strong>Paciente:</strong> {selectedPatient.nombrePaciente}
-            </p>
-            <p style={{fontFamily: 'Century Gothic'}}>
-              <strong>Fecha:</strong> {newAppointment.fecha}
-            </p>
-            <p style={{fontFamily: 'Century Gothic'}}>
-              <strong>Hora:</strong> {newAppointment.hora}
-            </p>
 
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleConfirmAppointment}
-              fullWidth
-            >
-              Confirmar Cita
-            </Button>
-
-            {/* Dialogo de confirmación */}
-            <Dialog
-              open={confirmDialogOpen}
-              onClose={closeConfirmDialog}
-              aria-labelledby="confirm-dialog-title"
-              aria-describedby="confirm-dialog-description"
-            >
-              <DialogTitle id="confirm-dialog-title">
-                Confirmar Creación de Cita
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="confirm-dialog-description">
-                  ¿Está seguro de que desea crear la siguiente cita?
-                  <br/>
-                  <br/>
-                  <strong>Odontólogo:</strong>{" "}
-                  {
-                    odontologos.find((o) => o.id === selectedOdontologo)
-                      ?.nombreOdontologo
-                  }
-                  <br />
-                  <strong>Paciente:</strong> {selectedPatient.nombrePaciente}
-                  <br />
-                  <strong>Fecha:</strong> {newAppointment.fecha}
-                  <br />
-                  <strong>Hora:</strong> {newAppointment.hora}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={closeConfirmDialog} color="secondary">
-                  Cancelar
-                </Button>
-                <Button
-                  onClick={confirmCreateAppointment}
-                  color="primary"
-                  autoFocus
+            {/* Seleccionar Odontólogo */}
+            <Box sx={{ my: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                Odontólogo
+              </Typography>
+              <FormControl fullWidth>
+                <InputLabel>Seleccionar Odontólogo</InputLabel>
+                <Select
+                  value={selectedOdontologo || ""}
+                  onChange={(e) => setSelectedOdontologo(e.target.value)}
+                  label="Seleccionar Odontólogo"
                 >
-                  Confirmar
+                  {odontologos.map((odontologo) => (
+                    <MenuItem key={odontologo.id} value={odontologo.id}>
+                      {odontologo.nombreOdontologo}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+
+            {selectedOdontologo && (
+              <>
+                <Box component="form" onSubmit={handleSearchSubmit}>
+                  <Typography variant="h5" gutterBottom>
+                    Paciente
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                      <FormControl fullWidth>
+                        <InputLabel>Tipo de Búsqueda</InputLabel>
+                        <Select
+                          value={searchType}
+                          onChange={(e) => setSearchType(e.target.value)}
+                          label="Tipo de Búsqueda"
+                        >
+                          <MenuItem value="cedula">Cédula</MenuItem>
+                          <MenuItem value="name">Nombre</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <TextField
+                        fullWidth
+                        label={searchType === "cedula" ? "Ingrese Cédula" : "Ingrese Nombre"}
+                        name="searchQuery"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4} alignContent={"center"} alignItems={"center"}>
+                      <Button type="submit" variant="contained">
+                        Buscar Paciente
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Box>
+
+                {searched && patients.length > 0 && (
+                  <TableContainer component={Paper} sx={{ mt: 4 }}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" align="center">
+                              Nombre
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="h6" align="center">
+                              Cédula
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="h6" align="center">
+                              Seleccionar
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {patients.map((patient) => (
+                          <TableRow key={patient.id}>
+                            <TableCell align="center">{patient.nombrePaciente}</TableCell>
+                            <TableCell align="center">{patient.numeroCedula}</TableCell>
+                            <TableCell align="center">
+                              <Button
+                                variant="outlined"
+                                onClick={() => setSelectedPatient(patient)}
+                              >
+                                Seleccionar
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </>
+            )}
+
+            {selectedPatient && (
+              <>
+                <Box component="form" sx={{ mt: 4 }}>
+                  <Typography variant="h5" gutterBottom>
+                    Seleccionar Fecha para {selectedPatient.nombrePaciente}
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Fecha"
+                    name="fecha"
+                    InputLabelProps={{ shrink: true }}
+                    value={newAppointment.fecha}
+                    onChange={handleDateChange}
+                    required
+                    inputProps={{
+                      min: today,
+                    }}
+                  />
+                </Box>
+
+                {newAppointment.fecha && (
+                  <>
+                    <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
+                      Horas Disponibles para el {newAppointment.fecha}
+                    </Typography>
+                    <Grid container spacing={2}>
+                      {availableHours.map((hour, index) => (
+                        <Grid item xs={1} key={index}>
+                          <Button
+                            variant={selectedHour === hour ? 'contained' : 'outlined'}
+                            color={selectedHour === hour ? 'secondary' : 'primary'}
+                            fullWidth
+                            onClick={() => handleHourClick(hour)}
+                            sx={{
+                              padding: 1,
+                            }}
+                          >
+                            {hour}
+                          </Button>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </>
+                )}
+              </>
+            )}
+          </Grid>
+
+          {/* Segunda columna: Resumen */}
+          <Grid item xs={12} md={4}>
+            {(selectedOdontologo || selectedPatient || newAppointment.fecha || newAppointment.hora) && (
+              <Box component={Paper} sx={{ mt: 4, p: 4 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                  Resumen de la Cita
+                </Typography>
+                {selectedOdontologo && (
+                  <p style={{ fontFamily: 'Century Gothic' }}>
+                    <strong>Odontólogo:</strong> {odontologos.find((o) => o.id === selectedOdontologo)?.nombreOdontologo}
+                  </p>
+                )}
+                {selectedPatient && (
+                  <p style={{ fontFamily: 'Century Gothic' }}>
+                    <strong>Paciente:</strong> {selectedPatient.nombrePaciente}
+                  </p>
+                )}
+                {newAppointment.fecha && (
+                  <p style={{ fontFamily: 'Century Gothic' }}>
+                    <strong>Fecha:</strong> {newAppointment.fecha}
+                  </p>
+                )}
+                {newAppointment.hora && (
+                  <p style={{ fontFamily: 'Century Gothic' }}>
+                    <strong>Hora:</strong> {newAppointment.hora}
+                  </p>
+                )}
+              </Box>
+            )}
+
+            {newAppointment.hora && (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleConfirmAppointment}
+                  sx={{ mt: 4 }}
+                >
+                  Confirmar Cita
                 </Button>
-              </DialogActions>
-            </Dialog>
-          </Box>
-        </>
-      )}
-    </Container>
+
+                <Dialog
+                  open={confirmDialogOpen}
+                  onClose={closeConfirmDialog}
+                  aria-labelledby="confirm-dialog-title"
+                  aria-describedby="confirm-dialog-description"
+                >
+                  <DialogTitle id="confirm-dialog-title">
+                    Confirmar Creación de Cita
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="confirm-dialog-description">
+                      ¿Está seguro de que desea crear la siguiente cita?
+                      <br />
+                      <strong>Odontólogo:</strong> {odontologos.find((o) => o.id === selectedOdontologo)?.nombreOdontologo}
+                      <br />
+                      <strong>Paciente:</strong> {selectedPatient.nombrePaciente}
+                      <br />
+                      <strong>Fecha:</strong> {newAppointment.fecha}
+                      <br />
+                      <strong>Hora:</strong> {newAppointment.hora}
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={closeConfirmDialog} color="secondary">
+                      Cancelar
+                    </Button>
+                    <Button onClick={confirmCreateAppointment} color="primary" autoFocus>
+                      Confirmar
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </>
+            )}
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   );
 };

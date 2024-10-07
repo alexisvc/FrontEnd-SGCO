@@ -4,32 +4,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Typography,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
   Container,
-  TextField,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
-import { useAppointments } from "../../hooks/useAppointment";
-import { usePatients } from "../../hooks/usePatients"; // Hook para buscar pacientes
-import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { toast } from "react-toastify";
-import dayjs from "dayjs"; // Para obtener la fecha de hoy
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import PersonIcon from '@mui/icons-material/Person';
 
@@ -38,8 +15,7 @@ const AppointmentMenu = () => {
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' , backgroundImage:"../../backgrounds/mainBack.png" }}>
-    <Container>
-      <Button
+    <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/main-menu")}
@@ -47,7 +23,7 @@ const AppointmentMenu = () => {
       >
         Atrás
       </Button>
-
+    <Container>
       <Typography variant="h4" align="center" gutterBottom>
         Agendamiento de citas
       </Typography>

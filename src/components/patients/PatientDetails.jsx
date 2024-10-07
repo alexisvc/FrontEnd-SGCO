@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Patients.css";
-import { FaArrowCircleLeft } from "react-icons/fa";
-import { usePatients } from "../../hooks/usePatients";
 import {
   Grid,
   TextField,
   Button,
-  Box,
   Typography,
   Container,
   Paper,
