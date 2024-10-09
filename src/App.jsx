@@ -34,7 +34,10 @@ import AppointmentMenu from "./components/appointments/AppointmentMenu";
 import EditOdontologo from "./components/odontologos/EditOdontologo";
 import AppointmentDetails from "./components/appointments/AppointmentDetails";
 import EditAppointment from "./components/appointments/EditAppointment";
-
+import PlanningMenu from "./components/planning/PlanningMenu";
+import PlanningPatientList from "./components/planning/PlanningPatientDetails";
+import TreatmentPlans from "./components/planning/TreatmentPlans";
+import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -64,7 +67,7 @@ function App() {
     endodonticTreatments,
     createEndodonticTreatment,
     updateEndodonticTreatment,
-    fetchEndodonticTreatmentsByPatientId
+    fetchEndodonticTreatmentsByPatientId,
   } = useEndodonticTreatments();
   const {
     cirugiaPatologias,
@@ -79,9 +82,8 @@ function App() {
     fetchOdontologoById,
     createOdontologo,
     updateOdontologo,
-    setOdontologo
+    setOdontologo,
   } = useOdontologos();
-  
 
   const isLoggedIn = !!user;
 
@@ -123,47 +125,41 @@ function App() {
                 <PatientAndMedicalRecordDetails
                   fetchPatients={fetchPatients}
                   updatePatient={updatePatient}
-
                   patientTreatments={patientTreatments}
                   createPatientTreatment={createPatientTreatment}
                   updatePatientTreatment={updatePatientTreatment}
-                  getPatientTreatmentsByPatientId={getPatientTreatmentsByPatientId}
-
+                  getPatientTreatmentsByPatientId={
+                    getPatientTreatmentsByPatientId
+                  }
                   evolutionCharts={evolutionCharts}
                   createEvolutionChart={createEvolutionChart}
                   updateEvolutionChart={updateEvolutionChart}
-                  fetchEvolutionChartsByPatientId={fetchEvolutionChartsByPatientId}
-
+                  fetchEvolutionChartsByPatientId={
+                    fetchEvolutionChartsByPatientId
+                  }
                   endodonticTreatments={endodonticTreatments}
                   createEndodonticTreatment={createEndodonticTreatment}
                   updateEndodonticTreatment={updateEndodonticTreatment}
-                  fetchEndodonticTreatmentsByPatientId={fetchEndodonticTreatmentsByPatientId}
-
+                  fetchEndodonticTreatmentsByPatientId={
+                    fetchEndodonticTreatmentsByPatientId
+                  }
                   cirugiaPatologias={cirugiaPatologias}
                   createCirugiaPatologia={createCirugiaPatologia}
                   updateCirugiaPatologia={updateCirugiaPatologia}
-                  fetchCirugiaPatologiaByPatientId={fetchCirugiaPatologiaByPatientId}
-
+                  fetchCirugiaPatologiaByPatientId={
+                    fetchCirugiaPatologiaByPatientId
+                  }
                 />
               }
             />
-            <Route
-              path="/agendamiento"
-              element={
-                <AppointmentMenu />
-              }
-            />
+            <Route path="/agendamiento" element={<AppointmentMenu />} />
             <Route
               path="/agendamiento/detalles"
-              element={
-                <AppointmentDetails />
-              }
+              element={<AppointmentDetails />}
             />
             <Route
               path="/agendamiento/cita/editar/:appointmentId"
-              element={
-                <EditAppointment />
-              }
+              element={<EditAppointment />}
             />
 
             <Route
@@ -186,15 +182,33 @@ function App() {
             />
             <Route
               path="/odontologos/editar/:odontologoId"
+              element={<EditOdontologo />}
+            />
+            <Route path="/agendamiento/cita" element={<Appointment />} />
+
+            <Route path="/planificacion" element={<PlanningMenu />} />
+
+            <Route
+              path="/planificacion/pacientes"
+              element={<PlanningPatientList />}
+            />
+
+            <Route
+              path="/treatment-plans/:patientId"
               element={
-                <EditOdontologo />
+                <TreatmentPlans
+                  patientTreatments={patientTreatments}
+                  getPatientTreatmentsByPatientId={
+                    getPatientTreatmentsByPatientId
+                  }
+                  createPatientTreatment={createPatientTreatment}
+                  updatePatientTreatment={updatePatientTreatment}
+                />
               }
             />
             <Route
-              path="/agendamiento/cita"
-              element={
-                <Appointment />
-              }
+              path="/planificacion/consolidado"
+              element={<AllTreatmentPlans />}
             />
 
             <Route
@@ -225,20 +239,10 @@ function App() {
             <Route
               path="/main-menu"
               element={
-                isLoggedIn ? (
-                  <Welcome
-                    user={user}
-                    logout={logout}
-                  />
-                ) : (
-                  <Home />
-                )
+                isLoggedIn ? <Welcome user={user} logout={logout} /> : <Home />
               }
             />
-            <Route
-              path="/"
-              element={<Home user={user} logout={logout} />}
-            />
+            <Route path="/" element={<Home user={user} logout={logout} />} />
           </Routes>
         </div>
       </Router>

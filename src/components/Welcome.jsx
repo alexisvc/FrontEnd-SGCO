@@ -188,7 +188,7 @@ function Welcome({ user, logout }) {
             <div>
               {user.username === "admin" && (
                 <Link
-                  to="/main-menu"
+                  to="/planificacion"
                   className="link-button"
                   style={{ textDecoration: "none", width: "100%" }}
                 >

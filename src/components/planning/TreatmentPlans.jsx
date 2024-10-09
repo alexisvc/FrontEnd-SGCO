@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import EditTreatmentForm from "./EditTreatmentForm";
-import CreateTreatmentForm from "./CreateTreatmentForm";
 import {
   Container,
   Typography,
@@ -11,19 +9,29 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@mui/material";
+import TreatmentPlansSummary from "./TreatmentPlansSummary";
 import usePatientTreatments from "../../hooks/usePatientTreatments";
+import { useParams } from "react-router";
+import EditTreatmentForm from "./EditTreatmentForm";
+import CreateTreatmentForm from "./CreateTreatmentForm";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
-const TreamentPlansDetails = ({
-  patientId,
-  patientTreatments,
-  createPatientTreatment,
-  updatePatientTreatment,
-  getPatientTreatmentsByPatientId,
+const TreatmentPlans = ({
+    patientTreatments,
+    getPatientTreatmentsByPatientId,
+    createPatientTreatment,
+    updatePatientTreatment,
 }) => {
-  // Cargar los tratamientos del paciente al montar el componente
+  
+  const { patientId } = useParams(); // ID del paciente seleccionado
+  const navigate = useNavigate();
+
   useEffect(() => {
-    getPatientTreatmentsByPatientId(patientId);
+    console.log("Fetching treatments for patient", patientId);
+    getPatientTreatmentsByPatientId(patientId);  
   }, [patientId]);
 
   // Función para manejar la creación de un nuevo tratamiento
@@ -41,18 +49,22 @@ const TreamentPlansDetails = ({
   };
 
   return (
-    <Container component={Paper} sx={{pb:2}}>
-      <Typography
-        variant="h4"
-        gutterBottom
-        align="center"
-        sx={{ pt: 2, pb: 1 }}
+    <>
+    <Button
+        variant="outlined"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate("/planificacion/pacientes")}
+        sx={{ m: 2 }}
       >
-        Tratamientos
+        Atrás
+      </Button>
+    <Container sx={{ pb: 2 }}>
+      <Typography variant="h4" gutterBottom align="center" sx={{ pt: 2, pb: 1 }}>
+        Planes de Tratamiento
       </Typography>
 
-      <TableContainer component={Paper} >
-        <Table sx = {{mb:1}}>
+      <TableContainer component={Paper}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell align="center">
@@ -66,6 +78,9 @@ const TreamentPlansDetails = ({
               </TableCell>
               <TableCell align="center">
                 <Typography variant="h6">Monto Abono</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="h6">Acciones</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -85,16 +100,21 @@ const TreamentPlansDetails = ({
               />
             ))}
 
-            {/* Fila para crear un nuevo tratamiento 
+            {/* Fila para crear un nuevo tratamiento */}
             <CreateTreatmentForm
               patientId={patientId}
               createPatientTreatment={handleCreateTreatment}
-            />*/}
+            />
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Resumen del total de los montos abonados */}
+      <TreatmentPlansSummary patientTreatments={patientTreatments} />
     </Container>
+    </>
+    
   );
 };
 
-export default TreamentPlansDetails;
+export default TreatmentPlans;

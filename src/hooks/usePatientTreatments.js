@@ -28,6 +28,7 @@ const usePatientTreatments = () => {
     try {
       const data = await patientTreatmentService.getByPatientId(id);
       setPatientTreatments(data);
+      console.log("Tratamientos del paciente", data);
     } catch (error) {
       setError(error.response ? error.response.data.error : 'Error fetching patient treatments');
     }
