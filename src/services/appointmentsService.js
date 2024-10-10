@@ -34,6 +34,8 @@ const getHorariosOcupados = (odontologoId, fecha) => {
   return axios.get(`${baseUrl}/horarios-ocupados/${odontologoId}/${fecha}`).then((response) => response.data);
 };
 
+
+
 export default {
   getAllAppointments,
   getAppointmentById,
