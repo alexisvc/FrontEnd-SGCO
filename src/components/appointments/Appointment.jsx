@@ -46,11 +46,16 @@ const Appointment = () => {
   const [newAppointment, setNewAppointment] = useState({
     paciente: "",
     fecha: "",
-    hora: "",
+    horaInicio: "",
+    horaFin: "",
   });
   const [availableHours, setAvailableHours] = useState([]);
+  const [availableEndHours, setAvailableEndHours] = useState([]);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedHour, setSelectedHour] = useState(null);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const handleHourClick = (hour) => {
     setNewAppointment((prev) => ({ ...prev, hora: hour }));
@@ -81,6 +86,70 @@ const Appointment = () => {
     return hours;
   };
 
+  const handleStartHourChange = (selectedHour) => {
+    setNewAppointment((prev) => ({ ...prev, horaInicio: selectedHour }));
+    // Generar las horas de fin disponibles basadas en la hora de inicio seleccionada
+    const updatedAvailableEndHours = generateAvailableEndHours(selectedHour);
+    setAvailableEndHours(updatedAvailableEndHours);
+    
+    // Asegurarse de que la hora de fin seleccionada esté en las opciones generadas
+    setNewAppointment((prev) => ({
+      ...prev,
+      horaFin: updatedAvailableEndHours.includes(prev.horaFin) ? prev.horaFin : ""
+    }));
+  };
+  
+/*
+  const generateAvailableEndHours = (startHour) => {
+    const startTime = dayjs(startHour, "HH:mm");
+    const endTime = dayjs().hour(20).minute(30); // Hora máxima permitida
+    const hours = [];
+    let time = startTime.add(15, "minute"); // Comienza 15 minutos después de la hora de inicio
+
+    while (time.isBefore(endTime) || time.isSame(endTime)) {
+      hours.push(time.format("HH:mm"));
+      time = time.add(15, "minute");
+    }
+
+    // Filtrar las horas que ya están ocupadas
+    const occupiedHours = appointments
+      .filter((appointment) => appointment.fecha.split("T")[0] === newAppointment.fecha)
+      .map((appointment) => appointment.horaInicio);
+
+    return hours.filter((hour) => !occupiedHours.includes(hour));
+  };
+
+  const handleStartHourChange = (selectedHour) => {
+    setNewAppointment((prev) => ({ ...prev, horaInicio: selectedHour }));
+    const availableEndHours = generateAvailableEndHours(selectedHour);
+    setAvailableHours(availableEndHours);
+  };
+
+  const handleEndHourChange = (selectedHour) => {
+    setNewAppointment((prev) => ({ ...prev, horaFin: selectedHour }));
+  };
+*/
+
+  const generateAvailableEndHours = (startHour) => {
+    const startTime = dayjs(startHour, 'HH:mm');
+    const endTime = dayjs().hour(20).minute(30);
+    const hours = [];
+    let time = startTime.add(15, 'minute'); // Comienza 15 minutos después de la hora de inicio
+
+    while (time.isBefore(endTime) || time.isSame(endTime)) {
+      hours.push(time.format('HH:mm'));
+      time = time.add(15, 'minute');
+    }
+
+    return hours;
+  };
+
+  const handleEndHourChange = (selectedHour) => {
+    setNewAppointment((prev) => ({ ...prev, horaFin: selectedHour }));
+  };
+
+  
+
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     setNewAppointment({ ...newAppointment, fecha: selectedDate });
@@ -108,7 +177,7 @@ const Appointment = () => {
       setSearched(false);
     }
   };
-
+/*
   const handleCreateAppointment = async () => {
     try {
       await createAppointment({
@@ -121,6 +190,41 @@ const Appointment = () => {
     } catch (error) {
       toast.error("Error al crear la cita", { autoClose: 3000 });
     }
+  };
+*/
+  const handleCreateAppointment = async () => {
+    if (!newAppointment.horaInicio || !newAppointment.horaFin) {
+      toast.error("Debe seleccionar la hora de inicio y la hora de fin.", { autoClose: 3000 });
+      return;
+    }
+    
+    // Calcular la duración en minutos
+    const start = dayjs(newAppointment.horaInicio, "HH:mm");
+    const end = dayjs(newAppointment.horaFin, "HH:mm");
+    const duracionMinutos = end.diff(start, 'minute');
+    
+    try {
+      await createAppointment({
+        ...newAppointment,
+        paciente: selectedPatient.id,
+        odontologo: selectedOdontologo,
+        duracion: duracionMinutos
+      });
+      toast.success("Cita creada exitosamente", { autoClose: 3000 });
+      navigate("/agendamiento/detalles");
+    } catch (error) {
+      console.error("Error al crear la cita:", error);
+      if (error.response && error.response.status === 400) {
+        setErrorMessage(error.response.data.error || "Error al crear la cita");
+      } else {
+        setErrorMessage("Error al crear la cita. Por favor, inténtelo de nuevo.");
+      }
+      setErrorDialogOpen(true);
+    }
+  };
+
+  const handleCloseErrorDialog = () => {
+    setErrorDialogOpen(false);
   };
 
   const handleConfirmAppointment = () => {
@@ -138,6 +242,24 @@ const Appointment = () => {
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+      <Dialog
+        open={errorDialogOpen}
+        onClose={handleCloseErrorDialog}
+        aria-labelledby="error-dialog-title"
+        aria-describedby="error-dialog-description"
+      >
+        <DialogTitle id="error-dialog-title">{"Error al crear la cita"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="error-dialog-description">
+            {errorMessage}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseErrorDialog} color="primary" autoFocus>
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Button
         variant="outlined"
         onClick={() => navigate("/agendamiento/detalles")}
@@ -279,27 +401,45 @@ const Appointment = () => {
 
                 {newAppointment.fecha && (
                   <>
-                    <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-                      Horas Disponibles para el {newAppointment.fecha}
-                    </Typography>
-                    <Grid container spacing={2}>
-                      {availableHours.map((hour, index) => (
-                        <Grid item xs={1} key={index}>
-                          <Button
-                            variant={selectedHour === hour ? 'contained' : 'outlined'}
-                            color={selectedHour === hour ? 'secondary' : 'primary'}
-                            fullWidth
-                            onClick={() => handleHourClick(hour)}
-                            sx={{
-                              padding: 1,
-                            }}
-                          >
+                    {/* Seleccionar la hora de inicio */}
+                      <Typography variant="h5" gutterBottom>
+                        Seleccionar Hora de Inicio
+                      </Typography>
+                      <Select
+                        value={newAppointment.horaInicio || ""}
+                        onChange={(e) => handleStartHourChange(e.target.value)}
+                        label="Hora de Inicio"
+                      >
+                        {availableHours.map((hour) => (
+                          <MenuItem key={hour} value={hour}>
                             {hour}
-                          </Button>
-                        </Grid>
-                      ))}
-                    </Grid>
+                          </MenuItem>
+                        ))}
+                      </Select>
+
+                      {/* Seleccionar la hora de fin */}
+                      {newAppointment.horaInicio && (
+                        <>
+                          <Typography variant="h5" gutterBottom>
+                            Seleccionar Hora de Fin
+                          </Typography>
+                          <Select
+                            value={newAppointment.horaFin || ""}
+                            onChange={(e) => handleEndHourChange(e.target.value)}
+                            label="Hora de Fin"
+                          >
+                            {availableHours.map((hour) => (
+                              <MenuItem key={hour} value={hour}>
+                                {hour}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </>
+                      )}
+
+
                   </>
+
                 )}
               </>
             )}
@@ -327,15 +467,20 @@ const Appointment = () => {
                     <strong>Fecha:</strong> {newAppointment.fecha}
                   </p>
                 )}
-                {newAppointment.hora && (
+                {newAppointment.horaInicio && (
                   <p style={{ fontFamily: 'Century Gothic' }}>
-                    <strong>Hora:</strong> {newAppointment.hora}
+                    <strong>Hora de Inicio:</strong> {newAppointment.horaInicio}
+                  </p>
+                )}
+                {newAppointment.horaFin && (
+                  <p style={{ fontFamily: 'Century Gothic' }}>
+                    <strong>Hora de Fin:</strong> {newAppointment.horaFin}
                   </p>
                 )}
               </Box>
             )}
 
-            {newAppointment.hora && (
+            {newAppointment.horaInicio && newAppointment.horaFin && (
               <>
                 <Button
                   variant="contained"
@@ -365,7 +510,9 @@ const Appointment = () => {
                       <br />
                       <strong>Fecha:</strong> {newAppointment.fecha}
                       <br />
-                      <strong>Hora:</strong> {newAppointment.hora}
+                      <strong>Hora de Inicio:</strong> {newAppointment.horaInicio}
+                      <br />
+                      <strong>Hora de Fin:</strong> {newAppointment.horaFin}
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>

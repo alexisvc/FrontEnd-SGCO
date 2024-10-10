@@ -26,11 +26,13 @@ const EditAppointment = () => {
     paciente: "",
     odontologo: "",
     fecha: "",
-    hora: "",
+    horaInicio: "",
+    horaFin: "",
   });
 
   const [newDate, setNewDate] = useState(null);
-  const [newTime, setNewTime] = useState("");
+  const [newTimeStart, setNewTimeStart] = useState("");
+  const [newTimeEnd, setNewTimeEnd] = useState("");
 
   useEffect(() => {
     const loadAppointment = async () => {
@@ -38,7 +40,8 @@ const EditAppointment = () => {
         const fetchedAppointment = await fetchAppointmentById(appointmentId);
         setAppointment(fetchedAppointment);
         setNewDate(dayjs(fetchedAppointment.fecha));
-        setNewTime(fetchedAppointment.hora);
+        setNewTimeStart(fetchedAppointment.horaInicio);
+        setNewTimeEnd(fetchedAppointment.horaFin);
       } catch (error) {
         toast.error("Error al cargar la cita");
       }
@@ -59,7 +62,8 @@ const EditAppointment = () => {
         paciente: appointment.paciente.id,
         odontologo: appointment.odontologo.id,
         fecha: newDate.format("YYYY-MM-DD"),
-        hora: newTime,
+        horaInicio: newTimeStart,
+        horaFin: newTimeEnd,
       });
 
       toast.success("Cita actualizada exitosamente");
@@ -111,7 +115,7 @@ const EditAppointment = () => {
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Fecha"
@@ -127,11 +131,24 @@ const EditAppointment = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Hora"
+                  label="Hora de Inicio"
+                  type="time"
+                  name="horaInicio"
+                  value={newTimeStart}
+                  onChange={(e) => setNewTimeStart(e.target.value)}
+                  inputProps={{ step: 900 }}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Hora de Fin"
                   type="time"
                   name="hora"
-                  value={newTime}
-                  onChange={(e) => setNewTime(e.target.value)}
+                  value={newTimeEnd}
+                  onChange={(e) => setNewTimeEnd(e.target.value)}
+                  inputProps={{ step: 900 }}
                   required
                 />
               </Grid>

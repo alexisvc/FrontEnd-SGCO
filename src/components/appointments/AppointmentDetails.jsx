@@ -235,7 +235,12 @@ const AppointmentDetails = () => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="h6" align="center">
-                      Hora
+                      Hora de Inicio
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6" align="center">
+                      Hora de Fin
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
@@ -251,7 +256,8 @@ const AppointmentDetails = () => {
                     <TableCell align="center">{appointment.paciente.nombrePaciente}</TableCell>
                     <TableCell align="center">{appointment.odontologo.nombreOdontologo}</TableCell>
                     <TableCell align="center">{appointment.fecha.split("T")[0]}</TableCell>
-                    <TableCell align="center">{appointment.hora}</TableCell>
+                    <TableCell align="center">{appointment.horaInicio}</TableCell>
+                    <TableCell align="center">{appointment.horaFin}</TableCell>
                     <TableCell align="center">
                       <IconButton
                         onClick={() => handleUpdateAppointment(appointment.id)}
