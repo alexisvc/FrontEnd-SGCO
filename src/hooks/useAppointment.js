@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import appointmentsService from '../services/appointmentsService';
 
 export function useAppointments() {
@@ -6,98 +6,115 @@ export function useAppointments() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Obtener todas las citas
-  const fetchAppointments = async () => {
+  const handleError = useCallback((err) => {
+    console.error('Error in appointment operation:', err);
+    setError(err.response?.data?.error || err.message || 'An unexpected error occurred');
+    setLoading(false);
+  }, []);
+
+  const fetchAppointments = useCallback(async () => {
     try {
       setLoading(true);
       const data = await appointmentsService.getAllAppointments();
       setAppointments(data);
       setLoading(false);
+      return { success: true, data };
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error fetching appointments' };
     }
-  };
+  }, [handleError]);
 
-  // Obtener una cita por ID
-  const fetchAppointmentById = async (id) => {
+  const fetchAppointmentById = useCallback(async (id) => {
     try {
       setLoading(true);
       const data = await appointmentsService.getAppointmentById(id);
       setLoading(false);
-      return data;
+      return { success: true, data };
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error fetching appointment' };
     }
-  };
+  }, [handleError]);
 
-  // Obtener citas por odontólogo
-  const fetchAppointmentsByOdontologo = async (odontologoId) => {
+  const fetchAppointmentsByOdontologo = useCallback(async (odontologoId) => {
     try {
       setLoading(true);
       const data = await appointmentsService.getAppointmentsByOdontologo(odontologoId);
       setAppointments(data);
       setLoading(false);
+      return { success: true, data };
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error fetching appointments by odontólogo' };
     }
-  };
+  }, [handleError]);
 
-  // Obtener citas por paciente
-  const fetchAppointmentsByPaciente = async (pacienteId) => {
+  const fetchAppointmentsByPaciente = useCallback(async (pacienteId) => {
     try {
       setLoading(true);
       const data = await appointmentsService.getAppointmentsByPaciente(pacienteId);
       setAppointments(data);
       setLoading(false);
+      return { success: true, data };
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error fetching appointments by paciente' };
     }
-  };
+  }, [handleError]);
 
-  // Crear una nueva cita
-  const createAppointment = async (newAppointment) => {
+  const createAppointment = useCallback(async (newAppointment) => {
     try {
       setLoading(true);
       const data = await appointmentsService.createAppointment(newAppointment);
-      setAppointments([...appointments, data]);
+      setAppointments(prevAppointments => [...prevAppointments, data]);
       setLoading(false);
-      return data;
+      return { success: true, data };
     } catch (err) {
-      setError(err);
-      setLoading(false);
-      throw err;
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error creating appointment' };
     }
-  };
+  }, [handleError]);
 
-  // Eliminar una cita
-  const deleteAppointment = async (id) => {
+  const deleteAppointment = useCallback(async (id) => {
     try {
       setLoading(true);
       await appointmentsService.deleteAppointment(id);
-      setAppointments(appointments.filter((appointment) => appointment.id !== id));
+      setAppointments(prevAppointments => prevAppointments.filter(appointment => appointment.id !== id));
       setLoading(false);
+      return { success: true };
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error deleting appointment' };
     }
-  };
+  }, [handleError]);
 
-  // Actualizar una cita
-  const updateAppointment = async (id, updatedAppointment) => {
+  const updateAppointment = useCallback(async (id, updatedAppointment) => {
     try {
       setLoading(true);
       const data = await appointmentsService.updateAppointment(id, updatedAppointment);
-      setAppointments(appointments.map((appointment) => (appointment.id === id ? data : appointment)));
+      setAppointments(prevAppointments => 
+        prevAppointments.map(appointment => appointment.id === id ? data : appointment)
+      );
       setLoading(false);
+      return { success: true, data };
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error updating appointment' };
     }
-  };
+  }, [handleError]);
+  
+  const fetchHorariosOcupados = useCallback(async (odontologoId, fecha) => {
+    try {
+      setLoading(true);
+      const data = await appointmentsService.getHorariosOcupados(odontologoId, fecha);
+      setLoading(false);
+      return { success: true, data };
+    } catch (err) {
+      handleError(err);
+      return { success: false, error: err.response?.data?.error || 'Error fetching horarios ocupados' };
+    }
+  }, [handleError]);
 
   return {
     appointments,
@@ -109,6 +126,7 @@ export function useAppointments() {
     fetchAppointmentsByPaciente,
     createAppointment,
     deleteAppointment,
-    updateAppointment
+    updateAppointment,
+    fetchHorariosOcupados,
   };
 }

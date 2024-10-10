@@ -30,6 +30,10 @@ const updateAppointment = (id, updatedAppointment) => {
   return axios.put(`${baseUrl}/${id}`, updatedAppointment).then((response) => response.data);
 };
 
+const getHorariosOcupados = (odontologoId, fecha) => {
+  return axios.get(`${baseUrl}/horarios-ocupados/${odontologoId}/${fecha}`).then((response) => response.data);
+};
+
 export default {
   getAllAppointments,
   getAppointmentById,
@@ -38,4 +42,5 @@ export default {
   createAppointment,
   deleteAppointment,
   updateAppointment,
+  getHorariosOcupados,
 };
