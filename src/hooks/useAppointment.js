@@ -72,7 +72,9 @@ export function useAppointments() {
       return { success: true, data };
     } catch (err) {
       handleError(err);
-      return { success: false, error: err.response?.data?.error || 'Error creating appointment' };
+      throw err; //REVISAR BIEN PORQUE NO FUNCIONA CON LA LÓGICA CON EL RETURN
+      
+      //return { success: false, error: err.response?.data?.error || 'Error creating appointment' }; 
     }
   }, [handleError]);
 
