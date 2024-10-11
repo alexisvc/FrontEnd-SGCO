@@ -57,7 +57,6 @@ const Appointment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [horariosOcupados, setHorariosOcupados] = useState([]);
 
-
   const handleHourClick = (hour) => {
     setNewAppointment((prev) => ({ ...prev, hora: hour }));
     setSelectedHour(hour);
@@ -74,12 +73,19 @@ const Appointment = () => {
   }, [selectedOdontologo]);
 
   useEffect(() => {
-    console.log("availableEndHours actualizadas:", availableEndHours);
-  }, [availableEndHours]);
-  
-  useEffect(() => {
-    console.log("newAppointment actualizado:", newAppointment);
-  }, [newAppointment]);
+    if (selectedOdontologo && newAppointment.fecha) {
+      loadHorariosOcupados(selectedOdontologo, dayjs(newAppointment.fecha).format("YYYY-MM-DD"));
+    }
+  }, [selectedOdontologo, newAppointment.fecha]);
+
+  const loadHorariosOcupados = async (odontologoId, fecha) => {
+    const result = await fetchHorariosOcupados(odontologoId, fecha);
+    if (result.success) {
+      setHorariosOcupados(result.data);
+    } else {
+      console.error("Error al cargar horarios ocupados:", result.error);
+    }
+  };
 
   const generateAvailableHours = () => {
     const startTime = dayjs().hour(7).minute(0);
@@ -96,10 +102,16 @@ const Appointment = () => {
   };
 
   const handleStartHourChange = (selectedHour) => {
-    setNewAppointment((prev) => ({ ...prev, horaInicio: selectedHour, horaFin: '' }));
+    setNewAppointment((prev) => ({ ...prev, horaInicio: selectedHour }));
+    // Generar las horas de fin disponibles basadas en la hora de inicio seleccionada
     const updatedAvailableEndHours = generateAvailableEndHours(selectedHour);
     setAvailableEndHours(updatedAvailableEndHours);
-    console.log("Horas de fin disponibles:", updatedAvailableEndHours);
+    
+    // Asegurarse de que la hora de fin seleccionada esté en las opciones generadas
+    setNewAppointment((prev) => ({
+      ...prev,
+      horaFin: updatedAvailableEndHours.includes(prev.horaFin) ? prev.horaFin : ""
+    }));
   };
   
 /*
@@ -133,20 +145,19 @@ const Appointment = () => {
   };
 */
 
-const generateAvailableEndHours = (startHour) => {
-  const startTime = dayjs(startHour, 'HH:mm');
-  const endTime = dayjs().hour(20).minute(30);
-  const hours = [];
-  let time = startTime.add(15, 'minute');
+  const generateAvailableEndHours = (startHour) => {
+    const startTime = dayjs(startHour, 'HH:mm');
+    const endTime = dayjs().hour(20).minute(30);
+    const hours = [];
+    let time = startTime.add(15, 'minute'); // Comienza 15 minutos después de la hora de inicio
 
-  while (time.isBefore(endTime) || time.isSame(endTime)) {
-    hours.push(time.format('HH:mm'));
-    time = time.add(15, 'minute');
-  }
+    while (time.isBefore(endTime) || time.isSame(endTime)) {
+      hours.push(time.format('HH:mm'));
+      time = time.add(15, 'minute');
+    }
 
-  console.log("Horas de fin generadas:", hours);
-  return hours;
-};
+    return hours;
+  };
 
   const handleEndHourChange = (selectedHour) => {
     setNewAppointment((prev) => ({ ...prev, horaFin: selectedHour }));
@@ -154,34 +165,17 @@ const generateAvailableEndHours = (startHour) => {
 
   
 
-  const handleDateChange = async (e) => {
+  const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    setNewAppointment({ ...newAppointment, fecha: selectedDate, horaInicio: '', horaFin: '' });
-  
-    if (selectedOdontologo) {
-      const result = await fetchHorariosOcupados(selectedOdontologo, selectedDate);
-      if (result.success) {
-        setHorariosOcupados(result.data);
-        console.log("Horarios ocupados cargados:", result.data);
-      } else {
-        toast.error("Error al obtener horarios ocupados", { autoClose: 3000 });
-        console.error("Error al obtener horarios ocupados:", result.error);
-      }
-    }
-  
-    const allHours = generateAvailableHours();
-    setAvailableHours(allHours);
-    setAvailableEndHours([]);
-  };
+    setNewAppointment({ ...newAppointment, fecha: selectedDate });
 
-  const isHorarioOcupado = (hora, esHoraFin = false) => {
-    return horariosOcupados.some(horario => {
-      if (esHoraFin) {
-        return hora > horario.horaInicio && hora <= horario.horaFin;
-      } else {
-        return hora >= horario.horaInicio && hora < horario.horaFin;
-      }
-    });
+    const occupiedHours = appointments
+      .filter((appointment) => appointment.fecha.split("T")[0] === selectedDate)
+      .map((appointment) => appointment.hora);
+
+    const allHours = generateAvailableHours();
+    const available = allHours.filter((hour) => !occupiedHours.includes(hour));
+    setAvailableHours(available);
   };
 
   const handleSearchSubmit = async (e) => {
@@ -198,6 +192,7 @@ const generateAvailableEndHours = (startHour) => {
       setSearched(false);
     }
   };
+
 /*
   const handleCreateAppointment = async () => {
     try {
@@ -213,36 +208,36 @@ const generateAvailableEndHours = (startHour) => {
     }
   };
 */
-  const handleCreateAppointment = async () => {
-    if (!newAppointment.horaInicio || !newAppointment.horaFin) {
-      toast.error("Debe seleccionar la hora de inicio y la hora de fin.", { autoClose: 3000 });
-      return;
-    }
-    
-    // Calcular la duración en minutos
-    const start = dayjs(newAppointment.horaInicio, "HH:mm");
-    const end = dayjs(newAppointment.horaFin, "HH:mm");
-    const duracionMinutos = end.diff(start, 'minute');
-    
-    try {
-      await createAppointment({
-        ...newAppointment,
-        paciente: selectedPatient.id,
-        odontologo: selectedOdontologo,
-        duracion: duracionMinutos
-      });
+
+const handleCreateAppointment = async () => {
+  if (!newAppointment.horaInicio || !newAppointment.horaFin || !newAppointment.fecha) {
+    toast.error("Debe seleccionar la fecha, hora de inicio y hora de fin.", { autoClose: 3000 });
+    return;
+  }
+  
+  try {
+    const appointmentData = {
+      paciente: selectedPatient.id,
+      odontologo: selectedOdontologo,
+      fecha: dayjs(newAppointment.fecha).format("YYYY-MM-DD"),
+      horaInicio: newAppointment.horaInicio,
+      horaFin: newAppointment.horaFin
+    };
+
+    const result = await createAppointment(appointmentData);
+    if (result.success) {
       toast.success("Cita creada exitosamente", { autoClose: 3000 });
       navigate("/agendamiento/detalles");
-    } catch (error) {
-      console.error("Error al crear la cita:", error);
-      if (error.response && error.response.status === 400) {
-        setErrorMessage(error.response.data.error || "Error al crear la cita");
-      } else {
-        setErrorMessage("Error al crear la cita. Por favor, inténtelo de nuevo.");
-      }
+    } else {
+      setErrorMessage(result.error || "Error al crear la cita");
       setErrorDialogOpen(true);
     }
-  };
+  } catch (error) {
+    console.error("Error al crear la cita:", error);
+    setErrorMessage(error.response?.data?.error || "Error al crear la cita. Por favor, inténtelo de nuevo.");
+    setErrorDialogOpen(true);
+  }
+};
 
   const handleCloseErrorDialog = () => {
     setErrorDialogOpen(false);
@@ -260,6 +255,25 @@ const generateAvailableEndHours = (startHour) => {
     handleCreateAppointment();
     closeConfirmDialog();
   };
+
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 7; hour < 21; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const time = dayjs().hour(hour).minute(minute).format("HH:mm");
+        options.push(time);
+      }
+    }
+    return options;
+  };
+
+  const isTimeOccupied = (time) => {
+    return horariosOcupados.some(horario => 
+      time >= horario.horaInicio && time < horario.horaFin
+    );
+  };
+
+  const timeOptions = generateTimeOptions();
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
@@ -422,52 +436,57 @@ const generateAvailableEndHours = (startHour) => {
 
                 {newAppointment.fecha && (
                   <>
-                    <Typography variant="h5" gutterBottom>
-                      Seleccionar Hora de Inicio
-                    </Typography>
-                    <Select
-                      value={newAppointment.horaInicio || ""}
-                      onChange={(e) => handleStartHourChange(e.target.value)}
-                      label="Hora de Inicio"
+                    {/* Seleccionar la hora de inicio */}
+                    <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Hora de Inicio</InputLabel>
+                <Select
+                  value={newAppointment.horaInicio}
+                  onChange={(e) => setNewAppointment({...newAppointment, horaInicio: e.target.value})}
+                  label="Hora de Inicio"
+                >
+                  {timeOptions.map((time) => (
+                    <MenuItem 
+                      key={time} 
+                      value={time}
+                      disabled={isTimeOccupied(time)}
+                      style={{
+                        backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
+                      }}
                     >
-                      {availableHours.map((hour) => (
-                        <MenuItem 
-                          key={hour} 
-                          value={hour}
-                          disabled={isHorarioOcupado(hour)}
-                          style={{
-                            backgroundColor: isHorarioOcupado(hour) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
-                          }}
-                        >
-                          {hour}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                      {time}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
 
                       {/* Seleccionar la hora de fin */}
                       {newAppointment.horaInicio && (
-  <>
-    <Typography variant="h5" gutterBottom>
-      Seleccionar Hora de Fin
-    </Typography>
-    <Select
-      value={newAppointment.horaFin || ""}
-      onChange={(e) => handleEndHourChange(e.target.value)}
-      label="Hora de Fin"
-    >
-      {availableEndHours.map((hour) => (
-        <MenuItem 
-          key={hour} 
-          value={hour}
-          disabled={isHorarioOcupado(hour, true)}
-          style={{
-            backgroundColor: isHorarioOcupado(hour, true) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
-          }}
-        >
-          {hour}
-        </MenuItem>
-      ))}
-    </Select>
+                        <>
+                          <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Hora de Fin</InputLabel>
+                <Select
+                  value={newAppointment.horaFin}
+                  onChange={(e) => setNewAppointment({...newAppointment, horaFin: e.target.value})}
+                  label="Hora de Fin"
+                >
+                  {timeOptions.map((time) => (
+                    <MenuItem 
+                      key={time} 
+                      value={time}
+                      disabled={isTimeOccupied(time) || time <= newAppointment.horaInicio}
+                      style={{
+                        backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
+                      }}
+                    >
+                      {time}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
                         </>
                       )}
 
