@@ -36,6 +36,7 @@ const EditAppointment = () => {
   const [newDate, setNewDate] = useState(null);
   const [newTimeStart, setNewTimeStart] = useState("");
   const [newTimeEnd, setNewTimeEnd] = useState("");
+  const [comentario, setComentario] = useState("");  // Campo comentario
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -51,6 +52,8 @@ const EditAppointment = () => {
           setNewDate(dayjs(result.data.fecha));
           setNewTimeStart(result.data.horaInicio);
           setNewTimeEnd(result.data.horaFin);
+          setComentario(result.data.comentario || ""); // Cargar comentario si existe
+          console.log("Cita cargada:", result.data);
           await loadHorariosOcupados(result.data.odontologo.id, result.data.fecha);
         } else {
           setErrorMessage(result.error || "Error al cargar la cita");
@@ -87,6 +90,7 @@ const EditAppointment = () => {
         fecha: newDate.format("YYYY-MM-DD"),
         horaInicio: newTimeStart,
         horaFin: newTimeEnd,
+        comentario, // Añadir el comentario en la actualización
       };
 
       console.log("Datos de la cita a actualizar:", updatedAppointmentData);
@@ -162,8 +166,6 @@ const EditAppointment = () => {
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Container component={Paper} sx={{ py: 1 }}>
             <Grid container spacing={2}>
-              {/* ... (otros campos sin cambios) ... */}
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
@@ -201,10 +203,6 @@ const EditAppointment = () => {
                   />
                 </LocalizationProvider>
               </Grid>
-
-
-
-
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel id="hora-inicio-label">Hora de Inicio</InputLabel>
@@ -253,6 +251,20 @@ const EditAppointment = () => {
                   </Select>
                 </FormControl>
               </Grid>
+
+              {/* Campo de Comentario */}
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Comentario"
+                  name="comentario"
+                  value={comentario}
+                  onChange={(e) => setComentario(e.target.value)}
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <Button
                   type="submit"

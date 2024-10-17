@@ -48,6 +48,7 @@ const Appointment = () => {
     fecha: "",
     horaInicio: "",
     horaFin: "",
+    comentario: "", // Agregar comentario
   });
   const [availableHours, setAvailableHours] = useState([]);
   const [availableEndHours, setAvailableEndHours] = useState([]);
@@ -113,37 +114,6 @@ const Appointment = () => {
       horaFin: updatedAvailableEndHours.includes(prev.horaFin) ? prev.horaFin : ""
     }));
   };
-  
-/*
-  const generateAvailableEndHours = (startHour) => {
-    const startTime = dayjs(startHour, "HH:mm");
-    const endTime = dayjs().hour(20).minute(30); // Hora máxima permitida
-    const hours = [];
-    let time = startTime.add(15, "minute"); // Comienza 15 minutos después de la hora de inicio
-
-    while (time.isBefore(endTime) || time.isSame(endTime)) {
-      hours.push(time.format("HH:mm"));
-      time = time.add(15, "minute");
-    }
-
-    // Filtrar las horas que ya están ocupadas
-    const occupiedHours = appointments
-      .filter((appointment) => appointment.fecha.split("T")[0] === newAppointment.fecha)
-      .map((appointment) => appointment.horaInicio);
-
-    return hours.filter((hour) => !occupiedHours.includes(hour));
-  };
-
-  const handleStartHourChange = (selectedHour) => {
-    setNewAppointment((prev) => ({ ...prev, horaInicio: selectedHour }));
-    const availableEndHours = generateAvailableEndHours(selectedHour);
-    setAvailableHours(availableEndHours);
-  };
-
-  const handleEndHourChange = (selectedHour) => {
-    setNewAppointment((prev) => ({ ...prev, horaFin: selectedHour }));
-  };
-*/
 
   const generateAvailableEndHours = (startHour) => {
     const startTime = dayjs(startHour, 'HH:mm');
@@ -162,8 +132,6 @@ const Appointment = () => {
   const handleEndHourChange = (selectedHour) => {
     setNewAppointment((prev) => ({ ...prev, horaFin: selectedHour }));
   };
-
-  
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
@@ -193,51 +161,36 @@ const Appointment = () => {
     }
   };
 
-/*
   const handleCreateAppointment = async () => {
+    if (!newAppointment.horaInicio || !newAppointment.horaFin || !newAppointment.fecha) {
+      toast.error("Debe seleccionar la fecha, hora de inicio y hora de fin.", { autoClose: 3000 });
+      return;
+    }
+    
     try {
-      await createAppointment({
-        ...newAppointment,
+      const appointmentData = {
         paciente: selectedPatient.id,
         odontologo: selectedOdontologo,
-      });
-      toast.success("Cita creada exitosamente", { autoClose: 3000 });
-      navigate("/agendamiento/detalles");
+        fecha: dayjs(newAppointment.fecha).format("YYYY-MM-DD"),
+        horaInicio: newAppointment.horaInicio,
+        horaFin: newAppointment.horaFin,
+        comentario: newAppointment.comentario // Incluir comentario
+      };
+
+      const result = await createAppointment(appointmentData);
+      if (result.success) {
+        toast.success("Cita creada exitosamente", { autoClose: 3000 });
+        navigate("/agendamiento/detalles");
+      } else {
+        setErrorMessage(result.error || "Error al crear la cita");
+        setErrorDialogOpen(true);
+      }
     } catch (error) {
-      toast.error("Error al crear la cita", { autoClose: 3000 });
-    }
-  };
-*/
-
-const handleCreateAppointment = async () => {
-  if (!newAppointment.horaInicio || !newAppointment.horaFin || !newAppointment.fecha) {
-    toast.error("Debe seleccionar la fecha, hora de inicio y hora de fin.", { autoClose: 3000 });
-    return;
-  }
-  
-  try {
-    const appointmentData = {
-      paciente: selectedPatient.id,
-      odontologo: selectedOdontologo,
-      fecha: dayjs(newAppointment.fecha).format("YYYY-MM-DD"),
-      horaInicio: newAppointment.horaInicio,
-      horaFin: newAppointment.horaFin
-    };
-
-    const result = await createAppointment(appointmentData);
-    if (result.success) {
-      toast.success("Cita creada exitosamente", { autoClose: 3000 });
-      navigate("/agendamiento/detalles");
-    } else {
-      setErrorMessage(result.error || "Error al crear la cita");
+      console.error("Error al crear la cita:", error);
+      setErrorMessage(error.response?.data?.error || "Error al crear la cita. Por favor, inténtelo de nuevo.");
       setErrorDialogOpen(true);
     }
-  } catch (error) {
-    console.error("Error al crear la cita:", error);
-    setErrorMessage(error.response?.data?.error || "Error al crear la cita. Por favor, inténtelo de nuevo.");
-    setErrorDialogOpen(true);
-  }
-};
+  };
 
   const handleCloseErrorDialog = () => {
     setErrorDialogOpen(false);
@@ -438,61 +391,73 @@ const handleCreateAppointment = async () => {
                   <>
                     {/* Seleccionar la hora de inicio */}
                     <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Hora de Inicio</InputLabel>
-                <Select
-                  value={newAppointment.horaInicio}
-                  onChange={(e) => setNewAppointment({...newAppointment, horaInicio: e.target.value})}
-                  label="Hora de Inicio"
-                >
-                  {timeOptions.map((time) => (
-                    <MenuItem 
-                      key={time} 
-                      value={time}
-                      disabled={isTimeOccupied(time)}
-                      style={{
-                        backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
-                      }}
-                    >
-                      {time}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+                      <FormControl fullWidth>
+                        <InputLabel>Hora de Inicio</InputLabel>
+                        <Select
+                          value={newAppointment.horaInicio}
+                          onChange={(e) => handleStartHourChange(e.target.value)}
+                          label="Hora de Inicio"
+                        >
+                          {timeOptions.map((time) => (
+                            <MenuItem 
+                              key={time} 
+                              value={time}
+                              disabled={isTimeOccupied(time)}
+                              style={{
+                                backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
+                              }}
+                            >
+                              {time}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
 
-                      {/* Seleccionar la hora de fin */}
-                      {newAppointment.horaInicio && (
-                        <>
-                          <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>Hora de Fin</InputLabel>
-                <Select
-                  value={newAppointment.horaFin}
-                  onChange={(e) => setNewAppointment({...newAppointment, horaFin: e.target.value})}
-                  label="Hora de Fin"
-                >
-                  {timeOptions.map((time) => (
-                    <MenuItem 
-                      key={time} 
-                      value={time}
-                      disabled={isTimeOccupied(time) || time <= newAppointment.horaInicio}
-                      style={{
-                        backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
-                      }}
-                    >
-                      {time}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-                        </>
-                      )}
+                    {/* Seleccionar la hora de fin */}
+                    {newAppointment.horaInicio && (
+                      <>
+                        <Grid item xs={12} sm={6}>
+                          <FormControl fullWidth>
+                            <InputLabel>Hora de Fin</InputLabel>
+                            <Select
+                              value={newAppointment.horaFin}
+                              onChange={(e) => handleEndHourChange(e.target.value)}
+                              label="Hora de Fin"
+                            >
+                              {availableEndHours.map((time) => (
+                                <MenuItem 
+                                  key={time} 
+                                  value={time}
+                                  disabled={isTimeOccupied(time) || time <= newAppointment.horaInicio}
+                                  style={{
+                                    backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
+                                  }}
+                                >
+                                  {time}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
 
-
+                        {/* Campo de Comentario que solo aparece después de seleccionar la hora de fin */}
+                        {newAppointment.horaFin && (
+                          <Grid item xs={12}>
+                            <TextField
+                              fullWidth
+                              label="Comentario"
+                              name="comentario"
+                              value={newAppointment.comentario}
+                              onChange={(e) => setNewAppointment({ ...newAppointment, comentario: e.target.value })}
+                              multiline
+                              rows={4} // Permite que sea un campo de texto largo
+                            />
+                          </Grid>
+                        )}
+                      </>
+                    )}
                   </>
-
                 )}
               </>
             )}
