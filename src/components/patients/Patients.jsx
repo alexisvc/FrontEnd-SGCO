@@ -62,7 +62,11 @@ const Patients = ({
     telefono: "",
     telContactoEmergencia: "",
     afinidadContactoEmergencia: "",
+    apiKey:"",
+    notificacionesWpp: 'false',
   });
+
+  const [deseaNotificaciones, setDeseaNotificaciones] = useState(false); // Estado local para la opción de notificaciones
 
   const handleSearchNameChange = (e) => {
     setSearchName(e.target.value);
@@ -134,6 +138,8 @@ const Patients = ({
         telefono: "",
         telContactoEmergencia: "",
         afinidadContactoEmergencia: "",
+        apiKey:"",
+        notificacionesWpp: 'false',
       });
 
       setShowCreateForm(false);
@@ -145,6 +151,10 @@ const Patients = ({
         autoClose: 3000,
       });
     }
+  };
+
+  const handleNotificacionesChange = (event) => {
+    setDeseaNotificaciones(event.target.value === 'true');
   };
 
   const handleViewPatient = (patient) => {

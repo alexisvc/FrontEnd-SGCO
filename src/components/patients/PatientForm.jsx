@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, TextField, Button, Box, Typography, Container, Paper } from '@mui/material';
+import { Grid, TextField, Button, Box, Typography, Container, Paper, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 
 const PatientForm = ({ newPatient, handleCreateChange, handleCreateSubmit }) => {
@@ -124,6 +124,35 @@ const PatientForm = ({ newPatient, handleCreateChange, handleCreateSubmit }) => 
               required
             />
           </Grid>
+
+          <Grid item xs={6}>
+            <FormControl component="fieldset" sx={{ margin: 1 }}>
+              <FormLabel component="legend">Desea recibir notificaciones al whatsapp?</FormLabel>
+              <RadioGroup
+                name="notificacionesWpp"
+                value={newPatient.notificacionesWpp}
+                onChange={handleCreateChange}
+                row
+              >
+                <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                <FormControlLabel defaultChecked value="false" control={<Radio />} label="No" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+
+          {newPatient.notificacionesWpp === 'true' && (
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Clave de activación"
+                name="apiKey"
+                value={newPatient.apiKey}
+                onChange={handleCreateChange}
+                //required
+              />
+            </Grid>
+          )}
+
           <Grid item xs={12} sx={{ m: 2 }} style={{ textAlign: 'center',}}>
             <Button type="submit" variant="contained" color="primary">
               Crear Paciente

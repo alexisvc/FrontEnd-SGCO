@@ -8,6 +8,11 @@ import {
   Typography,
   Container,
   Paper,
+  FormControl, 
+  FormLabel, 
+  RadioGroup, 
+  FormControlLabel, 
+  Radio
 } from "@mui/material";
 import { toast } from "react-toastify";
 
@@ -18,6 +23,11 @@ const PatientDetails = ({ updatePatient }) => {
   const { patient } = location.state;
 
   const [editablePatient, setEditablePatient] = useState({ ...patient });
+  const [deseaNotificaciones, setDeseaNotificaciones] = useState(false); // Estado local para la opción de notificaciones
+
+  const handleNotificacionesChange = (event) => {
+    setDeseaNotificaciones(event.target.value === 'true');
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -171,6 +181,33 @@ const PatientDetails = ({ updatePatient }) => {
               required
             />
           </Grid>
+          <Grid item xs={6}>
+            <FormControl component="fieldset" sx={{ margin: 1 }}>
+              <FormLabel component="legend">Desea recibir notificaciones al whatsapp?</FormLabel>
+              <RadioGroup
+                name="notificacionesWpp"
+                value={deseaNotificaciones ? 'true' : 'false'}
+                onChange={handleNotificacionesChange}
+                row
+              >
+                <FormControlLabel value="true" control={<Radio />} label="Sí" />
+                <FormControlLabel defaultChecked value="false" control={<Radio />} label="No" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+
+          {deseaNotificaciones && (
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Clave de activación"
+                name="apiKey"
+                value={editablePatient.apiKey}
+                onChange={handleChange}
+                //required
+              />
+            </Grid>
+          )}
           <Grid item xs={12} sx = {{m: 2}} style={{ textAlign: "center" }}>
             <Button type="submit" variant="contained" color="primary">
               Actualizar Paciente
