@@ -243,6 +243,11 @@ const AppointmentDetails = () => {
                       Hora de Fin
                     </Typography>
                   </TableCell>
+                  <TableCell>
+                  <Typography variant="h6" align="center">
+                    Comentario
+                  </Typography>
+                  </TableCell>
                   <TableCell align="center">
                     <Typography variant="h6" align="center">
                       Acciones
@@ -258,6 +263,7 @@ const AppointmentDetails = () => {
                     <TableCell align="center">{appointment.fecha.split("T")[0]}</TableCell>
                     <TableCell align="center">{appointment.horaInicio}</TableCell>
                     <TableCell align="center">{appointment.horaFin}</TableCell>
+                    <TableCell align="center">{appointment.comentario}</TableCell>
                     <TableCell align="center">
                       <IconButton
                         onClick={() => handleUpdateAppointment(appointment.id)}
