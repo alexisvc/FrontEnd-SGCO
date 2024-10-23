@@ -158,6 +158,7 @@ const Patients = ({
   };
 
   const handleViewPatient = (patient) => {
+    window.scrollTo(0, 0);
     navigate(`/patients/${patient.id}`, { state: { patient } });
     setShowSearchForm(false);
   };
