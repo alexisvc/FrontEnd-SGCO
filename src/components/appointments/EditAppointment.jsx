@@ -25,7 +25,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+// Configurar dayjs para manejar zonas horarias
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const EditAppointment = () => {
   const { appointmentId } = useParams();
@@ -36,7 +42,7 @@ const EditAppointment = () => {
   const [newDate, setNewDate] = useState(null);
   const [newTimeStart, setNewTimeStart] = useState("");
   const [newTimeEnd, setNewTimeEnd] = useState("");
-  const [comentario, setComentario] = useState("");  // Campo comentario
+  const [comentario, setComentario] = useState("");
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -49,12 +55,24 @@ const EditAppointment = () => {
         const result = await fetchAppointmentById(appointmentId);
         if (result.success) {
           setAppointment(result.data);
-          setNewDate(dayjs(result.data.fecha));
+          
+          // Extraer solo la fecha del string UTC y crear una nueva fecha local
+          const dateOnly = result.data.fecha.split('T')[0];
+          const appointmentDate = dayjs(dateOnly);
+          
+          console.log('Fecha original:', result.data.fecha);
+          console.log('Fecha extraída:', dateOnly);
+          console.log('Fecha convertida:', appointmentDate.format('YYYY-MM-DD'));
+          
+          setNewDate(appointmentDate);
           setNewTimeStart(result.data.horaInicio);
           setNewTimeEnd(result.data.horaFin);
-          setComentario(result.data.comentario || ""); // Cargar comentario si existe
-          console.log("Cita cargada:", result.data);
-          await loadHorariosOcupados(result.data.odontologo.id, result.data.fecha);
+          setComentario(result.data.comentario || "");
+          
+          await loadHorariosOcupados(
+            result.data.odontologo.id, 
+            appointmentDate.format("YYYY-MM-DD")
+          );
         } else {
           setErrorMessage(result.error || "Error al cargar la cita");
           setErrorDialogOpen(true);
@@ -70,13 +88,38 @@ const EditAppointment = () => {
     loadAppointment();
   }, [appointmentId, fetchAppointmentById]);
 
+  useEffect(() => {
+    const updateHorarios = async () => {
+      if (appointment && newDate) {
+        await loadHorariosOcupados(
+          appointment.odontologo.id, 
+          newDate.format("YYYY-MM-DD")
+        );
+      }
+    };
+    updateHorarios();
+  }, [newDate, appointment]);
+
   const loadHorariosOcupados = async (odontologoId, fecha) => {
-    const result = await fetchHorariosOcupados(odontologoId, fecha);
-    if (result.success) {
-      setHorariosOcupados(result.data);
-    } else {
-      console.error("Error al cargar horarios ocupados:", result.error);
+    try {
+      const result = await fetchHorariosOcupados(odontologoId, fecha);
+      if (result.success) {
+        setHorariosOcupados(result.data);
+      } else {
+        console.error("Error al cargar horarios ocupados:", result.error);
+      }
+    } catch (error) {
+      console.error("Error al cargar horarios ocupados:", error);
     }
+  };
+
+  const handleDateChange = async (date) => {
+    // Asegurarse de trabajar solo con la fecha, sin tiempo
+    const dateOnly = date.format('YYYY-MM-DD');
+    const newLocalDate = dayjs(dateOnly);
+    setNewDate(newLocalDate);
+    setNewTimeStart("");
+    setNewTimeEnd("");
   };
 
   const handleSubmit = async (e) => {
@@ -84,13 +127,16 @@ const EditAppointment = () => {
     if (!appointment) return;
     
     try {
+      // Usar solo la fecha sin tiempo
+      const dateToSubmit = newDate.format("YYYY-MM-DD");
+      
       const updatedAppointmentData = {
         paciente: appointment.paciente.id,
         odontologo: appointment.odontologo.id,
-        fecha: newDate.format("YYYY-MM-DD"),
+        fecha: dateToSubmit,
         horaInicio: newTimeStart,
         horaFin: newTimeEnd,
-        comentario, // Añadir el comentario en la actualización
+        comentario,
       };
 
       console.log("Datos de la cita a actualizar:", updatedAppointmentData);
@@ -151,7 +197,7 @@ const EditAppointment = () => {
   }
 
   return (
-    <>
+    <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/agendamiento/detalles")}
@@ -159,12 +205,12 @@ const EditAppointment = () => {
       >
         Atrás
       </Button>
-      <Container>
+      <Container >
         <Typography variant="h4" align="center" gutterBottom>
           Editar Cita
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          <Container component={Paper} sx={{ py: 1 }}>
+          <Container component={Paper} sx={{ p: 4 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -195,11 +241,10 @@ const EditAppointment = () => {
                   <DatePicker
                     label="Fecha"
                     value={newDate}
-                    onChange={(date) => setNewDate(date)}
+                    onChange={handleDateChange}
                     renderInput={(params) => (
-                      <TextField {...params} fullWidth />
+                      <TextField {...params} fullWidth required />
                     )}
-                    required
                   />
                 </LocalizationProvider>
               </Grid>
@@ -251,8 +296,6 @@ const EditAppointment = () => {
                   </Select>
                 </FormControl>
               </Grid>
-
-              {/* Campo de Comentario */}
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -264,7 +307,6 @@ const EditAppointment = () => {
                   rows={4}
                 />
               </Grid>
-
               <Grid item xs={12}>
                 <Button
                   type="submit"
@@ -298,7 +340,7 @@ const EditAppointment = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };
 

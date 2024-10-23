@@ -390,7 +390,7 @@ const Appointment = () => {
                 {newAppointment.fecha && (
                   <>
                     {/* Seleccionar la hora de inicio */}
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} sx={{mt: 2}}>
                       <FormControl fullWidth>
                         <InputLabel>Hora de Inicio</InputLabel>
                         <Select
@@ -417,7 +417,7 @@ const Appointment = () => {
                     {/* Seleccionar la hora de fin */}
                     {newAppointment.horaInicio && (
                       <>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} sx={{mt: 2}}>
                           <FormControl fullWidth>
                             <InputLabel>Hora de Fin</InputLabel>
                             <Select
@@ -443,7 +443,7 @@ const Appointment = () => {
 
                         {/* Campo de Comentario que solo aparece después de seleccionar la hora de fin */}
                         {newAppointment.horaFin && (
-                          <Grid item xs={12}>
+                          <Grid item xs={12} sx={{mt: 2, mb: 2}}>
                             <TextField
                               fullWidth
                               label="Comentario"
