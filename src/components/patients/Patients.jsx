@@ -158,7 +158,7 @@ const Patients = ({
   };
 
   const handleViewPatient = (patient) => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0); // Scroll to top
     navigate(`/patients/${patient.id}`, { state: { patient } });
     setShowSearchForm(false);
   };
