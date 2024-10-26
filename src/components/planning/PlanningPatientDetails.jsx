@@ -83,7 +83,8 @@ const PlanningPatientList = () => {
   };
 
   const handleViewPatient = (patient) => {
-    navigate(`/treatment-plans/${patient.id}`, { state: { patient } });
+    //navigate(`/treatment-plans/${patient.id}`, { state: { patient } });
+    navigate(`/patients/${patient.id}/budgets`, { state: { patient } });
     setShowSearchForm(false);
   };
 

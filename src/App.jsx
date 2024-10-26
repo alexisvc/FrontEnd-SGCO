@@ -38,6 +38,10 @@ import PlanningMenu from "./components/planning/PlanningMenu";
 import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
+import { BudgetCreate } from "./components/budgets/BudgetCreate";
+import { BudgetList } from "./components/BudgetList";
+import { ProcedimientoList } from "./components/ProcedimientoList";
+import { ProcedimientoCreate } from "./components/ProcedimientoCreate";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -188,6 +192,10 @@ function App() {
 
             <Route path="/planificacion" element={<PlanningMenu />} />
 
+            <Route path="/patients/:patientId/budgets" element={<BudgetList />} />
+            <Route path="/patients/:patientId/budgets/:budgetId/procedimientos" element={<ProcedimientoList />} />
+            <Route path="/patients/:patientId/budgets/:budgetId/procedimientos/create" element={<ProcedimientoCreate />} />
+            <Route path="/patients/:patientId/budgets/create" element={<BudgetCreate />} />
             <Route
               path="/planificacion/pacientes"
               element={<PlanningPatientList />}
