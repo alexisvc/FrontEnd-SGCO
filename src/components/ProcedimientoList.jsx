@@ -1,7 +1,6 @@
 // components/ProcedimientoList.js
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useBudgetProcedimientos } from '../hooks/useBudgetProcedimientos';
 import {
   Button,
   Typography,
@@ -18,11 +17,12 @@ import {
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useProcedimientos } from '../hooks/useProcedimientos';
 
 export function ProcedimientoList() {
-  const { budgetId } = useParams();
+  const { budgetId, patientId } = useParams();
   const navigate = useNavigate();
-  const { procedimientos, loading, error, fetchProcedimientosByBudget } = useBudgetProcedimientos();
+  const { procedimientos, loading, error, fetchProcedimientosByBudget } = useProcedimientos();
 
   useEffect(() => {
     fetchProcedimientosByBudget(budgetId);
@@ -31,7 +31,7 @@ export function ProcedimientoList() {
   }, [budgetId]);
 
   const handleViewProcedimiento = (procedimientoId) => {
-    navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}`);
+    navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases`);
   };
 
   const handleCreateProcedimiento = () => {
@@ -46,7 +46,7 @@ export function ProcedimientoList() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/patients/${patientId}/budgets/${budgetId}")}
         sx={{ m: 2 }}
       >
         Atrás
@@ -98,7 +98,7 @@ export function ProcedimientoList() {
                     {procedimiento.fases.length}
                   </TableCell>
                   <TableCell align="center">
-                    <IconButton onClick={() => handleViewProcedimiento(procedimiento.id)}>
+                    <IconButton onClick={() => handleViewProcedimiento(procedimiento._id)}>
                       <VisibilityIcon />
                     </IconButton>
                   </TableCell>

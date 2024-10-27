@@ -18,22 +18,46 @@ import {
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { toast } from 'react-toastify';
 
 export function BudgetList() {
   const { patientId } = useParams();
   const navigate = useNavigate();
-  const { budgets, loading, error, fetchBudgetsByPatient } = useBudgets();
+  const { 
+    budgets, 
+    loading, 
+    error, 
+    fetchBudgetsByPatient, 
+    createBudget 
+  } = useBudgets();
 
   useEffect(() => {
     fetchBudgetsByPatient(patientId);
-  }, [patientId]);
+  }, [patientId, fetchBudgetsByPatient]);
 
   const handleViewBudget = (budgetId) => {
     navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos`);
   };
 
-  const handleCreateBudget = () => {
-    navigate(`/patients/${patientId}/budgets/create`);
+  const handleCreateBudget = async () => {
+    try {
+      const { success, data, error } = await createBudget({
+        paciente: patientId,
+        procedimientos: []
+      });
+
+      if (success) {
+        toast.success('Presupuesto creado exitosamente');
+        // Navegar directamente a la lista de procedimientos del nuevo presupuesto
+        navigate(`/patients/${patientId}/budgets/${data.id}/procedimientos`);
+        //navigate(`/patients/${patientId}/budgets`);
+      } else {
+        toast.error(error || 'Error al crear el presupuesto');
+      }
+    } catch (error) {
+      console.error('Error al crear presupuesto:', error);
+      toast.error('Error al crear el presupuesto');
+    }
   };
 
   if (loading) return <div>Cargando...</div>;
@@ -102,6 +126,15 @@ export function BudgetList() {
                   </TableCell>
                 </TableRow>
               ))}
+              {budgets.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    <Typography variant="body1">
+                      No hay presupuestos registrados
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

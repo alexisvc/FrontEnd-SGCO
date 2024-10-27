@@ -42,6 +42,8 @@ import { BudgetCreate } from "./components/budgets/BudgetCreate";
 import { BudgetList } from "./components/BudgetList";
 import { ProcedimientoList } from "./components/ProcedimientoList";
 import { ProcedimientoCreate } from "./components/ProcedimientoCreate";
+import { FaseList } from "./components/FaseList";
+import { FaseCreate } from "./components/FaseCreate";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -191,15 +193,33 @@ function App() {
             <Route path="/agendamiento/cita" element={<Appointment />} />
 
             <Route path="/planificacion" element={<PlanningMenu />} />
-
-            <Route path="/patients/:patientId/budgets" element={<BudgetList />} />
-            <Route path="/patients/:patientId/budgets/:budgetId/procedimientos" element={<ProcedimientoList />} />
-            <Route path="/patients/:patientId/budgets/:budgetId/procedimientos/create" element={<ProcedimientoCreate />} />
-            <Route path="/patients/:patientId/budgets/create" element={<BudgetCreate />} />
             <Route
               path="/planificacion/pacientes"
               element={<PlanningPatientList />}
             />
+            <Route
+              path="/patients/:patientId/budgets"
+              element={<BudgetList />}
+            />
+            <Route
+              path="/patients/:patientId/budgets/create"
+              element={<BudgetCreate />}
+            />
+            <Route
+              path="/patients/:patientId/budgets/:budgetId/procedimientos"
+              element={<ProcedimientoList />}
+            />
+            <Route
+              path="/patients/:patientId/budgets/:budgetId/procedimientos/create"
+              element={<ProcedimientoCreate />}
+            />
+            
+            <Route
+              path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases"
+              element={<FaseList />}
+            />
+            <Route path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases/create" element={<FaseCreate />} />
+            
 
             <Route
               path="/treatment-plans/:patientId"
