@@ -1,5 +1,5 @@
 // components/FaseList.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFases } from '../hooks/useFases';
 import {
@@ -14,7 +14,11 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Box
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,6 +30,8 @@ export function FaseList() {
   const { budgetId, procedimientoId, patientId } = useParams();
   const navigate = useNavigate();
   const { fases, loading, error, fetchFases, deleteFase } = useFases();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [faseToDelete, setFaseToDelete] = useState(null);
 
   useEffect(() => {
     loadFases();
@@ -42,15 +48,30 @@ export function FaseList() {
     navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases/create`);
   };
 
-  const handleDeleteFase = async (faseId) => {
-    if (window.confirm('¿Está seguro de que desea eliminar esta fase?')) {
-      const { success, error } = await deleteFase(budgetId, procedimientoId, faseId);
+  const handleOpenDeleteDialog = (fase) => {
+    setFaseToDelete(fase);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setFaseToDelete(null);
+  };
+
+  const handleConfirmDelete = async (faseId) => {
+    try {
+      const { success } = await deleteFase(budgetId, procedimientoId, faseId);
       if (success) {
         toast.success('Fase eliminada exitosamente');
+        setFases(prevFases => prevFases.filter(fase => fase._id !== faseId));
       } else {
-        toast.error(error || 'Error al eliminar la fase');
+        toast.error('Error al eliminar la fase');
       }
+    } catch (err) {
+      console.error('Error al eliminar la fase:', err);
+      toast.error('Error al eliminar la fase');
     }
+    handleCloseDeleteDialog();
   };
 
   if (loading) return <div>Cargando...</div>;
@@ -99,18 +120,18 @@ export function FaseList() {
             </TableHead>
             <TableBody>
               {fases.map((fase) => (
-                <TableRow key={fase.id}>
+                <TableRow key={fase._id}>
                   <TableCell align="center">{fase.nombreFase}</TableCell>
                   <TableCell align="center">${fase.totalFase}</TableCell>
                   <TableCell align="center">
                     <IconButton 
-                      onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases/${fase.id}/edit`)}
+                      onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases/${fase._id}/edit`)}
                       color="primary"
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton 
-                      onClick={() => handleDeleteFase(fase._id)}
+                      onClick={() => handleOpenDeleteDialog(fase)}
                       color="error"
                     >
                       <DeleteIcon />
@@ -139,6 +160,28 @@ export function FaseList() {
           </Typography>
         </Box>
       </Container>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          ¿Estás seguro que deseas eliminar esta fase?
+        </DialogTitle>
+        <DialogContent>
+          <Typography id="alert-dialog-description">
+            Esta acción no se puede deshacer.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancelar</Button>
+          <Button onClick={() => handleConfirmDelete(faseToDelete._id)} color="error" autoFocus>
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

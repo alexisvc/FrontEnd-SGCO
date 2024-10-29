@@ -1,5 +1,5 @@
 // components/ProcedimientoList.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
@@ -12,23 +12,31 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useProcedimientos } from '../hooks/useProcedimientos';
+import { toast } from 'react-toastify';
 
 export function ProcedimientoList() {
   const { budgetId, patientId } = useParams();
   const navigate = useNavigate();
-  const { procedimientos, loading, error, fetchProcedimientosByBudget } = useProcedimientos();
+  const { procedimientos, loading, error, fetchProcedimientos, deleteProcedimiento } = useProcedimientos();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [procedimientoToDelete, setProcedimientoToDelete] = useState(null);
 
   useEffect(() => {
-    fetchProcedimientosByBudget(budgetId);
+    fetchProcedimientos(budgetId);
     console.log('fetchProcedimientosByBudget', budgetId);
     console.log('procedimientos', procedimientos);
-  }, [budgetId]);
+  }, [budgetId, fetchProcedimientos]);
 
   const handleViewProcedimiento = (procedimientoId) => {
     navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases`);
@@ -36,6 +44,29 @@ export function ProcedimientoList() {
 
   const handleCreateProcedimiento = () => {
     navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/create`);
+  };
+
+  const handleOpenDeleteDialog = (procedimiento) => {
+    setProcedimientoToDelete(procedimiento);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setProcedimientoToDelete(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (procedimientoToDelete) {
+      try {
+        await deleteProcedimiento(budgetId, procedimientoToDelete._id);
+        handleCloseDeleteDialog();
+        toast.success('Procedimiento eliminado exitosamente');
+      } catch (error) {
+        console.error('Error al eliminar procedimiento:', error);
+        toast.error('Error al eliminar el procedimiento');
+      }
+    }
   };
 
   if (loading) return <div>Cargando...</div>;
@@ -46,7 +77,7 @@ export function ProcedimientoList() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate("/patients/${patientId}/budgets/${budgetId}")}
+        onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}`)}
         sx={{ m: 2 }}
       >
         Atrás
@@ -87,7 +118,7 @@ export function ProcedimientoList() {
             </TableHead>
             <TableBody>
               {procedimientos.map((procedimiento) => (
-                <TableRow key={procedimiento.id}>
+                <TableRow key={procedimiento._id}>
                   <TableCell align="center">
                     {procedimiento.nombreProcedimiento}
                   </TableCell>
@@ -101,6 +132,9 @@ export function ProcedimientoList() {
                     <IconButton onClick={() => handleViewProcedimiento(procedimiento._id)}>
                       <VisibilityIcon />
                     </IconButton>
+                    <IconButton onClick={() => handleOpenDeleteDialog(procedimiento)}>
+                      <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -108,6 +142,28 @@ export function ProcedimientoList() {
           </Table>
         </TableContainer>
       </Container>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          ¿Estás seguro que deseas eliminar este procedimiento?
+        </DialogTitle>
+        <DialogContent>
+          <Typography id="alert-dialog-description">
+            Esta acción no se puede deshacer.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancelar</Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

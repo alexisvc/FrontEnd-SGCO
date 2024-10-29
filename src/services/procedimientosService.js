@@ -14,9 +14,13 @@ const createProcedimiento = async (budgetId, { nombreProcedimiento }) => {
   ).then(response => response.data);
 };
 
-const deleteProcedimiento = (budgetId, procedimientoId) => {
-  return axios.delete(`${baseUrl}/${budgetId}/procedimientos/${procedimientoId}`)
-    .then(response => response.data);
+const deleteProcedimiento = async (budgetId, procedimientoId) => {
+  try {
+    const response = await axios.delete(`${baseUrl}/${budgetId}/procedimientos/${procedimientoId}`);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, error: error.response?.data?.error || 'Error al eliminar el procedimiento' };
+  }
 };
 
 export default {

@@ -55,10 +55,15 @@ export function useFases() {
   const deleteFase = useCallback(async (budgetId, procedimientoId, faseId) => {
     try {
       setLoading(true);
-      await fasesService.deleteFase(budgetId, procedimientoId, faseId);
-      setFases(prevFases => prevFases.filter(f => f.id !== faseId));
-      setLoading(false);
-      return { success: true };
+      const { success, error } = await fasesService.deleteFase(budgetId, procedimientoId, faseId);
+      if (success) {
+        setFases(prevFases => prevFases.filter(fase => fase._id !== faseId));
+        setLoading(false);
+        return { success: true };
+      } else {
+        setLoading(false);
+        return { success: false, error: error || 'Error al eliminar la fase' };
+      }
     } catch (err) {
       handleError(err);
       return { success: false, error: err.response?.data?.error || 'Error al eliminar la fase' };

@@ -1,5 +1,5 @@
 // components/BudgetList.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBudgets } from '../hooks/useBudgets';
 import {
@@ -13,11 +13,16 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 
 export function BudgetList() {
@@ -28,8 +33,11 @@ export function BudgetList() {
     loading, 
     error, 
     fetchBudgetsByPatient, 
-    createBudget 
+    createBudget,
+    deleteBudget 
   } = useBudgets();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [budgetToDelete, setBudgetToDelete] = useState(null);
 
   useEffect(() => {
     fetchBudgetsByPatient(patientId);
@@ -49,14 +57,31 @@ export function BudgetList() {
       if (success) {
         toast.success('Presupuesto creado exitosamente');
         // Navegar directamente a la lista de procedimientos del nuevo presupuesto
-        navigate(`/patients/${patientId}/budgets/${data.id}/procedimientos`);
-        //navigate(`/patients/${patientId}/budgets`);
+        //navigate(`/patients/${patientId}/budgets/${data.id}/procedimientos`);
+        navigate(`/patients/${patientId}/budgets`);
       } else {
         toast.error(error || 'Error al crear el presupuesto');
       }
     } catch (error) {
       console.error('Error al crear presupuesto:', error);
       toast.error('Error al crear el presupuesto');
+    }
+  };
+
+  const handleOpenDeleteDialog = (budget) => {
+    setBudgetToDelete(budget);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setBudgetToDelete(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (budgetToDelete) {
+      await deleteBudget(budgetToDelete.id);
+      handleCloseDeleteDialog();
     }
   };
 
@@ -123,6 +148,9 @@ export function BudgetList() {
                     <IconButton onClick={() => handleViewBudget(budget.id)}>
                       <VisibilityIcon />
                     </IconButton>
+                    <IconButton onClick={() => handleOpenDeleteDialog(budget)}>
+                      <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -139,6 +167,28 @@ export function BudgetList() {
           </Table>
         </TableContainer>
       </Container>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          ¿Estás seguro que deseas eliminar este presupuesto?
+        </DialogTitle>
+        <DialogContent>
+          <Typography id="alert-dialog-description">
+            Esta acción no se puede deshacer.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancelar</Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

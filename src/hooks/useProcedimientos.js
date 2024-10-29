@@ -42,15 +42,21 @@ export function useProcedimientos() {
   const deleteProcedimiento = useCallback(async (budgetId, procedimientoId) => {
     try {
       setLoading(true);
-      await procedimientosService.deleteProcedimiento(budgetId, procedimientoId);
-      setProcedimientos(prevProcedimientos => 
-        prevProcedimientos.filter(proc => proc.id !== procedimientoId)
-      );
-      setLoading(false);
-      return { success: true };
+      const { success, data, error } = await procedimientosService.deleteProcedimiento(budgetId, procedimientoId);
+      if (success) {
+        setProcedimientos(prevProcedimientos => 
+          prevProcedimientos.filter(proc => proc._id !== procedimientoId)
+        );
+        setLoading(false);
+        return { success: true };
+      } else {
+        setLoading(false);
+        console.error('Error al eliminar el procedimiento:', error);
+        throw new Error(error || 'Error desconocido al eliminar el procedimiento');
+      }
     } catch (err) {
       handleError(err);
-      return { success: false, error: err.response?.data?.error || 'Error al eliminar el procedimiento' };
+      return { success: false, error: err.message || 'Error al eliminar el procedimiento' };
     }
   }, [handleError]);
 

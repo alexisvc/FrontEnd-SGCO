@@ -38,12 +38,12 @@ import PlanningMenu from "./components/planning/PlanningMenu";
 import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
-import { BudgetCreate } from "./components/budgets/BudgetCreate";
 import { BudgetList } from "./components/BudgetList";
 import { ProcedimientoList } from "./components/ProcedimientoList";
 import { ProcedimientoCreate } from "./components/ProcedimientoCreate";
 import { FaseList } from "./components/FaseList";
 import { FaseCreate } from "./components/FaseCreate";
+import { BudgetCreate } from "./components/BudgetCreate";
 
 function App() {
   const { user, logout, login } = useUser();
