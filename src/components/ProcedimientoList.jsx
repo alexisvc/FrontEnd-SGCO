@@ -77,7 +77,7 @@ export function ProcedimientoList() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}`)}
+        onClick={() => navigate(`/patients/${patientId}/budgets`)}
         sx={{ m: 2 }}
       >
         Atrás

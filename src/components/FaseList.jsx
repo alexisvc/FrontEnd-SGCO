@@ -82,7 +82,7 @@ export function FaseList() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos`)}
         sx={{ m: 2 }}
       >
         Atrás

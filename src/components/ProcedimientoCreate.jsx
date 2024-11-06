@@ -51,7 +51,7 @@ export function ProcedimientoCreate() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos`)}
         sx={{ mt: 2, mb: 4 }}
       >
         Atrás

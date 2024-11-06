@@ -87,7 +87,7 @@ export function FaseCreate() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases`)}
         sx={{ mt: 2, mb: 4 }}
       >
         Atrás

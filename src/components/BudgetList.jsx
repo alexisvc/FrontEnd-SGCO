@@ -93,7 +93,7 @@ export function BudgetList() {
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(`/planificacion/pacientes`)}
         sx={{ m: 2 }}
       >
         Atrás
