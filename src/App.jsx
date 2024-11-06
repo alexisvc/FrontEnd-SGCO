@@ -44,6 +44,10 @@ import { ProcedimientoCreate } from "./components/ProcedimientoCreate";
 import { FaseList } from "./components/FaseList";
 import { FaseCreate } from "./components/FaseCreate";
 import { BudgetCreate } from "./components/BudgetCreate";
+import { ProcedimientoEdit } from "./components/ProcedimientoEdit";
+import { useProcedimientos } from "./hooks/useProcedimientos";
+import { useFases } from "./hooks/useFases";
+import { FaseEdit } from "./components/FaseEdit";
 
 function App() {
   const { user, logout, login } = useUser();
@@ -90,6 +94,22 @@ function App() {
     updateOdontologo,
     setOdontologo,
   } = useOdontologos();
+  const {
+    procedimientos,
+    loading: procedimientosLoading,
+    error: procedimientosError,
+    fetchProcedimientos,
+    createProcedimiento,
+    updateProcedimiento,
+    deleteProcedimiento,
+  } = useProcedimientos();
+  const { 
+    fetchFases,
+    createFase,
+    updateFase,
+    deleteFase
+    // ... (otras funciones del hook useFases)
+  } = useFases();
 
   const isLoggedIn = !!user;
 
@@ -207,19 +227,60 @@ function App() {
             />
             <Route
               path="/patients/:patientId/budgets/:budgetId/procedimientos"
-              element={<ProcedimientoList />}
+              element={
+                <ProcedimientoList
+                  fetchProcedimientos={fetchProcedimientos}
+                  createProcedimiento={createProcedimiento}
+                  updateProcedimiento={updateProcedimiento}
+                  deleteProcedimiento={deleteProcedimiento}
+                />
+              }
             />
             <Route
               path="/patients/:patientId/budgets/:budgetId/procedimientos/create"
-              element={<ProcedimientoCreate />}
+              element={
+                <ProcedimientoCreate
+                  createProcedimiento={createProcedimiento}
+                />
+              }
             />
-            
+
             <Route
-              path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases"
-              element={<FaseList />}
+              path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/edit"
+              element={
+                <ProcedimientoEdit
+                  fetchProcedimientos={fetchProcedimientos}
+                  updateProcedimiento={updateProcedimiento}
+                />
+              }
             />
-            <Route path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases/create" element={<FaseCreate />} />
-            
+
+<Route
+              path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases"
+              element={
+                <FaseList
+                  fetchFases={fetchFases}
+                  deleteFase={deleteFase}
+                />
+              }
+            />
+            <Route
+              path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases/create"
+              element={
+                <FaseCreate
+                  createFase={createFase}
+                />
+              }
+            />
+            <Route
+              path="/patients/:patientId/budgets/:budgetId/procedimientos/:procedimientoId/fases/:faseId/edit"
+              element={
+                <FaseEdit
+                  fetchFases={fetchFases}
+                  updateFase={updateFase}
+                />
+              }
+            />
 
             <Route
               path="/treatment-plans/:patientId"

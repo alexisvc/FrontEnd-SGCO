@@ -39,6 +39,30 @@ export function useProcedimientos() {
     }
   }, [handleError]);
 
+  const updateProcedimiento = useCallback(async (budgetId, procedimientoId, { nombreProcedimiento }) => {
+    try {
+      setLoading(true);
+      const { success, data, error } = await procedimientosService.updateProcedimiento(budgetId, procedimientoId, { nombreProcedimiento });
+      if (success) {
+        const updatedProcedimientos = procedimientos.map(proc => {
+          if (proc._id === procedimientoId) {
+            return { ...proc, nombreProcedimiento };
+          }
+          return proc;
+        });
+        setProcedimientos(updatedProcedimientos);
+        setLoading(false);
+        return { success: true, data };
+      } else {
+        setLoading(false);
+        return { success: false, error };
+      }
+    } catch (err) {
+      handleError(err);
+      return { success: false, error: err.message || 'Error al actualizar el procedimiento' };
+    }
+  }, [handleError, procedimientos]);
+
   const deleteProcedimiento = useCallback(async (budgetId, procedimientoId) => {
     try {
       setLoading(true);
@@ -66,6 +90,7 @@ export function useProcedimientos() {
     error,
     fetchProcedimientos,
     createProcedimiento,
+    updateProcedimiento,
     deleteProcedimiento
   };
 }

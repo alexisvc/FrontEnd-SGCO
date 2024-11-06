@@ -26,23 +26,32 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { toast } from 'react-toastify';
 
-export function FaseList() {
+export function FaseList({ fetchFases, deleteFase }) {
   const { budgetId, procedimientoId, patientId } = useParams();
   const navigate = useNavigate();
-  const { fases, loading, error, fetchFases, deleteFase } = useFases();
+  const [fases, setFases] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [faseToDelete, setFaseToDelete] = useState(null);
 
   useEffect(() => {
+    const loadFases = async () => {
+      setLoading(true);
+      try {
+        const { success, data, error } = await fetchFases(budgetId, procedimientoId);
+        if (success) {
+          setFases(data);
+        } else {
+          setError(error);
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+      setLoading(false);
+    };
     loadFases();
-  }, [budgetId, procedimientoId]);
-
-  const loadFases = async () => {
-    const { success, error } = await fetchFases(budgetId, procedimientoId);
-    if (!success) {
-      toast.error(error || 'Error al cargar las fases');
-    }
-  };
+  }, [budgetId, procedimientoId, fetchFases]);
 
   const handleCreateFase = () => {
     navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases/create`);

@@ -22,24 +22,42 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useProcedimientos } from '../hooks/useProcedimientos';
+import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 
-export function ProcedimientoList() {
+export function ProcedimientoList({ fetchProcedimientos, createProcedimiento, updateProcedimiento, deleteProcedimiento }) {
   const { budgetId, patientId } = useParams();
   const navigate = useNavigate();
-  const { procedimientos, loading, error, fetchProcedimientos, deleteProcedimiento } = useProcedimientos();
+  const [procedimientos, setProcedimientos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [procedimientoToDelete, setProcedimientoToDelete] = useState(null);
 
   useEffect(() => {
-    fetchProcedimientos(budgetId);
-    console.log('fetchProcedimientosByBudget', budgetId);
-    console.log('procedimientos', procedimientos);
+    const loadProcedimientos = async () => {
+      setLoading(true);
+      try {
+        const { success, data, error } = await fetchProcedimientos(budgetId);
+        if (success) {
+          setProcedimientos(data);
+        } else {
+          setError(error);
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+      setLoading(false);
+    };
+    loadProcedimientos();
   }, [budgetId, fetchProcedimientos]);
 
   const handleViewProcedimiento = (procedimientoId) => {
     navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/fases`);
+  };
+
+  const handleEditProcedimiento = (procedimientoId) => {
+    navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos/${procedimientoId}/edit`);
   };
 
   const handleCreateProcedimiento = () => {
@@ -60,8 +78,14 @@ export function ProcedimientoList() {
     if (procedimientoToDelete) {
       try {
         await deleteProcedimiento(budgetId, procedimientoToDelete._id);
+        const { success, data, error } = await fetchProcedimientos(budgetId);
+        if (success) {
+          setProcedimientos(data);
+          toast.success('Procedimiento eliminado exitosamente');
+        } else {
+          toast.error(error || 'Error al eliminar el procedimiento');
+        }
         handleCloseDeleteDialog();
-        toast.success('Procedimiento eliminado exitosamente');
       } catch (error) {
         console.error('Error al eliminar procedimiento:', error);
         toast.error('Error al eliminar el procedimiento');
@@ -132,7 +156,10 @@ export function ProcedimientoList() {
                     <IconButton onClick={() => handleViewProcedimiento(procedimiento._id)}>
                       <VisibilityIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleOpenDeleteDialog(procedimiento)}>
+                    <IconButton onClick={() => handleEditProcedimiento(procedimiento._id)} color="primary">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleOpenDeleteDialog(procedimiento)} color="error">
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>

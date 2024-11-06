@@ -14,6 +14,18 @@ const createProcedimiento = async (budgetId, { nombreProcedimiento }) => {
   ).then(response => response.data);
 };
 
+const updateProcedimiento = async (budgetId, procedimientoId, { nombreProcedimiento }) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/${budgetId}/procedimientos/${procedimientoId}`,
+      { nombreProcedimiento }
+    );
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, error: error.response?.data?.error || 'Error al actualizar el procedimiento' };
+  }
+};
+
 const deleteProcedimiento = async (budgetId, procedimientoId) => {
   try {
     const response = await axios.delete(`${baseUrl}/${budgetId}/procedimientos/${procedimientoId}`);
@@ -26,5 +38,6 @@ const deleteProcedimiento = async (budgetId, procedimientoId) => {
 export default {
   getProcedimientos,
   createProcedimiento,
+  updateProcedimiento,
   deleteProcedimiento
 };

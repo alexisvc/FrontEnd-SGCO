@@ -8,8 +8,8 @@ export function useFases() {
   const [error, setError] = useState(null);
 
   const handleError = useCallback((err) => {
-    console.error('Error in fase operation:', err);
-    setError(err.response?.data?.error || err.message || 'An unexpected error occurred');
+    console.error('Error en operación de fase:', err);
+    setError(err.response?.data?.error || err.message || 'Un error inesperado ha ocurrido');
     setLoading(false);
   }, []);
 
@@ -43,7 +43,7 @@ export function useFases() {
     try {
       setLoading(true);
       const data = await fasesService.updateFase(budgetId, procedimientoId, faseId, fase);
-      setFases(prevFases => prevFases.map(f => f.id === faseId ? data : f));
+      setFases(prevFases => prevFases.map(f => f._id === faseId ? data : f));
       setLoading(false);
       return { success: true, data };
     } catch (err) {
@@ -55,15 +55,10 @@ export function useFases() {
   const deleteFase = useCallback(async (budgetId, procedimientoId, faseId) => {
     try {
       setLoading(true);
-      const { success, error } = await fasesService.deleteFase(budgetId, procedimientoId, faseId);
-      if (success) {
-        setFases(prevFases => prevFases.filter(fase => fase._id !== faseId));
-        setLoading(false);
-        return { success: true };
-      } else {
-        setLoading(false);
-        return { success: false, error: error || 'Error al eliminar la fase' };
-      }
+      await fasesService.deleteFase(budgetId, procedimientoId, faseId);
+      setFases(prevFases => prevFases.filter(fase => fase._id !== faseId));
+      setLoading(false);
+      return { success: true };
     } catch (err) {
       handleError(err);
       return { success: false, error: err.response?.data?.error || 'Error al eliminar la fase' };

@@ -1,5 +1,5 @@
-// components/ProcedimientoCreate.js
-import React, { useState } from 'react';
+// components/ProcedimientoEdit.js
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
@@ -12,11 +12,29 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { toast } from 'react-toastify';
 
-export function ProcedimientoCreate({ createProcedimiento }) {
-  const { budgetId, patientId } = useParams();
+export function ProcedimientoEdit({ fetchProcedimientos, updateProcedimiento }) {
+  const { budgetId, patientId, procedimientoId } = useParams();
   const navigate = useNavigate();
-
+  const [procedimientos, setProcedimientos] = useState([]);
   const [nombreProcedimiento, setNombreProcedimiento] = useState('');
+
+  useEffect(() => {
+    const loadProcedimientos = async () => {
+      try {
+        const { success, data } = await fetchProcedimientos(budgetId);
+        if (success) {
+          setProcedimientos(data);
+          const procedimiento = data.find(proc => proc._id === procedimientoId);
+          if (procedimiento) {
+            setNombreProcedimiento(procedimiento.nombreProcedimiento);
+          }
+        }
+      } catch (err) {
+        console.error('Error al cargar procedimientos:', err);
+      }
+    };
+    loadProcedimientos();
+  }, [budgetId, procedimientoId, fetchProcedimientos]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,19 +44,19 @@ export function ProcedimientoCreate({ createProcedimiento }) {
     }
 
     try {
-      const { success, data, error } = await createProcedimiento(budgetId, {
+      const { success, data, error } = await updateProcedimiento(budgetId, procedimientoId, {
         nombreProcedimiento
       });
 
       if (success) {
-        toast.success('Procedimiento creado exitosamente');
+        toast.success('Procedimiento actualizado exitosamente');
         navigate(`/patients/${patientId}/budgets/${budgetId}/procedimientos`);
       } else {
-        toast.error(error || 'Error al crear el procedimiento');
+        toast.error(error || 'Error al actualizar el procedimiento');
       }
     } catch (error) {
-      console.error('Error al crear procedimiento:', error);
-      toast.error('Error al crear el procedimiento');
+      console.error('Error al actualizar procedimiento:', error);
+      toast.error('Error al actualizar el procedimiento');
     }
   };
 
@@ -54,7 +72,7 @@ export function ProcedimientoCreate({ createProcedimiento }) {
       </Button>
 
       <Typography variant="h4" align="center" gutterBottom>
-        Crear Nuevo Procedimiento
+        Editar Procedimiento
       </Typography>
 
       <Paper sx={{ p: 3, mt: 3 }}>
@@ -75,7 +93,7 @@ export function ProcedimientoCreate({ createProcedimiento }) {
               color="primary"
               size="large"
             >
-              Crear Procedimiento
+              Actualizar Procedimiento
             </Button>
           </Box>
         </form>

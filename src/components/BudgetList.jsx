@@ -148,7 +148,7 @@ export function BudgetList() {
                     <IconButton onClick={() => handleViewBudget(budget.id)}>
                       <VisibilityIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleOpenDeleteDialog(budget)}>
+                    <IconButton onClick={() => handleOpenDeleteDialog(budget)} color="error">
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>

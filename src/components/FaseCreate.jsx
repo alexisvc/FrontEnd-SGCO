@@ -17,11 +17,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { toast } from 'react-toastify';
 
-export function FaseCreate() {
+export function FaseCreate({ createFase }) {
   const { patientId, budgetId, procedimientoId } = useParams();
   const navigate = useNavigate();
-  const { createFase, loading } = useFases();
-
   const [fases, setFases] = useState([
     { nombreFase: '', totalFase: '' }
   ]);
@@ -79,8 +77,6 @@ export function FaseCreate() {
       toast.error('Error al crear las fases');
     }
   };
-
-  if (loading) return <div>Cargando...</div>;
 
   return (
     <Container maxWidth="md">
