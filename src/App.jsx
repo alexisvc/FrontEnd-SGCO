@@ -28,6 +28,8 @@ import useEvolutionCharts from "./hooks/useEvolutionCharts";
 import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
 import { useOdontologos } from "./hooks/useOdontologos";
+import { useBudgets } from "./hooks/useBudgets";
+
 import Odontologos from "./components/odontologos/Odontologos";
 import Appointment from "./components/appointments/Appointment";
 import AppointmentMenu from "./components/appointments/AppointmentMenu";
@@ -38,6 +40,12 @@ import PlanningMenu from "./components/planning/PlanningMenu";
 import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
+
+// Importar componentes de presupuestos
+import BudgetList from "./components/budgets/BudgetList";
+import BudgetForm from "./components/budgets/BudgetForm";
+import BudgetDetails from "./components/budgets/BudgetDetails";
+
 
 function App() {
   const { user, logout, login } = useUser();
@@ -84,6 +92,19 @@ function App() {
     updateOdontologo,
     setOdontologo,
   } = useOdontologos();
+
+  const {
+    budgets,
+    currentBudget,
+    loading,
+    error,
+    fetchBudgets,
+    fetchBudgetsByPatient,
+    createBudget,
+    updateBudgetStatus,
+    setCurrentBudget,
+    calculateTotals
+  } = useBudgets();
 
   const isLoggedIn = !!user;
 
@@ -185,6 +206,84 @@ function App() {
               element={<EditOdontologo />}
             />
             <Route path="/agendamiento/cita" element={<Appointment />} />
+
+            <Route
+              path="/presupuestos"
+              element={
+                isLoggedIn ? (
+                  <BudgetList 
+                    budgets={budgets}
+                    fetchBudgets={fetchBudgets}
+                    loading={loading}
+                    error={error}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+
+<Route
+              path="/presupuestos/nuevo"
+              element={
+                isLoggedIn ? (
+                  <BudgetForm
+                    createBudget={createBudget}
+                    calculateTotals={calculateTotals}
+                    mode="create"
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+
+            <Route
+              path="/presupuestos/:id"
+              element={
+                isLoggedIn ? (
+                  <BudgetDetails 
+                    budget={currentBudget}
+                    updateBudgetStatus={updateBudgetStatus}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+
+            <Route
+              path="/presupuestos/editar/:id"
+              element={
+                isLoggedIn ? (
+                  <BudgetForm
+                    budget={currentBudget}
+                    createBudget={createBudget}
+                    calculateTotals={calculateTotals}
+                    mode="edit"
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+
+            <Route
+              path="/patients/:patientId/presupuestos"
+              element={
+                isLoggedIn ? (
+                  <BudgetList 
+                    budgets={budgets}
+                    fetchBudgets={fetchBudgetsByPatient}
+                    loading={loading}
+                    error={error}
+                    isPatientView={true}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
 
             <Route path="/planificacion" element={<PlanningMenu />} />
 
