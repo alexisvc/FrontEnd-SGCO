@@ -32,9 +32,15 @@ import { usePatients } from '../../hooks/usePatients';
 const BudgetForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { createBudget, calculateTotals } = useBudgets();
   const { patients, fetchPatientByCedula } = usePatients();
-  
+  const { 
+    currentBudget, 
+    fetchBudgetById, 
+    createBudget, 
+    updateBudget, 
+    calculateTotals 
+  } = useBudgets();
+
   const initialFaseState = {
     nombre: '',
     descripcion: '',
@@ -50,24 +56,45 @@ const BudgetForm = () => {
   const [patientSearch, setPatientSearch] = useState('');
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showSearchDialog, setShowSearchDialog] = useState(false);
-  const [currentFaseIndex, setCurrentFaseIndex] = useState(0);
   const [newProcedimiento, setNewProcedimiento] = useState({
     nombre: '',
     numeroPiezas: '',
     costoPorUnidad: ''
   });
 
+  // Cargar el presupuesto si estamos en modo edición
+  useEffect(() => {
+    if (id) {
+      fetchBudgetById(id);
+    }
+  }, [id, fetchBudgetById]);
+
+  // Actualizar el formulario cuando se carga el presupuesto
+  useEffect(() => {
+    if (id && currentBudget) {
+      setBudget({
+        ...currentBudget,
+        paciente: currentBudget.paciente.id || currentBudget.paciente
+      });
+      setSelectedPatient(currentBudget.paciente);
+    }
+  }, [id, currentBudget]);
+
   const handlePatientSearch = async () => {
     try {
+      if (!patientSearch.trim()) {
+        toast.error('Ingrese un número de cédula');
+        return;
+      }
+  
       const result = await fetchPatientByCedula(patientSearch);
-      
-      if (result.success) {
+      if (result && result.data) {
         setSelectedPatient(result.data);
         setBudget(prev => ({ ...prev, paciente: result.data.id }));
         setShowSearchDialog(false);
         toast.success('Paciente encontrado');
       } else {
-        toast.error('Paciente no encontrado');
+        toast.error('No se encontró el paciente');
       }
     } catch (error) {
       toast.error('Error al buscar el paciente');
@@ -99,7 +126,6 @@ const BudgetForm = () => {
       };
     });
 
-    // Resetear el formulario de nuevo procedimiento
     setNewProcedimiento({
       nombre: '',
       numeroPiezas: '',
@@ -133,7 +159,6 @@ const BudgetForm = () => {
       return;
     }
 
-    // Verificar que cada fase tenga al menos un procedimiento
     const hasEmptyFases = budget.fases.some(fase => 
       !fase.nombre || !fase.descripcion || fase.procedimientos.length === 0
     );
@@ -148,34 +173,39 @@ const BudgetForm = () => {
       const budgetToSave = {
         ...budget,
         fases,
-        totalGeneral
+        totalGeneral,
+        estado: 'borrador' // Aseguramos que el estado inicial sea borrador
       };
 
-      const result = await createBudget(budgetToSave);
+      const result = id 
+        ? await updateBudget(id, budgetToSave)
+        : await createBudget(budgetToSave);
       
       if (result.success) {
-        toast.success('Presupuesto creado exitosamente');
+        toast.success(`Presupuesto ${id ? 'actualizado' : 'creado'} exitosamente`);
         navigate('/presupuestos');
       } else {
-        toast.error('Error al crear el presupuesto');
+        toast.error(`Error al ${id ? 'actualizar' : 'crear'} el presupuesto`);
       }
     } catch (error) {
-      console.error('Error al crear presupuesto:', error);
-      toast.error('Error al crear el presupuesto');
+      console.error('Error:', error);
+      toast.error(`Error al ${id ? 'actualizar' : 'crear'} el presupuesto`);
     }
   };
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
-      <Container maxWidth="lg">
-        <Button
+      <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/presupuestos")}
           sx={{ mb: 2 }}
         >
           Atrás
         </Button>
+        
+      <Container maxWidth="lg">
+        
 
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h5" gutterBottom>
@@ -190,6 +220,7 @@ const BudgetForm = () => {
                   variant="contained"
                   onClick={() => setShowSearchDialog(true)}
                   disabled={!!selectedPatient}
+                  
                 >
                   Buscar Paciente
                 </Button>
@@ -363,7 +394,7 @@ const BudgetForm = () => {
                   size="large"
                   fullWidth
                 >
-                  Guardar Presupuesto
+                  {id ? 'Actualizar Presupuesto' : 'Guardar Presupuesto'}
                 </Button>
               </Grid>
             </Grid>

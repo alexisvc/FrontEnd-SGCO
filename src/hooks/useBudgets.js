@@ -72,6 +72,8 @@ export function useBudgets() {
     }
   }, [handleError]);
 
+  
+
   const calculateTotals = useCallback((fases) => {
     let totalGeneral = 0;
     const fasesCalculated = fases.map(fase => {
@@ -87,6 +89,37 @@ export function useBudgets() {
     return { fases: fasesCalculated, totalGeneral };
   }, []);
 
+
+  const fetchBudgetById = useCallback(async (budgetId) => {
+    try {
+      setLoading(true);
+      const data = await budgetService.getBudgetById(budgetId);
+      setCurrentBudget(data);
+      setLoading(false);
+      return { success: true, data };
+    } catch (err) {
+      handleError(err);
+      return { success: false, error: err.message };
+    }
+  }, [handleError]);
+  
+  const updateBudget = useCallback(async (budgetId, budgetData) => {
+    try {
+      setLoading(true);
+      const data = await budgetService.updateBudget(budgetId, budgetData);
+      setBudgets(prev => 
+        prev.map(budget => budget._id === budgetId ? data : budget)
+      );
+      setLoading(false);
+      toast.success('Presupuesto actualizado exitosamente');
+      return { success: true, data };
+    } catch (err) {
+      handleError(err);
+      toast.error('Error al actualizar el presupuesto');
+      return { success: false, error: err.message };
+    }
+  }, [handleError]);
+
   return {
     budgets,
     currentBudget,
@@ -97,6 +130,8 @@ export function useBudgets() {
     createBudget,
     updateBudgetStatus,
     setCurrentBudget,
-    calculateTotals
+    calculateTotals,
+    fetchBudgetById,
+    updateBudget
   };
 }

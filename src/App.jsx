@@ -41,7 +41,7 @@ import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
 
-// Importar componentes de presupuestos
+// Componentes de presupuestos
 import BudgetList from "./components/budgets/BudgetList";
 import BudgetForm from "./components/budgets/BudgetForm";
 import BudgetDetails from "./components/budgets/BudgetDetails";
@@ -101,9 +101,11 @@ function App() {
     fetchBudgets,
     fetchBudgetsByPatient,
     createBudget,
+    updateBudget,
     updateBudgetStatus,
     setCurrentBudget,
-    calculateTotals
+    calculateTotals,
+    fetchBudgetById
   } = useBudgets();
 
   const isLoggedIn = !!user;
@@ -252,21 +254,22 @@ function App() {
               }
             />
 
-            <Route
-              path="/presupuestos/editar/:id"
-              element={
-                isLoggedIn ? (
-                  <BudgetForm
-                    budget={currentBudget}
-                    createBudget={createBudget}
-                    calculateTotals={calculateTotals}
-                    mode="edit"
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
-            />
+          <Route
+            path="/presupuestos/editar/:id"
+            element={
+              isLoggedIn ? (
+                <BudgetForm
+                  createBudget={createBudget}
+                  updateBudget={updateBudget} // Añadir esta prop
+                  fetchBudgetById={fetchBudgetById} // Añadir esta prop
+                  calculateTotals={calculateTotals}
+                  mode="edit"
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
 
             <Route
               path="/patients/:patientId/presupuestos"

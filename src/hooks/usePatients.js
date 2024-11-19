@@ -45,7 +45,7 @@ export function usePatients() {
         setLoading(false);
       });
   };
-
+/*
   const fetchPatientByCedula = async (numeroCedula) => {
     try {
       setLoading(true);
@@ -58,6 +58,23 @@ export function usePatients() {
       setLoading(false);
       console.error("Error al buscar:", err);
       throw err;  // Lanzar el error para que pueda ser capturado por el bloque catch en handleCreateSubmit
+    }
+  };
+*/
+  const fetchPatientByCedula = async (numeroCedula) => {
+    try {
+      setLoading(true);
+      const data = await patientsService.getPatientByCedula(numeroCedula);
+      if (data) {
+        setPatient(data);
+        setPatients([data]);
+        setLoading(false);
+        return { success: true, data };
+      }
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+      return { success: false, error: err.message };
     }
   };
 

@@ -35,10 +35,11 @@ import {
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { useBudgets } from '../../hooks/useBudgets';
+import budgetService from '../../services/budgetService';
 
 const BudgetList = () => {
   const navigate = useNavigate();
-  const { budgets, loading, error, fetchBudgets, fetchBudgetsByPatient } = useBudgets();
+  const { budgets, loading, error, fetchBudgets } = useBudgets();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('cedula');
   const [filteredBudgets, setFilteredBudgets] = useState([]);
@@ -46,8 +47,15 @@ const BudgetList = () => {
   const [budgetToDelete, setBudgetToDelete] = useState(null);
 
   useEffect(() => {
-    fetchBudgets();
-  }, []);
+    const loadBudgets = async () => {
+      try {
+        await fetchBudgets();
+      } catch (error) {
+        toast.error('Error al cargar los presupuestos');
+      }
+    };
+    loadBudgets();
+  }, [fetchBudgets]);
 
   useEffect(() => {
     if (budgets) {
@@ -80,6 +88,7 @@ const BudgetList = () => {
       }
     } catch (error) {
       toast.error('Error al buscar presupuestos');
+      console.error('Error en la búsqueda:', error);
     }
   };
 
@@ -96,12 +105,19 @@ const BudgetList = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      // Aquí iría la lógica para eliminar el presupuesto
+      if (!budgetToDelete) {
+        toast.error('No se ha seleccionado ningún presupuesto para eliminar');
+        return;
+      }
+
+      await budgetService.deleteBudget(budgetToDelete._id);
       toast.success('Presupuesto eliminado exitosamente');
       setDeleteDialogOpen(false);
       setBudgetToDelete(null);
+      // Recargar la lista de presupuestos
       fetchBudgets();
     } catch (error) {
+      console.error('Error al eliminar:', error);
       toast.error('Error al eliminar el presupuesto');
     }
   };
@@ -134,15 +150,17 @@ const BudgetList = () => {
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
-      <Container maxWidth="lg">
-        <Button
+      <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/planificacion")}
           sx={{ mb: 2 }}
         >
           Atrás
         </Button>
+        
+      <Container maxWidth="lg">
+        
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -223,7 +241,7 @@ const BudgetList = () => {
                 </TableHead>
                 <TableBody>
                   {filteredBudgets.map((budget) => (
-                    <TableRow key={budget.id}>
+                    <TableRow key={budget._id}>
                       <TableCell>{formatDate(budget.fecha)}</TableCell>
                       <TableCell>{budget.paciente.nombrePaciente}</TableCell>
                       <TableCell>{budget.paciente.numeroCedula}</TableCell>
@@ -238,7 +256,7 @@ const BudgetList = () => {
                       </TableCell>
                       <TableCell align="center">
                         <IconButton
-                          onClick={() => navigate(`/presupuestos/${budget.id}`)}
+                          onClick={() => navigate(`/presupuestos/${budget._id}`)}
                           title="Ver detalles"
                         >
                           <ViewIcon />
@@ -246,7 +264,7 @@ const BudgetList = () => {
                         {budget.estado === 'borrador' && (
                           <>
                             <IconButton
-                              onClick={() => navigate(`/presupuestos/editar/${budget.id}`)}
+                              onClick={() => navigate(`/presupuestos/editar/${budget._id}`)}
                               title="Editar"
                             >
                               <EditIcon />
