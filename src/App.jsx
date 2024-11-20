@@ -246,7 +246,8 @@ function App() {
             <BudgetForm
               createBudget={createBudget}
               calculateTotals={calculateTotals}
-              fetchPatientByCedula={fetchPatientByCedula} // Añadir esta prop
+              fetchPatientByCedula={fetchPatientByCedula} 
+              fetchPatientByName={fetchPatientByName}
               mode="create"
             />
           ) : (

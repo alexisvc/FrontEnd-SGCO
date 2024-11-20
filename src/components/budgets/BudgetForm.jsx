@@ -35,6 +35,7 @@ const BudgetForm = ({
   createBudget, 
   updateBudget, 
   fetchBudgetById, 
+  fetchPatientByName,
   fetchPatientByCedula,
   calculateTotals, 
   mode = 'create' 
@@ -55,14 +56,14 @@ const BudgetForm = ({
     fases: [{ ...initialFaseState }]
   });
 
-  const [patientSearch, setPatientSearch] = useState('');
+  
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [showSearchDialog, setShowSearchDialog] = useState(false);
-  const [newProcedimiento, setNewProcedimiento] = useState({
-    nombre: '',
-    numeroPiezas: '',
-    costoPorUnidad: ''
-  });
+  
+  const [newProcedimientos, setNewProcedimientos] = useState({});
+  const [searchType, setSearchType] = useState('cedula');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searched, setSearched] = useState(false);
+  const [patients, setPatients] = useState([]);
 
   // Lista de especialidades disponibles
   const especialidades = [
@@ -104,60 +105,89 @@ const BudgetForm = ({
     loadBudget();
   }, [mode, id, fetchBudgetById, navigate]);
 
-  // Manejadores de eventos
-  const handlePatientSearch = async () => {
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
     try {
-      if (!patientSearch.trim()) {
-        toast.error('Ingrese un número de cédula');
-        return;
-      }
-  
-      const result = await fetchPatientByCedula(patientSearch);
-      if (result && result.data) {
-        setSelectedPatient(result.data);
-        setBudget(prev => ({ ...prev, paciente: result.data.id }));
-        setShowSearchDialog(false);
-        toast.success('Paciente encontrado');
-      } else {
-        toast.error('No se encontró el paciente');
+      console.log('Buscando paciente con:', { tipo: searchType, query: searchQuery });
+      
+      if (searchType === "cedula") {
+        const result = await fetchPatientByCedula(searchQuery);
+        console.log('Resultado búsqueda cédula:', result);
+        if (result && result.data) {
+          setPatients([result.data]);
+          setSearched(true);
+        }
+      } else if (searchType === "nombre") {
+        console.log('Iniciando búsqueda por nombre');
+        const result = await fetchPatientByName(searchQuery);
+        console.log('Resultado búsqueda nombre:', result);
+        
+        // Si result es directamente el array de pacientes
+        if (Array.isArray(result)) {
+          setPatients(result);
+          setSearched(true);
+        } 
+        // Si result tiene una propiedad data que es el array
+        else if (result && Array.isArray(result.data)) {
+          setPatients(result.data);
+          setSearched(true);
+        }
+        // Si es un solo paciente
+        else if (result && !Array.isArray(result)) {
+          setPatients([result]);
+          setSearched(true);
+        }
       }
     } catch (error) {
-      console.error('Error al buscar paciente:', error);
-      toast.error('Error al buscar el paciente');
+      console.error('Error completo:', error);
+      toast.error("Error al buscar el paciente");
+      setSearched(false);
     }
   };
 
-  const handleAddProcedimiento = (faseIndex) => {
-    if (!newProcedimiento.nombre || !newProcedimiento.numeroPiezas || !newProcedimiento.costoPorUnidad) {
-      toast.error('Todos los campos del procedimiento son requeridos');
-      return;
-    }
+  // Modificar handleAddProcedimiento
+const handleAddProcedimiento = (faseIndex) => {
+  const procedimiento = newProcedimientos[faseIndex] || {
+    nombre: '',
+    numeroPiezas: '',
+    costoPorUnidad: ''
+  };
 
-    const procedimientoToAdd = {
-      ...newProcedimiento,
-      numeroPiezas: parseInt(newProcedimiento.numeroPiezas),
-      costoPorUnidad: parseFloat(newProcedimiento.costoPorUnidad),
-      costoTotal: parseInt(newProcedimiento.numeroPiezas) * parseFloat(newProcedimiento.costoPorUnidad)
+  if (!procedimiento.nombre || !procedimiento.numeroPiezas || !procedimiento.costoPorUnidad) {
+    toast.error('Todos los campos del procedimiento son requeridos');
+    return;
+  }
+
+  const procedimientoToAdd = {
+    ...procedimiento,
+    numeroPiezas: parseInt(procedimiento.numeroPiezas),
+    costoPorUnidad: parseFloat(procedimiento.costoPorUnidad),
+    costoTotal: parseInt(procedimiento.numeroPiezas) * parseFloat(procedimiento.costoPorUnidad)
+  };
+
+  setBudget(prevBudget => {
+    const newFases = [...prevBudget.fases];
+    newFases[faseIndex] = {
+      ...newFases[faseIndex],
+      procedimientos: [...newFases[faseIndex].procedimientos, procedimientoToAdd]
     };
+    return {
+      ...prevBudget,
+      fases: newFases
+    };
+  });
 
-    setBudget(prevBudget => {
-      const newFases = [...prevBudget.fases];
-      newFases[faseIndex] = {
-        ...newFases[faseIndex],
-        procedimientos: [...newFases[faseIndex].procedimientos, procedimientoToAdd]
-      };
-      return {
-        ...prevBudget,
-        fases: newFases
-      };
-    });
-
-    setNewProcedimiento({
+  // Limpiar solo el procedimiento de la fase actual
+  setNewProcedimientos(prev => ({
+    ...prev,
+    [faseIndex]: {
       nombre: '',
       numeroPiezas: '',
       costoPorUnidad: ''
-    });
-  };
+    }
+  }));
+};
 
   const handleDeleteProcedimiento = (faseIndex, procIndex) => {
     setBudget(prevBudget => {
@@ -232,6 +262,96 @@ const BudgetForm = ({
           Volver
         </Button>
 
+         {/* Diálogo de búsqueda de paciente */}
+         {mode === 'create' && (
+          <Box component={Paper} style={{padding: '20px', marginBottom: '30px'}}> 
+            <Box component="form" onSubmit={handleSearchSubmit}>
+              <Typography variant="h5" gutterBottom>
+                Paciente
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel>Tipo de Búsqueda</InputLabel>
+                    <Select
+                      value={searchType}
+                      onChange={(e) => setSearchType(e.target.value)}
+                      label="Tipo de Búsqueda"
+                    >
+                      <MenuItem value="cedula">Cédula</MenuItem>
+                      <MenuItem value="nombre">Nombre</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label={searchType === "cedula" ? "Ingrese Cédula" : "Ingrese Nombre"}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Button type="submit" variant="contained">
+                    Buscar Paciente
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        )}
+
+        {/* Tabla de resultados */}
+        {searched && patients.length > 0 && (
+          <TableContainer component={Paper} sx={{ mt: 4 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><Typography variant='h6'>Nombre</Typography></TableCell>
+                  <TableCell><Typography variant='h6'>Cédula</Typography></TableCell>
+                  <TableCell><Typography variant='h6'>Seleccionar</Typography></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {patients.map((patient) => (
+                  <TableRow key={patient.id}>
+                    <TableCell>{patient.nombrePaciente}</TableCell>
+                    <TableCell>{patient.numeroCedula}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          setSelectedPatient(patient);
+                          setBudget(prev => ({ ...prev, paciente: patient.id }));
+                        }}
+                      >
+                        Seleccionar
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {selectedPatient && (
+          <Box component={Paper} mt={2} p={2}>
+            <Typography variant="subtitle1">
+              <Typography variant='h6'><strong>Paciente seleccionado:</strong></Typography> {selectedPatient.nombrePaciente}
+            </Typography>
+            <br></br>
+            <Typography variant="subtitle1">
+              <Typography variant='h6'><strong>Cédula:</strong></Typography> {selectedPatient.numeroCedula}
+            </Typography>
+          </Box>
+        )}
+
+        <br></br>
+        <hr></hr>
+        <br></br>
+
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h5" gutterBottom>
             {mode === 'edit' ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
@@ -239,27 +359,8 @@ const BudgetForm = ({
 
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-              {/* Sección de Paciente */}
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  onClick={() => setShowSearchDialog(true)}
-                  disabled={!!selectedPatient}
-                >
-                  Buscar Paciente
-                </Button>
-                {selectedPatient && (
-                  <Box mt={2}>
-                    <Typography variant="subtitle1">
-                      Paciente: {selectedPatient.nombrePaciente}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      Cédula: {selectedPatient.numeroCedula}
-                    </Typography>
-                  </Box>
-                )}
-              </Grid>
 
+             
               {/* Especialidad */}
               <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -348,44 +449,53 @@ const BudgetForm = ({
                           {/* Fila para agregar nuevo procedimiento */}
                           <TableRow>
                             <TableCell>
-                              <TextField
-                                fullWidth
-                                size="small"
-                                value={newProcedimiento.nombre}
-                                onChange={(e) => setNewProcedimiento({
-                                  ...newProcedimiento,
+                            <TextField
+                              fullWidth
+                              size="small"
+                              value={newProcedimientos[faseIndex]?.nombre || ''}
+                              onChange={(e) => setNewProcedimientos(prev => ({
+                                ...prev,
+                                [faseIndex]: {
+                                  ...prev[faseIndex],
                                   nombre: e.target.value
-                                })}
-                                placeholder="Nombre del procedimiento"
-                              />
+                                }
+                              }))}
+                              placeholder="Nombre del procedimiento"
+                            />
                             </TableCell>
                             <TableCell>
-                              <TextField
-                                size="small"
-                                type="number"
-                                value={newProcedimiento.numeroPiezas}
-                                onChange={(e) => setNewProcedimiento({
-                                  ...newProcedimiento,
+                            <TextField
+                              size="small"
+                              type="number"
+                              value={newProcedimientos[faseIndex]?.numeroPiezas || ''}
+                              onChange={(e) => setNewProcedimientos(prev => ({
+                                ...prev,
+                                [faseIndex]: {
+                                  ...prev[faseIndex],
                                   numeroPiezas: e.target.value
-                                })}
-                                placeholder="N° piezas"
-                              />
+                                }
+                              }))}
+                              placeholder="N° piezas"
+                            />
                             </TableCell>
                             <TableCell>
-                              <TextField
-                                size="small"
-                                type="number"
-                                value={newProcedimiento.costoPorUnidad}
-                                onChange={(e) => setNewProcedimiento({
-                                  ...newProcedimiento,
+                            <TextField
+                              size="small"
+                              type="number"
+                              value={newProcedimientos[faseIndex]?.costoPorUnidad || ''}
+                              onChange={(e) => setNewProcedimientos(prev => ({
+                                ...prev,
+                                [faseIndex]: {
+                                  ...prev[faseIndex],
                                   costoPorUnidad: e.target.value
-                                })}
-                                placeholder="Costo"
-                              />
+                                }
+                              }))}
+                              placeholder="Costo"
+                            />
                             </TableCell>
                             <TableCell>
-                              {newProcedimiento.numeroPiezas && newProcedimiento.costoPorUnidad ? 
-                                `$${(newProcedimiento.numeroPiezas * newProcedimiento.costoPorUnidad).toFixed(2)}` : 
+                              {newProcedimientos[faseIndex]?.numeroPiezas && newProcedimientos[faseIndex]?.costoPorUnidad ? 
+                                `$${(newProcedimientos[faseIndex].numeroPiezas * newProcedimientos[faseIndex].costoPorUnidad).toFixed(2)}` : 
                                 '-'
                               }
                             </TableCell>
@@ -433,24 +543,8 @@ const BudgetForm = ({
           </form>
         </Paper>
 
-        {/* Diálogo de búsqueda de paciente */}
-        <Dialog open={showSearchDialog} onClose={() => setShowSearchDialog(false)}>
-          <DialogTitle>Buscar Paciente</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Número de Cédula"
-              fullWidth
-              value={patientSearch}
-              onChange={(e) => setPatientSearch(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setShowSearchDialog(false)}>Cancelar</Button>
-            <Button onClick={handlePatientSearch}>Buscar</Button>
-          </DialogActions>
-        </Dialog>
+       
+
       </Container>
     </div>
   );
