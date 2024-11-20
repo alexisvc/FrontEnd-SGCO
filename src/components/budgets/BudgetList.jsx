@@ -31,15 +31,14 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as ViewIcon,
-  ArrowBack as ArrowBackIcon
+  ArrowBack as ArrowBackIcon,
+  Payment as PaymentIcon
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
-import { useBudgets } from '../../hooks/useBudgets';
 import budgetService from '../../services/budgetService';
 
-const BudgetList = () => {
+const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = false }) => {
   const navigate = useNavigate();
-  const { budgets, loading, error, fetchBudgets } = useBudgets();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('cedula');
   const [filteredBudgets, setFilteredBudgets] = useState([]);
@@ -88,7 +87,6 @@ const BudgetList = () => {
       }
     } catch (error) {
       toast.error('Error al buscar presupuestos');
-      console.error('Error en la búsqueda:', error);
     }
   };
 
@@ -105,19 +103,13 @@ const BudgetList = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      if (!budgetToDelete) {
-        toast.error('No se ha seleccionado ningún presupuesto para eliminar');
-        return;
-      }
-
+      if (!budgetToDelete) return;
       await budgetService.deleteBudget(budgetToDelete._id);
       toast.success('Presupuesto eliminado exitosamente');
       setDeleteDialogOpen(false);
       setBudgetToDelete(null);
-      // Recargar la lista de presupuestos
       fetchBudgets();
     } catch (error) {
-      console.error('Error al eliminar:', error);
       toast.error('Error al eliminar el presupuesto');
     }
   };
@@ -132,12 +124,21 @@ const BudgetList = () => {
     return statusColors[status] || 'default';
   };
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
+  const getPaymentStatusColor = (status) => {
+    const paymentColors = {
+      pendiente: 'warning',
+      parcial: 'info',
+      completado: 'success'
+    };
+    return paymentColors[status] || 'default';
   };
 
   const formatCurrency = (amount) => {
     return `$${amount.toFixed(2)}`;
+  };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
   };
 
   if (loading) {
@@ -151,17 +152,15 @@ const BudgetList = () => {
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
       <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/planificacion")}
-          sx={{ mb: 2 }}
-        >
-          Atrás
-        </Button>
+        variant="outlined"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate(isPatientView ? "/planificacion" : "/planificacion")}
+        sx={{ mb: 2 }}
+      >
+        Atrás
+      </Button>
         
       <Container maxWidth="lg">
-        
-
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Paper sx={{ p: 3, mb: 3 }}>
@@ -171,45 +170,49 @@ const BudgetList = () => {
                     Presupuestos
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={3}>
-                  <FormControl fullWidth>
-                    <InputLabel>Buscar por</InputLabel>
-                    <Select
-                      value={searchType}
-                      onChange={(e) => setSearchType(e.target.value)}
-                      label="Buscar por"
-                    >
-                      <MenuItem value="cedula">Cédula</MenuItem>
-                      <MenuItem value="nombre">Nombre</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label={searchType === 'cedula' ? 'Ingrese cédula' : 'Ingrese nombre'}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={handleSearch}
-                  >
-                    Buscar
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={handleReset}
-                  >
-                    Resetear
-                  </Button>
-                </Grid>
+                {!isPatientView && (
+                  <>
+                    <Grid item xs={12} sm={3}>
+                      <FormControl fullWidth>
+                        <InputLabel>Buscar por</InputLabel>
+                        <Select
+                          value={searchType}
+                          onChange={(e) => setSearchType(e.target.value)}
+                          label="Buscar por"
+                        >
+                          <MenuItem value="cedula">Cédula</MenuItem>
+                          <MenuItem value="nombre">Nombre</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <TextField
+                        fullWidth
+                        label={searchType === 'cedula' ? 'Ingrese cédula' : 'Ingrese nombre'}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={handleSearch}
+                      >
+                        Buscar
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleReset}
+                      >
+                        Resetear
+                      </Button>
+                    </Grid>
+                  </>
+                )}
                 <Grid item xs={12} sm={1}>
                   <Button
                     fullWidth
@@ -236,6 +239,7 @@ const BudgetList = () => {
                     <TableCell>Especialidad</TableCell>
                     <TableCell align="right">Total</TableCell>
                     <TableCell align="center">Estado</TableCell>
+                    <TableCell align="center">Estado Pago</TableCell>
                     <TableCell align="center">Acciones</TableCell>
                   </TableRow>
                 </TableHead>
@@ -251,6 +255,13 @@ const BudgetList = () => {
                         <Chip 
                           label={budget.estado}
                           color={getStatusColor(budget.estado)}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Chip 
+                          label={budget.estadoPagoGeneral}
+                          color={getPaymentStatusColor(budget.estadoPagoGeneral)}
                           size="small"
                         />
                       </TableCell>
@@ -277,6 +288,15 @@ const BudgetList = () => {
                               <DeleteIcon />
                             </IconButton>
                           </>
+                        )}
+                        {budget.estado === 'aceptado' && (
+                          <IconButton
+                            onClick={() => navigate(`/presupuestos/${budget._id}/pagos`)}
+                            title="Gestionar pagos"
+                            color="primary"
+                          >
+                            <PaymentIcon />
+                          </IconButton>
                         )}
                       </TableCell>
                     </TableRow>

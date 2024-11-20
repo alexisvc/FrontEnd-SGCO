@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import {
   Button,
   Typography,
@@ -12,13 +12,12 @@ import {
   TableHead,
   TableRow,
   Box,
-  Container
+  Chip
 } from '@mui/material';
-import { useReactToPrint } from 'react-to-print';
-import { PrintOutlined, ArrowBack } from '@mui/icons-material';
-import { useBudgets } from '../../hooks/useBudgets';
+import { PrintOutlined } from '@mui/icons-material';
 
-const BudgetContent = React.forwardRef(({ currentBudget, isPrintMode }, ref) => (
+// Componente para la versión imprimible
+const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
   <div ref={ref} className={isPrintMode ? 'print-mode' : ''}>
     {/* Cabecera */}
     <Box mb={3} className={isPrintMode ? 'print-header' : ''}>
@@ -27,18 +26,18 @@ const BudgetContent = React.forwardRef(({ currentBudget, isPrintMode }, ref) => 
       </Typography>
       <Grid container spacing={2} justifyContent="space-between">
         <Grid item xs={12} sm={6}>
-          <Typography><strong>Paciente:</strong> {currentBudget.paciente.nombrePaciente}</Typography>
-          <Typography><strong>Cédula:</strong> {currentBudget.paciente.numeroCedula}</Typography>
+          <Typography><strong>Paciente:</strong> {budget.paciente.nombrePaciente}</Typography>
+          <Typography><strong>Cédula:</strong> {budget.paciente.numeroCedula}</Typography>
         </Grid>
         <Grid item xs={12} sm={6} textAlign="right">
-          <Typography><strong>Fecha:</strong> {new Date(currentBudget.fecha).toLocaleDateString()}</Typography>
-          <Typography><strong>Especialidad:</strong> {currentBudget.especialidad}</Typography>
+          <Typography><strong>Fecha:</strong> {new Date(budget.fecha).toLocaleDateString()}</Typography>
+          <Typography><strong>Especialidad:</strong> {budget.especialidad}</Typography>
         </Grid>
       </Grid>
     </Box>
 
     {/* Fases y Procedimientos */}
-    {currentBudget.fases.map((fase, faseIndex) => (
+    {budget.fases.map((fase, faseIndex) => (
       <Box key={faseIndex} mb={4}>
         <Typography variant="h6" gutterBottom>
           {fase.nombre}
@@ -86,7 +85,7 @@ const BudgetContent = React.forwardRef(({ currentBudget, isPrintMode }, ref) => 
     {/* Total General */}
     <Box mt={3} mb={3}>
       <Typography variant="h5" align="right">
-        Total General: ${currentBudget.totalGeneral.toFixed(2)}
+        Total General: ${budget.totalGeneral.toFixed(2)}
       </Typography>
     </Box>
 
@@ -104,65 +103,89 @@ const BudgetContent = React.forwardRef(({ currentBudget, isPrintMode }, ref) => 
   </div>
 ));
 
-const BudgetDetails = () => {
-  // Hooks en orden consistente
-  const navigate = useNavigate();
-  const { id } = useParams();
+const BudgetDetails = ({ budget, updateBudgetStatus }) => {
   const componentRef = useRef();
-  const [isPrintMode, setIsPrintMode] = useState(false);
-  const { currentBudget, loading, error, fetchBudgetById } = useBudgets();
+  const [isPrintMode, setIsPrintMode] = React.useState(false);
 
-  // Efecto para cargar el presupuesto
-  useEffect(() => {
-    const loadBudget = async () => {
-      try {
-        await fetchBudgetById(id);
-      } catch (error) {
-        console.error('Error al cargar el presupuesto:', error);
-      }
-    };
-    
-    if (id) {
-      loadBudget();
-    }
-  }, [id, fetchBudgetById]);
-
-  // Configuración de impresión
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     onBeforeGetContent: () => setIsPrintMode(true),
     onAfterPrint: () => setIsPrintMode(false),
   });
 
-  if (loading) return <Typography>Cargando...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
-  if (!currentBudget) return <Typography>Presupuesto no encontrado</Typography>;
+  const handleStatusChange = async (newStatus) => {
+    try {
+      await updateBudgetStatus(budget._id, newStatus);
+    } catch (error) {
+      console.error('Error al actualizar el estado:', error);
+    }
+  };
+
+  const getStatusColor = (status) => {
+    const statusColors = {
+      borrador: 'default',
+      emitido: 'primary',
+      aceptado: 'success',
+      rechazado: 'error'
+    };
+    return statusColors[status] || 'default';
+  };
 
   return (
-    <Container maxWidth="lg">
-      {!isPrintMode && (
-        <Box mb={2} display="flex" justifyContent="space-between">
-          <Button
-            startIcon={<ArrowBack />}
-            onClick={() => navigate("/presupuestos")}
-            variant="outlined"
-          >
-            Volver
-          </Button>
+    <Box>
+      {/* Encabezado con estado y acciones */}
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Typography variant="subtitle1">
+            Estado:
+          </Typography>
+          <Chip
+            label={budget.estado.toUpperCase()}
+            color={getStatusColor(budget.estado)}
+          />
+        </Box>
+        <Box display="flex" gap={2}>
+          {budget.estado === 'borrador' && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleStatusChange('emitido')}
+            >
+              Emitir Presupuesto
+            </Button>
+          )}
+          {budget.estado === 'emitido' && (
+            <>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => handleStatusChange('aceptado')}
+              >
+                Aceptar
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleStatusChange('rechazado')}
+              >
+                Rechazar
+              </Button>
+            </>
+          )}
           <Button
             startIcon={<PrintOutlined />}
             onClick={handlePrint}
-            variant="contained"
-            color="primary"
+            variant="outlined"
           >
-            Imprimir Presupuesto
+            Imprimir
           </Button>
         </Box>
-      )}
+      </Box>
 
+      {/* Contenido del presupuesto */}
       <BudgetContent 
         ref={componentRef}
-        currentBudget={currentBudget}
+        budget={budget}
         isPrintMode={isPrintMode}
       />
 
@@ -183,7 +206,7 @@ const BudgetDetails = () => {
           }
         `}
       </style>
-    </Container>
+    </Box>
   );
 };
 

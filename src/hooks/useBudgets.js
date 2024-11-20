@@ -12,6 +12,7 @@ export function useBudgets() {
     console.error('Error en operación de presupuesto:', err);
     setError(err.response?.data?.error || err.message);
     setLoading(false);
+    return { success: false, error: err.message };
   }, []);
 
   const fetchBudgets = useCallback(async () => {
@@ -22,8 +23,7 @@ export function useBudgets() {
       setLoading(false);
       return { success: true, data };
     } catch (err) {
-      handleError(err);
-      return { success: false, error: err.message };
+      return handleError(err);
     }
   }, [handleError]);
 
@@ -35,10 +35,48 @@ export function useBudgets() {
       setLoading(false);
       return { success: true, data };
     } catch (err) {
-      handleError(err);
-      return { success: false, error: err.message };
+      return handleError(err);
     }
   }, [handleError]);
+
+
+  // useBudgets.js
+  const fetchBudgetById = useCallback(async (budgetId) => {
+    console.log('Hook - Starting fetchBudgetById:', budgetId);
+    try {
+      setLoading(true);
+      setError(null);
+      
+      if (!budgetId) {
+        throw new Error('ID de presupuesto no proporcionado');
+      }
+  
+      const response = await budgetService.getBudgetById(budgetId);
+      console.log('Hook - Response from service:', response);
+  
+      // Validar la respuesta
+      if (!response || !response._id) {
+        throw new Error('Datos del presupuesto inválidos');
+      }
+  
+      setCurrentBudget(response);
+      setLoading(false);
+  
+      return {
+        success: true,
+        data: response
+      };
+    } catch (err) {
+      console.error('Hook - Error in fetchBudgetById:', err);
+      setError(err.message || 'Error al cargar el presupuesto');
+      setLoading(false);
+      
+      return {
+        success: false,
+        error: err.message || 'Error al cargar el presupuesto'
+      };
+    }
+  }, []);
 
   const createBudget = useCallback(async (budgetData) => {
     try {
@@ -49,9 +87,24 @@ export function useBudgets() {
       toast.success('Presupuesto creado exitosamente');
       return { success: true, data };
     } catch (err) {
-      handleError(err);
       toast.error('Error al crear el presupuesto');
-      return { success: false, error: err.message };
+      return handleError(err);
+    }
+  }, [handleError]);
+
+  const updateBudget = useCallback(async (budgetId, budgetData) => {
+    try {
+      setLoading(true);
+      const data = await budgetService.updateBudget(budgetId, budgetData);
+      setBudgets(prev => prev.map(budget => 
+        budget._id === budgetId ? data : budget
+      ));
+      setLoading(false);
+      toast.success('Presupuesto actualizado exitosamente');
+      return { success: true, data };
+    } catch (err) {
+      toast.error('Error al actualizar el presupuesto');
+      return handleError(err);
     }
   }, [handleError]);
 
@@ -59,20 +112,17 @@ export function useBudgets() {
     try {
       setLoading(true);
       const data = await budgetService.updateBudgetStatus(budgetId, status);
-      setBudgets(prev => 
-        prev.map(budget => budget.id === budgetId ? data : budget)
-      );
+      setBudgets(prev => prev.map(budget => 
+        budget._id === budgetId ? data : budget
+      ));
       setLoading(false);
       toast.success('Estado del presupuesto actualizado');
       return { success: true, data };
     } catch (err) {
-      handleError(err);
       toast.error('Error al actualizar el estado del presupuesto');
-      return { success: false, error: err.message };
+      return handleError(err);
     }
   }, [handleError]);
-
-  
 
   const calculateTotals = useCallback((fases) => {
     let totalGeneral = 0;
@@ -89,37 +139,6 @@ export function useBudgets() {
     return { fases: fasesCalculated, totalGeneral };
   }, []);
 
-
-  const fetchBudgetById = useCallback(async (budgetId) => {
-    try {
-      setLoading(true);
-      const data = await budgetService.getBudgetById(budgetId);
-      setCurrentBudget(data);
-      setLoading(false);
-      return { success: true, data };
-    } catch (err) {
-      handleError(err);
-      return { success: false, error: err.message };
-    }
-  }, [handleError]);
-  
-  const updateBudget = useCallback(async (budgetId, budgetData) => {
-    try {
-      setLoading(true);
-      const data = await budgetService.updateBudget(budgetId, budgetData);
-      setBudgets(prev => 
-        prev.map(budget => budget._id === budgetId ? data : budget)
-      );
-      setLoading(false);
-      toast.success('Presupuesto actualizado exitosamente');
-      return { success: true, data };
-    } catch (err) {
-      handleError(err);
-      toast.error('Error al actualizar el presupuesto');
-      return { success: false, error: err.message };
-    }
-  }, [handleError]);
-
   return {
     budgets,
     currentBudget,
@@ -127,11 +146,11 @@ export function useBudgets() {
     error,
     fetchBudgets,
     fetchBudgetsByPatient,
-    createBudget,
-    updateBudgetStatus,
-    setCurrentBudget,
-    calculateTotals,
     fetchBudgetById,
-    updateBudget
+    createBudget,
+    updateBudget,
+    updateBudgetStatus,
+    calculateTotals,
+    setCurrentBudget
   };
 }

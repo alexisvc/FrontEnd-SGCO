@@ -19,6 +19,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -26,20 +30,17 @@ import {
   ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
-import { useBudgets } from '../../hooks/useBudgets';
-import { usePatients } from '../../hooks/usePatients';
 
-const BudgetForm = () => {
+const BudgetForm = ({ 
+  createBudget, 
+  updateBudget, 
+  fetchBudgetById, 
+  fetchPatientByCedula,
+  calculateTotals, 
+  mode = 'create' 
+}) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { patients, fetchPatientByCedula } = usePatients();
-  const { 
-    currentBudget, 
-    fetchBudgetById, 
-    createBudget, 
-    updateBudget, 
-    calculateTotals 
-  } = useBudgets();
 
   const initialFaseState = {
     nombre: '',
@@ -47,6 +48,7 @@ const BudgetForm = () => {
     procedimientos: []
   };
 
+  // Estados
   const [budget, setBudget] = useState({
     paciente: '',
     especialidad: '',
@@ -62,24 +64,47 @@ const BudgetForm = () => {
     costoPorUnidad: ''
   });
 
-  // Cargar el presupuesto si estamos en modo edición
-  useEffect(() => {
-    if (id) {
-      fetchBudgetById(id);
-    }
-  }, [id, fetchBudgetById]);
+  // Lista de especialidades disponibles
+  const especialidades = [
+    'Odontología General',
+    'Ortodoncia',
+    'Endodoncia',
+    'Periodoncia',
+    'Cirugía Oral',
+    'Rehabilitación Oral',
+    'Odontopediatría',
+    'Implantología'
+  ];
 
-  // Actualizar el formulario cuando se carga el presupuesto
+  // Efecto para cargar presupuesto en modo edición
   useEffect(() => {
-    if (id && currentBudget) {
-      setBudget({
-        ...currentBudget,
-        paciente: currentBudget.paciente.id || currentBudget.paciente
-      });
-      setSelectedPatient(currentBudget.paciente);
-    }
-  }, [id, currentBudget]);
+    const loadBudget = async () => {
+      if (mode === 'edit' && id) {
+        try {
+          console.log('BudgetForm - Loading budget with ID:', id);
+          const result = await fetchBudgetById(id);
+          
+          if (!result.success) {
+            throw new Error(result.error || 'Error al cargar el presupuesto');
+          }
+          
+          setBudget({
+            ...result.data,
+            paciente: result.data.paciente.id || result.data.paciente
+          });
+          setSelectedPatient(result.data.paciente);
+        } catch (error) {
+          console.error('BudgetForm - Error loading budget:', error);
+          toast.error(error.message || 'Error al cargar el presupuesto');
+          navigate('/presupuestos');
+        }
+      }
+    };
+    
+    loadBudget();
+  }, [mode, id, fetchBudgetById, navigate]);
 
+  // Manejadores de eventos
   const handlePatientSearch = async () => {
     try {
       if (!patientSearch.trim()) {
@@ -97,6 +122,7 @@ const BudgetForm = () => {
         toast.error('No se encontró el paciente');
       }
     } catch (error) {
+      console.error('Error al buscar paciente:', error);
       toast.error('Error al buscar el paciente');
     }
   };
@@ -174,42 +200,41 @@ const BudgetForm = () => {
         ...budget,
         fases,
         totalGeneral,
-        estado: 'borrador' // Aseguramos que el estado inicial sea borrador
+        estado: 'borrador',
+        estadoPagoGeneral: 'pendiente' // Nuevo campo
       };
 
-      const result = id 
+      const result = mode === 'edit'
         ? await updateBudget(id, budgetToSave)
         : await createBudget(budgetToSave);
       
       if (result.success) {
-        toast.success(`Presupuesto ${id ? 'actualizado' : 'creado'} exitosamente`);
+        toast.success(`Presupuesto ${mode === 'edit' ? 'actualizado' : 'creado'} exitosamente`);
         navigate('/presupuestos');
       } else {
-        toast.error(`Error al ${id ? 'actualizar' : 'crear'} el presupuesto`);
+        toast.error(`Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error(`Error al ${id ? 'actualizar' : 'crear'} el presupuesto`);
+      toast.error(`Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
     }
   };
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
-      <Button
+      <Container maxWidth="lg">
+        <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate("/presupuestos")}
           sx={{ mb: 2 }}
         >
-          Atrás
+          Volver
         </Button>
-        
-      <Container maxWidth="lg">
-        
 
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h5" gutterBottom>
-            {id ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
+            {mode === 'edit' ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
           </Typography>
 
           <form onSubmit={handleSubmit}>
@@ -220,7 +245,6 @@ const BudgetForm = () => {
                   variant="contained"
                   onClick={() => setShowSearchDialog(true)}
                   disabled={!!selectedPatient}
-                  
                 >
                   Buscar Paciente
                 </Button>
@@ -238,13 +262,21 @@ const BudgetForm = () => {
 
               {/* Especialidad */}
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Especialidad"
-                  value={budget.especialidad}
-                  onChange={(e) => setBudget({ ...budget, especialidad: e.target.value })}
-                  required
-                />
+                <FormControl fullWidth>
+                  <InputLabel>Especialidad</InputLabel>
+                  <Select
+                    value={budget.especialidad}
+                    onChange={(e) => setBudget({ ...budget, especialidad: e.target.value })}
+                    label="Especialidad"
+                    required
+                  >
+                    {especialidades.map((esp) => (
+                      <MenuItem key={esp} value={esp}>
+                        {esp}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
 
               {/* Fases */}
@@ -394,7 +426,7 @@ const BudgetForm = () => {
                   size="large"
                   fullWidth
                 >
-                  {id ? 'Actualizar Presupuesto' : 'Guardar Presupuesto'}
+                  {mode === 'edit' ? 'Actualizar Presupuesto' : 'Guardar Presupuesto'}
                 </Button>
               </Grid>
             </Grid>

@@ -29,6 +29,7 @@ import { useEndodonticTreatments } from "./hooks/useEndodonticTreatments";
 import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
 import { useOdontologos } from "./hooks/useOdontologos";
 import { useBudgets } from "./hooks/useBudgets";
+import { usePayments } from "./hooks/usePayments";
 
 import Odontologos from "./components/odontologos/Odontologos";
 import Appointment from "./components/appointments/Appointment";
@@ -45,6 +46,10 @@ import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
 import BudgetList from "./components/budgets/BudgetList";
 import BudgetForm from "./components/budgets/BudgetForm";
 import BudgetDetails from "./components/budgets/BudgetDetails";
+// Pagos
+import BudgetManagement from "./components/budgets/BudgetManagement";
+
+import PaymentDetails from "./components/budgets/PaymentDetails"; // Nuevo
 
 
 function App() {
@@ -107,6 +112,15 @@ function App() {
     calculateTotals,
     fetchBudgetById
   } = useBudgets();
+
+  const {
+    paymentSummary,
+    fetchPaymentSummary,
+    registerPayment,
+    cancelPayment,
+    formatters,
+    helpers
+  } = usePayments();
 
   const isLoggedIn = !!user;
 
@@ -210,83 +224,105 @@ function App() {
             <Route path="/agendamiento/cita" element={<Appointment />} />
 
             <Route
-              path="/presupuestos"
-              element={
-                isLoggedIn ? (
-                  <BudgetList 
-                    budgets={budgets}
-                    fetchBudgets={fetchBudgets}
-                    loading={loading}
-                    error={error}
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
+        path="/presupuestos"
+        element={
+          isLoggedIn ? (
+            <BudgetList 
+              budgets={budgets}
+              fetchBudgets={fetchBudgets}
+              loading={loading}
+              error={error}
             />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      />
 
-<Route
-              path="/presupuestos/nuevo"
-              element={
-                isLoggedIn ? (
-                  <BudgetForm
-                    createBudget={createBudget}
-                    calculateTotals={calculateTotals}
-                    mode="create"
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
+      <Route
+        path="/presupuestos/nuevo"
+        element={
+          isLoggedIn ? (
+            <BudgetForm
+              createBudget={createBudget}
+              calculateTotals={calculateTotals}
+              fetchPatientByCedula={fetchPatientByCedula} // Añadir esta prop
+              mode="create"
             />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      />
 
-            <Route
-              path="/presupuestos/:id"
-              element={
-                isLoggedIn ? (
-                  <BudgetDetails 
-                    budget={currentBudget}
-                    updateBudgetStatus={updateBudgetStatus}
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
+      {/* Nueva ruta para gestión de presupuesto */}
+      <Route
+        path="/presupuestos/:id/*"
+        element={
+          isLoggedIn ? (
+            <BudgetManagement
+              budget={currentBudget}
+              fetchBudgetById={fetchBudgetById}
+              updateBudgetStatus={updateBudgetStatus}
+              paymentSummary={paymentSummary}
+              fetchPaymentSummary={fetchPaymentSummary}
+              registerPayment={registerPayment}
+              cancelPayment={cancelPayment}
+              formatters={formatters}
+              helpers={helpers}
             />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      >
+        {/* Sub-rutas para BudgetManagement */}
+        <Route index element={<Navigate to="detalles" />} />
+        <Route 
+          path="detalles" 
+          element={<BudgetDetails />} 
+        />
+        <Route 
+          path="pagos" 
+          element={<PaymentDetails />} 
+        />
+      </Route>
 
-          <Route
-            path="/presupuestos/editar/:id"
-            element={
-              isLoggedIn ? (
-                <BudgetForm
-                  createBudget={createBudget}
-                  updateBudget={updateBudget} // Añadir esta prop
-                  fetchBudgetById={fetchBudgetById} // Añadir esta prop
-                  calculateTotals={calculateTotals}
-                  mode="edit"
-                />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-
-            <Route
-              path="/patients/:patientId/presupuestos"
-              element={
-                isLoggedIn ? (
-                  <BudgetList 
-                    budgets={budgets}
-                    fetchBudgets={fetchBudgetsByPatient}
-                    loading={loading}
-                    error={error}
-                    isPatientView={true}
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
+      <Route
+        path="/presupuestos/editar/:id"
+        element={
+          isLoggedIn ? (
+            <BudgetForm
+              createBudget={createBudget}
+              updateBudget={updateBudget}
+              fetchBudgetById={fetchBudgetById}
+              fetchPatientByCedula={fetchPatientByCedula} // Añadir esta prop
+              calculateTotals={calculateTotals}
+              mode="edit"
             />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      />
+
+      {/* Vista de presupuestos por paciente */}
+      <Route
+        path="/patients/:patientId/presupuestos"
+        element={
+          isLoggedIn ? (
+            <BudgetList 
+              budgets={budgets}
+              fetchBudgets={fetchBudgetsByPatient}
+              loading={loading}
+              error={error}
+              isPatientView={true}
+            />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      />
 
             <Route path="/planificacion" element={<PlanningMenu />} />
 
