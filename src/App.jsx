@@ -30,6 +30,7 @@ import { useCirugiaPatologia } from "./hooks/useCirugiaPatologia";
 import { useOdontologos } from "./hooks/useOdontologos";
 import { useBudgets } from "./hooks/useBudgets";
 import { usePayments } from "./hooks/usePayments";
+import { useFinancialReports } from "./hooks/useFinancialReports";
 
 import Odontologos from "./components/odontologos/Odontologos";
 import Appointment from "./components/appointments/Appointment";
@@ -42,6 +43,7 @@ import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
 
+
 // Componentes de presupuestos
 import BudgetList from "./components/budgets/BudgetList";
 import BudgetForm from "./components/budgets/BudgetForm";
@@ -50,6 +52,8 @@ import BudgetDetails from "./components/budgets/BudgetDetails";
 import BudgetManagement from "./components/budgets/BudgetManagement";
 
 import PaymentDetails from "./components/budgets/PaymentDetails"; // Nuevo
+
+import FinancialReports from "./components/reports/FinancialReports";
 
 
 function App() {
@@ -121,6 +125,15 @@ function App() {
     formatters,
     helpers
   } = usePayments();
+
+  const {
+    reports,
+    loading: reportsLoading,
+    error: reportsError,
+    getReporteMensual,
+    getReporteAnual,
+    getReportePorRango
+  } = useFinancialReports();
 
   const isLoggedIn = !!user;
 
@@ -324,6 +337,23 @@ function App() {
           )
         }
       />
+
+<Route
+  path="/reportes-financieros"
+  element={
+    isLoggedIn ? (
+      <FinancialReports 
+        loading={reportsLoading}
+        error={reportsError}
+        getReporteMensual={getReporteMensual}
+        getReporteAnual={getReporteAnual}
+        getReportePorRango={getReportePorRango}
+      />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
 
             <Route path="/planificacion" element={<PlanningMenu />} />
 

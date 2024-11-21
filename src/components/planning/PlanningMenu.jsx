@@ -9,6 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonIcon from '@mui/icons-material/Person';
 import { FaMoneyBillWave } from "react-icons/fa";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const PlanningMenu = () => {
   const navigate = useNavigate();
@@ -44,13 +45,13 @@ const PlanningMenu = () => {
                 variant="contained"
                 color="primary"
                 startIcon={
-                  <PersonIcon style={{ fontSize: 40, marginRight: "40" }} />
+                  <PersonIcon style={{ fontSize: 40, marginRight: "220" }} />
                 }
                 style={{
                   fontSize: "18px",
                   padding: "20px",
                   margin: "5%",
-                  width: "140%",
+                  width: "100%",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -78,13 +79,13 @@ const PlanningMenu = () => {
                 variant="contained"
                 color="primary"
                 startIcon={
-                  <ReceiptLongIcon style={{ fontSize: 40, marginRight: "40" }} />
+                  <ReceiptLongIcon style={{ fontSize: 40, marginRight: "180" }} />
                 }
                 style={{
                   fontSize: "18px",
                   padding: "20px",
                   margin: "5%",
-                  width: "140%",
+                  width: "100%",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -102,6 +103,8 @@ const PlanningMenu = () => {
               </Button>
             </Link>
           </div>
+
+          {/*
           <div>
             <Link
               to="/planificacion/consolidado"
@@ -136,9 +139,52 @@ const PlanningMenu = () => {
               </Button>
             </Link>
           </div>
+
+          */}
+
+          <div>
+            <Link
+              to="/reportes-financieros"
+              className="link-button"
+              style={{ textDecoration: "none", width: "100%" }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={
+                  <AccountBalanceWalletIcon style={{ fontSize: 40, marginRight: "110" }} />
+                }
+                style={{
+                  fontSize: "18px",
+                  padding: "20px",
+                  margin: "5%",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+                sx={{
+                  color: "white",
+                  backgroundColor: "#8ba082",
+                  "&:hover": {
+                    backgroundColor: "#5d6c56",
+                  },
+                }}
+              >
+                Reportes Financieros
+              </Button>
+            </Link>
+          </div>
+
+          
         </div>
+        
+        
       </Container>
     </div>
+    
+    
   );
 };
 
