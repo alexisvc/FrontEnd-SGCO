@@ -1,32 +1,55 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/treatment-plans'; // Actualiza con la ruta correcta de tu backend
+const baseUrl = 'http://localhost:3001/api/treatment-plans';
 
+// Obtener todos los tratamientos
 const getAll = async () => {
   const response = await axios.get(baseUrl);
   return response.data;
 };
 
-const getById = async (id) => {
-  const response = await axios.get(`${baseUrl}/${id}`);
-  return response.data;
-};
-
+// Obtener tratamientos por paciente
 const getByPatientId = async (patientId) => {
   const response = await axios.get(`${baseUrl}/patient/${patientId}`);
   return response.data;
 };
 
-const create = async (newTreatmentPlan) => {
-  const response = await axios.post(baseUrl, newTreatmentPlan);
+// Obtener un tratamiento específico
+const getById = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
   return response.data;
 };
 
-const update = async (id, updatedTreatmentPlan) => {
-  const response = await axios.put(`${baseUrl}/${id}`, updatedTreatmentPlan);
+// Crear nuevo tratamiento
+/*
+const create = async (newTreatment) => {
+  const response = await axios.post(baseUrl, newTreatment);
+  return response.data;
+};
+*/
+const create = async (newTreatment) => {
+  console.log('Creating treatment with data:', JSON.stringify(newTreatment));
+  try {
+    const response = await axios.post(baseUrl, newTreatment);
+    return response.data;
+  } catch (error) {
+    console.error('Full error details:', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      url: error.config?.url
+    });
+    throw error;
+  }
+};
+
+// Actualizar tratamiento
+const update = async (id, updatedTreatment) => {
+  const response = await axios.put(`${baseUrl}/${id}`, updatedTreatment);
   return response.data;
 };
 
+// Eliminar tratamiento
 const remove = async (id) => {
   const response = await axios.delete(`${baseUrl}/${id}`);
   return response.data;
@@ -34,9 +57,9 @@ const remove = async (id) => {
 
 export default {
   getAll,
-  getById,
   getByPatientId,
+  getById,
   create,
   update,
-  remove,
+  remove
 };

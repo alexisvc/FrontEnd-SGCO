@@ -237,20 +237,20 @@ function App() {
             <Route path="/agendamiento/cita" element={<Appointment />} />
 
             <Route
-        path="/presupuestos"
-        element={
-          isLoggedIn ? (
-            <BudgetList 
-              budgets={budgets}
-              fetchBudgets={fetchBudgets}
-              loading={loading}
-              error={error}
+              path="/presupuestos"
+              element={
+                isLoggedIn ? (
+                  <BudgetList 
+                    budgets={budgets}
+                    fetchBudgets={fetchBudgets}
+                    loading={loading}
+                    error={error}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
 
       <Route
         path="/presupuestos/nuevo"

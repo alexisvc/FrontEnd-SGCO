@@ -1,75 +1,93 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import patientTreatmentService from '../services/patientTreatmentService';
+import { toast } from 'react-toastify';
 
 const usePatientTreatments = () => {
   const [patientTreatments, setPatientTreatments] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    patientTreatmentService.getAll()
-      .then(data => {
-        setPatientTreatments(data);
-      })
-      .catch(err => {
-        setError(err);
-      });
-  }, []);
 
   const getAllPatientTreatments = async () => {
     try {
+      setLoading(true);
       const data = await patientTreatmentService.getAll();
       setPatientTreatments(data);
+      setLoading(false);
     } catch (error) {
-      setError(error.response ? error.response.data.error : 'Error fetching patient treatments');
+      setError(error.message);
+      setLoading(false);
+      toast.error('Error al obtener los tratamientos');
     }
   };
 
   const getPatientTreatmentsByPatientId = async (id) => {
     try {
+      setLoading(true);
       const data = await patientTreatmentService.getByPatientId(id);
       setPatientTreatments(data);
-      console.log("Tratamientos del paciente", data);
+      setLoading(false);
     } catch (error) {
-      setError(error.response ? error.response.data.error : 'Error fetching patient treatments');
+      setError(error.message);
+      setLoading(false);
+      toast.error('Error al obtener los tratamientos del paciente');
     }
   };
 
-  const createPatientTreatment = async (newTreatment) => {
+  const createPatientTreatment = async (treatmentData) => {
     try {
-      const data = await patientTreatmentService.create(newTreatment);
-      setPatientTreatments([...patientTreatments, data]);
+      setLoading(true);
+      const data = await patientTreatmentService.create(treatmentData);
+      setPatientTreatments(prevTreatments => [...prevTreatments, data]);
+      setLoading(false);
+      toast.success('Tratamiento creado exitosamente');
       return data;
     } catch (error) {
-      setError(error.response ? error.response.data.error : 'Error creating patient treatment');
-      console.error("Error al crear el tratamiento del paciente:", error);
-      throw error; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
+      setError(error.message);
+      setLoading(false);
+      toast.error('Error al crear el tratamiento');
+      throw error;
     }
   };
-  
 
-  const updatePatientTreatment = async (id, updatedTreatment) => {
+  const updatePatientTreatment = async (id, treatmentData) => {
     try {
-      const data = await patientTreatmentService.update(id, updatedTreatment);
-      setPatientTreatments(patientTreatments.map(treatment => treatment.id === id ? data : treatment));
-      return data;
+      setLoading(true);
+      const updatedTreatment = await patientTreatmentService.update(id, treatmentData);
+      setPatientTreatments(prevTreatments => 
+        prevTreatments.map(treatment => 
+          treatment.id === id ? updatedTreatment : treatment
+        )
+      );
+      setLoading(false);
+      toast.success('Tratamiento actualizado exitosamente');
+      return updatedTreatment;
     } catch (error) {
-      setError(error.response ? error.response.data.error : 'Error updating patient treatment');
-      console.error("Error al actualizar el tratamiento del paciente:", error);
-      throw error; // Lanzar el error para que pueda ser capturado por el bloque catch en el controlador correspondiente
+      setError(error.message);
+      setLoading(false);
+      toast.error('Error al actualizar el tratamiento');
+      throw error;
     }
   };
-  
 
   const deletePatientTreatment = async (id) => {
     try {
+      setLoading(true);
       await patientTreatmentService.remove(id);
+      setPatientTreatments(prevTreatments => 
+        prevTreatments.filter(treatment => treatment.id !== id)
+      );
+      setLoading(false);
+      toast.success('Tratamiento eliminado exitosamente');
     } catch (error) {
-      setError(error.response ? error.response.data.error : 'Error deleting patient treatment');
+      setError(error.message);
+      setLoading(false);
+      toast.error('Error al eliminar el tratamiento');
     }
   };
 
   return {
     patientTreatments,
+    loading,
     error,
     getAllPatientTreatments,
     getPatientTreatmentsByPatientId,
