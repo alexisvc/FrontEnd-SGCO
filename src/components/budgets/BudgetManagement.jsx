@@ -251,7 +251,7 @@ function a11yProps(index) {
 const BudgetManagement = ({
   budget,
   fetchBudgetById,
-  updateBudgetStatus,
+  //updateBudgetStatus,
   paymentSummary,
   fetchPaymentSummary,
   registerPayment,
@@ -372,32 +372,33 @@ const BudgetManagement = ({
               onChange={handleTabChange}
               aria-label="budget management tabs"
             >
-              <Tab label="Presupuesto" {...a11yProps(0)} />
               <Tab 
                 label="Planificación" 
                 {...a11yProps(1)}
-                disabled={localBudget.estado !== 'aceptado'}
+                //disabled={localBudget.estado !== 'aceptado'}
               />
+              <Tab label="Presupuesto" {...a11yProps(0)} />
+              
               <Tab 
                 label="Pagos" 
                 {...a11yProps(2)}
-                disabled={localBudget.estado !== 'aceptado'}
+                //disabled={localBudget.estado !== 'aceptado'}
               />
             </Tabs>
           </Box>
-
           <CustomTabPanel value={tabValue} index={0}>
-            <BudgetDetails
-              budget={localBudget}
-              updateBudgetStatus={updateBudgetStatus}
-            />
-          </CustomTabPanel>
-
-          <CustomTabPanel value={tabValue} index={1}>
             <PlanningDetails
               budget={localBudget}
             />
           </CustomTabPanel>
+          <CustomTabPanel value={tabValue} index={1}>
+            <BudgetDetails
+              budget={localBudget}
+              //updateBudgetStatus={updateBudgetStatus}
+            />
+          </CustomTabPanel>
+
+          
 
           <CustomTabPanel value={tabValue} index={2}>
             <PaymentDetails

@@ -1,23 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import { useAppointments } from '../../hooks/useAppointment';
 import {
-  Box,
-  TextField,
   Button,
-  Grid,
-  Paper,
   Typography,
-  IconButton
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Box,
+  CircularProgress
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+import dayjs from "dayjs";
 
 const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     cita: '',
     actividadPlanTrat: '',
     fechaPlanTrat: '',
-    montoAbono: ''
+    montoAbono: '',
+    horaInicio: '',
+    horaFin: ''
   });
+
+  const [horariosOcupados, setHorariosOcupados] = useState([]);
+  const [availableEndHours, setAvailableEndHours] = useState([]);
 
   useEffect(() => {
     if (initialData) {
@@ -30,12 +54,48 @@ const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
     }
   }, [initialData]);
 
+  useEffect(() => {
+    if (formData.fechaPlanTrat) {
+      loadHorariosOcupados(formData.fechaPlanTrat);
+    }
+  }, [formData.fechaPlanTrat]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  const loadHorariosOcupados = async (fecha) => {
+    const result = await fetchHorariosOcupados(odontologoId, fecha);
+    if (result.success) {
+      setHorariosOcupados(result.data);
+    }
+  };
+
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 7; hour < 21; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const time = dayjs().hour(hour).minute(minute).format("HH:mm");
+        options.push(time);
+      }
+    }
+    return options;
+  };
+
+  const handleStartHourChange = (selectedHour) => {
+    setFormData(prev => ({ ...prev, horaInicio: selectedHour }));
+    const updatedAvailableEndHours = generateAvailableEndHours(selectedHour);
+    setAvailableEndHours(updatedAvailableEndHours);
+  };
+
+  const isTimeOccupied = (time) => {
+    return horariosOcupados.some(horario => 
+      time >= horario.horaInicio && time < horario.horaFin
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -106,7 +166,59 @@ const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
               required
               InputLabelProps={{ shrink: true }}
             />
+        </Grid>
+
+        {/* Selector de hora inicio */}
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel>Hora de Inicio</InputLabel>
+            <Select
+              value={formData.horaInicio}
+              onChange={(e) => handleStartHourChange(e.target.value)}
+              label="Hora de Inicio"
+            >
+              {generateTimeOptions().map((time) => (
+                <MenuItem 
+                  key={time} 
+                  value={time}
+                  disabled={isTimeOccupied(time)}
+                  style={{
+                    backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
+                  }}
+                >
+                  {time}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        {/* Selector de hora fin */}
+        {formData.horaInicio && (
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Hora de Fin</InputLabel>
+              <Select
+                value={formData.horaFin}
+                onChange={(e) => setFormData(prev => ({ ...prev, horaFin: e.target.value }))}
+                label="Hora de Fin"
+              >
+                {availableEndHours.map((time) => (
+                  <MenuItem 
+                    key={time} 
+                    value={time}
+                    disabled={isTimeOccupied(time)}
+                    style={{
+                      backgroundColor: isTimeOccupied(time) ? 'rgba(255, 0, 0, 0.1)' : 'inherit'
+                    }}
+                  >
+                    {time}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
+        )}
 
           <Grid item xs={12}>
             <TextField

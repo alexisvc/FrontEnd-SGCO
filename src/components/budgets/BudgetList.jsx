@@ -202,18 +202,23 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                         Buscar
                       </Button>
                     </Grid>
-                    <Grid item xs={12} sm={2}>
+         
+                  </>
+                )}
+                </Grid>
+
+<Grid container spacing={2} alignItems="center" sx={{marginTop:2}}>
+                <Grid item xs={12} sm={3}>
                       <Button
                         fullWidth
                         variant="outlined"
-                        onClick={handleReset}
+                        startIcon={<AddIcon />}
+                        onClick={() => navigate('/planificacion/pacientes')}
                       >
-                        Resetear
+                        Nueva Planificación
                       </Button>
-                    </Grid>
-                  </>
-                )}
-                <Grid item xs={12} sm={1}>
+                </Grid>
+                <Grid item xs={12} sm={3}>
                   <Button
                     fullWidth
                     variant="contained"
@@ -221,10 +226,12 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                     startIcon={<AddIcon />}
                     onClick={() => navigate('/presupuestos/nuevo')}
                   >
-                    Nuevo
+                    Nuevo Presupuesto
                   </Button>
                 </Grid>
-              </Grid>
+
+                </Grid>
+              
             </Paper>
           </Grid>
 
@@ -238,7 +245,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                     <TableCell>Cédula</TableCell>
                     <TableCell>Especialidad</TableCell>
                     <TableCell align="right">Total</TableCell>
-                    <TableCell align="center">Estado</TableCell>
+                    {/*<TableCell align="center">Estado</TableCell>*/}
                     <TableCell align="center">Estado Pago</TableCell>
                     <TableCell align="center">Acciones</TableCell>
                   </TableRow>
@@ -251,6 +258,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                       <TableCell>{budget.paciente.numeroCedula}</TableCell>
                       <TableCell>{budget.especialidad}</TableCell>
                       <TableCell align="right">{formatCurrency(budget.totalGeneral)}</TableCell>
+                      {/*
                       <TableCell align="center">
                         <Chip 
                           label={budget.estado}
@@ -258,6 +266,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                           size="small"
                         />
                       </TableCell>
+                      */}
                       <TableCell align="center">
                         <Chip 
                           label={budget.estadoPagoGeneral}

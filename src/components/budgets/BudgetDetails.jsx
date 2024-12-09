@@ -135,6 +135,7 @@ const BudgetDetails = ({ budget, updateBudgetStatus }) => {
     <Box>
       {/* Encabezado con estado y acciones */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        {/*
         <Box display="flex" alignItems="center" gap={2}>
           <Typography variant="subtitle1">
             Estado:
@@ -144,6 +145,8 @@ const BudgetDetails = ({ budget, updateBudgetStatus }) => {
             color={getStatusColor(budget.estado)}
           />
         </Box>
+        */}
+        
         <Box display="flex" gap={2}>
           {budget.estado === 'borrador' && (
             <Button

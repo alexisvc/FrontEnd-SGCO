@@ -52,10 +52,12 @@ const updateBudget = (id, updatedBudget) => {
   return axios.put(`${baseUrl}/${id}`, updatedBudget).then((response) => response.data);
 };
 
+/*
 const updateBudgetStatus = (id, status) => {
   return axios.patch(`${baseUrl}/${id}/estado`, { estado: status })
     .then((response) => response.data);
 };
+*/
 
 const deleteBudget = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
@@ -67,6 +69,6 @@ export default {
   getBudgetsByPatient,
   createBudget,
   updateBudget,
-  updateBudgetStatus,
+  //updateBudgetStatus,
   deleteBudget
 };

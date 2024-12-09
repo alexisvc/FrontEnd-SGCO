@@ -36,14 +36,14 @@ const PaymentDetails = ({
 }) => {
   console.log('Budget:', budget);
   console.log('Payment Summary:', paymentSummary);
-  console.log('Budget Status:', budget?.estado);
+  //console.log('Budget Status:', budget?.estado);
   console.log('Budget in PaymentDetails:', budget);
   console.log('PaymentSummary in PaymentDetails:', paymentSummary);
 
 
   useEffect(() => {
     const initializePayments = async () => {
-      if (budget?._id && budget.estado === 'aceptado') {
+      if (budget?._id ) {
         console.log('Initializing payments for budget:', budget._id);
         try {
           await fetchPaymentSummary(budget._id);
@@ -71,7 +71,7 @@ const PaymentDetails = ({
       nombreFase: fase.nombre,
       totalFase: fase.total,
       totalPagado: 0,
-      saldoPendiente: fase.total, // Asegurarse que se inicializa correctamente
+      saldoPendiente: fase.total, 
       pagos: []
     })) || []
   };
@@ -176,13 +176,13 @@ const PaymentDetails = ({
   ];
 
   if (!paymentSummary || !paymentSummary.fases) {
-    if (budget?.estado !== 'aceptado') {
+    //if (budget?.estado !== 'aceptado') {
       return (
         <Typography color="error">
           Solo se pueden registrar pagos para presupuestos aceptados
         </Typography>
       );
-    }
+    //}
     return <Typography>Cargando datos de pagos...</Typography>;
   }
 

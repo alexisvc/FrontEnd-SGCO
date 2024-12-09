@@ -108,6 +108,7 @@ export function useBudgets() {
     }
   }, [handleError]);
 
+  /*
   const updateBudgetStatus = useCallback(async (budgetId, status) => {
     try {
       setLoading(true);
@@ -123,6 +124,7 @@ export function useBudgets() {
       return handleError(err);
     }
   }, [handleError]);
+  */
 
   const calculateTotals = useCallback((fases) => {
     let totalGeneral = 0;
@@ -149,7 +151,7 @@ export function useBudgets() {
     fetchBudgetById,
     createBudget,
     updateBudget,
-    updateBudgetStatus,
+    //updateBudgetStatus,
     calculateTotals,
     setCurrentBudget
   };
