@@ -78,6 +78,18 @@ export function usePayments() {
       return handleError(err);
     }
   }, [handleError, paymentSummary, fetchPaymentSummary]);
+
+  const registerPaymentForTreatment = useCallback(async (budgetId, faseIndex, treatmentId, paymentData) => {
+    try {
+      setLoading(true);
+      const data = await paymentService.createPaymentForTreatment(budgetId, faseIndex, treatmentId, paymentData);
+      await fetchPaymentSummary(budgetId);
+      setLoading(false);
+      return { success: true, data };
+    } catch (err) {
+      return handleError(err);
+    }
+  }, [handleError, fetchPaymentSummary]);
   
 /*
   const registerPayment = useCallback(async (budgetId, faseIndex, paymentData) => {
@@ -155,6 +167,7 @@ export function usePayments() {
     error,
     fetchPaymentSummary,
     registerPayment,
+    registerPaymentForTreatment,
     cancelPayment,
     getPaymentMethods,
     formatters,

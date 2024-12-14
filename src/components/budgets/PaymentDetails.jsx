@@ -17,7 +17,8 @@ import {
   TextField,
   MenuItem,
   Chip,
-  IconButton
+  IconButton,
+  Grid
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -32,7 +33,8 @@ const PaymentDetails = ({
   cancelPayment,
   formatters,
   helpers,
-  fetchPaymentSummary
+  fetchPaymentSummary,
+  treatmentDetails,
 }) => {
   console.log('Budget:', budget);
   console.log('Payment Summary:', paymentSummary);
@@ -89,6 +91,18 @@ const PaymentDetails = ({
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [cancelReason, setCancelReason] = useState('');
 
+  const getActividadRelacionada = (faseIndex) => {
+    if (!treatmentDetails?.actividades) return null;
+    return treatmentDetails.actividades[faseIndex];
+  };
+
+  const getActivityForPhase = (faseIndex) => {
+    if (treatmentDetails?.actividades) {
+      return treatmentDetails.actividades[faseIndex];
+    }
+    return null;
+  };
+  
   const handleOpenDialog = (faseIndex) => {
     setSelectedFase(faseIndex);
     setPaymentData({
@@ -188,43 +202,64 @@ const PaymentDetails = ({
 
   return (
     <Box>
-      {/* Resumen General */}
+      {/* Resumen General con info de planificación */}
       <Paper sx={{ p: 2, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Resumen General</Typography>
-        <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
-          <Typography>
-            Total Presupuesto: {formatters.amount(currentPaymentSummary.resumenGeneral.totalPresupuesto)}
-          </Typography>
-          <Typography>
-            Total Pagado: {formatters.amount(currentPaymentSummary.resumenGeneral.totalPagado)}
-          </Typography>
-          <Typography>
-            Saldo Pendiente: {formatters.amount(currentPaymentSummary.resumenGeneral.saldoPendiente)}
-          </Typography>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Typography sx={{ mr: 1 }}>Estado de Pago:</Typography>
-          <Chip
-            label={formatters.status(paymentSummary.resumenGeneral.estadoPago).label}
-            color={formatters.status(paymentSummary.resumenGeneral.estadoPago).color}
-          />
-        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Total Presupuesto:</Typography>
+              <Typography>{formatters.amount(paymentSummary.resumenGeneral.totalPresupuesto)}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Total Pagado:</Typography>
+              <Typography>{formatters.amount(paymentSummary.resumenGeneral.totalPagado)}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Saldo Pendiente:</Typography>
+              <Typography>{formatters.amount(paymentSummary.resumenGeneral.saldoPendiente)}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {treatmentDetails && (
+              <Box>
+                <Typography variant="subtitle2">Actividades Planificadas</Typography>
+                <Typography>
+                  Completadas: {treatmentDetails.actividades.filter(a => a.estado === 'completado').length} 
+                  de {treatmentDetails.actividades.length}
+                </Typography>
+              </Box>
+            )}
+          </Grid>
+        </Grid>
       </Paper>
 
       {/* Pagos por Fase */}
-      {paymentSummary.fases.map((fase, index) => (
-        <Paper key={index} sx={{ p: 2, mb: 2 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-            <Typography variant="h6">{fase.nombreFase}</Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => handleOpenDialog(index)}
-              disabled={fase.saldoPendiente <= 0}
-            >
-              Registrar Pago
-            </Button>
-          </Box>
+      {paymentSummary.fases.map((fase, index) => {
+        const actividad = getActividadRelacionada(index);
+        return (
+          <Paper key={index} sx={{ p: 2, mb: 2 }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+              <Box>
+                <Typography variant="h6">{fase.nombreFase}</Typography>
+                {actividad && (
+                  <Typography variant="caption" color="textSecondary">
+                    Actividad: {actividad.actividadPlanTrat} - 
+                    Estado: <Chip size="small" label={actividad.estado} />
+                  </Typography>
+                )}
+              </Box>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => handleOpenDialog(index)}
+                disabled={fase.saldoPendiente <= 0}
+              >
+                Registrar Pago
+              </Button>
+            </Box>
+       
+
 
           <TableContainer>
             <Table>
@@ -284,7 +319,8 @@ const PaymentDetails = ({
             </Typography>
           </Box>
         </Paper>
-      ))}
+        );
+  })}
 
       {/* Diálogo para nuevo pago */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>

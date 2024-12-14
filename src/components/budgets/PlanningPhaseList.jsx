@@ -18,7 +18,9 @@ import {
   PauseCircle as PauseCircleIcon
 } from '@mui/icons-material';
 
-const PlanningPhaseList = ({ fase, treatments, onAddTreatment, onUpdateStatus }) => {
+const PlanningPhaseList = ({ fase, treatments, budget, onAddTreatment, onUpdateStatus }) => {
+  const [selectedProcedure, setSelectedProcedure] = useState(null);
+
   const getStatusColor = (status) => {
     const colors = {
       'pendiente': 'default',
@@ -34,6 +36,14 @@ const PlanningPhaseList = ({ fase, treatments, onAddTreatment, onUpdateStatus })
     return currentStatus;
   };
 
+  const handlePlanificar = (procedimiento, index) => {
+    setSelectedProcedure({ 
+      procedimiento, 
+      index,
+      budgetId: budget?._id
+    });
+  };
+
   return (
     <Paper sx={{ p: 2 }}>
       <Typography variant="subtitle1" gutterBottom>
@@ -46,6 +56,8 @@ const PlanningPhaseList = ({ fase, treatments, onAddTreatment, onUpdateStatus })
             <TableRow>
               <TableCell>Procedimiento</TableCell>
               <TableCell>Fecha</TableCell>
+              <TableCell>Fase</TableCell>
+              <TableCell>Costo</TableCell>
               <TableCell>Estado</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -62,6 +74,9 @@ const PlanningPhaseList = ({ fase, treatments, onAddTreatment, onUpdateStatus })
                   <TableCell>
                     {treatment ? new Date(treatment.fechaPlanTrat).toLocaleDateString() : '-'}
                   </TableCell>
+                  <TableCell>{fase.nombre}</TableCell>
+                  <TableCell>${proc.costoTotal?.toFixed(2)}</TableCell>
+                  
                   <TableCell>
                     {treatment ? (
                       <Chip 

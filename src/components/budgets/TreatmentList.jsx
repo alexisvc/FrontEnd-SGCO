@@ -9,14 +9,19 @@ import {
   Paper,
   IconButton,
   Typography,
-  Box
+  Box,
+  Button
 } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon
 } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom";
 
 const TreatmentList = ({ treatments, onEdit, onDelete }) => {
+  const navigate = useNavigate();
+  const { createBudgetFromTreatment } = useBudgets();
+
   if (!treatments.length) {
     return (
       <Box textAlign="center" py={3}>
@@ -33,16 +38,39 @@ const TreatmentList = ({ treatments, onEdit, onDelete }) => {
     }
   };
 
+  const handleCreateBudget = (treatment) => {
+/*
+    //navigate('/presupuestos/nuevo', { state: { treatmentPlan: treatment } });
+    navigate('/presupuestos/nuevo', { 
+      state: { treatmentPlanId: treatment.id }
+    });
+*/
+    try {
+      const result =  createBudgetFromTreatment(treatmentId);
+      if (result.success) {
+        toast.success('Presupuesto creado exitosamente');
+        navigate(`/presupuestos/${result.data._id}`);
+      }
+    } catch (error) {
+      toast.error('Error al crear el presupuesto');
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
+      <Button onClick={() => handleCreateBudget(treatment.id)}>
+  Crear Presupuesto
+</Button>
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell><Typography variant="h6">Especialidad</Typography></TableCell>
             <TableCell>
               <Typography variant="subtitle1" fontWeight="bold">
                 Cita
               </Typography>
             </TableCell>
+
             <TableCell>
               <Typography variant="subtitle1" fontWeight="bold">
                 Actividad
@@ -68,6 +96,7 @@ const TreatmentList = ({ treatments, onEdit, onDelete }) => {
         <TableBody>
           {treatments.map((treatment) => (
             <TableRow key={treatment.id}>
+              <TableCell>{treatment.especialidad}</TableCell>
               <TableCell>{treatment.cita}</TableCell>
               <TableCell 
                 style={{ 
@@ -118,6 +147,11 @@ const TreatmentList = ({ treatments, onEdit, onDelete }) => {
                 ${treatments.reduce((sum, t) => sum + Number(t.montoAbono), 0).toFixed(2)}
               </Typography>
             </TableCell>
+            <TableCell>
+        <Button onClick={() => handleCreateBudget(treatment.id)}>
+          Crear Presupuesto
+        </Button>
+      </TableCell>
             <TableCell />
           </TableRow>
         </TableBody>

@@ -6,7 +6,11 @@ import {
   Grid,
   Paper,
   Typography,
-  IconButton
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -17,9 +21,19 @@ const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
     cita: '',
     actividadPlanTrat: '',
     fechaPlanTrat: '',
-    montoAbono: ''
+    montoAbono: '',
+    especialidad:''
   });
 
+  const especialidades = [
+    'Odontología General',
+    'Ortodoncia',
+    'Endodoncia',
+    'Periodoncia',
+    'Cirugía Oral',
+    'Rehabilitación Oral',
+    'Odontopediatría'
+  ];
 
   useEffect(() => {
     if (initialData) {
@@ -27,7 +41,8 @@ const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
         cita: initialData.cita || '',
         actividadPlanTrat: initialData.actividadPlanTrat || '',
         fechaPlanTrat: initialData.fechaPlanTrat.split('T')[0] || '',
-        montoAbono: initialData.montoAbono || ''
+        montoAbono: initialData.montoAbono || '',
+        especialidad:initialData.especialidad ||''
       });
     }
   }, [initialData]);
@@ -63,7 +78,8 @@ const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
         cita: '',
         actividadPlanTrat: '',
         fechaPlanTrat: '',
-        montoAbono: ''
+        montoAbono: '',
+        especialidad:''
       });
     } catch (error) {
       console.error('Error en el formulario:', error);
@@ -85,6 +101,19 @@ const TreatmentForm = ({ initialData, onSubmit, onCancel }) => {
       </Typography>
 
       <form onSubmit={handleSubmit}>
+      <FormControl fullWidth>
+        <InputLabel>Especialidad</InputLabel>
+        <Select
+          value={formData.especialidad}
+          onChange={handleChange}
+          name="especialidad"
+          required
+        >
+          {especialidades.map(esp => (
+            <MenuItem key={esp} value={esp}>{esp}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField

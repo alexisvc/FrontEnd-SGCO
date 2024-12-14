@@ -33,11 +33,13 @@ import { toast } from 'react-toastify';
 
 const BudgetForm = ({ 
   createBudget, 
+  treatmentPlan,
   updateBudget, 
   fetchBudgetById, 
   fetchPatientByName,
   fetchPatientByCedula,
   calculateTotals, 
+  treatmentPlanId,
   mode = 'create' 
 }) => {
   const navigate = useNavigate();
@@ -51,9 +53,13 @@ const BudgetForm = ({
 
   // Estados
   const [budget, setBudget] = useState({
-    paciente: '',
-    especialidad: '',
-    fases: [{ ...initialFaseState }]
+    paciente: treatmentPlan?.paciente || '',
+    especialidad: treatmentPlan?.especialidad || '',
+    fases: [{
+      nombre: 'Fase Inicial',
+      descripcion: treatmentPlan?.actividadPlanTrat || '',
+      procedimientos: []
+    }]
   });
 
   
@@ -64,6 +70,7 @@ const BudgetForm = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [searched, setSearched] = useState(false);
   const [patients, setPatients] = useState([]);
+  const [selectedActivities, setSelectedActivities] = useState([]);
 
   // Lista de especialidades disponibles
   const especialidades = [
@@ -73,8 +80,7 @@ const BudgetForm = ({
     'Periodoncia',
     'Cirugía Oral',
     'Rehabilitación Oral',
-    'Odontopediatría',
-    'Implantología'
+    'Odontopediatría'
   ];
 
   // Efecto para cargar presupuesto en modo edición
@@ -104,6 +110,29 @@ const BudgetForm = ({
     
     loadBudget();
   }, [mode, id, fetchBudgetById, navigate]);
+
+  useEffect(() => {
+    if (treatmentPlan) {
+      setBudget(prev => ({
+        ...prev,
+        paciente: treatmentPlan.paciente,
+        especialidad: treatmentPlan.especialidad,
+        treatmentPlan: treatmentPlan._id,
+        fases: [{
+          nombre: 'Fase Principal',
+          descripcion: 'Basado en planificación',
+          procedimientos: treatmentPlan.actividades.map(act => ({
+            nombre: act.actividadPlanTrat,
+            numeroPiezas: 1,
+            costoPorUnidad: 0,
+            costoTotal: 0
+          }))
+        }]
+      }));
+      setSelectedPatient(treatmentPlan.paciente);
+      setSelectedActivities(treatmentPlan.actividades);
+    }
+  }, [treatmentPlan]);
 
 
   const handleSearchSubmit = async (e) => {
@@ -225,9 +254,12 @@ const handleAddProcedimiento = (faseIndex) => {
     }
 
     try {
+      
+
       const { fases, totalGeneral } = calculateTotals(budget.fases);
       const budgetToSave = {
         ...budget,
+        treatmentPlan: treatmentPlan?._id,
         fases,
         totalGeneral,
         estado: 'borrador',
@@ -263,7 +295,7 @@ const handleAddProcedimiento = (faseIndex) => {
         </Button>
 
          {/* Diálogo de búsqueda de paciente */}
-         {mode === 'create' && (
+         {mode === 'create' && !treatmentPlan && (
           <Box component={Paper} style={{padding: '20px', marginBottom: '30px'}}> 
             <Box component="form" onSubmit={handleSearchSubmit}>
               <Typography variant="h5" gutterBottom>
@@ -301,6 +333,39 @@ const handleAddProcedimiento = (faseIndex) => {
             </Box>
           </Box>
         )}
+
+        {/* Nueva sección de actividades planificadas si existe treatmentPlan */}
+      {treatmentPlan && (
+        <Paper sx={{ p: 2, mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Actividades Planificadas
+          </Typography>
+          <List>
+            {selectedActivities.map((actividad, index) => (
+              <ListItem key={index}>
+                <ListItemText
+                  primary={`Cita ${actividad.cita}`}
+                  secondary={
+                    <>
+                      <Typography>{actividad.actividadPlanTrat}</Typography>
+                      <Typography variant="caption">
+                        {new Date(actividad.fechaPlanTrat).toLocaleDateString()}
+                      </Typography>
+                    </>
+                  }
+                />
+                <Chip 
+                  label={actividad.estado}
+                  color={getStatusColor(actividad.estado)}
+                  size="small"
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      )}
+
+      
 
         {/* Tabla de resultados */}
         {searched && patients.length > 0 && (
@@ -353,9 +418,10 @@ const handleAddProcedimiento = (faseIndex) => {
         <br></br>
 
         <Paper sx={{ p: 3, mb: 3 }}>
-          <Typography variant="h5" gutterBottom>
-            {mode === 'edit' ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
-          </Typography>
+        <Typography variant="h5" gutterBottom>
+          {mode === 'edit' ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
+          {treatmentPlan && ' - Basado en Planificación'}
+        </Typography>
 
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>

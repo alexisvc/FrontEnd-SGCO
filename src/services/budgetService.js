@@ -41,11 +41,23 @@ const getBudgetById = async (id) => {
 };
 
 const getBudgetsByPatient = (patientId) => {
-  return axios.get(`${baseUrl}/paciente/${patientId}`).then((response) => response.data);
+  //return axios.get(`${baseUrl}/paciente/${patientId}`).then((response) => response.data);
+  const response = axios.get(`${baseUrl}/paciente/${patientId}`);
+  return response.data;
 };
 
 const createBudget = (newBudget) => {
   return axios.post(baseUrl, newBudget).then((response) => response.data);
+};
+
+const createBudgetForTreatment = async (treatmentId, budgetData) => {
+  return axios.post(`${baseUrl}/treatment/${treatmentId}`, budgetData)
+    .then(response => response.data);
+};
+
+const createBudgetFromTreatment = async (treatmentPlanId) => {
+  const response = await axios.post(`${baseUrl}/from-treatment/${treatmentPlanId}`);
+  return response.data;
 };
 
 const updateBudget = (id, updatedBudget) => {
@@ -68,6 +80,8 @@ export default {
   getBudgetById,
   getBudgetsByPatient,
   createBudget,
+  createBudgetForTreatment,
+  createBudgetFromTreatment,
   updateBudget,
   //updateBudgetStatus,
   deleteBudget

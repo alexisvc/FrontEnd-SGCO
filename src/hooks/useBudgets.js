@@ -53,7 +53,8 @@ export function useBudgets() {
   
       const response = await budgetService.getBudgetById(budgetId);
       console.log('Hook - Response from service:', response);
-  
+      setCurrentBudget(response);
+
       // Validar la respuesta
       if (!response || !response._id) {
         throw new Error('Datos del presupuesto inválidos');
@@ -88,6 +89,19 @@ export function useBudgets() {
       return { success: true, data };
     } catch (err) {
       toast.error('Error al crear el presupuesto');
+      return handleError(err);
+    }
+  }, [handleError]);
+
+
+  const createBudgetForTreatment = useCallback(async (treatmentId, budgetData) => {
+    try {
+      setLoading(true);
+      const data = await budgetService.createBudgetForTreatment(treatmentId, budgetData);
+      setBudgets(prev => [...prev, data]);
+      setLoading(false);
+      return { success: true, data };
+    } catch (err) {
       return handleError(err);
     }
   }, [handleError]);
@@ -141,6 +155,29 @@ export function useBudgets() {
     return { fases: fasesCalculated, totalGeneral };
   }, []);
 
+  // Agregar nueva función para crear presupuesto desde planificación
+  const createBudgetFromTreatment = async (treatmentId) => {
+    const treatment = await patientTreatmentService.getById(treatmentId);
+    
+    const budgetData = {
+      paciente: treatment.paciente._id,
+      especialidad: treatment.especialidad,
+      treatmentPlan: treatmentId,
+      fases: treatment.actividades.map((act, index) => ({
+        nombre: `Fase ${index + 1}`,
+        descripcion: act.actividadPlanTrat,
+        procedimientos: [{
+          nombre: act.actividadPlanTrat,
+          numeroPiezas: 1,
+          costoPorUnidad: act.montoAbono,
+          estado: act.estado
+        }]
+      }))
+    };
+  
+    return await createBudget(budgetData);
+  };
+
   return {
     budgets,
     currentBudget,
@@ -150,6 +187,8 @@ export function useBudgets() {
     fetchBudgetsByPatient,
     fetchBudgetById,
     createBudget,
+    createBudgetForTreatment,
+    createBudgetFromTreatment,
     updateBudget,
     //updateBudgetStatus,
     calculateTotals,

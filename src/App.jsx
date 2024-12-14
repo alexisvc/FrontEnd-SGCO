@@ -38,20 +38,22 @@ import AppointmentMenu from "./components/appointments/AppointmentMenu";
 import EditOdontologo from "./components/odontologos/EditOdontologo";
 import AppointmentDetails from "./components/appointments/AppointmentDetails";
 import EditAppointment from "./components/appointments/EditAppointment";
+
 import PlanningMenu from "./components/planning/PlanningMenu";
 import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
-
+import CreatePlanningForm from "./components/planning/CreatePlanningForm";
 
 // Componentes de presupuestos
 import BudgetList from "./components/budgets/BudgetList";
 import BudgetForm from "./components/budgets/BudgetForm";
 import BudgetDetails from "./components/budgets/BudgetDetails";
+
 // Pagos
 import BudgetManagement from "./components/budgets/BudgetManagement";
 
-import PaymentDetails from "./components/budgets/PaymentDetails"; // Nuevo
+import PaymentDetails from "./components/budgets/PaymentDetails"; 
 
 import FinancialReports from "./components/reports/FinancialReports";
 
@@ -261,6 +263,7 @@ function App() {
               calculateTotals={calculateTotals}
               fetchPatientByCedula={fetchPatientByCedula} 
               fetchPatientByName={fetchPatientByName}
+              treatmentPlan={location?.state?.treatmentPlan}
               mode="create"
             />
           ) : (
@@ -361,6 +364,37 @@ function App() {
               path="/planificacion/pacientes"
               element={<PlanningPatientList />}
             />
+
+<Route
+  path="/planificacion/nueva"
+  element={
+    isLoggedIn ? (
+      <CreatePlanningForm
+        onSubmit={createPatientTreatment}
+        fetchPatientByCedula={fetchPatientByCedula}
+        fetchPatientByName={fetchPatientByName}
+      />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
+
+<Route
+  path="/planificacion/editar/:id"
+  element={
+    isLoggedIn ? (
+      <CreatePlanningForm
+        mode="edit"
+        onSubmit={updatePatientTreatment}
+        fetchPatientByCedula={fetchPatientByCedula}
+        fetchPatientByName={fetchPatientByName}
+      />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
 
             <Route
               path="/treatment-plans/:patientId"

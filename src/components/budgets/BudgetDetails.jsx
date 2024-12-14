@@ -14,6 +14,7 @@ import {
   Box,
   Chip
 } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 import { PrintOutlined } from '@mui/icons-material';
 
 // Componente para la versión imprimible
@@ -24,16 +25,20 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
       <Typography variant="h4" gutterBottom align="center">
         Presupuesto Dental
       </Typography>
-      <Grid container spacing={2} justifyContent="space-between">
-        <Grid item xs={12} sm={6}>
-          <Typography><strong>Paciente:</strong> {budget.paciente.nombrePaciente}</Typography>
-          <Typography><strong>Cédula:</strong> {budget.paciente.numeroCedula}</Typography>
+
+      <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Typography><strong>Paciente:</strong> {budget.paciente.nombrePaciente}</Typography>
+            <Typography><strong>Cédula:</strong> {budget.paciente.numeroCedula}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} textAlign="right">
+            <Typography><strong>Fecha:</strong> {new Date(budget.fecha).toLocaleDateString()}</Typography>
+            <Typography><strong>Especialidad:</strong> {budget.especialidad}</Typography>
+            {budget.treatmentPlan && (
+              <Typography><strong>N° Planificación:</strong> {budget.treatmentPlan._id}</Typography>
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} textAlign="right">
-          <Typography><strong>Fecha:</strong> {new Date(budget.fecha).toLocaleDateString()}</Typography>
-          <Typography><strong>Especialidad:</strong> {budget.especialidad}</Typography>
-        </Grid>
-      </Grid>
     </Box>
 
     {/* Fases y Procedimientos */}
@@ -90,22 +95,46 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
     </Box>
 
     {/* Nota al pie */}
-    {isPrintMode && (
-      <Box mt={4} className="print-footer">
-        <Typography variant="body2" align="center">
-          Este presupuesto tiene una validez de 30 días a partir de la fecha de emisión.
-        </Typography>
-        <Typography variant="body2" align="center">
-          Los precios pueden estar sujetos a cambios según la evaluación del caso.
-        </Typography>
-      </Box>
-    )}
+    {!isPrintMode && budget.treatmentPlan && (
+        <Box mt={4}>
+          <Typography variant="h6" gutterBottom>Actividades Planificadas</Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Cita</TableCell>
+                  <TableCell>Actividad</TableCell>
+                  <TableCell>Fecha</TableCell>
+                  <TableCell>Estado</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {budget.treatmentPlan.actividades.map((actividad, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{actividad.cita}</TableCell>
+                    <TableCell>{actividad.actividadPlanTrat}</TableCell>
+                    <TableCell>{new Date(actividad.fechaPlanTrat).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={actividad.estado} 
+                        color={getStatusColor(actividad.estado)}
+                        size="small"
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
   </div>
 ));
 
 const BudgetDetails = ({ budget, updateBudgetStatus }) => {
   const componentRef = useRef();
   const [isPrintMode, setIsPrintMode] = React.useState(false);
+  const navigate = useNavigate();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -133,64 +162,55 @@ const BudgetDetails = ({ budget, updateBudgetStatus }) => {
 
   return (
     <Box>
-      {/* Encabezado con estado y acciones */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        {/*
-        <Box display="flex" alignItems="center" gap={2}>
-          <Typography variant="subtitle1">
-            Estado:
-          </Typography>
-          <Chip
-            label={budget.estado.toUpperCase()}
-            color={getStatusColor(budget.estado)}
-          />
-        </Box>
-        */}
-        
-        <Box display="flex" gap={2}>
-          {budget.estado === 'borrador' && (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleStatusChange('emitido')}
-            >
-              Emitir Presupuesto
-            </Button>
-          )}
-          {budget.estado === 'emitido' && (
-            <>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => handleStatusChange('aceptado')}
-              >
-                Aceptar
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => handleStatusChange('rechazado')}
-              >
-                Rechazar
-              </Button>
-            </>
-          )}
-          <Button
-            startIcon={<PrintOutlined />}
-            onClick={handlePrint}
-            variant="outlined"
-          >
-            Imprimir
-          </Button>
-        </Box>
-      </Box>
+     <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+       {budget.treatmentPlan && (
+         <Typography variant="subtitle1">
+           Presupuesto basado en planificación del {new Date(budget.treatmentPlan.fecha).toLocaleDateString()}
+         </Typography>
+       )}
+       <Box display="flex" gap={2}>
+         {budget.estado === 'borrador' && (
+           <Button
+             variant="contained"
+             color="primary"
+             onClick={() => handleStatusChange('emitido')}
+           >
+             Emitir Presupuesto
+           </Button>
+         )}
+         {budget.estado === 'emitido' && (
+           <>
+             <Button
+               variant="contained"
+               color="success"
+               onClick={() => handleStatusChange('aceptado')}
+             >
+               Aceptar
+             </Button>
+             <Button
+               variant="contained"
+               color="error"
+               onClick={() => handleStatusChange('rechazado')}
+             >
+               Rechazar
+             </Button>
+           </>
+         )}
+         <Button
+           startIcon={<PrintOutlined />}
+           onClick={handlePrint}
+           variant="outlined"
+         >
+           Imprimir
+         </Button>
+       </Box>
+     </Box>
 
-      {/* Contenido del presupuesto */}
-      <BudgetContent 
-        ref={componentRef}
-        budget={budget}
-        isPrintMode={isPrintMode}
-      />
+     <BudgetContent 
+       ref={componentRef}
+       budget={budget}
+       isPrintMode={isPrintMode}
+     />
 
       <style>
         {`

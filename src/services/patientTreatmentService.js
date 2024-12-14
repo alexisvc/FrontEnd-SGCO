@@ -43,9 +43,22 @@ const create = async (newTreatment) => {
   }
 };
 
+const addActivity = async (treatmentId, activityData) => {
+  const response = await axios.post(`${baseUrl}/${treatmentId}/actividades`, activityData);
+  return response.data;
+};
+
+const updateActivityStatus = async (treatmentId, activityIndex, estado) => {
+  const response = await axios.patch(
+    `${baseUrl}/${treatmentId}/actividades/${activityIndex}/estado`,
+    { estado }
+  );
+  return response.data;
+};
+
 // Actualizar tratamiento
-const update = async (id, updatedTreatment) => {
-  const response = await axios.put(`${baseUrl}/${id}`, updatedTreatment);
+const update = async (id, treatmentData) => {
+  const response = await axios.put(`${baseUrl}/${id}`, treatmentData);
   return response.data;
 };
 
@@ -60,6 +73,8 @@ export default {
   getByPatientId,
   getById,
   create,
+  addActivity,
+  updateActivityStatus,
   update,
   remove
 };

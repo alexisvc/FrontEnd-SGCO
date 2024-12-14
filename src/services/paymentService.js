@@ -16,6 +16,13 @@ const createPayment = (budgetId, faseIndex, paymentData) => {
   ).then(response => response.data);
 };
 
+const createPaymentForTreatment = (budgetId, faseIndex, treatmentId, paymentData) => {
+  return axios.post(
+    `${baseUrl}/budget/${budgetId}/fase/${faseIndex}/treatment/${treatmentId}/pago`,
+    paymentData
+  ).then(response => response.data);
+ };
+
 // Anular un pago
 const cancelPayment = (budgetId, faseIndex, pagoId, motivo) => {
   return axios.patch(
@@ -93,6 +100,7 @@ const calculatePaymentSummary = (pagos) => {
 export default {
   getBudgetPaymentsSummary,
   createPayment,
+  createPaymentForTreatment,
   cancelPayment,
   getPaymentMethods,
   formatAmount,

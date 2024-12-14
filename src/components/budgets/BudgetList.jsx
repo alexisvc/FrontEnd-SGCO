@@ -23,7 +23,8 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle
+  
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -32,7 +33,8 @@ import {
   Delete as DeleteIcon,
   Visibility as ViewIcon,
   ArrowBack as ArrowBackIcon,
-  Payment as PaymentIcon
+  Payment as PaymentIcon,
+  EventNote as EventNoteIcon
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import budgetService from '../../services/budgetService';
@@ -213,7 +215,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                         fullWidth
                         variant="outlined"
                         startIcon={<AddIcon />}
-                        onClick={() => navigate('/planificacion/pacientes')}
+                        onClick={() => navigate('/planificacion/nueva')}
                       >
                         Nueva Planificación
                       </Button>
@@ -236,51 +238,58 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
           </Grid>
 
           <Grid item xs={12}>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Fecha</TableCell>
-                    <TableCell>Paciente</TableCell>
-                    <TableCell>Cédula</TableCell>
-                    <TableCell>Especialidad</TableCell>
-                    <TableCell align="right">Total</TableCell>
-                    {/*<TableCell align="center">Estado</TableCell>*/}
-                    <TableCell align="center">Estado Pago</TableCell>
-                    <TableCell align="center">Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredBudgets.map((budget) => (
-                    <TableRow key={budget._id}>
-                      <TableCell>{formatDate(budget.fecha)}</TableCell>
-                      <TableCell>{budget.paciente.nombrePaciente}</TableCell>
-                      <TableCell>{budget.paciente.numeroCedula}</TableCell>
-                      <TableCell>{budget.especialidad}</TableCell>
-                      <TableCell align="right">{formatCurrency(budget.totalGeneral)}</TableCell>
-                      {/*
-                      <TableCell align="center">
-                        <Chip 
-                          label={budget.estado}
-                          color={getStatusColor(budget.estado)}
-                          size="small"
-                        />
-                      </TableCell>
-                      */}
-                      <TableCell align="center">
-                        <Chip 
-                          label={budget.estadoPagoGeneral}
-                          color={getPaymentStatusColor(budget.estadoPagoGeneral)}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => navigate(`/presupuestos/${budget._id}`)}
-                          title="Ver detalles"
-                        >
-                          <ViewIcon />
-                        </IconButton>
+          <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Fecha</TableCell>
+            <TableCell>Paciente</TableCell>
+            <TableCell>Cédula</TableCell>
+            <TableCell>Especialidad</TableCell>
+            <TableCell>Planificación</TableCell>
+            <TableCell align="right">Total</TableCell>
+            <TableCell align="center">Estado Pago</TableCell>
+            <TableCell align="center">Acciones</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredBudgets.map((budget) => (
+            <TableRow key={budget._id}>
+              <TableCell>{formatDate(budget.fecha)}</TableCell>
+              <TableCell>{budget.paciente.nombrePaciente}</TableCell>
+              <TableCell>{budget.paciente.numeroCedula}</TableCell>
+              <TableCell>{budget.especialidad}</TableCell>
+              <TableCell>
+                {budget.treatmentPlan ? (
+                  <Box>
+                    <Typography variant="body2">
+                      {budget.treatmentPlan.actividades?.length} actividades
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      {budget.treatmentPlan.actividades?.filter(a => a.estado === 'completado').length} completadas
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Chip size="small" label="Sin planificación" color="warning" />
+                )}
+              </TableCell>
+              <TableCell align="right">{formatCurrency(budget.totalGeneral)}</TableCell>
+              <TableCell align="center">
+                <Chip 
+                  label={budget.estadoPagoGeneral}
+                  color={getPaymentStatusColor(budget.estadoPagoGeneral)}
+                  size="small"
+                />
+              </TableCell>
+              <TableCell align="center">
+                <IconButton onClick={() => navigate(`/presupuestos/${budget._id}`)}>
+                  <ViewIcon />
+                </IconButton>
+                {budget.treatmentPlan && (
+                  <IconButton onClick={() => navigate(`/planificacion/${budget.treatmentPlan._id}`)}>
+                    <EventNoteIcon />
+                  </IconButton>
+                )}
                         {budget.estado === 'borrador' && (
                           <>
                             <IconButton

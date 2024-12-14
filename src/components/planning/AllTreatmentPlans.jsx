@@ -32,6 +32,28 @@ const AllTreatmentPlans = () => {
   const [selectedMonth, setSelectedMonth] = useState(""); // Estado para el mes seleccionado
   const [filteredTreatments, setFilteredTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Estado para manejar la carga
+  const { getReporteMensual } = useFinancialReports();
+  const [presupuestosInfo, setPresupuestosInfo] = useState({});
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!filteredTreatments.length) return;
+      
+      const presupuestos = {};
+      for (let treatment of filteredTreatments) {
+        if (treatment.budget) {
+          presupuestos[treatment.id] = {
+            total: treatment.budget.totalGeneral,
+            estado: treatment.budget.estadoPagoGeneral
+          };
+        }
+      }
+      setPresupuestosInfo(presupuestos);
+    };
+    
+    fetchData();
+  }, [filteredTreatments]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,10 +73,17 @@ const AllTreatmentPlans = () => {
     if (!selectedMonth) {
       setFilteredTreatments(patientTreatments);
     } else {
+/*
       const filtered = patientTreatments.filter((treatment) => {
         const treatmentMonth = dayjs(treatment.fechaPlanTrat).format("MM");
         return treatmentMonth === selectedMonth;
+*/
+        const filtered = patientTreatments.filter(treatment => {
+          return treatment.actividades.some(actividad => {
+            const actividadMonth = dayjs(actividad.fechaPlanTrat).format("MM");
+            return actividadMonth === selectedMonth;
       });
+    });
       setFilteredTreatments(filtered);
     }
   };
@@ -69,20 +98,21 @@ const AllTreatmentPlans = () => {
       >
         Atrás
       </Button>
-      <Container sx={{ pb: 2 }}>
-        <Typography variant="h4" gutterBottom align="center" sx={{ pt: 2, pb: 1 }}>
-          Consolidado Planes de Tratamiento
-        </Typography>
+      <Container>
+      <Typography variant="h4" gutterBottom>
+        Consolidado de Planificaciones
+      </Typography>
 
-        {/* Filtro por mes */}
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Filtrar por Mes</InputLabel>
-          <Select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            label="Filtrar por Mes"
-          >
-            <MenuItem value="">Todos los meses</MenuItem>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Filtrar por Mes</InputLabel>
+        <Select
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          label="Filtrar por Mes"
+        >
+          <MenuItem value="">Todos los meses</MenuItem>
+          {/* Meses... */}
+          
             <MenuItem value="01">Enero</MenuItem>
             <MenuItem value="02">Febrero</MenuItem>
             <MenuItem value="03">Marzo</MenuItem>
@@ -95,57 +125,63 @@ const AllTreatmentPlans = () => {
             <MenuItem value="10">Octubre</MenuItem>
             <MenuItem value="11">Noviembre</MenuItem>
             <MenuItem value="12">Diciembre</MenuItem>
-          </Select>
-        </FormControl>
+        </Select>
+      </FormControl>
 
-        {isLoading ? (
-          <Typography align="center" sx={{ mt: 4, mb: 2 }}>
-            Cargando tratamientos...
-          </Typography>
-        ) : filteredTreatments.length > 0 ? (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">
-                    <Typography variant="h6">Paciente</Typography>
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Paciente</TableCell>
+                <TableCell>Especialidad</TableCell>
+                <TableCell>Actividades</TableCell>
+                <TableCell>Presupuesto</TableCell>
+                <TableCell>Estado Pagos</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredTreatments.map((treatment) => (
+                <TableRow key={treatment.id}>
+                  <TableCell>{treatment.paciente.nombrePaciente}</TableCell>
+                  <TableCell>{treatment.especialidad}</TableCell>
+                  <TableCell>
+                    <List>
+                      {treatment.actividades.map((act, index) => (
+                        <ListItem key={index}>
+                          <ListItemText
+                            primary={act.cita}
+                            secondary={`${act.actividadPlanTrat} - ${new Date(act.fechaPlanTrat).toLocaleDateString()}`}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Cita</Typography>
+                  <TableCell>
+                    {treatment.budget ? 
+                      `$${treatment.budget.totalGeneral}` : 
+                      'Sin presupuesto'
+                    }
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Actividad</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Fecha</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Monto Abono</Typography>
+                  <TableCell>
+                    {treatment.budget && 
+                      <Chip 
+                        label={treatment.budget.estadoPagoGeneral}
+                        color={getPaymentStatusColor(treatment.budget.estadoPagoGeneral)}
+                      />
+                    }
                   </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredTreatments.map((treatment) => (
-                  <TableRow key={treatment.id}>
-                    <TableCell align="center">{treatment.paciente.nombrePaciente}</TableCell>
-                    <TableCell align="center">{treatment.cita}</TableCell>
-                    <TableCell align="center">{treatment.actividadPlanTrat}</TableCell>
-                    <TableCell align="center">{treatment.fechaPlanTrat.split("T")[0]}</TableCell>
-                    <TableCell align="center">{treatment.montoAbono}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <Typography align="center" sx={{ mt: 4, mb: 2 }}>
-            No se encontraron tratamientos.
-          </Typography>
-        )}
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Container>
 
-        {/* Resumen del total de los montos abonados */}
-        <TreatmentPlansSummary patientTreatments={filteredTreatments} />
-      </Container>
+      
     </>
   );
 };
