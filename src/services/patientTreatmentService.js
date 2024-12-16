@@ -16,10 +16,14 @@ const getByPatientId = async (patientId) => {
 
 // Obtener un tratamiento específico
 const getById = async (id) => {
-  const response = await axios.get(`${baseUrl}/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${baseUrl}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching treatment:', error);
+    throw error;
+  }
 };
-
 // Crear nuevo tratamiento
 /*
 const create = async (newTreatment) => {
@@ -58,8 +62,14 @@ const updateActivityStatus = async (treatmentId, activityIndex, estado) => {
 
 // Actualizar tratamiento
 const update = async (id, treatmentData) => {
-  const response = await axios.put(`${baseUrl}/${id}`, treatmentData);
-  return response.data;
+  try {
+    console.log('Updating treatment:', { id, data: treatmentData });
+    const response = await axios.put(`${baseUrl}/${id}`, treatmentData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating treatment:', error.response?.data);
+    throw error;
+  }
 };
 
 // Eliminar tratamiento

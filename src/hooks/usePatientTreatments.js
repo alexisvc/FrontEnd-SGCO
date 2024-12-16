@@ -136,6 +136,7 @@ const createPatientTreatment = async (treatmentData) => {
   const updatePatientTreatment = async (id, treatmentData) => {
     try {
       setLoading(true);
+      console.log('Hook - Updating treatment:', { id, data: treatmentData });
       const updatedTreatment = await patientTreatmentService.update(id, treatmentData);
       setPatientTreatments(prev => 
         prev.map(treatment => treatment.id === id ? updatedTreatment : treatment)

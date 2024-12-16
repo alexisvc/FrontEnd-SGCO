@@ -12,8 +12,11 @@ import {
   Grid
 } from '@mui/material';
 import usePatientTreatments from '../../hooks/usePatientTreatments';
+import { Button } from '@mui/material';
+import { Edit as EditIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { useBudgets } from '../../hooks/useBudgets';
+import { useNavigate } from 'react-router-dom';
 
 const getStatusColor = (status) => ({
   'pendiente': 'default',
@@ -21,7 +24,7 @@ const getStatusColor = (status) => ({
   'completado': 'success'
 }[status] || 'default');
 
-const PlanningDetails = ({ budget }) => {
+const PlanningDetails = ({ budget, treatmentDetails  }) => {
   const {
     patientTreatments,
     loading,
@@ -38,6 +41,7 @@ const PlanningDetails = ({ budget }) => {
   const [currentTreatment, setCurrentTreatment] = useState(null);
   const patientId = budget?.paciente?._id || budget?.paciente?.id;
   const patientName = budget?.paciente?.nombrePaciente;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadTreatments = async () => {
@@ -60,6 +64,12 @@ const PlanningDetails = ({ budget }) => {
       setCurrentTreatment(treatment || null);
     }
   }, [patientTreatments, budget?._id]);
+
+  useEffect(() => {
+    if (treatmentDetails) {
+      setCurrentTreatment(treatmentDetails);
+    }
+  }, [treatmentDetails]);
 
   //const currentTreatment = patientTreatments.find(t => t.budget?._id === budget?._id);
 
@@ -141,6 +151,8 @@ const PlanningDetails = ({ budget }) => {
     );
   }
 
+
+
   return (
     <Container>
       {currentTreatment ? (
@@ -174,7 +186,7 @@ const PlanningDetails = ({ budget }) => {
                       </Typography>
                       {actividad.montoAbono > 0 && (
                         <Typography variant="body2">
-                          Abono Sugerido: ${actividad.montoAbono}
+                          Abono: ${actividad.montoAbono}
                         </Typography>
                       )}
                     </Box>
