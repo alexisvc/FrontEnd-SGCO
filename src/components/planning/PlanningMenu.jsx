@@ -4,188 +4,108 @@ import {
   Button,
   Typography,
   Container,
+  Grid,
+  Paper
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PersonIcon from '@mui/icons-material/Person';
-import { FaMoneyBillWave } from "react-icons/fa";
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import {
+  ArrowBack as ArrowBackIcon,
+  Person as PersonIcon,
+  ReceiptLong as ReceiptLongIcon,
+  AccountBalanceWallet as AccountBalanceWalletIcon
+} from '@mui/icons-material';
 
 const PlanningMenu = () => {
   const navigate = useNavigate();
+
+  const menuItems = [
+    {
+      to: "/planificacion/pacientes",
+      icon: <PersonIcon sx={{ fontSize: 40 }} />,
+      text: "Pacientes",
+      description: "Gestionar planificaciones por paciente"
+    },
+    {
+      to: "/presupuestos",
+      icon: <ReceiptLongIcon sx={{ fontSize: 40 }} />,
+      text: "Presupuestos",
+      description: "Ver y gestionar presupuestos"
+    },
+    {
+      to: "/reportes-financieros",
+      icon: <AccountBalanceWalletIcon sx={{ fontSize: 40 }} />,
+      text: "Reportes Financieros",
+      description: "Ver reportes y estadísticas"
+    }
+  ];
 
   return (
     <div style={{ 
       backgroundColor: '#f5f1ef', 
       minHeight: '100vh', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      backgroundImage:"../../backgrounds/mainBack.png" 
+      padding: '20px'
     }}>
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/main-menu")}
-        sx={{ m: 2 }}
+        sx={{ mb: 3 }}
       >
         Atrás
       </Button>
-      <Container>
-        <Typography variant="h4" align="center" gutterBottom>
+
+      <Container maxWidth="md">
+        <Typography 
+          variant="h4" 
+          align="center" 
+          gutterBottom 
+          sx={{ mb: 4 }}
+        >
           Planificación y Presupuesto
         </Typography>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-          <div>
-            <Link
-              to="/planificacion/pacientes"
-              className="link-button"
-              style={{ textDecoration: "none", width: "100%" }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={
-                  <PersonIcon style={{ fontSize: 40, marginRight: "220" }} />
-                }
-                style={{
-                  fontSize: "18px",
-                  padding: "20px",
-                  margin: "5%",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-                sx={{
-                  color: "white",
-                  backgroundColor: "#8ba082",
-                  "&:hover": {
-                    backgroundColor: "#5d6c56",
-                  },
+
+        <Grid container spacing={3}>
+          {menuItems.map((item, index) => (
+            <Grid item xs={12} key={index}>
+              <Paper 
+                elevation={3}
+                sx={{ 
+                  p: 2,
+                  transition: 'transform 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4
+                  }
                 }}
               >
-                Pacientes
-              </Button>
-            </Link>
-          </div>
-          <div>
-            <Link
-              to="/presupuestos"
-              className="link-button"
-              style={{ textDecoration: "none", width: "100%" }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={
-                  <ReceiptLongIcon style={{ fontSize: 40, marginRight: "180" }} />
-                }
-                style={{
-                  fontSize: "18px",
-                  padding: "20px",
-                  margin: "5%",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-                sx={{
-                  color: "white",
-                  backgroundColor: "#8ba082",
-                  "&:hover": {
-                    backgroundColor: "#5d6c56",
-                  },
-                }}
-              >
-                Presupuestos
-              </Button>
-            </Link>
-          </div>
-
-          {/*
-          <div>
-            <Link
-              to="/planificacion/consolidado"
-              className="link-button"
-              style={{ textDecoration: "none", width: "100%" }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={
-                  <FaMoneyBillWave style={{ fontSize: 40, marginRight: "110" }} />
-                }
-                style={{
-                  fontSize: "18px",
-                  padding: "20px",
-                  margin: "5%",
-                  width: "145%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-                sx={{
-                  color: "white",
-                  backgroundColor: "#8ba082",
-                  "&:hover": {
-                    backgroundColor: "#5d6c56",
-                  },
-                }}
-              >
-                Consolidado
-              </Button>
-            </Link>
-          </div>
-
-          */}
-
-          <div>
-            <Link
-              to="/reportes-financieros"
-              className="link-button"
-              style={{ textDecoration: "none", width: "100%" }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={
-                  <AccountBalanceWalletIcon style={{ fontSize: 40, marginRight: "110" }} />
-                }
-                style={{
-                  fontSize: "18px",
-                  padding: "20px",
-                  margin: "5%",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-                sx={{
-                  color: "white",
-                  backgroundColor: "#8ba082",
-                  "&:hover": {
-                    backgroundColor: "#5d6c56",
-                  },
-                }}
-              >
-                Reportes Financieros
-              </Button>
-            </Link>
-          </div>
-
-          
-        </div>
-        
-        
+                <Link 
+                  to={item.to}
+                  style={{ 
+                    textDecoration: "none", 
+                    color: 'inherit',
+                    display: 'block'
+                  }}
+                >
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item>
+                      {item.icon}
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant="h6">
+                        {item.text}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Link>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </div>
-    
-    
   );
 };
 
-export default PlanningMenu
+export default PlanningMenu;

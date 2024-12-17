@@ -39,10 +39,7 @@ export function useBudgets() {
     }
   }, [handleError]);
 
-
-  // useBudgets.js
   const fetchBudgetById = useCallback(async (budgetId) => {
-    console.log('Hook - Starting fetchBudgetById:', budgetId);
     try {
       setLoading(true);
       setError(null);
@@ -52,56 +49,45 @@ export function useBudgets() {
       }
   
       const response = await budgetService.getBudgetById(budgetId);
-      console.log('Hook - Response from service:', response);
-      setCurrentBudget(response);
-
-      // Validar la respuesta
-      if (!response || !response._id) {
-        throw new Error('Datos del presupuesto inválidos');
-      }
-  
       setCurrentBudget(response);
       setLoading(false);
   
-      return {
-        success: true,
-        data: response
-      };
+      return { success: true, data: response };
     } catch (err) {
-      console.error('Hook - Error in fetchBudgetById:', err);
-      setError(err.message || 'Error al cargar el presupuesto');
-      setLoading(false);
-      
-      return {
-        success: false,
-        error: err.message || 'Error al cargar el presupuesto'
-      };
+      return handleError(err);
     }
-  }, []);
+  }, [handleError]);
 
   const createBudget = useCallback(async (budgetData) => {
     try {
       setLoading(true);
+      if (budgetData.treatmentPlan) {
+        const existingBudget = await budgetService.getBudgetByTreatment(budgetData.treatmentPlan);
+        if (existingBudget) {
+          throw new Error('Ya existe un presupuesto para esta planificación');
+        }
+      }
       const data = await budgetService.createBudget(budgetData);
       setBudgets(prev => [...prev, data]);
       setLoading(false);
       toast.success('Presupuesto creado exitosamente');
       return { success: true, data };
     } catch (err) {
-      toast.error('Error al crear el presupuesto');
+      toast.error(err.message || 'Error al crear el presupuesto');
       return handleError(err);
     }
   }, [handleError]);
 
-
-  const createBudgetForTreatment = useCallback(async (treatmentId, budgetData) => {
+  const createBudgetFromTreatment = useCallback(async (treatmentPlanId) => {
     try {
       setLoading(true);
-      const data = await budgetService.createBudgetForTreatment(treatmentId, budgetData);
+      const data = await budgetService.createBudgetFromTreatment(treatmentPlanId);
       setBudgets(prev => [...prev, data]);
       setLoading(false);
+      toast.success('Presupuesto creado exitosamente desde planificación');
       return { success: true, data };
     } catch (err) {
+      toast.error('Error al crear el presupuesto desde planificación');
       return handleError(err);
     }
   }, [handleError]);
@@ -122,24 +108,6 @@ export function useBudgets() {
     }
   }, [handleError]);
 
-  /*
-  const updateBudgetStatus = useCallback(async (budgetId, status) => {
-    try {
-      setLoading(true);
-      const data = await budgetService.updateBudgetStatus(budgetId, status);
-      setBudgets(prev => prev.map(budget => 
-        budget._id === budgetId ? data : budget
-      ));
-      setLoading(false);
-      toast.success('Estado del presupuesto actualizado');
-      return { success: true, data };
-    } catch (err) {
-      toast.error('Error al actualizar el estado del presupuesto');
-      return handleError(err);
-    }
-  }, [handleError]);
-  */
-
   const calculateTotals = useCallback((fases) => {
     let totalGeneral = 0;
     const fasesCalculated = fases.map(fase => {
@@ -155,29 +123,6 @@ export function useBudgets() {
     return { fases: fasesCalculated, totalGeneral };
   }, []);
 
-  // Agregar nueva función para crear presupuesto desde planificación
-  const createBudgetFromTreatment = async (treatmentId) => {
-    const treatment = await patientTreatmentService.getById(treatmentId);
-    
-    const budgetData = {
-      paciente: treatment.paciente._id,
-      especialidad: treatment.especialidad,
-      treatmentPlan: treatmentId,
-      fases: treatment.actividades.map((act, index) => ({
-        nombre: `Fase ${index + 1}`,
-        descripcion: act.actividadPlanTrat,
-        procedimientos: [{
-          nombre: act.actividadPlanTrat,
-          numeroPiezas: 1,
-          costoPorUnidad: act.montoAbono,
-          estado: act.estado
-        }]
-      }))
-    };
-  
-    return await createBudget(budgetData);
-  };
-
   return {
     budgets,
     currentBudget,
@@ -187,10 +132,8 @@ export function useBudgets() {
     fetchBudgetsByPatient,
     fetchBudgetById,
     createBudget,
-    createBudgetForTreatment,
     createBudgetFromTreatment,
     updateBudget,
-    //updateBudgetStatus,
     calculateTotals,
     setCurrentBudget
   };

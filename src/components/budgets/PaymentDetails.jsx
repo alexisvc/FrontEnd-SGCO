@@ -16,7 +16,6 @@ import {
   DialogActions,
   TextField,
   MenuItem,
-  Chip,
   IconButton,
   Grid
 } from '@mui/material';
@@ -36,17 +35,20 @@ const PaymentDetails = ({
   fetchPaymentSummary,
   treatmentDetails,
 }) => {
-  console.log('Budget:', budget);
-  console.log('Payment Summary:', paymentSummary);
-  //console.log('Budget Status:', budget?.estado);
-  console.log('Budget in PaymentDetails:', budget);
-  console.log('PaymentSummary in PaymentDetails:', paymentSummary);
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedFase, setSelectedFase] = useState(null);
+  const [paymentData, setPaymentData] = useState({
+    descripcion: '',
+    monto: '',
+    metodoPago: ''
+  });
+  const [openCancelDialog, setOpenCancelDialog] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [cancelReason, setCancelReason] = useState('');
 
   useEffect(() => {
     const initializePayments = async () => {
-      if (budget?._id ) {
-        console.log('Initializing payments for budget:', budget._id);
+      if (budget?._id) {
         try {
           await fetchPaymentSummary(budget._id);
         } catch (error) {
@@ -59,50 +61,24 @@ const PaymentDetails = ({
     initializePayments();
   }, [budget, fetchPaymentSummary]);
 
-  // Inicializar fases con la estructura del presupuesto si no hay paymentSummary
   const initializedPaymentSummary = {
     resumenGeneral: {
       totalPresupuesto: budget?.totalGeneral || 0,
       totalPagado: 0,
-      saldoPendiente: budget?.totalGeneral || 0,
-      estadoPago: 'pendiente',
-      porcentajePagado: 0
+      saldoPendiente: budget?.totalGeneral || 0
     },
     fases: budget?.fases.map((fase, index) => ({
       faseIndex: index,
       nombreFase: fase.nombre,
       totalFase: fase.total,
       totalPagado: 0,
-      saldoPendiente: fase.total, 
+      saldoPendiente: fase.total,
       pagos: []
     })) || []
   };
 
   const currentPaymentSummary = paymentSummary || initializedPaymentSummary;
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedFase, setSelectedFase] = useState(null);
-  const [paymentData, setPaymentData] = useState({
-    descripcion: '',
-    monto: '',
-    metodoPago: ''
-  });
-  const [openCancelDialog, setOpenCancelDialog] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState(null);
-  const [cancelReason, setCancelReason] = useState('');
-
-  const getActividadRelacionada = (faseIndex) => {
-    if (!treatmentDetails?.actividades) return null;
-    return treatmentDetails.actividades[faseIndex];
-  };
-
-  const getActivityForPhase = (faseIndex) => {
-    if (treatmentDetails?.actividades) {
-      return treatmentDetails.actividades[faseIndex];
-    }
-    return null;
-  };
-  
   const handleOpenDialog = (faseIndex) => {
     setSelectedFase(faseIndex);
     setPaymentData({
@@ -125,7 +101,7 @@ const PaymentDetails = ({
         return;
       }
 
-      const fase = paymentSummary.fases[selectedFase];
+      const fase = currentPaymentSummary.fases[selectedFase];
       const validation = helpers.validatePaymentAmount(
         parseFloat(paymentData.monto),
         fase.saldoPendiente
@@ -189,77 +165,45 @@ const PaymentDetails = ({
     { value: 'cheque', label: 'Cheque' }
   ];
 
-  if (!paymentSummary || !paymentSummary.fases) {
-    //if (budget?.estado !== 'aceptado') {
-      return (
-        <Typography color="error">
-          Solo se pueden registrar pagos para presupuestos aceptados
-        </Typography>
-      );
-    //}
-    return <Typography>Cargando datos de pagos...</Typography>;
-  }
-
   return (
     <Box>
-      {/* Resumen General con info de planificación */}
+      {/* Resumen General */}
       <Paper sx={{ p: 2, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Resumen General</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <Box display="flex" justifyContent="space-between">
-              <Typography>Total Presupuesto:</Typography>
-              <Typography>{formatters.amount(paymentSummary.resumenGeneral.totalPresupuesto)}</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Typography>Total Pagado:</Typography>
-              <Typography>{formatters.amount(paymentSummary.resumenGeneral.totalPagado)}</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Typography>Saldo Pendiente:</Typography>
-              <Typography>{formatters.amount(paymentSummary.resumenGeneral.saldoPendiente)}</Typography>
+            <Box>
+              <Typography>Total Presupuesto: {formatters.amount(currentPaymentSummary.resumenGeneral.totalPresupuesto)}</Typography>
+              <Typography>Total Pagado: {formatters.amount(currentPaymentSummary.resumenGeneral.totalPagado)}</Typography>
+              <Typography>Saldo Pendiente: {formatters.amount(currentPaymentSummary.resumenGeneral.saldoPendiente)}</Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            {treatmentDetails && (
-              <Box>
-                <Typography variant="subtitle2">Actividades Planificadas</Typography>
-                <Typography>
-                  Completadas: {treatmentDetails.actividades.filter(a => a.estado === 'completado').length} 
-                  de {treatmentDetails.actividades.length}
-                </Typography>
-              </Box>
-            )}
-          </Grid>
+          {treatmentDetails && (
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle2">Actividades Planificadas</Typography>
+              <Typography>
+                Completadas: {treatmentDetails.actividades.filter(a => a.estado === 'completado').length} 
+                de {treatmentDetails.actividades.length}
+              </Typography>
+            </Grid>
+          )}
         </Grid>
       </Paper>
 
       {/* Pagos por Fase */}
-      {paymentSummary.fases.map((fase, index) => {
-        const actividad = getActividadRelacionada(index);
-        return (
-          <Paper key={index} sx={{ p: 2, mb: 2 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-              <Box>
-                <Typography variant="h6">{fase.nombreFase}</Typography>
-                {actividad && (
-                  <Typography variant="caption" color="textSecondary">
-                    Actividad: {actividad.actividadPlanTrat} - 
-                    Estado: <Chip size="small" label={actividad.estado} />
-                  </Typography>
-                )}
-              </Box>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => handleOpenDialog(index)}
-                disabled={fase.saldoPendiente <= 0}
-              >
-                Registrar Pago
-              </Button>
-            </Box>
-       
-
+      {currentPaymentSummary.fases.map((fase, index) => (
+        <Paper key={index} sx={{ p: 2, mb: 2 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+            <Typography variant="h6">{fase.nombreFase}</Typography>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpenDialog(index)}
+              disabled={fase.saldoPendiente <= 0}
+            >
+              Registrar Pago
+            </Button>
+          </Box>
 
           <TableContainer>
             <Table>
@@ -293,13 +237,6 @@ const PaymentDetails = ({
                           <CancelIcon />
                         </IconButton>
                       )}
-                      {pago.anulado && (
-                        <Chip
-                          label="Anulado"
-                          color="error"
-                          size="small"
-                        />
-                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -319,8 +256,7 @@ const PaymentDetails = ({
             </Typography>
           </Box>
         </Paper>
-        );
-  })}
+      ))}
 
       {/* Diálogo para nuevo pago */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>

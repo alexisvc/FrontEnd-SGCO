@@ -14,56 +14,36 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  List,
+  ListItem,
+  ListItemText,
+  Chip,
+  CircularProgress,
+  Box
 } from "@mui/material";
-import TreatmentPlansSummary from "./TreatmentPlansSummary";
-import usePatientTreatments from "../../hooks/usePatientTreatments";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import dayjs from "dayjs";
 
-const AllTreatmentPlans = () => {
-  const {
-    patientTreatments,
-    getAllPatientTreatments,
-  } = usePatientTreatments();
-
+const AllTreatmentPlans = ({ 
+  patientTreatments, 
+  getAllPatientTreatments,
+  createBudgetFromTreatment 
+}) => {
   const navigate = useNavigate();
-
-  const [selectedMonth, setSelectedMonth] = useState(""); // Estado para el mes seleccionado
+  const [selectedMonth, setSelectedMonth] = useState("");
   const [filteredTreatments, setFilteredTreatments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado para manejar la carga
-  const { getReporteMensual } = useFinancialReports();
-  const [presupuestosInfo, setPresupuestosInfo] = useState({});
-
+  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!filteredTreatments.length) return;
-      
-      const presupuestos = {};
-      for (let treatment of filteredTreatments) {
-        if (treatment.budget) {
-          presupuestos[treatment.id] = {
-            total: treatment.budget.totalGeneral,
-            estado: treatment.budget.estadoPagoGeneral
-          };
-        }
-      }
-      setPresupuestosInfo(presupuestos);
-    };
-    
-    fetchData();
-  }, [filteredTreatments]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true); // Activar el estado de carga
+      setIsLoading(true);
       await getAllPatientTreatments();
-      setIsLoading(false); // Desactivar el estado de carga
+      setIsLoading(false);
     };
 
     fetchData();
-  }, []);
+  }, [getAllPatientTreatments]);
 
   useEffect(() => {
     filterTreatmentsByMonth();
@@ -72,21 +52,46 @@ const AllTreatmentPlans = () => {
   const filterTreatmentsByMonth = () => {
     if (!selectedMonth) {
       setFilteredTreatments(patientTreatments);
-    } else {
-/*
-      const filtered = patientTreatments.filter((treatment) => {
-        const treatmentMonth = dayjs(treatment.fechaPlanTrat).format("MM");
-        return treatmentMonth === selectedMonth;
-*/
-        const filtered = patientTreatments.filter(treatment => {
-          return treatment.actividades.some(actividad => {
-            const actividadMonth = dayjs(actividad.fechaPlanTrat).format("MM");
-            return actividadMonth === selectedMonth;
+      return;
+    }
+
+    const filtered = patientTreatments.filter(treatment => {
+      return treatment.actividades.some(actividad => {
+        const actividadMonth = dayjs(actividad.fechaPlanTrat).format("MM");
+        return actividadMonth === selectedMonth;
       });
     });
-      setFilteredTreatments(filtered);
+    setFilteredTreatments(filtered);
+  };
+
+  const getPaymentStatusColor = (status) => {
+    const colors = {
+      pendiente: 'warning',
+      parcial: 'info',
+      completado: 'success'
+    };
+    return colors[status] || 'default';
+  };
+
+  const handleCreateBudget = async (treatmentId) => {
+    try {
+      const result = await createBudgetFromTreatment(treatmentId);
+      if (result.success) {
+        toast.success('Presupuesto creado exitosamente');
+        navigate(`/presupuestos/${result.data._id}`);
+      }
+    } catch (error) {
+      toast.error('Error al crear el presupuesto');
     }
   };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -98,39 +103,32 @@ const AllTreatmentPlans = () => {
       >
         Atrás
       </Button>
+
       <Container>
-      <Typography variant="h4" gutterBottom>
-        Consolidado de Planificaciones
-      </Typography>
+        <Typography variant="h4" gutterBottom>
+          Consolidado de Planificaciones
+        </Typography>
 
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Filtrar por Mes</InputLabel>
-        <Select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          label="Filtrar por Mes"
-        >
-          <MenuItem value="">Todos los meses</MenuItem>
-          {/* Meses... */}
-          
-            <MenuItem value="01">Enero</MenuItem>
-            <MenuItem value="02">Febrero</MenuItem>
-            <MenuItem value="03">Marzo</MenuItem>
-            <MenuItem value="04">Abril</MenuItem>
-            <MenuItem value="05">Mayo</MenuItem>
-            <MenuItem value="06">Junio</MenuItem>
-            <MenuItem value="07">Julio</MenuItem>
-            <MenuItem value="08">Agosto</MenuItem>
-            <MenuItem value="09">Septiembre</MenuItem>
-            <MenuItem value="10">Octubre</MenuItem>
-            <MenuItem value="11">Noviembre</MenuItem>
-            <MenuItem value="12">Diciembre</MenuItem>
-        </Select>
-      </FormControl>
+        <FormControl fullWidth sx={{ mb: 3 }}>
+          <InputLabel>Filtrar por Mes</InputLabel>
+          <Select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            label="Filtrar por Mes"
+          >
+            <MenuItem value="">Todos los meses</MenuItem>
+            {[...Array(12)].map((_, i) => {
+              const month = (i + 1).toString().padStart(2, '0');
+              const monthName = new Date(2024, i).toLocaleString('es', { month: 'long' });
+              return (
+                <MenuItem key={month} value={month}>
+                  {monthName.charAt(0).toUpperCase() + monthName.slice(1)}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
 
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -139,7 +137,6 @@ const AllTreatmentPlans = () => {
                 <TableCell>Especialidad</TableCell>
                 <TableCell>Actividades</TableCell>
                 <TableCell>Presupuesto</TableCell>
-                <TableCell>Estado Pagos</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -148,40 +145,72 @@ const AllTreatmentPlans = () => {
                   <TableCell>{treatment.paciente.nombrePaciente}</TableCell>
                   <TableCell>{treatment.especialidad}</TableCell>
                   <TableCell>
-                    <List>
+                    <List dense>
                       {treatment.actividades.map((act, index) => (
                         <ListItem key={index}>
                           <ListItemText
                             primary={act.cita}
-                            secondary={`${act.actividadPlanTrat} - ${new Date(act.fechaPlanTrat).toLocaleDateString()}`}
+                            secondary={
+                              <>
+                                {act.actividadPlanTrat}
+                                <br />
+                                {new Date(act.fechaPlanTrat).toLocaleDateString()}
+                              </>
+                            }
+                          />
+                          <Chip
+                            size="small"
+                            label={act.estado}
+                            color={act.estado === 'completado' ? 'success' : 
+                                  act.estado === 'en-proceso' ? 'primary' : 'default'}
                           />
                         </ListItem>
                       ))}
                     </List>
                   </TableCell>
                   <TableCell>
-                    {treatment.budget ? 
-                      `$${treatment.budget.totalGeneral}` : 
-                      'Sin presupuesto'
-                    }
-                  </TableCell>
-                  <TableCell>
-                    {treatment.budget && 
-                      <Chip 
-                        label={treatment.budget.estadoPagoGeneral}
-                        color={getPaymentStatusColor(treatment.budget.estadoPagoGeneral)}
-                      />
-                    }
+                    {treatment.budget ? (
+                      <Box>
+                        <Typography>
+                          ${treatment.budget.totalGeneral}
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={treatment.budget.estadoPagoGeneral}
+                          color={getPaymentStatusColor(treatment.budget.estadoPagoGeneral)}
+                        />
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          sx={{ ml: 1 }}
+                          onClick={() => navigate(`/presupuestos/${treatment.budget._id}`)}
+                        >
+                          Ver
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() => handleCreateBudget(treatment.id)}
+                      >
+                        Crear Presupuesto
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-      )}
-    </Container>
 
-      
+        {filteredTreatments.length === 0 && (
+          <Typography variant="subtitle1" textAlign="center" sx={{ mt: 3 }}>
+            No se encontraron planificaciones
+            {selectedMonth && " para el mes seleccionado"}
+          </Typography>
+        )}
+      </Container>
     </>
   );
 };

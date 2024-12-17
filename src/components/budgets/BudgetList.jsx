@@ -14,7 +14,6 @@ import {
   TextField,
   Box,
   IconButton,
-  Chip,
   FormControl,
   InputLabel,
   Select,
@@ -24,7 +23,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle
-  
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -33,7 +31,6 @@ import {
   Delete as DeleteIcon,
   Visibility as ViewIcon,
   ArrowBack as ArrowBackIcon,
-  Payment as PaymentIcon,
   EventNote as EventNoteIcon
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -116,24 +113,13 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
     }
   };
 
-  const getStatusColor = (status) => {
-    const statusColors = {
-      borrador: 'default',
-      emitido: 'primary',
-      aceptado: 'success',
-      rechazado: 'error'
-    };
-    return statusColors[status] || 'default';
-  };
+  if (loading) {
+    return <Typography align="center">Cargando...</Typography>;
+  }
 
-  const getPaymentStatusColor = (status) => {
-    const paymentColors = {
-      pendiente: 'warning',
-      parcial: 'info',
-      completado: 'success'
-    };
-    return paymentColors[status] || 'default';
-  };
+  if (error) {
+    return <Typography color="error" align="center">{error}</Typography>;
+  }
 
   const formatCurrency = (amount) => {
     return `$${amount.toFixed(2)}`;
@@ -142,14 +128,6 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString();
   };
-
-  if (loading) {
-    return <Typography align="center">Cargando...</Typography>;
-  }
-
-  if (error) {
-    return <Typography color="error" align="center">{error}</Typography>;
-  }
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
@@ -204,21 +182,20 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                         Buscar
                       </Button>
                     </Grid>
-         
                   </>
                 )}
-                </Grid>
+              </Grid>
 
-<Grid container spacing={2} alignItems="center" sx={{marginTop:2}}>
+              <Grid container spacing={2} alignItems="center" sx={{marginTop:2}}>
                 <Grid item xs={12} sm={3}>
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                        onClick={() => navigate('/planificacion/nueva')}
-                      >
-                        Nueva Planificación
-                      </Button>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<AddIcon />}
+                    onClick={() => navigate('/planificacion/nueva')}
+                  >
+                    Nueva Planificación
+                  </Button>
                 </Grid>
                 <Grid item xs={12} sm={3}>
                   <Button
@@ -231,91 +208,68 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
                     Nuevo Presupuesto
                   </Button>
                 </Grid>
-
-                </Grid>
-              
+              </Grid>
             </Paper>
           </Grid>
 
           <Grid item xs={12}>
-          <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Fecha</TableCell>
-            <TableCell>Paciente</TableCell>
-            <TableCell>Cédula</TableCell>
-            <TableCell>Especialidad</TableCell>
-            <TableCell>Planificación</TableCell>
-            <TableCell align="right">Total</TableCell>
-            <TableCell align="center">Estado Pago</TableCell>
-            <TableCell align="center">Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredBudgets.map((budget) => (
-            <TableRow key={budget._id}>
-              <TableCell>{formatDate(budget.fecha)}</TableCell>
-              <TableCell>{budget.paciente.nombrePaciente}</TableCell>
-              <TableCell>{budget.paciente.numeroCedula}</TableCell>
-              <TableCell>{budget.especialidad}</TableCell>
-              <TableCell>
-                {budget.treatmentPlan ? (
-                  <Box>
-                    <Typography variant="body2">
-                      {budget.treatmentPlan.actividades?.length} actividades
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {budget.treatmentPlan.actividades?.filter(a => a.estado === 'completado').length} completadas
-                    </Typography>
-                  </Box>
-                ) : (
-                  <Chip size="small" label="Sin planificación" color="warning" />
-                )}
-              </TableCell>
-              <TableCell align="right">{formatCurrency(budget.totalGeneral)}</TableCell>
-              <TableCell align="center">
-                <Chip 
-                  label={budget.estadoPagoGeneral}
-                  color={getPaymentStatusColor(budget.estadoPagoGeneral)}
-                  size="small"
-                />
-              </TableCell>
-              <TableCell align="center">
-                <IconButton onClick={() => navigate(`/presupuestos/${budget._id}`)}>
-                  <ViewIcon />
-                </IconButton>
-                {budget.treatmentPlan && (
-                  <IconButton onClick={() => navigate(`/planificacion/${budget.treatmentPlan._id}`)}>
-                    <EventNoteIcon />
-                  </IconButton>
-                )}
-                        {budget.estado === 'borrador' && (
-                          <>
-                            <IconButton
-                              onClick={() => navigate(`/presupuestos/editar/${budget._id}`)}
-                              title="Editar"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => handleDeleteClick(budget)}
-                              title="Eliminar"
-                              color="error"
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Fecha</TableCell>
+                    <TableCell>Paciente</TableCell>
+                    <TableCell>Cédula</TableCell>
+                    <TableCell>Especialidad</TableCell>
+                    <TableCell>Planificación</TableCell>
+                    <TableCell align="right">Total</TableCell>
+                    <TableCell align="center">Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredBudgets.map((budget) => (
+                    <TableRow key={budget._id}>
+                      <TableCell>{formatDate(budget.fecha)}</TableCell>
+                      <TableCell>{budget.paciente.nombrePaciente}</TableCell>
+                      <TableCell>{budget.paciente.numeroCedula}</TableCell>
+                      <TableCell>{budget.especialidad}</TableCell>
+                      <TableCell>
+                        {budget.treatmentPlan ? (
+                          <Box>
+                            <Typography variant="body2">
+                              {budget.treatmentPlan.actividades?.length} actividades
+                            </Typography>
+                            <Typography variant="caption" color="textSecondary">
+                              {budget.treatmentPlan.actividades?.filter(a => a.estado === 'completado').length} completadas
+                            </Typography>
+                          </Box>
+                        ) : (
+                          'Sin planificación'
                         )}
-                        {budget.estado === 'aceptado' && (
-                          <IconButton
-                            onClick={() => navigate(`/presupuestos/${budget._id}/pagos`)}
-                            title="Gestionar pagos"
-                            color="primary"
-                          >
-                            <PaymentIcon />
+                      </TableCell>
+                      <TableCell align="right">{formatCurrency(budget.totalGeneral)}</TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={() => navigate(`/presupuestos/${budget._id}`)}>
+                          <ViewIcon />
+                        </IconButton>
+                        {budget.treatmentPlan && (
+                          <IconButton onClick={() => navigate(`/planificacion/${budget.treatmentPlan._id}`)}>
+                            <EventNoteIcon />
                           </IconButton>
                         )}
+                        <IconButton
+                          onClick={() => navigate(`/presupuestos/editar/${budget._id}`)}
+                          title="Editar"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDeleteClick(budget)}
+                          title="Eliminar"
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}

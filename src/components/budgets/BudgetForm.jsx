@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Button,
-  Typography,
-  Grid,
-  TextField,
-  Container,
-  Paper,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Button, Typography, Grid, TextField, Container, Paper, IconButton,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Box, FormControl, InputLabel, Select, MenuItem, List, ListItem, ListItemText, Chip
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -38,8 +19,7 @@ const BudgetForm = ({
   fetchBudgetById, 
   fetchPatientByName,
   fetchPatientByCedula,
-  calculateTotals, 
-  treatmentPlanId,
+  calculateTotals,
   mode = 'create' 
 }) => {
   const navigate = useNavigate();
@@ -51,28 +31,23 @@ const BudgetForm = ({
     procedimientos: []
   };
 
-  // Estados
   const [budget, setBudget] = useState({
-    paciente: treatmentPlan?.paciente || '',
-    especialidad: treatmentPlan?.especialidad || '',
+    paciente: '',
+    especialidad: '',
     fases: [{
       nombre: 'Fase Inicial',
-      descripcion: treatmentPlan?.actividadPlanTrat || '',
+      descripcion: '',
       procedimientos: []
     }]
   });
 
-  
   const [selectedPatient, setSelectedPatient] = useState(null);
-  
   const [newProcedimientos, setNewProcedimientos] = useState({});
   const [searchType, setSearchType] = useState('cedula');
   const [searchQuery, setSearchQuery] = useState("");
   const [searched, setSearched] = useState(false);
   const [patients, setPatients] = useState([]);
-  const [selectedActivities, setSelectedActivities] = useState([]);
 
-  // Lista de especialidades disponibles
   const especialidades = [
     'Odontología General',
     'Ortodoncia',
@@ -83,31 +58,25 @@ const BudgetForm = ({
     'Odontopediatría'
   ];
 
-  // Efecto para cargar presupuesto en modo edición
   useEffect(() => {
     const loadBudget = async () => {
       if (mode === 'edit' && id) {
         try {
-          console.log('BudgetForm - Loading budget with ID:', id);
           const result = await fetchBudgetById(id);
-          
           if (!result.success) {
             throw new Error(result.error || 'Error al cargar el presupuesto');
           }
-          
           setBudget({
             ...result.data,
             paciente: result.data.paciente.id || result.data.paciente
           });
           setSelectedPatient(result.data.paciente);
         } catch (error) {
-          console.error('BudgetForm - Error loading budget:', error);
           toast.error(error.message || 'Error al cargar el presupuesto');
           navigate('/presupuestos');
         }
       }
     };
-    
     loadBudget();
   }, [mode, id, fetchBudgetById, navigate]);
 
@@ -130,102 +99,67 @@ const BudgetForm = ({
         }]
       }));
       setSelectedPatient(treatmentPlan.paciente);
-      setSelectedActivities(treatmentPlan.actividades);
     }
   }, [treatmentPlan]);
 
-
-  const handleSearchSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      console.log('Buscando paciente con:', { tipo: searchType, query: searchQuery });
-      
-      if (searchType === "cedula") {
-        const result = await fetchPatientByCedula(searchQuery);
-        console.log('Resultado búsqueda cédula:', result);
-        if (result && result.data) {
-          setPatients([result.data]);
-          setSearched(true);
-        }
-      } else if (searchType === "nombre") {
-        console.log('Iniciando búsqueda por nombre');
-        const result = await fetchPatientByName(searchQuery);
-        console.log('Resultado búsqueda nombre:', result);
-        
-        // Si result es directamente el array de pacientes
-        if (Array.isArray(result)) {
-          setPatients(result);
-          setSearched(true);
-        } 
-        // Si result tiene una propiedad data que es el array
-        else if (result && Array.isArray(result.data)) {
-          setPatients(result.data);
-          setSearched(true);
-        }
-        // Si es un solo paciente
-        else if (result && !Array.isArray(result)) {
-          setPatients([result]);
-          setSearched(true);
-        }
+      const result = await (searchType === "cedula" ? 
+        fetchPatientByCedula(searchQuery) : 
+        fetchPatientByName(searchQuery));
+
+      if (result.success) {
+        setPatients(Array.isArray(result.data) ? result.data : [result.data]);
+        setSearched(true);
       }
     } catch (error) {
-      console.error('Error completo:', error);
       toast.error("Error al buscar el paciente");
-      setSearched(false);
     }
   };
 
-  // Modificar handleAddProcedimiento
-const handleAddProcedimiento = (faseIndex) => {
-  const procedimiento = newProcedimientos[faseIndex] || {
-    nombre: '',
-    numeroPiezas: '',
-    costoPorUnidad: ''
-  };
-
-  if (!procedimiento.nombre || !procedimiento.numeroPiezas || !procedimiento.costoPorUnidad) {
-    toast.error('Todos los campos del procedimiento son requeridos');
-    return;
-  }
-
-  const procedimientoToAdd = {
-    ...procedimiento,
-    numeroPiezas: parseInt(procedimiento.numeroPiezas),
-    costoPorUnidad: parseFloat(procedimiento.costoPorUnidad),
-    costoTotal: parseInt(procedimiento.numeroPiezas) * parseFloat(procedimiento.costoPorUnidad)
-  };
-
-  setBudget(prevBudget => {
-    const newFases = [...prevBudget.fases];
-    newFases[faseIndex] = {
-      ...newFases[faseIndex],
-      procedimientos: [...newFases[faseIndex].procedimientos, procedimientoToAdd]
-    };
-    return {
-      ...prevBudget,
-      fases: newFases
-    };
-  });
-
-  // Limpiar solo el procedimiento de la fase actual
-  setNewProcedimientos(prev => ({
-    ...prev,
-    [faseIndex]: {
+  const handleAddProcedimiento = (faseIndex) => {
+    const procedimiento = newProcedimientos[faseIndex] || {
       nombre: '',
       numeroPiezas: '',
       costoPorUnidad: ''
+    };
+
+    if (!procedimiento.nombre || !procedimiento.numeroPiezas || !procedimiento.costoPorUnidad) {
+      toast.error('Todos los campos del procedimiento son requeridos');
+      return;
     }
-  }));
-};
+
+    const procedimientoToAdd = {
+      ...procedimiento,
+      numeroPiezas: parseInt(procedimiento.numeroPiezas),
+      costoPorUnidad: parseFloat(procedimiento.costoPorUnidad),
+      costoTotal: parseInt(procedimiento.numeroPiezas) * parseFloat(procedimiento.costoPorUnidad)
+    };
+
+    setBudget(prevBudget => {
+      const newFases = [...prevBudget.fases];
+      newFases[faseIndex] = {
+        ...newFases[faseIndex],
+        procedimientos: [...newFases[faseIndex].procedimientos, procedimientoToAdd]
+      };
+      return {
+        ...prevBudget,
+        fases: newFases
+      };
+    });
+
+    setNewProcedimientos(prev => ({
+      ...prev,
+      [faseIndex]: { nombre: '', numeroPiezas: '', costoPorUnidad: '' }
+    }));
+  };
 
   const handleDeleteProcedimiento = (faseIndex, procIndex) => {
     setBudget(prevBudget => {
       const newFases = [...prevBudget.fases];
       newFases[faseIndex].procedimientos.splice(procIndex, 1);
-      return {
-        ...prevBudget,
-        fases: newFases
-      };
+      return { ...prevBudget, fases: newFases };
     });
   };
 
@@ -254,31 +188,26 @@ const handleAddProcedimiento = (faseIndex) => {
     }
 
     try {
-      
-
       const { fases, totalGeneral } = calculateTotals(budget.fases);
       const budgetToSave = {
         ...budget,
         treatmentPlan: treatmentPlan?._id,
         fases,
-        totalGeneral,
-        estado: 'borrador',
-        estadoPagoGeneral: 'pendiente' // Nuevo campo
+        totalGeneral
       };
 
-      const result = mode === 'edit'
-        ? await updateBudget(id, budgetToSave)
-        : await createBudget(budgetToSave);
+      const result = mode === 'edit' ?
+        await updateBudget(id, budgetToSave) :
+        await createBudget(budgetToSave);
       
       if (result.success) {
         toast.success(`Presupuesto ${mode === 'edit' ? 'actualizado' : 'creado'} exitosamente`);
         navigate('/presupuestos');
       } else {
-        toast.error(`Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
+        toast.error(result.error || `Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error(`Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
+      toast.error(error.message || `Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
     }
   };
 
@@ -293,11 +222,11 @@ const handleAddProcedimiento = (faseIndex) => {
         >
           Volver
         </Button>
-
-         {/* Diálogo de búsqueda de paciente */}
-         {mode === 'create' && !treatmentPlan && (
+  
+        {/* Búsqueda de paciente */}
+        {mode === 'create' && !treatmentPlan && (
           <Box component={Paper} style={{padding: '20px', marginBottom: '30px'}}> 
-            <Box component="form" onSubmit={handleSearchSubmit}>
+            <Box component="form" onSubmit={handleSearch}>
               <Typography variant="h5" gutterBottom>
                 Paciente
               </Typography>
@@ -333,49 +262,47 @@ const handleAddProcedimiento = (faseIndex) => {
             </Box>
           </Box>
         )}
-
-        {/* Nueva sección de actividades planificadas si existe treatmentPlan */}
-      {treatmentPlan && (
-        <Paper sx={{ p: 2, mb: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Actividades Planificadas
-          </Typography>
-          <List>
-            {selectedActivities.map((actividad, index) => (
-              <ListItem key={index}>
-                <ListItemText
-                  primary={`Cita ${actividad.cita}`}
-                  secondary={
-                    <>
-                      <Typography>{actividad.actividadPlanTrat}</Typography>
-                      <Typography variant="caption">
+  
+        {/* Información de Planificación */}
+        {treatmentPlan && (
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Planificación Asociada
+            </Typography>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Cita</TableCell>
+                    <TableCell>Actividad</TableCell>
+                    <TableCell>Fecha</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {treatmentPlan.actividades.map((actividad, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{actividad.cita}</TableCell>
+                      <TableCell>{actividad.actividadPlanTrat}</TableCell>
+                      <TableCell>
                         {new Date(actividad.fechaPlanTrat).toLocaleDateString()}
-                      </Typography>
-                    </>
-                  }
-                />
-                <Chip 
-                  label={actividad.estado}
-                  color={getStatusColor(actividad.estado)}
-                  size="small"
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      )}
-
-      
-
-        {/* Tabla de resultados */}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        )}
+  
+        {/* Resultados de búsqueda de paciente */}
         {searched && patients.length > 0 && (
           <TableContainer component={Paper} sx={{ mt: 4 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell><Typography variant='h6'>Nombre</Typography></TableCell>
-                  <TableCell><Typography variant='h6'>Cédula</Typography></TableCell>
-                  <TableCell><Typography variant='h6'>Seleccionar</Typography></TableCell>
+                  <TableCell>Nombre</TableCell>
+                  <TableCell>Cédula</TableCell>
+                  <TableCell>Seleccionar</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -400,33 +327,25 @@ const handleAddProcedimiento = (faseIndex) => {
             </Table>
           </TableContainer>
         )}
-
+  
+        {/* Información del paciente seleccionado */}
         {selectedPatient && (
           <Box component={Paper} mt={2} p={2}>
-            <Typography variant="subtitle1">
-              <Typography variant='h6'><strong>Paciente seleccionado:</strong></Typography> {selectedPatient.nombrePaciente}
-            </Typography>
-            <br></br>
-            <Typography variant="subtitle1">
-              <Typography variant='h6'><strong>Cédula:</strong></Typography> {selectedPatient.numeroCedula}
-            </Typography>
+            <Typography variant="h6" gutterBottom>Paciente seleccionado</Typography>
+            <Typography>Nombre: {selectedPatient.nombrePaciente}</Typography>
+            <Typography>Cédula: {selectedPatient.numeroCedula}</Typography>
           </Box>
         )}
-
-        <br></br>
-        <hr></hr>
-        <br></br>
-
-        <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h5" gutterBottom>
-          {mode === 'edit' ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
-          {treatmentPlan && ' - Basado en Planificación'}
-        </Typography>
-
+  
+        {/* Formulario de Presupuesto */}
+        <Paper sx={{ p: 3, mb: 3, mt: 3 }}>
+          <Typography variant="h5" gutterBottom>
+            {mode === 'edit' ? 'Editar Presupuesto' : 'Nuevo Presupuesto'}
+            {treatmentPlan && ' - Basado en Planificación'}
+          </Typography>
+  
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-
-             
               {/* Especialidad */}
               <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -445,7 +364,7 @@ const handleAddProcedimiento = (faseIndex) => {
                   </Select>
                 </FormControl>
               </Grid>
-
+  
               {/* Fases */}
               {budget.fases.map((fase, faseIndex) => (
                 <Grid item xs={12} key={faseIndex}>
@@ -482,9 +401,9 @@ const handleAddProcedimiento = (faseIndex) => {
                         />
                       </Grid>
                     </Grid>
-
+  
                     {/* Tabla de Procedimientos */}
-                    <TableContainer component={Paper} sx={{ mt: 2 }}>
+                    <TableContainer sx={{ mt: 2 }}>
                       <Table>
                         <TableHead>
                           <TableRow>
@@ -512,56 +431,58 @@ const handleAddProcedimiento = (faseIndex) => {
                               </TableCell>
                             </TableRow>
                           ))}
-                          {/* Fila para agregar nuevo procedimiento */}
+                          {/* Fila para nuevo procedimiento */}
                           <TableRow>
                             <TableCell>
-                            <TextField
-                              fullWidth
-                              size="small"
-                              value={newProcedimientos[faseIndex]?.nombre || ''}
-                              onChange={(e) => setNewProcedimientos(prev => ({
-                                ...prev,
-                                [faseIndex]: {
-                                  ...prev[faseIndex],
-                                  nombre: e.target.value
-                                }
-                              }))}
-                              placeholder="Nombre del procedimiento"
-                            />
+                              <TextField
+                                fullWidth
+                                size="small"
+                                value={newProcedimientos[faseIndex]?.nombre || ''}
+                                onChange={(e) => setNewProcedimientos(prev => ({
+                                  ...prev,
+                                  [faseIndex]: {
+                                    ...prev[faseIndex],
+                                    nombre: e.target.value
+                                  }
+                                }))}
+                                placeholder="Nombre del procedimiento"
+                              />
                             </TableCell>
                             <TableCell>
-                            <TextField
-                              size="small"
-                              type="number"
-                              value={newProcedimientos[faseIndex]?.numeroPiezas || ''}
-                              onChange={(e) => setNewProcedimientos(prev => ({
-                                ...prev,
-                                [faseIndex]: {
-                                  ...prev[faseIndex],
-                                  numeroPiezas: e.target.value
-                                }
-                              }))}
-                              placeholder="N° piezas"
-                            />
+                              <TextField
+                                size="small"
+                                type="number"
+                                value={newProcedimientos[faseIndex]?.numeroPiezas || ''}
+                                onChange={(e) => setNewProcedimientos(prev => ({
+                                  ...prev,
+                                  [faseIndex]: {
+                                    ...prev[faseIndex],
+                                    numeroPiezas: e.target.value
+                                  }
+                                }))}
+                                placeholder="N° piezas"
+                              />
                             </TableCell>
                             <TableCell>
-                            <TextField
-                              size="small"
-                              type="number"
-                              value={newProcedimientos[faseIndex]?.costoPorUnidad || ''}
-                              onChange={(e) => setNewProcedimientos(prev => ({
-                                ...prev,
-                                [faseIndex]: {
-                                  ...prev[faseIndex],
-                                  costoPorUnidad: e.target.value
-                                }
-                              }))}
-                              placeholder="Costo"
-                            />
+                              <TextField
+                                size="small"
+                                type="number"
+                                value={newProcedimientos[faseIndex]?.costoPorUnidad || ''}
+                                onChange={(e) => setNewProcedimientos(prev => ({
+                                  ...prev,
+                                  [faseIndex]: {
+                                    ...prev[faseIndex],
+                                    costoPorUnidad: e.target.value
+                                  }
+                                }))}
+                                placeholder="Costo"
+                              />
                             </TableCell>
                             <TableCell>
-                              {newProcedimientos[faseIndex]?.numeroPiezas && newProcedimientos[faseIndex]?.costoPorUnidad ? 
-                                `$${(newProcedimientos[faseIndex].numeroPiezas * newProcedimientos[faseIndex].costoPorUnidad).toFixed(2)}` : 
+                              {newProcedimientos[faseIndex]?.numeroPiezas && 
+                               newProcedimientos[faseIndex]?.costoPorUnidad ? 
+                                `$${(newProcedimientos[faseIndex].numeroPiezas * 
+                                     newProcedimientos[faseIndex].costoPorUnidad).toFixed(2)}` : 
                                 '-'
                               }
                             </TableCell>
@@ -581,8 +502,8 @@ const handleAddProcedimiento = (faseIndex) => {
                   </Paper>
                 </Grid>
               ))}
-
-              {/* Botón para agregar nueva fase */}
+  
+              {/* Botones de acción */}
               <Grid item xs={12}>
                 <Button
                   variant="outlined"
@@ -592,8 +513,7 @@ const handleAddProcedimiento = (faseIndex) => {
                   Agregar Fase
                 </Button>
               </Grid>
-
-              {/* Botón de guardar */}
+  
               <Grid item xs={12}>
                 <Button
                   type="submit"
@@ -608,9 +528,6 @@ const handleAddProcedimiento = (faseIndex) => {
             </Grid>
           </form>
         </Paper>
-
-       
-
       </Container>
     </div>
   );

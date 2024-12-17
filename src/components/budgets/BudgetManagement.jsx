@@ -11,10 +11,8 @@ import {
   CircularProgress
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { toast } from 'react-toastify';
 import BudgetDetails from './BudgetDetails';
 import PaymentDetails from './PaymentDetails';
-import PlanningDetails from './PlanningDetails';
 import patientTreatmentService from '../../services/patientTreatmentService';
 
 function CustomTabPanel({ children, value, index }) {
@@ -66,26 +64,16 @@ const BudgetManagement = ({
       setError(null);
       
       try {
-        console.log('Loading budget data for ID:', id);
         const result = await fetchBudgetById(id);
-        console.log('Budget data loaded:', result.data);
-  
         setLocalBudget(result.data);
-  
-        // Verificar si hay treatmentPlan
-        console.log('TreatmentPlan ID:', result.data.treatmentPlan);
   
         if (result.data.treatmentPlan) {
           try {
-            console.log('Fetching treatment plan:', result.data.treatmentPlan);
             const treatmentData = await patientTreatmentService.getById(result.data.treatmentPlan);
-            console.log('Treatment data loaded:', treatmentData);
             setTreatmentDetails(treatmentData);
           } catch (treatmentError) {
             console.error('Error loading treatment:', treatmentError);
           }
-        } else {
-          console.log('No treatment plan associated with this budget');
         }
   
       } catch (err) {
@@ -96,24 +84,10 @@ const BudgetManagement = ({
     };
   
     loadData();
-  }, [id]);
-
+  }, [id, fetchBudgetById]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-  };
-
-  const handleUpdateActivityStatus = async (index, currentStatus) => {
-    const newStatus = currentStatus === 'pendiente' ? 'en-proceso' : 
-                     currentStatus === 'en-proceso' ? 'completado' : 
-                     currentStatus;
-    
-    try {
-      await onUpdateActivity(index, newStatus);
-      toast.success('Estado actualizado correctamente');
-    } catch (error) {
-      toast.error('Error al actualizar el estado');
-    }
   };
 
   if (loading) {
@@ -171,11 +145,11 @@ const BudgetManagement = ({
             </Typography>
 
             {treatmentDetails && (
-            <Typography variant="subtitle1" color="text.secondary">
-              Planificación: {treatmentDetails.especialidad} - 
-              {treatmentDetails.actividades.length} actividades
-            </Typography>
-          )}
+              <Typography variant="subtitle1" color="text.secondary">
+                Planificación: {treatmentDetails.especialidad} - 
+                {treatmentDetails.actividades.length} actividades
+              </Typography>
+            )}
             <Typography variant="subtitle1" color="text.secondary">
               Fecha: {new Date(localBudget.fecha).toLocaleDateString()}
             </Typography>
@@ -185,14 +159,9 @@ const BudgetManagement = ({
           </Box>
 
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              aria-label="budget management tabs"
-            >
-              <Tab label="Presupuesto" {...a11yProps(0)} />
-              <Tab label="Planificación" {...a11yProps(1)} />
-              <Tab label="Pagos" {...a11yProps(2)} />
+            <Tabs value={tabValue} onChange={handleTabChange}>
+              <Tab label="Detalles" {...a11yProps(0)} />
+              <Tab label="Pagos" {...a11yProps(1)} />
             </Tabs>
           </Box>
 
@@ -204,13 +173,6 @@ const BudgetManagement = ({
           </CustomTabPanel>
 
           <CustomTabPanel value={tabValue} index={1}>
-            <PlanningDetails
-              budget={localBudget}
-              treatmentDetails={treatmentDetails}
-            />
-          </CustomTabPanel>
-
-          <CustomTabPanel value={tabValue} index={2}>
             <PaymentDetails
               budget={localBudget}
               paymentSummary={paymentSummary}

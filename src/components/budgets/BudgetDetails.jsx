@@ -12,12 +12,9 @@ import {
   TableHead,
   TableRow,
   Box,
-  Chip
 } from '@mui/material';
-import { useNavigate } from "react-router-dom";
 import { PrintOutlined } from '@mui/icons-material';
 
-// Componente para la versión imprimible
 const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
   <div ref={ref} className={isPrintMode ? 'print-mode' : ''}>
     {/* Cabecera */}
@@ -27,18 +24,18 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
       </Typography>
 
       <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Typography><strong>Paciente:</strong> {budget.paciente.nombrePaciente}</Typography>
-            <Typography><strong>Cédula:</strong> {budget.paciente.numeroCedula}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} textAlign="right">
-            <Typography><strong>Fecha:</strong> {new Date(budget.fecha).toLocaleDateString()}</Typography>
-            <Typography><strong>Especialidad:</strong> {budget.especialidad}</Typography>
-            {budget.treatmentPlan && (
-              <Typography><strong>N° Planificación:</strong> {budget.treatmentPlan._id}</Typography>
-            )}
-          </Grid>
+        <Grid item xs={12} sm={6}>
+          <Typography><strong>Paciente:</strong> {budget.paciente.nombrePaciente}</Typography>
+          <Typography><strong>Cédula:</strong> {budget.paciente.numeroCedula}</Typography>
         </Grid>
+        <Grid item xs={12} sm={6} textAlign="right">
+          <Typography><strong>Fecha:</strong> {new Date(budget.fecha).toLocaleDateString()}</Typography>
+          <Typography><strong>Especialidad:</strong> {budget.especialidad}</Typography>
+          {budget.treatmentPlan && (
+            <Typography><strong>N° Planificación:</strong> {budget.treatmentPlan._id}</Typography>
+          )}
+        </Grid>
+      </Grid>
     </Box>
 
     {/* Fases y Procedimientos */}
@@ -94,47 +91,38 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
       </Typography>
     </Box>
 
-    {/* Nota al pie */}
+    {/* Sección de Planificación */}
     {!isPrintMode && budget.treatmentPlan && (
-        <Box mt={4}>
-          <Typography variant="h6" gutterBottom>Actividades Planificadas</Typography>
-          <TableContainer component={Paper}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Cita</TableCell>
-                  <TableCell>Actividad</TableCell>
-                  <TableCell>Fecha</TableCell>
-                  <TableCell>Estado</TableCell>
+      <Box mt={4}>
+        <Typography variant="h6" gutterBottom>Actividades Planificadas</Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Cita</TableCell>
+                <TableCell>Actividad</TableCell>
+                <TableCell>Fecha</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {budget.treatmentPlan.actividades.map((actividad, index) => (
+                <TableRow key={index}>
+                  <TableCell>{actividad.cita}</TableCell>
+                  <TableCell>{actividad.actividadPlanTrat}</TableCell>
+                  <TableCell>{new Date(actividad.fechaPlanTrat).toLocaleDateString()}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {budget.treatmentPlan.actividades.map((actividad, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{actividad.cita}</TableCell>
-                    <TableCell>{actividad.actividadPlanTrat}</TableCell>
-                    <TableCell>{new Date(actividad.fechaPlanTrat).toLocaleDateString()}</TableCell>
-                    <TableCell>
-                      <Chip 
-                        label={actividad.estado} 
-                        color={getStatusColor(actividad.estado)}
-                        size="small"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      )}
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    )}
   </div>
 ));
 
-const BudgetDetails = ({ budget, updateBudgetStatus }) => {
+const BudgetDetails = ({ budget }) => {
   const componentRef = useRef();
   const [isPrintMode, setIsPrintMode] = React.useState(false);
-  const navigate = useNavigate();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -142,75 +130,23 @@ const BudgetDetails = ({ budget, updateBudgetStatus }) => {
     onAfterPrint: () => setIsPrintMode(false),
   });
 
-  const handleStatusChange = async (newStatus) => {
-    try {
-      await updateBudgetStatus(budget._id, newStatus);
-    } catch (error) {
-      console.error('Error al actualizar el estado:', error);
-    }
-  };
-
-  const getStatusColor = (status) => {
-    const statusColors = {
-      borrador: 'default',
-      emitido: 'primary',
-      aceptado: 'success',
-      rechazado: 'error'
-    };
-    return statusColors[status] || 'default';
-  };
-
   return (
     <Box>
-     <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-       {budget.treatmentPlan && (
-         <Typography variant="subtitle1">
-           Presupuesto basado en planificación del {new Date(budget.treatmentPlan.fecha).toLocaleDateString()}
-         </Typography>
-       )}
-       <Box display="flex" gap={2}>
-         {budget.estado === 'borrador' && (
-           <Button
-             variant="contained"
-             color="primary"
-             onClick={() => handleStatusChange('emitido')}
-           >
-             Emitir Presupuesto
-           </Button>
-         )}
-         {budget.estado === 'emitido' && (
-           <>
-             <Button
-               variant="contained"
-               color="success"
-               onClick={() => handleStatusChange('aceptado')}
-             >
-               Aceptar
-             </Button>
-             <Button
-               variant="contained"
-               color="error"
-               onClick={() => handleStatusChange('rechazado')}
-             >
-               Rechazar
-             </Button>
-           </>
-         )}
-         <Button
-           startIcon={<PrintOutlined />}
-           onClick={handlePrint}
-           variant="outlined"
-         >
-           Imprimir
-         </Button>
-       </Box>
-     </Box>
+      <Box display="flex" justifyContent="flex-end" mb={3}>
+        <Button
+          startIcon={<PrintOutlined />}
+          onClick={handlePrint}
+          variant="outlined"
+        >
+          Imprimir
+        </Button>
+      </Box>
 
-     <BudgetContent 
-       ref={componentRef}
-       budget={budget}
-       isPrintMode={isPrintMode}
-     />
+      <BudgetContent 
+        ref={componentRef}
+        budget={budget}
+        isPrintMode={isPrintMode}
+      />
 
       <style>
         {`
