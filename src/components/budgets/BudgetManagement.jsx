@@ -66,37 +66,37 @@ const BudgetManagement = ({
       setError(null);
       
       try {
+        console.log('Loading budget data for ID:', id);
         const result = await fetchBudgetById(id);
-        if (!result.success) {
-          throw new Error(result.error || 'Error al cargar el presupuesto');
-        }
-
+        console.log('Budget data loaded:', result.data);
+  
         setLocalBudget(result.data);
-
+  
+        // Verificar si hay treatmentPlan
+        console.log('TreatmentPlan ID:', result.data.treatmentPlan);
+  
         if (result.data.treatmentPlan) {
           try {
+            console.log('Fetching treatment plan:', result.data.treatmentPlan);
             const treatmentData = await patientTreatmentService.getById(result.data.treatmentPlan);
+            console.log('Treatment data loaded:', treatmentData);
             setTreatmentDetails(treatmentData);
           } catch (treatmentError) {
             console.error('Error loading treatment:', treatmentError);
           }
+        } else {
+          console.log('No treatment plan associated with this budget');
         }
-
-        try {
-          await fetchPaymentSummary(id);
-        } catch (paymentError) {
-          console.error('Error loading payments:', paymentError);
-        }
-
+  
       } catch (err) {
         setError(err.message || 'Error al cargar datos');
       } finally {
         setLoading(false);
       }
     };
-
+  
     loadData();
-  }, [id]); // Solo depender del id
+  }, [id]);
 
 
   const handleTabChange = (event, newValue) => {

@@ -24,12 +24,14 @@ export function  usePatientTreatments  ()  {
     try {
       setLoading(true);
       const data = await patientTreatmentService.getByPatientId(id);
-      setPatientTreatments(data);
+      setPatientTreatments(data || []); // Asegurar que siempre tengamos un array
       setLoading(false);
+      return data || []; // Retornar array vacío si no hay datos
     } catch (error) {
       setError(error.message);
       setLoading(false);
       toast.error('Error al obtener los tratamientos del paciente');
+      return []; // Retornar array vacío en caso de error
     }
   };
 /*

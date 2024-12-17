@@ -44,27 +44,56 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
+  
     const loadTreatments = async () => {
-      if (!patientId || !budget?._id) return;
-
+      if (!patientId || !budget?._id) {
+        console.log('Missing data:', { patientId, budgetId: budget?._id });
+        return;
+      }
+    
       try {
-        await getPatientTreatmentsByPatientId(patientId);
-        // La búsqueda del tratamiento actual se hará cuando se actualice patientTreatments
+        console.log('Loading treatments for patient:', patientId);
+        const treatments = await getPatientTreatmentsByPatientId(patientId);
+    
+        if (!isMounted) return;
+    
+        if (treatments?.length > 0) {
+          console.log('Budget to find:', budget._id);
+          console.log('Available treatments with budgets:', treatments.map(t => ({
+            treatmentId: t.id,
+            budgetId: t.budget?._id || t.budget
+          })));
+    
+          // Buscar el tratamiento por su referencia al presupuesto
+          const treatment = treatments.find(t => {
+            const treatmentBudgetId = t.budget?.toString() || t.budget;
+            const currentBudgetId = budget._id?.toString();
+            console.log('Comparing:', { treatmentBudgetId, currentBudgetId });
+            return treatmentBudgetId === currentBudgetId;
+          });
+    
+          if (treatment) {
+            console.log('Found treatment:', treatment);
+            setCurrentTreatment(treatment);
+          } else {
+            console.log('No matching treatment found');
+          }
+        }
       } catch (error) {
         console.error('Error loading treatments:', error);
       }
     };
-
+  
     loadTreatments();
+  
+    return () => {
+      isMounted = false;
+    };
   }, [patientId, budget?._id]);
 
-  useEffect(() => {
-    if (patientTreatments.length > 0 && budget?._id) {
-      const treatment = patientTreatments.find(t => t.budget?._id === budget._id);
-      setCurrentTreatment(treatment || null);
-    }
-  }, [patientTreatments, budget?._id]);
 
+  // Segundo useEffect para manejar treatmentDetails
   useEffect(() => {
     if (treatmentDetails) {
       setCurrentTreatment(treatmentDetails);
@@ -240,7 +269,19 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
           </Box>
         </Paper>
       ) : (
-        <Typography>No se encontró la planificación asociada</Typography>
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+          <Typography gutterBottom>
+            Este presupuesto no tiene una planificación asociada.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate('/planificacion/nueva')}
+            sx={{ mt: 2 }}
+          >
+            Crear Nueva Planificación
+          </Button>
+        </Box>
       )}
     </Container>
   );
