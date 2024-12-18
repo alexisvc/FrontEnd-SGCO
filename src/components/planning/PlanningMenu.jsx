@@ -19,10 +19,10 @@ const PlanningMenu = () => {
 
   const menuItems = [
     {
-      to: "/planificacion/pacientes",
+      to: "/planificacion/lista",
       icon: <PersonIcon sx={{ fontSize: 40 }} />,
-      text: "Pacientes",
-      description: "Gestionar planificaciones por paciente"
+      text: "Pacientes/Planificaciones",
+      description: "Ver planificaciones y presupuestos"
     },
     {
       to: "/presupuestos",

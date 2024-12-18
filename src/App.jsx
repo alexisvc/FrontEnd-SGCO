@@ -44,6 +44,7 @@ import PlanningPatientList from "./components/planning/PlanningPatientDetails";
 import TreatmentPlans from "./components/planning/TreatmentPlans";
 import AllTreatmentPlans from "./components/planning/AllTreatmentPlans";
 import CreatePlanningForm from "./components/planning/CreatePlanningForm";
+import PlanningList from "./components/planning/PlanningList";
 
 // Componentes de presupuestos
 import BudgetList from "./components/budgets/BudgetList";
@@ -72,9 +73,13 @@ function App() {
   } = usePatients();
   const {
     patientTreatments,
+    loading: treatmentsLoading,  // Renombramos para evitar conflicto
+    error: treatmentsError,      // Renombramos para evitar conflicto
+    getAllPatientTreatments,
     createPatientTreatment,
     updatePatientTreatment,
     getPatientTreatmentsByPatientId,
+    deletePatientTreatment      // Agregamos esta función
   } = usePatientTreatments();
   const {
     evolutionCharts,
@@ -364,7 +369,10 @@ function App() {
               path="/planificacion/pacientes"
               element={<PlanningPatientList />}
             />
-
+<Route
+  path="/planificacion"
+  element={<PlanningMenu />}
+/>
 <Route
   path="/planificacion/nueva"
   element={
@@ -373,6 +381,21 @@ function App() {
         onSubmit={createPatientTreatment}
         fetchPatientByCedula={fetchPatientByCedula}
         fetchPatientByName={fetchPatientByName}
+      />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
+
+<Route
+  path="/planificacion/lista"
+  element={
+    isLoggedIn ? (
+      <PlanningList
+        patientTreatments={patientTreatments}
+        getAllPatientTreatments={fetchPatients} // Cambiamos esta función
+        deletePatientTreatment={deletePatientTreatment}
       />
     ) : (
       <Navigate to="/" />

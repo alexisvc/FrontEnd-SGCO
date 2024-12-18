@@ -24,10 +24,11 @@ const getByPatientId = async (patientId) => {
 // Obtener un tratamiento específico
 const getById = async (id) => {
   try {
+    console.log('Service - Fetching treatment:', id);
     const response = await axios.get(`${baseUrl}/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching treatment:', error);
+    console.error('Service - Error fetching treatment:', error);
     throw error;
   }
 };

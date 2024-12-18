@@ -24,8 +24,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { ArrowBack } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+import patientTreatmentService from '../../services/patientTreatmentService';
 
-const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
+
+const CreatePlanningForm = ({ 
+  mode = 'create', 
+  onSubmit, 
+  fetchPatientByCedula,
+  fetchPatientByName  
+}) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
@@ -62,7 +69,10 @@ const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
       const loadTreatment = async () => {
         setLoading(true);
         try {
+          // Asegurarse de que patientTreatmentService esté importado
           const treatment = await patientTreatmentService.getById(id);
+          console.log('Loaded treatment:', treatment); // Para debug
+          
           setFormData({
             especialidad: treatment.especialidad,
             actividades: treatment.actividades.map(act => ({
@@ -76,8 +86,9 @@ const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
           
           setSelectedPatient(treatment.paciente);
         } catch (error) {
+          console.error('Error loading treatment:', error);
           toast.error('Error al cargar la planificación');
-          navigate('/planificacion');
+          navigate('/planificacion/lista');
         } finally {
           setLoading(false);
         }
@@ -85,25 +96,6 @@ const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
       loadTreatment();
     }
   }, [mode, id, navigate]);
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    try {
-      let result;
-      if (searchType === "cedula") {
-        result = await fetchPatientByCedula(searchQuery);
-      } else {
-        result = await fetchPatientByName(searchQuery);
-      }
-      
-      if (result.success) {
-        setPatients(Array.isArray(result.data) ? result.data : [result.data]);
-        setSearched(true);
-      }
-    } catch (error) {
-      toast.error("Error al buscar el paciente");
-    }
-  };
 
   const addActivity = () => {
     setFormData(prev => ({
@@ -148,7 +140,7 @@ const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
     }
 
     const treatmentData = {
-      paciente: selectedPatient._id,
+      paciente: selectedPatient.id || selectedPatient._id,
       especialidad: formData.especialidad,
       actividades: formData.actividades.map(act => ({
         ...act,
@@ -159,6 +151,7 @@ const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
     };
 
     try {
+      console.log('Enviando datos:', treatmentData); // Para debug
       if (mode === 'edit') {
         await onSubmit(id, treatmentData);
       } else {
@@ -246,13 +239,15 @@ const CreatePlanningForm = ({ mode = 'create', onSubmit }) => {
                         <TableCell>{patient.nombrePaciente}</TableCell>
                         <TableCell>{patient.numeroCedula}</TableCell>
                         <TableCell>
-                          <Button
-                            variant="outlined"
-                            size="small"
-                            onClick={() => setSelectedPatient(patient)}
-                          >
-                            Seleccionar
-                          </Button>
+                        <Button
+  variant="outlined"
+  onClick={() => {
+    setSelectedPatient(patient);
+    console.log('Paciente seleccionado:', patient); // Para debug
+  }}
+>
+  Seleccionar
+</Button>
                         </TableCell>
                       </TableRow>
                     ))}

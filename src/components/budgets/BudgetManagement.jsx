@@ -146,44 +146,45 @@ const BudgetManagement = ({
 
             {treatmentDetails && (
               <Typography variant="subtitle1" color="text.secondary">
-                Planificación: {treatmentDetails.especialidad} - 
-                {treatmentDetails.actividades.length} actividades
+                Planificación: {treatmentDetails.especialidad}
               </Typography>
             )}
-            <Typography variant="subtitle1" color="text.secondary">
-              Fecha: {new Date(localBudget.fecha).toLocaleDateString()}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              Especialidad: {localBudget.especialidad}
-            </Typography>
+            
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 3 }}>
+              <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab label="Planificación" {...a11yProps(0)} />
+                <Tab label="Presupuesto" {...a11yProps(1)} />
+                <Tab label="Pagos" {...a11yProps(2)} />
+              </Tabs>
+            </Box>
+
+            <CustomTabPanel value={tabValue} index={0}>
+              <PlanningDetails
+                budget={localBudget}
+                treatmentDetails={treatmentDetails}
+              />
+            </CustomTabPanel>
+
+            <CustomTabPanel value={tabValue} index={1}>
+              <BudgetDetails
+                budget={localBudget}
+                treatmentDetails={treatmentDetails}
+              />
+            </CustomTabPanel>
+
+            <CustomTabPanel value={tabValue} index={2}>
+              <PaymentDetails
+                budget={localBudget}
+                paymentSummary={paymentSummary}
+                registerPayment={registerPayment}
+                cancelPayment={cancelPayment}
+                formatters={formatters}
+                helpers={helpers}
+                treatmentDetails={treatmentDetails}
+                fetchPaymentSummary={fetchPaymentSummary}
+              />
+            </CustomTabPanel>
           </Box>
-
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={tabValue} onChange={handleTabChange}>
-              <Tab label="Detalles" {...a11yProps(0)} />
-              <Tab label="Pagos" {...a11yProps(1)} />
-            </Tabs>
-          </Box>
-
-          <CustomTabPanel value={tabValue} index={0}>
-            <BudgetDetails
-              budget={localBudget}
-              treatmentDetails={treatmentDetails}
-            />
-          </CustomTabPanel>
-
-          <CustomTabPanel value={tabValue} index={1}>
-            <PaymentDetails
-              budget={localBudget}
-              paymentSummary={paymentSummary}
-              registerPayment={registerPayment}
-              cancelPayment={cancelPayment}
-              formatters={formatters}
-              helpers={helpers}
-              treatmentDetails={treatmentDetails}
-              fetchPaymentSummary={fetchPaymentSummary}
-            />
-          </CustomTabPanel>
         </Paper>
       </Container>
     </div>
