@@ -36,7 +36,7 @@ import {
 import { toast } from 'react-toastify';
 import budgetService from '../../services/budgetService';
 
-const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = false }) => {
+const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatient, isPatientView = false }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('cedula');
@@ -47,13 +47,24 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, isPatientView = fal
   useEffect(() => {
     const loadBudgets = async () => {
       try {
-        await fetchBudgets();
+        if (isPatientView) {
+          // Si estamos en la vista de paciente, extraemos el ID de la URL
+          const pathParts = window.location.pathname.split('/');
+          const patientId = pathParts[2]; // Asumiendo que la ruta es /patients/:patientId/presupuestos
+          if (patientId) {
+            console.log('Cargando presupuestos para paciente:', patientId);
+            await fetchBudgetsByPatient(patientId);
+          }
+        } else {
+          await fetchBudgets();
+        }
       } catch (error) {
+        console.error('Error al cargar presupuestos:', error);
         toast.error('Error al cargar los presupuestos');
       }
     };
     loadBudgets();
-  }, [fetchBudgets]);
+  }, [fetchBudgets, fetchBudgetsByPatient, isPatientView]);
 
   useEffect(() => {
     if (budgets) {

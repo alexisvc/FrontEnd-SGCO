@@ -14,6 +14,7 @@ import { ArrowBack } from '@mui/icons-material';
 import BudgetDetails from './BudgetDetails';
 import PaymentDetails from './PaymentDetails';
 import patientTreatmentService from '../../services/patientTreatmentService';
+import PlanningDetails from './PlanningDetails';  
 
 function CustomTabPanel({ children, value, index }) {
   return (

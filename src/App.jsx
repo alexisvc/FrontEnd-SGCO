@@ -330,21 +330,22 @@ function App() {
 
       {/* Vista de presupuestos por paciente */}
       <Route
-        path="/patients/:patientId/presupuestos"
-        element={
-          isLoggedIn ? (
-            <BudgetList 
-              budgets={budgets}
-              fetchBudgets={fetchBudgetsByPatient}
-              loading={loading}
-              error={error}
-              isPatientView={true}
-            />
-          ) : (
-            <Navigate to="/" />
-          )
-        }
+  path="/patients/:patientId/presupuestos"
+  element={
+    isLoggedIn ? (
+      <BudgetList 
+        budgets={budgets}
+        fetchBudgets={fetchBudgets}
+        fetchBudgetsByPatient={fetchBudgetsByPatient}
+        loading={loading}
+        error={error}
+        isPatientView={true}
       />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
 
 <Route
   path="/reportes-financieros"
@@ -381,6 +382,7 @@ function App() {
         onSubmit={createPatientTreatment}
         fetchPatientByCedula={fetchPatientByCedula}
         fetchPatientByName={fetchPatientByName}
+        treatmentPlan={null}
       />
     ) : (
       <Navigate to="/" />
@@ -392,11 +394,7 @@ function App() {
   path="/planificacion/lista"
   element={
     isLoggedIn ? (
-      <PlanningList
-        patientTreatments={patientTreatments}
-        getAllPatientTreatments={fetchPatients} // Cambiamos esta función
-        deletePatientTreatment={deletePatientTreatment}
-      />
+      <PlanningList />  // Eliminar todas las props
     ) : (
       <Navigate to="/" />
     )

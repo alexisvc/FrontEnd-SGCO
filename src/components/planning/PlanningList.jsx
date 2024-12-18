@@ -13,7 +13,8 @@ import {
   Container,
   Box,
   IconButton,
-  Chip
+  Chip,
+  CircularProgress
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -24,33 +25,51 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import usePatientTreatments from '../../hooks/usePatientTreatments'; // Asegúrate de que la ruta sea correcta
 
-const PlanningList = ({ 
-  patientTreatments, 
-  getAllPatientTreatments,
-  deleteTreatment 
-}) => {
+
+const PlanningList = () => { // Eliminamos las props
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { 
+    patientTreatments, 
+    getAllPatientTreatments, 
+    deletePatientTreatment // Cambiamos a la función del hook
+  } = usePatientTreatments();
 
   useEffect(() => {
-    const loadTreatments = async () => {
+    const loadData = async () => {
       try {
         await getAllPatientTreatments();
-        console.log('Planificaciones cargadas:', patientTreatments); // Para debug
       } catch (error) {
-        console.error('Error loading treatments:', error);
+        console.error('PlanningList - Error loading data:', error);
         toast.error('Error al cargar las planificaciones');
+      } finally {
+        setLoading(false);
       }
     };
-    
-    loadTreatments();
-  }, [getAllPatientTreatments]);  // Dependencia importante
+
+    loadData();
+  }, [getAllPatientTreatments]);
+
+  // En PlanningList.jsx, antes del return:
+useEffect(() => {
+  console.log('Treatment structure:', patientTreatments[0]);
+}, [patientTreatments]);
+
+useEffect(() => {
+  if (patientTreatments && patientTreatments.length > 0) {
+    console.log('Todos los treatments:', patientTreatments);
+    console.log('Primer treatment:', patientTreatments[0]);
+    console.log('Paciente del primer treatment:', patientTreatments[0]?.paciente);
+  }
+}, [patientTreatments]);
 
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de eliminar esta planificación?')) {
       try {
-        await deleteTreatment(id);
+        await deletePatientTreatment(id);
+        await getAllPatientTreatments();
         toast.success('Planificación eliminada exitosamente');
       } catch (error) {
         toast.error('Error al eliminar la planificación');
@@ -58,7 +77,29 @@ const PlanningList = ({
     }
   };
 
-  if (loading) return <Typography align="center">Cargando...</Typography>;
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+
+  if (!patientTreatments || patientTreatments.length === 0) {
+    return (
+      <Box textAlign="center" p={3}>
+        <Typography>No hay planificaciones disponibles</Typography>
+        <Button
+          variant="contained"
+          onClick={() => navigate('/planificacion/nueva')}
+          sx={{ mt: 2 }}
+        >
+          Crear Nueva Planificación
+        </Button>
+      </Box>
+    );
+  }
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
@@ -102,7 +143,8 @@ const PlanningList = ({
             </TableHead>
             <TableBody>
               {patientTreatments.map((treatment) => (
-                <TableRow key={treatment.id}>
+                
+                <TableRow key={treatment._id}>
                   <TableCell>{treatment.paciente.nombrePaciente}</TableCell>
                   <TableCell>{treatment.especialidad}</TableCell>
                   <TableCell>
@@ -119,20 +161,29 @@ const PlanningList = ({
                     />
                   </TableCell>
                   <TableCell align="center">
-                    <IconButton 
-                      onClick={() => navigate(`/presupuestos/paciente/${treatment.paciente._id}`)}
-                      title="Ver presupuestos"
-                    >
-                      <ViewIcon />
-                    </IconButton>
+                  <IconButton 
+  onClick={() => {
+    console.log('Treatment completo:', treatment);
+    console.log('Paciente:', treatment.paciente);
+    console.log('Paciente ID:', treatment.paciente?.id);
+    if (treatment.paciente?.id) {
+      navigate(`/patients/${treatment.paciente.id}/presupuestos`), {state: { isPatientView: true }};
+    } else {
+      toast.error('No se pudo obtener el ID del paciente');
+    }
+  }}
+  title="Ver presupuestos"
+>
+  <ViewIcon />
+</IconButton>
                     <IconButton
-                      onClick={() => navigate(`/planificacion/editar/${treatment.id}`)}
+                      onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}
                       title="Editar"
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
-                      onClick={() => handleDelete(treatment.id)}
+                      onClick={() => handleDelete(treatment._id)}
                       title="Eliminar"
                       color="error"
                     >

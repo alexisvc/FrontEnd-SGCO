@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import patientTreatmentService from '../services/patientTreatmentService';
 import { toast } from 'react-toastify';
 
@@ -7,23 +7,26 @@ export function  usePatientTreatments  ()  {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getAllPatientTreatments = async () => {
+
+  const getAllPatientTreatments = useCallback(async () => {
     try {
       setLoading(true);
-      console.log('Fetching all treatments'); // Para debug
+      setError(null);
       const data = await patientTreatmentService.getAll();
-      console.log('Treatments received:', data); // Para debug
-      setPatientTreatments(data);
-      setLoading(false);
-      return data;
+      if (Array.isArray(data)) {
+        setPatientTreatments(data);
+      } else {
+        console.error('Los datos recibidos no son un array:', data);
+        setPatientTreatments([]);
+      }
     } catch (error) {
-      console.error('Error fetching treatments:', error);
+      console.error('Hook - Error getting treatments:', error);
       setError(error.message);
-      setLoading(false);
-      toast.error('Error al obtener los tratamientos');
       throw error;
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
   const getPatientTreatmentsByPatientId = async (id) => {
     try {

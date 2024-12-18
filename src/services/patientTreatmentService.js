@@ -4,8 +4,15 @@ const baseUrl = 'http://localhost:3001/api/treatment-plans';
 
 // Obtener todos los tratamientos
 const getAll = async () => {
-  const response = await axios.get(baseUrl);
-  return response.data;
+  try {
+    console.log('Solicitando planificaciones al servidor');
+    const response = await axios.get(baseUrl);
+    console.log('Datos recibidos del servidor:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error en getAll:', error.response || error);
+    throw error;
+  }
 };
 
 // Obtener tratamientos por paciente
@@ -24,7 +31,9 @@ const getByPatientId = async (patientId) => {
 // Obtener un tratamiento específico
 const getById = async (id) => {
   try {
-    console.log('Service - Fetching treatment:', id);
+    console.log('Service - Fetching treatment with ID:', id);
+    if (!id) throw new Error('ID no proporcionado');
+    
     const response = await axios.get(`${baseUrl}/${id}`);
     return response.data;
   } catch (error) {

@@ -40,10 +40,18 @@ const getBudgetById = async (id) => {
   }
 };
 
-const getBudgetsByPatient = (patientId) => {
-  //return axios.get(`${baseUrl}/paciente/${patientId}`).then((response) => response.data);
-  const response = axios.get(`${baseUrl}/paciente/${patientId}`);
-  return response.data;
+const getBudgetsByPatient = async (patientId) => {
+  try {
+    if (!patientId) {
+      throw new Error('ID de paciente no proporcionado');
+    }
+    console.log('Obteniendo presupuestos para el paciente:', patientId);
+    const response = await axios.get(`${baseUrl}/paciente/${patientId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting budgets by patient:', error);
+    throw error;
+  }
 };
 
 const createBudget = (newBudget) => {

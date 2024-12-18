@@ -26,10 +26,13 @@ export function useBudgets() {
       return handleError(err);
     }
   }, [handleError]);
+  
 
   const fetchBudgetsByPatient = useCallback(async (patientId) => {
     try {
       setLoading(true);
+      setError(null);
+      console.log('Fetching budgets for patient:', patientId);
       const data = await budgetService.getBudgetsByPatient(patientId);
       setBudgets(data);
       setLoading(false);

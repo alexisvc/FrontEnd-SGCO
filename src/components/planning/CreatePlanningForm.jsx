@@ -31,7 +31,8 @@ const CreatePlanningForm = ({
   mode = 'create', 
   onSubmit, 
   fetchPatientByCedula,
-  fetchPatientByName  
+  fetchPatientByName,
+  treatmentPlan = null  
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -64,38 +65,66 @@ const CreatePlanningForm = ({
     'Odontopediatría'
   ];
 
-  useEffect(() => {
-    if (mode === 'edit' && id) {
-      const loadTreatment = async () => {
-        setLoading(true);
-        try {
-          // Asegurarse de que patientTreatmentService esté importado
-          const treatment = await patientTreatmentService.getById(id);
-          console.log('Loaded treatment:', treatment); // Para debug
-          
-          setFormData({
-            especialidad: treatment.especialidad,
-            actividades: treatment.actividades.map(act => ({
-              cita: act.cita,
-              actividadPlanTrat: act.actividadPlanTrat,
-              fechaPlanTrat: act.fechaPlanTrat.split('T')[0],
-              montoAbono: act.montoAbono || '',
-              estado: act.estado || 'pendiente'
-            }))
-          });
-          
-          setSelectedPatient(treatment.paciente);
-        } catch (error) {
-          console.error('Error loading treatment:', error);
-          toast.error('Error al cargar la planificación');
-          navigate('/planificacion/lista');
-        } finally {
-          setLoading(false);
-        }
-      };
-      loadTreatment();
+  // Agregar la función handleSearch justo después de las declaraciones de estado
+const handleSearch = async () => {
+  try {
+    let result;
+    console.log('Buscando paciente:', { tipo: searchType, query: searchQuery });
+    
+    if (searchType === "cedula") {
+      result = await fetchPatientByCedula(searchQuery);
+    } else {
+      result = await fetchPatientByName(searchQuery);
     }
-  }, [mode, id, navigate]);
+
+    if (result.success) {
+      setPatients(Array.isArray(result.data) ? result.data : [result.data]);
+      setSearched(true);
+    } else {
+      toast.error(result.error || "No se encontró el paciente");
+    }
+  } catch (error) {
+    console.error('Error en búsqueda:', error);
+    toast.error("Error al buscar el paciente");
+  }
+};
+
+useEffect(() => {
+  if (mode === 'edit' && id) {
+    const loadTreatment = async () => {
+      setLoading(true);
+      try {
+        console.log('Loading treatment with ID:', id); // Debug
+        const treatment = await patientTreatmentService.getById(id);
+        
+        if (!treatment) {
+          throw new Error('No se encontró la planificación');
+        }
+
+        setFormData({
+          especialidad: treatment.especialidad,
+          actividades: treatment.actividades.map(act => ({
+            cita: act.cita,
+            actividadPlanTrat: act.actividadPlanTrat,
+            fechaPlanTrat: act.fechaPlanTrat.split('T')[0],
+            montoAbono: act.montoAbono || '',
+            estado: act.estado || 'pendiente'
+          }))
+        });
+        
+        setSelectedPatient(treatment.paciente);
+      } catch (error) {
+        console.error('Error loading treatment:', error);
+        toast.error('Error al cargar la planificación');
+        navigate('/planificacion/lista');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTreatment();
+  }
+}, [mode, id, navigate]);
 
   const addActivity = () => {
     setFormData(prev => ({
@@ -150,6 +179,8 @@ const CreatePlanningForm = ({
       }))
     };
 
+    
+
     try {
       console.log('Enviando datos:', treatmentData); // Para debug
       if (mode === 'edit') {
@@ -186,77 +217,98 @@ const CreatePlanningForm = ({
         </Typography>
   
         {/* Búsqueda de Paciente */}
-        {mode === 'create' && (
-          <Box component={Paper} sx={{ p: 2, mb: 3 }}>
-            <Typography variant="h6" gutterBottom>Buscar Paciente</Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <FormControl fullWidth>
-                  <InputLabel>Tipo de Búsqueda</InputLabel>
-                  <Select
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                    label="Tipo de Búsqueda"
+        {mode === 'create' && !treatmentPlan && (
+  <Box component={Paper} sx={{ p: 2, mb: 3 }}>
+    <Box component="form" onSubmit={(e) => {
+      e.preventDefault();
+      handleSearch();
+    }}>
+      <Typography variant="h6" gutterBottom>Buscar Paciente</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth>
+            <InputLabel>Tipo de Búsqueda</InputLabel>
+            <Select
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+              label="Tipo de Búsqueda"
+            >
+              <MenuItem value="cedula">Cédula</MenuItem>
+              <MenuItem value="nombre">Nombre</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <TextField
+            fullWidth
+            label={searchType === "cedula" ? "Cédula" : "Nombre"}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+          >
+            Buscar
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
+
+    {/* Resultados de búsqueda */}
+    {searched && patients.length > 0 && (
+      <TableContainer sx={{ mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Cédula</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {patients.map((patient) => (
+              <TableRow key={patient.id}>
+                <TableCell>{patient.nombrePaciente}</TableCell>
+                <TableCell>{patient.numeroCedula}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      setSelectedPatient(patient);
+                      setFormData(prev => ({
+                        ...prev,
+                        paciente: patient._id || patient.id
+                      }));
+                      console.log('Paciente seleccionado:', patient);
+                    }}
                   >
-                    <MenuItem value="cedula">Cédula</MenuItem>
-                    <MenuItem value="nombre">Nombre</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  fullWidth
-                  label={searchType === "cedula" ? "Cédula" : "Nombre"}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={handleSearch}
-                >
-                  Buscar
-                </Button>
-              </Grid>
-            </Grid>
-  
-            {/* Resultados de búsqueda */}
-            {searched && patients.length > 0 && (
-              <TableContainer sx={{ mt: 2 }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Nombre</TableCell>
-                      <TableCell>Cédula</TableCell>
-                      <TableCell>Acciones</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {patients.map((patient) => (
-                      <TableRow key={patient._id}>
-                        <TableCell>{patient.nombrePaciente}</TableCell>
-                        <TableCell>{patient.numeroCedula}</TableCell>
-                        <TableCell>
-                        <Button
-  variant="outlined"
-  onClick={() => {
-    setSelectedPatient(patient);
-    console.log('Paciente seleccionado:', patient); // Para debug
-  }}
->
-  Seleccionar
-</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </Box>
-        )}
+                    Seleccionar
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+
+    {/* Mostrar paciente seleccionado */}
+    {selectedPatient && (
+      <Box mt={2} p={2} sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
+        <Typography variant="subtitle1">
+          <strong>Paciente seleccionado:</strong> {selectedPatient.nombrePaciente}
+        </Typography>
+        <Typography variant="subtitle1">
+          <strong>Cédula:</strong> {selectedPatient.numeroCedula}
+        </Typography>
+      </Box>
+    )}
+  </Box>
+)}
   
         {/* Formulario de Planificación */}
         <form onSubmit={handleSubmit}>
