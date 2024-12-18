@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../patients/Patients.css";
-import { usePatients } from "../../hooks/usePatients";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -20,227 +18,157 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem,
-} from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import SearchIcon from "@mui/icons-material/Search";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { toast } from "react-toastify";
+  MenuItem
+} from '@mui/material';
+import {
+  ArrowBack as ArrowBackIcon,
+  Search as SearchIcon,
+  Visibility as VisibilityIcon
+} from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
-const PlanningPatientList = () => {
-  const { patients, fetchPatients, fetchPatientByCedula, fetchPatientByName, setPatient } = usePatients();
-
-  useEffect(() => {
-    fetchPatients(); // Cargar la lista de pacientes al inicio
-  }, []);
-
+const PlanningPatientList = ({ patients, fetchPatients, fetchPatientByCedula, fetchPatientByName }) => {
   const navigate = useNavigate();
-
   const [showSearchForm, setShowSearchForm] = useState(false);
   const [searchType, setSearchType] = useState("cedula");
-  const [searchName, setSearchName] = useState("");
-  const [searchCedula, setSearchCedula] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearchNameChange = (e) => {
-    setSearchName(e.target.value);
-  };
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
 
-  const handleSearchCedulaChange = (e) => {
-    setSearchCedula(e.target.value);
-  };
-
-  const handleSearchSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    if (searchType === "name" && searchName) {
-      try {
-        await fetchPatientByName(searchName);
-        toast.success("Paciente encontrado exitosamente", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      } catch (error) {
-        toast.error("Error al buscar el paciente.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
-      setSearchName("");
-    } else if (searchType === "cedula" && searchCedula) {
-      try {
-        await fetchPatientByCedula(searchCedula);
-        toast.success("Paciente encontrado exitosamente", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      } catch (error) {
-        toast.error("Error al buscar el paciente.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
-      setSearchCedula("");
+    if (!searchQuery.trim()) {
+      await fetchPatients();
+      return;
     }
+
+    try {
+      const result = searchType === "name" ? 
+        await fetchPatientByName(searchQuery) : 
+        await fetchPatientByCedula(searchQuery);
+
+      if (result.success) {
+        toast.success("Paciente encontrado");
+      }
+    } catch (error) {
+      toast.error("Error al buscar el paciente");
+    }
+  };
+
+  const handleReset = () => {
+    setSearchQuery("");
+    setSearchType("cedula");
+    fetchPatients();
   };
 
   const handleViewPatient = (patient) => {
     navigate(`/treatment-plans/${patient.id || patient._id}`, { state: { patient } });
-    state: { patient }
-    setShowSearchForm(false);
-  };
-
-  const handleReset = () => {
-    setSearchCedula(""); // Restablecer los valores de búsqueda
-    setSearchName("");
-    setPatient(null); // Quitar cualquier paciente seleccionado
-    setShowSearchForm(false); // Ocultar el formulario de búsqueda
-    fetchPatients(); // Recargar la lista de pacientes
   };
 
   return (
-    <div className="Patients">
+    <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/planificacion")}
-        sx={{ m: 2 }}
+        sx={{ mb: 2 }}
       >
         Atrás
       </Button>
+
       <Container>
-        <Typography variant="h4" align="center" gutterBottom sx={{ marginBottom: 4 }}>
-          Pacientes
+        <Typography variant="h4" align="center" gutterBottom sx={{ mb: 4 }}>
+          Pacientes - Planificación
         </Typography>
-      </Container>
-      <Container>
-        <Grid container spacing={2} justifyContent="center" sx={{ marginBottom: 4 }}>
-          <Grid item>
-            <Button
-              variant="outlined"
-              startIcon={<SearchIcon />}
-              onClick={() => {
-                setShowSearchForm(!showSearchForm);
-                setSearchCedula("");
-                setSearchName("");
-                setPatient(null);
-                fetchPatients();
-              }}
-            >
-              {showSearchForm ? "Ocultar Buscar Paciente" : "Buscar Paciente"}
-            </Button>
-          </Grid>
-        </Grid>
-      </Container>
 
-      {/* Formulario de búsqueda */}
-      {showSearchForm && (
-        <Box component="form" onSubmit={handleSearchSubmit} sx={{ mt: 2, mb: 4 }}>
-          <Container component={Paper} sx={{ py: 1 }}>
-            <Typography variant="h6" align="center" gutterBottom sx={{ marginBottom: 4 }}>
-              Buscar Paciente
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Tipo de Búsqueda</InputLabel>
-                  <Select
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                    label="Tipo de Búsqueda"
-                  >
-                    <MenuItem value="cedula">Cédula</MenuItem>
-                    <MenuItem value="name">Nombre</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              {searchType === "cedula" ? (
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    label="Ingrese Número de Cédula del paciente"
-                    value={searchCedula}
-                    onChange={handleSearchCedulaChange}
-                  />
-                </Grid>
-              ) : (
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    label="Ingrese Nombre del paciente"
-                    value={searchName}
-                    onChange={handleSearchNameChange}
-                  />
-                </Grid>
-              )}
-              <Grid item xs={12} container justifyContent="center" gap={4}>
-                <Grid item xs={2}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    sx={{ m: 2 }}
-                    startIcon={<SearchIcon />}
-                    fullWidth
-                  >
-                    Buscar
-                  </Button>
-                </Grid>
-                <Grid item xs={2}>
-                  <Button variant="contained" color="secondary" sx={{ m: 2 }} fullWidth onClick={handleReset}>
-                    Restablecer
-                  </Button>
-                </Grid>
-              </Grid>
+        <Paper sx={{ p: 3, mb: 3 }}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={4}>
+              <FormControl fullWidth>
+                <InputLabel>Tipo de Búsqueda</InputLabel>
+                <Select
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value)}
+                  label="Tipo de Búsqueda"
+                >
+                  <MenuItem value="cedula">Cédula</MenuItem>
+                  <MenuItem value="name">Nombre</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
-          </Container>
-        </Box>
-      )}
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label={searchType === "cedula" ? "Ingrese cédula" : "Ingrese nombre"}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleSearch}
+                startIcon={<SearchIcon />}
+              >
+                Buscar
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={handleReset}
+              >
+                Restablecer
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
 
-      {/* Lista de pacientes */}
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center"><Typography variant="h6">Nombre</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Edad</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Fecha de Nacimiento</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Correo</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Dirección</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Género</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Número de Cédula</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Ocupación</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Teléfono</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Tel. Emergencia</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Afinidad Emergencia</Typography></TableCell>
-              <TableCell align="center"><Typography variant="h6">Planificación</Typography></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {patients.map((patient) => (
-              <TableRow key={patient.id}>
-                <TableCell align="center">{patient.nombrePaciente}</TableCell>
-                <TableCell align="center">{patient.edadPaciente}</TableCell>
-                <TableCell align="center">{patient.fechaNacimiento.split("T")[0]}</TableCell>
-                <TableCell align="center">{patient.correoPaciente}</TableCell>
-                <TableCell align="center">{patient.direccionPaciente}</TableCell>
-                <TableCell align="center">{patient.generoPaciente}</TableCell>
-                <TableCell align="center">{patient.numeroCedula}</TableCell>
-                <TableCell align="center">{patient.ocupacion}</TableCell>
-                <TableCell align="center">{patient.telefono}</TableCell>
-                <TableCell align="center">{patient.telContactoEmergencia}</TableCell>
-                <TableCell align="center">{patient.afinidadContactoEmergencia}</TableCell>
-                <TableCell align="center">
-                  <IconButton onClick={() => handleViewPatient(patient)}>
-                    <VisibilityIcon />
-                  </IconButton>
-                  Ver
-                </TableCell>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Cédula</TableCell>
+                <TableCell>Correo</TableCell>
+                <TableCell>Teléfono</TableCell>
+                <TableCell align="center">Planificación</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {patients.map((patient) => (
+                <TableRow key={patient.id || patient._id}>
+                  <TableCell>{patient.nombrePaciente}</TableCell>
+                  <TableCell>{patient.numeroCedula}</TableCell>
+                  <TableCell>{patient.correoPaciente}</TableCell>
+                  <TableCell>{patient.telefono}</TableCell>
+                  <TableCell align="center">
+                    <IconButton 
+                      onClick={() => handleViewPatient(patient)}
+                      color="primary"
+                      title="Ver planificaciones"
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {patients.length === 0 && (
+          <Box textAlign="center" mt={3}>
+            <Typography variant="subtitle1" color="text.secondary">
+              No se encontraron pacientes
+            </Typography>
+          </Box>
+        )}
+      </Container>
     </div>
   );
 };
