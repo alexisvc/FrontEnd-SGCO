@@ -18,7 +18,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  CircularProgress
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@mui/material';
 import { useNavigate, useParams } from "react-router-dom";
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
@@ -54,6 +59,9 @@ const CreatePlanningForm = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [searched, setSearched] = useState(false);
   const [patients, setPatients] = useState([]);
+
+  const [showDialog, setShowDialog] = useState(false);
+  const [createdTreatmentId, setCreatedTreatmentId] = useState(null);
 
   const especialidades = [
     'Odontología General',
@@ -158,16 +166,8 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!selectedPatient) {
-      toast.error('Debe seleccionar un paciente');
-      return;
-    }
-
-    if (!formData.especialidad || formData.actividades.length === 0) {
-      toast.error('Todos los campos son requeridos');
-      return;
-    }
-
+    if (!selectedPatient || !formData.especialidad) return toast.error('Campos requeridos incompletos');
+  
     const treatmentData = {
       paciente: selectedPatient.id || selectedPatient._id,
       especialidad: formData.especialidad,
@@ -178,20 +178,24 @@ useEffect(() => {
         estado: 'pendiente'
       }))
     };
-
-    
-
+  
     try {
-      console.log('Enviando datos:', treatmentData); // Para debug
       if (mode === 'edit') {
         await onSubmit(id, treatmentData);
+        toast.success('Planificación actualizada');
+        navigate('/planificacion');
       } else {
-        await onSubmit(treatmentData);
+        const response = await onSubmit(treatmentData);
+        console.log('Planificación creada:', response); // Debug
+        if (response && response._id) {
+          setCreatedTreatmentId(response._id);
+          setShowDialog(true);
+        } else {
+          throw new Error('No se recibió ID de planificación');
+        }
       }
-      toast.success(`Planificación ${mode === 'edit' ? 'actualizada' : 'creada'} exitosamente`);
-      navigate('/planificacion');
     } catch (error) {
-      toast.error(error.message || `Error al ${mode === 'edit' ? 'actualizar' : 'crear'} la planificación`);
+      toast.error(error.message);
     }
   };
 
@@ -418,6 +422,31 @@ useEffect(() => {
           </Button>
         </form>
       </Paper>
+      <Dialog open={showDialog}>
+  <DialogTitle>Planificación Creada Exitosamente</DialogTitle>
+  <DialogContent>
+    <DialogContentText>
+      ¿Desea crear un presupuesto para esta planificación?
+    </DialogContentText>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => {
+      setShowDialog(false);
+      navigate('/planificacion');
+    }}>
+      No
+    </Button>
+    <Button 
+      variant="contained"
+      onClick={() => {
+        navigate(`/presupuestos/nuevo`, {
+          state: { treatmentPlanId: createdTreatmentId }
+        });
+    }}>
+      Sí
+    </Button>
+  </DialogActions>
+</Dialog>
     </Container>
   );
 };

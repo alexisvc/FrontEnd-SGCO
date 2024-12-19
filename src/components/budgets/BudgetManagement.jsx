@@ -65,19 +65,25 @@ const BudgetManagement = ({
       setError(null);
       
       try {
+        console.log('Fetching budget with ID:', id);
         const result = await fetchBudgetById(id);
+        console.log('Budget data received:', result.data);
         setLocalBudget(result.data);
   
         if (result.data.treatmentPlan) {
+          console.log('Treatment Plan ID:', result.data.treatmentPlan);
           try {
             const treatmentData = await patientTreatmentService.getById(result.data.treatmentPlan);
+            console.log('Treatment data received:', treatmentData);
             setTreatmentDetails(treatmentData);
           } catch (treatmentError) {
             console.error('Error loading treatment:', treatmentError);
           }
+        } else {
+          console.log('No treatment plan associated with this budget');
         }
-  
       } catch (err) {
+        console.error('Error in loadData:', err);
         setError(err.message || 'Error al cargar datos');
       } finally {
         setLoading(false);

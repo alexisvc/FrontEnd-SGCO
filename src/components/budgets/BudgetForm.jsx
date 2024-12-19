@@ -11,6 +11,7 @@ import {
   ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+import patientTreatmentService from '../../services/patientTreatmentService';
 
 const BudgetForm = ({ 
   createBudget, 
@@ -20,6 +21,7 @@ const BudgetForm = ({
   fetchPatientByName,
   fetchPatientByCedula,
   calculateTotals,
+  location,
   mode = 'create' 
 }) => {
   const navigate = useNavigate();
@@ -81,26 +83,29 @@ const BudgetForm = ({
   }, [mode, id, fetchBudgetById, navigate]);
 
   useEffect(() => {
-    if (treatmentPlan) {
-      setBudget(prev => ({
-        ...prev,
-        paciente: treatmentPlan.paciente,
-        especialidad: treatmentPlan.especialidad,
-        treatmentPlan: treatmentPlan._id,
-        fases: [{
-          nombre: 'Fase Principal',
-          descripcion: 'Basado en planificación',
-          procedimientos: treatmentPlan.actividades.map(act => ({
-            nombre: act.actividadPlanTrat,
-            numeroPiezas: 1,
-            costoPorUnidad: 0,
-            costoTotal: 0
-          }))
-        }]
-      }));
-      setSelectedPatient(treatmentPlan.paciente);
+    if (location?.state?.treatmentPlanId) {
+      const loadTreatmentPlan = async () => {
+        const treatmentData = await patientTreatmentService.getById(location.state.treatmentPlanId);
+        setBudget({
+          paciente: treatmentData.paciente._id,
+          especialidad: treatmentData.especialidad,
+          treatmentPlan: location.state.treatmentPlanId, // Importante: guardar el ID
+          fases: [{
+            nombre: 'Fase Principal',
+            descripcion: 'Basado en planificación',
+            procedimientos: treatmentData.actividades.map(act => ({
+              nombre: act.actividadPlanTrat,
+              numeroPiezas: 1,
+              costoPorUnidad: act.montoAbono || 0,
+              costoTotal: act.montoAbono || 0
+            }))
+          }]
+        });
+        setSelectedPatient(treatmentData.paciente);
+      };
+      loadTreatmentPlan();
     }
-  }, [treatmentPlan]);
+  }, [location?.state?.treatmentPlanId]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -172,6 +177,7 @@ const BudgetForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const treatmentPlanId = location?.state?.treatmentPlanId;
     
     if (!budget.paciente || !budget.especialidad) {
       toast.error('Paciente y especialidad son requeridos');
@@ -191,10 +197,12 @@ const BudgetForm = ({
       const { fases, totalGeneral } = calculateTotals(budget.fases);
       const budgetToSave = {
         ...budget,
-        treatmentPlan: treatmentPlan?._id,
+        treatmentPlan: treatmentPlanId,
         fases,
         totalGeneral
       };
+
+      console.log('Budget to save:', budgetToSave);
 
       const result = mode === 'edit' ?
         await updateBudget(id, budgetToSave) :
