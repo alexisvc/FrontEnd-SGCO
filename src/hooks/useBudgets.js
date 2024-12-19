@@ -64,12 +64,14 @@ export function useBudgets() {
   const createBudget = useCallback(async (budgetData) => {
     try {
       setLoading(true);
+      /*
       if (budgetData.treatmentPlan) {
         const existingBudget = await budgetService.getBudgetByTreatment(budgetData.treatmentPlan);
         if (existingBudget) {
           throw new Error('Ya existe un presupuesto para esta planificación');
         }
       }
+        */
       const data = await budgetService.createBudget(budgetData);
       setBudgets(prev => [...prev, data]);
       setLoading(false);

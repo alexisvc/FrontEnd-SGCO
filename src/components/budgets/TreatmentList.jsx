@@ -38,21 +38,13 @@ const TreatmentList = ({ treatments, onEdit, onDelete }) => {
     }
   };
 
-  const handleCreateBudget = (treatment) => {
-/*
-    //navigate('/presupuestos/nuevo', { state: { treatmentPlan: treatment } });
-    navigate('/presupuestos/nuevo', { 
-      state: { treatmentPlanId: treatment.id }
-    });
-*/
+  const handleCreateBudget = async (treatmentId) => {
     try {
-      const result =  createBudgetFromTreatment(treatmentId);
-      if (result.success) {
-        toast.success('Presupuesto creado exitosamente');
-        navigate(`/presupuestos/${result.data._id}`);
-      }
+      const budgetResult = await createBudgetFromTreatment(treatmentId);
+      toast.success('Presupuesto creado');
+      navigate(`/presupuestos/${budgetResult._id}`);
     } catch (error) {
-      toast.error('Error al crear el presupuesto');
+      toast.error('Error al crear presupuesto');
     }
   };
 

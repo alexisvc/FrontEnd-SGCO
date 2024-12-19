@@ -439,10 +439,15 @@ useEffect(() => {
     <Button 
       variant="contained"
       onClick={() => {
+        // Verificar que tenemos el ID correctamente
+        console.log('ID de planificación a enviar:', createdTreatmentId);
         navigate(`/presupuestos/nuevo`, {
-          state: { treatmentPlanId: createdTreatmentId }
+          state: { 
+            treatmentPlanId: createdTreatmentId,
+            fromPlanning: true // flag para indicar que viene de planificación
+          }
         });
-    }}>
+      }}>
       Sí
     </Button>
   </DialogActions>

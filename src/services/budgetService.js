@@ -59,8 +59,33 @@ const getBudgetByTreatment = async (treatmentId) => {
   return response.data;
 };
 
-const createBudget = (newBudget) => {
-  return axios.post(baseUrl, newBudget).then((response) => response.data);
+const createBudget = async (budgetData) => {
+  try {
+    console.log('createBudget - Datos:', budgetData);
+    let response;
+    
+    // Si viene de una planificación
+    if (budgetData.treatmentPlan) {
+      response = await axios.post(
+        `${baseUrl}/from-treatment/${budgetData.treatmentPlan}`,
+        budgetData  // Añadir los datos del presupuesto
+      );
+    } else {
+      response = await axios.post(baseUrl, budgetData);
+    }
+
+    if (response.data) {
+      return { success: true, data: response.data };
+    } else {
+      throw new Error('No se recibieron datos del servidor');
+    }
+  } catch (error) {
+    console.error('Error en createBudget:', error);
+    return { 
+      success: false, 
+      error: error.response?.data?.error || 'Error al crear el presupuesto'
+    };
+  }
 };
 
 const createBudgetForTreatment = async (treatmentId, budgetData) => {
@@ -69,9 +94,16 @@ const createBudgetForTreatment = async (treatmentId, budgetData) => {
 };
 
 const createBudgetFromTreatment = async (treatmentPlanId) => {
-  const response = await axios.post(`${baseUrl}/from-treatment/${treatmentPlanId}`);
-  return response.data;
-};
+  try {
+    const response = await axios.post(
+      `${baseUrl}/from-treatment/${treatmentPlanId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating budget from treatment:', error);
+    throw error;
+  }
+ };
 
 const updateBudget = (id, updatedBudget) => {
   return axios.put(`${baseUrl}/${id}`, updatedBudget).then((response) => response.data);
@@ -93,7 +125,7 @@ export default {
   getAllBudgets,
   getBudgetById,
   getBudgetsByPatient,
-  getBudgetByTreatment,
+  //getBudgetByTreatment,
   createBudget,
   createBudgetForTreatment,
   createBudgetFromTreatment,

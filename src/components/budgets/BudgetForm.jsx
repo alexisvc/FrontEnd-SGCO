@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   Button, Typography, Grid, TextField, Container, Paper, IconButton,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -21,7 +21,7 @@ const BudgetForm = ({
   fetchPatientByName,
   fetchPatientByCedula,
   calculateTotals,
-  location,
+  
   mode = 'create' 
 }) => {
   const navigate = useNavigate();
@@ -49,6 +49,7 @@ const BudgetForm = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [searched, setSearched] = useState(false);
   const [patients, setPatients] = useState([]);
+  const location = useLocation();
 
   const especialidades = [
     'Odontología General',
@@ -61,9 +62,10 @@ const BudgetForm = ({
   ];
 
   useEffect(() => {
-    const loadBudget = async () => {
-      if (mode === 'edit' && id) {
-        try {
+    const loadData = async () => {
+      try {
+        // Caso 1: Editar presupuesto existente
+        if (mode === 'edit' && id) {
           const result = await fetchBudgetById(id);
           if (!result.success) {
             throw new Error(result.error || 'Error al cargar el presupuesto');
@@ -73,40 +75,43 @@ const BudgetForm = ({
             paciente: result.data.paciente.id || result.data.paciente
           });
           setSelectedPatient(result.data.paciente);
-        } catch (error) {
-          toast.error(error.message || 'Error al cargar el presupuesto');
-          navigate('/presupuestos');
+        } 
+        // Caso 2: Crear presupuesto desde planificación
+        else if (location?.state?.treatmentPlanId) {
+          console.log('Cargando planificación:', location.state.treatmentPlanId);
+          const treatmentData = await patientTreatmentService.getById(location.state.treatmentPlanId);
+          
+          // Asegurar que todos los campos necesarios estén presentes
+          const newBudget = {
+            paciente: treatmentData.paciente._id || treatmentData.paciente.id,
+            especialidad: treatmentData.especialidad,
+            treatmentPlan: location.state.treatmentPlanId,
+            fases: [{
+              nombre: 'Fase Principal',
+              descripcion: 'Basado en planificación',
+              procedimientos: treatmentData.actividades.map(act => ({
+                nombre: act.actividadPlanTrat,
+                numeroPiezas: 1,
+                costoPorUnidad: act.montoAbono || 0
+              }))
+            }]
+          };
+  
+          console.log('Setting budget state:', newBudget); // Debug
+          setBudget(newBudget);
+          setSelectedPatient(treatmentData.paciente);
         }
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+        toast.error('Error al cargar datos');
+        navigate('/presupuestos');
       }
     };
-    loadBudget();
-  }, [mode, id, fetchBudgetById, navigate]);
-
-  useEffect(() => {
-    if (location?.state?.treatmentPlanId) {
-      const loadTreatmentPlan = async () => {
-        const treatmentData = await patientTreatmentService.getById(location.state.treatmentPlanId);
-        setBudget({
-          paciente: treatmentData.paciente._id,
-          especialidad: treatmentData.especialidad,
-          treatmentPlan: location.state.treatmentPlanId, // Importante: guardar el ID
-          fases: [{
-            nombre: 'Fase Principal',
-            descripcion: 'Basado en planificación',
-            procedimientos: treatmentData.actividades.map(act => ({
-              nombre: act.actividadPlanTrat,
-              numeroPiezas: 1,
-              costoPorUnidad: act.montoAbono || 0,
-              costoTotal: act.montoAbono || 0
-            }))
-          }]
-        });
-        setSelectedPatient(treatmentData.paciente);
-      };
-      loadTreatmentPlan();
-    }
-  }, [location?.state?.treatmentPlanId]);
-
+  
+    loadData();
+  }, [mode, id, location?.state?.treatmentPlanId, fetchBudgetById, navigate]);
+  
+  
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
@@ -177,45 +182,26 @@ const BudgetForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const treatmentPlanId = location?.state?.treatmentPlanId;
-    
-    if (!budget.paciente || !budget.especialidad) {
-      toast.error('Paciente y especialidad son requeridos');
-      return;
-    }
-
-    const hasEmptyFases = budget.fases.some(fase => 
-      !fase.nombre || !fase.descripcion || fase.procedimientos.length === 0
-    );
-
-    if (hasEmptyFases) {
-      toast.error('Todas las fases deben tener nombre, descripción y al menos un procedimiento');
-      return;
-    }
-
     try {
       const { fases, totalGeneral } = calculateTotals(budget.fases);
       const budgetToSave = {
         ...budget,
-        treatmentPlan: treatmentPlanId,
         fases,
         totalGeneral
       };
-
-      console.log('Budget to save:', budgetToSave);
-
-      const result = mode === 'edit' ?
-        await updateBudget(id, budgetToSave) :
-        await createBudget(budgetToSave);
+  
+      console.log('Enviando presupuesto:', budgetToSave);
+      const result = await createBudget(budgetToSave);
       
       if (result.success) {
-        toast.success(`Presupuesto ${mode === 'edit' ? 'actualizado' : 'creado'} exitosamente`);
+        toast.success('Presupuesto creado exitosamente');
         navigate('/presupuestos');
       } else {
-        toast.error(result.error || `Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
+        toast.error(result.error);
       }
     } catch (error) {
-      toast.error(error.message || `Error al ${mode === 'edit' ? 'actualizar' : 'crear'} el presupuesto`);
+      console.error('Error al crear presupuesto:', error);
+      toast.error('Error al crear el presupuesto');
     }
   };
 

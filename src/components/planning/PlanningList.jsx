@@ -26,7 +26,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import usePatientTreatments from '../../hooks/usePatientTreatments'; // Asegúrate de que la ruta sea correcta
-
+import budgetService from '../../services/budgetService';
 
 const PlanningList = () => { // Eliminamos las props
   const navigate = useNavigate();
@@ -74,6 +74,22 @@ useEffect(() => {
       } catch (error) {
         toast.error('Error al eliminar la planificación');
       }
+    }
+  };
+
+  const handleCreateBudget = async (treatment) => {
+    try {
+      if (treatment.budget) {
+        // Si ya tiene presupuesto, navegar a él
+        navigate(`/presupuestos/${treatment.budget}`);
+      } else {
+        // Crear nuevo presupuesto
+        navigate('/presupuestos/nuevo', { 
+          state: { treatmentPlanId: treatment._id }
+        });
+      }
+    } catch (error) {
+      toast.error('Error al gestionar presupuesto');
     }
   };
 
@@ -161,35 +177,26 @@ useEffect(() => {
                     />
                   </TableCell>
                   <TableCell align="center">
-                  <IconButton 
-  onClick={() => {
-    console.log('Treatment completo:', treatment);
-    console.log('Paciente:', treatment.paciente);
-    console.log('Paciente ID:', treatment.paciente?.id);
-    if (treatment.paciente?.id) {
-      navigate(`/patients/${treatment.paciente.id}/presupuestos`), {state: { isPatientView: true }};
-    } else {
-      toast.error('No se pudo obtener el ID del paciente');
-    }
-  }}
-  title="Ver presupuestos"
->
-  <ViewIcon />
-</IconButton>
-                    <IconButton
-                      onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}
-                      title="Editar"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleDelete(treatment._id)}
-                      title="Eliminar"
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+  <IconButton 
+    onClick={() => handleCreateBudget(treatment)}
+    title="Crear/Ver Presupuesto"
+  >
+    <ViewIcon />
+  </IconButton>
+  <IconButton
+    onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}
+    title="Editar"
+  >
+    <EditIcon />
+  </IconButton>
+  <IconButton
+    onClick={() => handleDelete(treatment._id)}
+    title="Eliminar"
+    color="error"
+  >
+    <DeleteIcon />
+  </IconButton>
+</TableCell>
                 </TableRow>
               ))}
             </TableBody>
