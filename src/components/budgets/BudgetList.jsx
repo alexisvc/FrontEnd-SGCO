@@ -50,7 +50,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
         if (isPatientView) {
           // Si estamos en la vista de paciente, extraemos el ID de la URL
           const pathParts = window.location.pathname.split('/');
-          const patientId = pathParts[2]; // Asumiendo que la ruta es /patients/:patientId/presupuestos
+          const patientId = pathParts[2]; // la ruta es /patients/:patientId/presupuestos
           if (patientId) {
             console.log('Cargando presupuestos para paciente:', patientId);
             await fetchBudgetsByPatient(patientId);
@@ -72,6 +72,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
     }
   }, [budgets]);
 
+  /*
   const handleSearch = async () => {
     try {
       if (!searchQuery.trim()) {
@@ -92,6 +93,35 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
 
       setFilteredBudgets(filtered);
 
+      if (filtered.length === 0) {
+        toast.info('No se encontraron presupuestos');
+      }
+    } catch (error) {
+      toast.error('Error al buscar presupuestos');
+    }
+  };
+
+  */
+  const handleSearch = async () => {
+    try {
+      if (!searchQuery.trim()) {
+        await fetchBudgets();
+        return;
+      }
+  
+      let filtered;
+      if (searchType === 'cedula') {
+        filtered = budgets.filter(budget => 
+          budget.paciente?.numeroCedula?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      } else {
+        filtered = budgets.filter(budget =>
+          budget.paciente?.nombrePaciente?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+  
+      setFilteredBudgets(filtered);
+  
       if (filtered.length === 0) {
         toast.info('No se encontraron presupuestos');
       }
@@ -241,30 +271,34 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
                   {filteredBudgets.map((budget) => (
                     <TableRow key={budget._id}>
                       <TableCell>{formatDate(budget.fecha)}</TableCell>
-                      <TableCell>{budget.paciente.nombrePaciente}</TableCell>
-                      <TableCell>{budget.paciente.numeroCedula}</TableCell>
-                      <TableCell>{budget.especialidad}</TableCell>
+                      <TableCell>
+                        {budget.paciente ? budget.paciente.nombrePaciente : 'No disponible'}
+                      </TableCell>
+                      <TableCell>
+                        {budget.paciente ? budget.paciente.numeroCedula : 'No disponible'}
+                      </TableCell>
+                      <TableCell>{budget.especialidad || 'No definida'}</TableCell>
                       <TableCell>
                         {budget.treatmentPlan ? (
                           <Box>
                             <Typography variant="body2">
-                              {budget.treatmentPlan.actividades?.length} actividades
+                              {budget.treatmentPlan.actividades?.length || 0} actividades
                             </Typography>
                             <Typography variant="caption" color="textSecondary">
-                              {budget.treatmentPlan.actividades?.filter(a => a.estado === 'completado').length} completadas
+                              {budget.treatmentPlan.actividades?.filter(a => a.estado === 'completado').length || 0} completadas
                             </Typography>
                           </Box>
                         ) : (
                           'Sin planificación'
                         )}
                       </TableCell>
-                      <TableCell align="right">{formatCurrency(budget.totalGeneral)}</TableCell>
+                      <TableCell align="right">{formatCurrency(budget.totalGeneral || 0)}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => navigate(`/presupuestos/${budget._id}`)}>
                           <ViewIcon />
                         </IconButton>
                         {budget.treatmentPlan && (
-                          <IconButton onClick={() => navigate(`/planificacion/${budget.treatmentPlan._id}`)}>
+                          <IconButton onClick={() => navigate(`/planificacion/editar/${currentTreatment._id}`)}>
                             <EventNoteIcon />
                           </IconButton>
                         )}

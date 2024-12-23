@@ -61,6 +61,7 @@ const BudgetForm = ({
     'Odontopediatría'
   ];
 
+/*
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -111,6 +112,36 @@ const BudgetForm = ({
     loadData();
   }, [mode, id, location?.state?.treatmentPlanId, fetchBudgetById, navigate]);
   
+  */
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if (location?.state?.treatmentPlanId) {
+          const treatmentData = await patientTreatmentService.getById(location.state.treatmentPlanId);
+          
+          const newBudget = {
+            paciente: treatmentData.paciente._id,
+            especialidad: '', // Permitir que sea editable
+            treatmentPlan: location.state.treatmentPlanId,
+            fases: [{
+              nombre: 'Fase Principal',
+              descripcion: 'Basado en planificación',
+              procedimientos: [] // Iniciar vacío para que el doctor lo llene
+            }]
+          };
+  
+          setBudget(newBudget);
+          setSelectedPatient(treatmentData.paciente);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('Error al cargar datos');
+      }
+    };
+  
+    loadData();
+  }, [location?.state?.treatmentPlanId]);
   
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -186,22 +217,23 @@ const BudgetForm = ({
       const { fases, totalGeneral } = calculateTotals(budget.fases);
       const budgetToSave = {
         ...budget,
+        paciente: budget.paciente || selectedPatient?.id, // Backup con selectedPatient
         fases,
         totalGeneral
       };
   
-      console.log('Enviando presupuesto:', budgetToSave);
+      console.log('Budget to save:', budgetToSave); // Debug
       const result = await createBudget(budgetToSave);
       
       if (result.success) {
         toast.success('Presupuesto creado exitosamente');
         navigate('/presupuestos');
       } else {
-        toast.error(result.error);
+        toast.error(result.error || 'Error al crear el presupuesto');
       }
     } catch (error) {
-      console.error('Error al crear presupuesto:', error);
-      toast.error('Error al crear el presupuesto');
+      console.error('Error submitting budget:', error);
+      toast.error(error.response?.data?.error || 'Error al crear el presupuesto');
     }
   };
 

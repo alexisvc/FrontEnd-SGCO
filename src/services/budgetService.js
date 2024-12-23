@@ -10,14 +10,14 @@ const getAllBudgets = () => {
 
 const getBudgetById = async (id) => {
   try {
-    console.log('Service - Fetching budget with ID:', id);
+    //console.log('Service - Fetching budget with ID:', id);
     
     if (!id) {
       throw new Error('ID no proporcionado');
     }
 
     const response = await axios.get(`${baseUrl}/${id}`);
-    console.log('Service - Raw response:', response);
+    //console.log('Service - Raw response:', response);
 
     if (!response.data) {
       throw new Error('No se recibieron datos del servidor');
@@ -62,23 +62,12 @@ const getBudgetByTreatment = async (treatmentId) => {
 const createBudget = async (budgetData) => {
   try {
     console.log('createBudget - Datos:', budgetData);
-    let response;
-    
-    // Si viene de una planificación
-    if (budgetData.treatmentPlan) {
-      response = await axios.post(
-        `${baseUrl}/from-treatment/${budgetData.treatmentPlan}`,
-        budgetData  // Añadir los datos del presupuesto
-      );
-    } else {
-      response = await axios.post(baseUrl, budgetData);
-    }
+    const response = await axios.post(baseUrl, budgetData);
 
     if (response.data) {
       return { success: true, data: response.data };
-    } else {
-      throw new Error('No se recibieron datos del servidor');
     }
+    throw new Error('No se recibieron datos del servidor');
   } catch (error) {
     console.error('Error en createBudget:', error);
     return { 

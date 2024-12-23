@@ -80,6 +80,9 @@ const updateActivityStatus = async (treatmentId, activityIndex, estado) => {
 // Actualizar tratamiento
 const update = async (id, treatmentData) => {
   try {
+    if (!id) {
+      throw new Error('ID no proporcionado para actualizar');
+    }
     console.log('Updating treatment:', { id, data: treatmentData });
     const response = await axios.put(`${baseUrl}/${id}`, treatmentData);
     return response.data;

@@ -47,32 +47,30 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
     let isMounted = true;
   
     const loadTreatments = async () => {
+      // Si tenemos treatmentDetails directamente, usarlos
+      if (treatmentDetails) {
+        console.log('Using provided treatment details:', treatmentDetails);
+        setCurrentTreatment(treatmentDetails);
+        return;
+      }
+  
+      // Si no hay treatmentDetails, intentar cargar desde la API
       if (!patientId || !budget?._id) {
         console.log('Missing data:', { patientId, budgetId: budget?._id });
         return;
       }
-    
+  
       try {
         console.log('Loading treatments for patient:', patientId);
         const treatments = await getPatientTreatmentsByPatientId(patientId);
-    
+  
         if (!isMounted) return;
-    
+  
         if (treatments?.length > 0) {
-          console.log('Budget to find:', budget._id);
-          console.log('Available treatments with budgets:', treatments.map(t => ({
-            treatmentId: t.id,
-            budgetId: t.budget?._id || t.budget
-          })));
-    
-          // Buscar el tratamiento por su referencia al presupuesto
-          const treatment = treatments.find(t => {
-            const treatmentBudgetId = t.budget?.toString() || t.budget;
-            const currentBudgetId = budget._id?.toString();
-            console.log('Comparing:', { treatmentBudgetId, currentBudgetId });
-            return treatmentBudgetId === currentBudgetId;
-          });
-    
+          const treatment = treatments.find(t => 
+            t._id === (budget.treatmentPlan?._id || budget.treatmentPlan)
+          );
+  
           if (treatment) {
             console.log('Found treatment:', treatment);
             setCurrentTreatment(treatment);
@@ -90,16 +88,16 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
     return () => {
       isMounted = false;
     };
-  }, [patientId, budget?._id]);
+  }, [patientId, budget?._id, budget?.treatmentPlan, treatmentDetails]);
 
-
+/*
   // Segundo useEffect para manejar treatmentDetails
   useEffect(() => {
     if (treatmentDetails) {
       setCurrentTreatment(treatmentDetails);
     }
   }, [treatmentDetails]);
-
+*/
   //const currentTreatment = patientTreatments.find(t => t.budget?._id === budget?._id);
 
   const handleCreateTreatment = async (treatmentData) => {
@@ -140,13 +138,30 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
         index === activityIndex ? { ...act, estado: newStatus } : act
       );
   
-      await updatePatientTreatment(currentTreatment.id, {
-        ...currentTreatment,
+      const treatmentId = currentTreatment._id;
+      if (!treatmentId) {
+        throw new Error('ID de tratamiento no disponible');
+      }
+  
+      // Crear objeto con solo los campos necesarios
+      const updateData = {
+        _id: treatmentId,
+        paciente: currentTreatment.paciente._id || currentTreatment.paciente.id,
+        especialidad: currentTreatment.especialidad,
         actividades: updatedActivities
-      });
+      };
+  
+      await updatePatientTreatment(treatmentId, updateData);
+  
+      // Actualizar el estado local
+      setCurrentTreatment(prev => ({
+        ...prev,
+        actividades: updatedActivities
+      }));
   
       toast.success('Estado actualizado exitosamente');
     } catch (error) {
+      console.error('Error updating activity status:', error);
       toast.error('Error al actualizar el estado');
     }
   };
@@ -193,7 +208,7 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
       variant="contained"
       color="primary"
       startIcon={<EditIcon />}
-      onClick={() => navigate(`/planificacion/editar/${currentTreatment.id}`)}
+      onClick={() => navigate(`/planificacion/editar/${currentTreatment._id}`)}
     >
       Editar Planificación
     </Button>
@@ -222,23 +237,23 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
                   }
                 />
                 <Box sx={{ display: 'flex', gap: 1 }}>
-    <Chip
-      label={actividad.estado}
-      color={getStatusColor(actividad.estado)}
-    />
-    {actividad.estado !== 'completado' && (
-      <Button
-        size="small"
-        variant="outlined"
-        onClick={() => handleUpdateActivityStatus(
-          index, 
-          actividad.estado === 'pendiente' ? 'en-proceso' : 'completado'
-        )}
-      >
-        {actividad.estado === 'pendiente' ? 'Iniciar' : 'Completar'}
-      </Button>
-    )}
-  </Box>
+                  <Chip
+                    label={actividad.estado}
+                    color={getStatusColor(actividad.estado)}
+                  />
+                  {actividad.estado !== 'completado' && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => handleUpdateActivityStatus(
+                        index, 
+                        actividad.estado === 'pendiente' ? 'en-proceso' : 'completado'
+                      )}
+                    >
+                      {actividad.estado === 'pendiente' ? 'Iniciar' : 'Completar'}
+                    </Button>
+                  )}
+                </Box>
               </ListItem>
             ))}
           </List>

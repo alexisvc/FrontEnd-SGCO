@@ -25,16 +25,16 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import usePatientTreatments from '../../hooks/usePatientTreatments'; // Asegúrate de que la ruta sea correcta
+import usePatientTreatments from '../../hooks/usePatientTreatments'; 
 import budgetService from '../../services/budgetService';
 
-const PlanningList = () => { // Eliminamos las props
+const PlanningList = () => { 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { 
     patientTreatments, 
     getAllPatientTreatments, 
-    deletePatientTreatment // Cambiamos a la función del hook
+    deletePatientTreatment 
   } = usePatientTreatments();
 
   useEffect(() => {
@@ -52,18 +52,36 @@ const PlanningList = () => { // Eliminamos las props
     loadData();
   }, [getAllPatientTreatments]);
 
-  // En PlanningList.jsx, antes del return:
-useEffect(() => {
-  console.log('Treatment structure:', patientTreatments[0]);
-}, [patientTreatments]);
 
-useEffect(() => {
-  if (patientTreatments && patientTreatments.length > 0) {
-    console.log('Todos los treatments:', patientTreatments);
-    console.log('Primer treatment:', patientTreatments[0]);
-    console.log('Paciente del primer treatment:', patientTreatments[0]?.paciente);
-  }
-}, [patientTreatments]);
+
+  const handleSearch = async () => {
+      try {
+        if (!searchQuery.trim()) {
+          await fetchBudgets();
+          return;
+        }
+    
+        let filtered;
+        if (searchType === 'cedula') {
+          filtered = budgets.filter(budget => 
+            budget.paciente?.numeroCedula?.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+        } else {
+          filtered = budgets.filter(budget =>
+            budget.paciente?.nombrePaciente?.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+        }
+    
+        setFilteredBudgets(filtered);
+    
+        if (filtered.length === 0) {
+          toast.info('No se encontraron presupuestos');
+        }
+      } catch (error) {
+        toast.error('Error al buscar presupuestos');
+      }
+  };
+
 
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de eliminar esta planificación?')) {
@@ -72,7 +90,7 @@ useEffect(() => {
         await getAllPatientTreatments();
         toast.success('Planificación eliminada exitosamente');
       } catch (error) {
-        toast.error('Error al eliminar la planificación');
+        toast.error('Error al eliminar la planificación. \nVerifique que no existan Presupuestos asignados para este Plan de Tratamientos');
       }
     }
   };
@@ -177,26 +195,26 @@ useEffect(() => {
                     />
                   </TableCell>
                   <TableCell align="center">
-  <IconButton 
-    onClick={() => handleCreateBudget(treatment)}
-    title="Crear/Ver Presupuesto"
-  >
-    <ViewIcon />
-  </IconButton>
-  <IconButton
-    onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}
-    title="Editar"
-  >
-    <EditIcon />
-  </IconButton>
-  <IconButton
-    onClick={() => handleDelete(treatment._id)}
-    title="Eliminar"
-    color="error"
-  >
-    <DeleteIcon />
-  </IconButton>
-</TableCell>
+                    <IconButton 
+                      onClick={() => handleCreateBudget(treatment)}
+                      title="Crear/Ver Presupuesto"
+                    >
+                      <ViewIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}
+                      title="Editar"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDelete(treatment._id)}
+                      title="Eliminar"
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
