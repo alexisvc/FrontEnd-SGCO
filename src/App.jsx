@@ -73,13 +73,13 @@ function App() {
   } = usePatients();
   const {
     patientTreatments,
-    loading: treatmentsLoading,  // Renombramos para evitar conflicto
-    error: treatmentsError,      // Renombramos para evitar conflicto
+    loading: treatmentsLoading,  
+    error: treatmentsError,      
     getAllPatientTreatments,
     createPatientTreatment,
     updatePatientTreatment,
     getPatientTreatmentsByPatientId,
-    deletePatientTreatment      // Agregamos esta función
+    deletePatientTreatment      
   } = usePatientTreatments();
   const {
     evolutionCharts,
@@ -318,7 +318,7 @@ function App() {
               createBudget={createBudget}
               updateBudget={updateBudget}
               fetchBudgetById={fetchBudgetById}
-              fetchPatientByCedula={fetchPatientByCedula} // Añadir esta prop
+              fetchPatientByCedula={fetchPatientByCedula} 
               calculateTotals={calculateTotals}
               mode="edit"
             />
@@ -394,7 +394,7 @@ function App() {
   path="/planificacion/lista"
   element={
     isLoggedIn ? (
-      <PlanningList />  // Eliminar todas las props
+      <PlanningList />  
     ) : (
       <Navigate to="/" />
     )

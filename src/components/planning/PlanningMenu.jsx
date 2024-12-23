@@ -21,7 +21,7 @@ const PlanningMenu = () => {
     {
       to: "/planificacion/lista",
       icon: <PersonIcon sx={{ fontSize: 40 }} />,
-      text: "Pacientes/Planificaciones",
+      text: "Planificaciones",
       description: "Ver planificaciones y presupuestos"
     },
     {
@@ -58,7 +58,7 @@ const PlanningMenu = () => {
           variant="h4" 
           align="center" 
           gutterBottom 
-          sx={{ mb: 4 }}
+          sx={{ mb: 4 , color:'#383434'}}
         >
           Planificación y Presupuesto
         </Typography>
@@ -71,9 +71,13 @@ const PlanningMenu = () => {
                 sx={{ 
                   p: 2,
                   transition: 'transform 0.2s',
+                  backgroundColor: '#8ba082',
+                  color: 'white',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: 4
+                    boxShadow: 4,
+                    cursor: 'pointer',
+                    
                   }
                 }}
               >
@@ -93,7 +97,7 @@ const PlanningMenu = () => {
                       <Typography variant="h6">
                         {item.text}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="white">
                         {item.description}
                       </Typography>
                     </Grid>

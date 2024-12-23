@@ -15,6 +15,7 @@ import BudgetDetails from './BudgetDetails';
 import PaymentDetails from './PaymentDetails';
 import patientTreatmentService from '../../services/patientTreatmentService';
 import PlanningDetails from './PlanningDetails';  
+import ContractTab from '../contract/ContractTab';
 
 function CustomTabPanel({ children, value, index }) {
   return (
@@ -71,10 +72,13 @@ const BudgetManagement = ({
         setLocalBudget(result.data);
   
         if (result.data.treatmentPlan) {
-          console.log('Treatment Plan ID:', result.data.treatmentPlan);
+          console.log('Treatment Plan completo:', result.data.treatmentPlan);
           try {
-            const treatmentData = await patientTreatmentService.getById(result.data.treatmentPlan);
-            console.log('Treatment data received:', treatmentData);
+           
+            const treatmentId = result.data.treatmentPlan._id || result.data.treatmentPlan.id;
+            //const treatmentId = result.data.treatmentPlan;
+            console.log('ID extraído:', treatmentId);
+            const treatmentData = await patientTreatmentService.getById(treatmentId);
             setTreatmentDetails(treatmentData);
           } catch (treatmentError) {
             console.error('Error loading treatment:', treatmentError);
@@ -92,6 +96,7 @@ const BudgetManagement = ({
   
     loadData();
   }, [id, fetchBudgetById]);
+  
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -162,6 +167,7 @@ const BudgetManagement = ({
                 <Tab label="Planificación" {...a11yProps(0)} />
                 <Tab label="Presupuesto" {...a11yProps(1)} />
                 <Tab label="Pagos" {...a11yProps(2)} />
+                <Tab label="Contrato" {...a11yProps(3)} />
               </Tabs>
             </Box>
 
@@ -190,6 +196,10 @@ const BudgetManagement = ({
                 treatmentDetails={treatmentDetails}
                 fetchPaymentSummary={fetchPaymentSummary}
               />
+            </CustomTabPanel>
+
+            <CustomTabPanel value={tabValue} index={3}>
+              <ContractTab treatmentPlan={treatmentDetails} />
             </CustomTabPanel>
           </Box>
         </Paper>

@@ -21,7 +21,8 @@ import {
   Visibility as ViewIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Add as AddIcon
+  Add as AddIcon,
+  ReceiptLong as ReceiptLongIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -199,7 +200,7 @@ const PlanningList = () => {
                       onClick={() => handleCreateBudget(treatment)}
                       title="Crear/Ver Presupuesto"
                     >
-                      <ViewIcon />
+                      <ReceiptLongIcon />
                     </IconButton>
                     <IconButton
                       onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}

@@ -41,13 +41,8 @@ const getById = async (id) => {
     throw error;
   }
 };
+
 // Crear nuevo tratamiento
-/*
-const create = async (newTreatment) => {
-  const response = await axios.post(baseUrl, newTreatment);
-  return response.data;
-};
-*/
 const create = async (newTreatment) => {
   console.log('Creating treatment with data:', JSON.stringify(newTreatment));
   try {

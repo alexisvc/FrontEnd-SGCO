@@ -9,7 +9,8 @@ import {
   ListItemText,
   Chip,
   CircularProgress,
-  Grid
+  Grid,
+  TableContainer, Table, TableHead, TableRow, TableCell, TableBody
 } from '@mui/material';
 import usePatientTreatments from '../../hooks/usePatientTreatments';
 import { Button } from '@mui/material';
@@ -90,15 +91,6 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
     };
   }, [patientId, budget?._id, budget?.treatmentPlan, treatmentDetails]);
 
-/*
-  // Segundo useEffect para manejar treatmentDetails
-  useEffect(() => {
-    if (treatmentDetails) {
-      setCurrentTreatment(treatmentDetails);
-    }
-  }, [treatmentDetails]);
-*/
-  //const currentTreatment = patientTreatments.find(t => t.budget?._id === budget?._id);
 
   const handleCreateTreatment = async (treatmentData) => {
     try {
@@ -205,58 +197,66 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
             Planificación - {currentTreatment.especialidad}
           </Typography>
           <Button
-      variant="contained"
-      color="primary"
-      startIcon={<EditIcon />}
-      onClick={() => navigate(`/planificacion/editar/${currentTreatment._id}`)}
-    >
-      Editar Planificación
-    </Button>
+            variant="contained"
+            color="primary"
+            startIcon={<EditIcon />}
+            onClick={() => navigate(`/planificacion/editar/${currentTreatment._id}`)}
+          >
+            Editar Planificación
+          </Button>
 
-          <List>
-            {currentTreatment.actividades?.map((actividad, index) => (
-              <ListItem key={index} divider>
-                <ListItemText
-                  primary={
-                    <Typography variant="subtitle1">
-                      Cita {actividad.cita}
-                    </Typography>
-                  }
-                  secondary={
-                    <Box>
-                      <Typography>{actividad.actividadPlanTrat}</Typography>
-                      <Typography variant="caption">
-                        Fecha: {new Date(actividad.fechaPlanTrat).toLocaleDateString()}
+    <TableContainer component={Paper} style={{ marginTop: 30 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Cita</TableCell>
+                <TableCell>Descripción</TableCell>
+                <TableCell>Fecha</TableCell>
+                <TableCell>Estado</TableCell>
+                <TableCell align="right">Acciones</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {currentTreatment.actividades?.map((actividad, index) => (
+                <TableRow key={index}>
+                  <TableCell>Cita {actividad.cita}</TableCell>
+                  <TableCell>
+                    <Typography>{actividad.actividadPlanTrat}</Typography>
+                    {actividad.montoAbono > 0 && (
+                      <Typography variant="caption" color="textSecondary">
+                        Abono: ${actividad.montoAbono}
                       </Typography>
-                      {actividad.montoAbono > 0 && (
-                        <Typography variant="body2">
-                          Abono: ${actividad.montoAbono}
-                        </Typography>
-                      )}
-                    </Box>
-                  }
-                />
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <Chip
-                    label={actividad.estado}
-                    color={getStatusColor(actividad.estado)}
-                  />
-                  {actividad.estado !== 'completado' && (
-                    <Button
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(actividad.fechaPlanTrat).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      label={actividad.estado}
+                      color={getStatusColor(actividad.estado)}
                       size="small"
-                      variant="outlined"
-                      onClick={() => handleUpdateActivityStatus(
-                        index, 
-                        actividad.estado === 'pendiente' ? 'en-proceso' : 'completado'
-                      )}
-                    >
-                      {actividad.estado === 'pendiente' ? 'Iniciar' : 'Completar'}
-                    </Button>
-                  )}
-                </Box>
-              </ListItem>
-            ))}
-          </List>
+                    />
+                  </TableCell>
+                  <TableCell align="right">
+                    {actividad.estado !== 'completado' && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => handleUpdateActivityStatus(
+                          index, 
+                          actividad.estado === 'pendiente' ? 'en-proceso' : 'completado'
+                        )}
+                      >
+                        {actividad.estado === 'pendiente' ? 'Iniciar' : 'Completar'}
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
           <Box sx={{ mt: 3 }}>
             <Typography variant="h6">Resumen de Actividades</Typography>

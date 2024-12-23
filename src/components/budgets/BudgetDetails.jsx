@@ -31,14 +31,14 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
         <Grid item xs={12} sm={6} textAlign="right">
           <Typography><strong>Fecha:</strong> {new Date(budget.fecha).toLocaleDateString()}</Typography>
           <Typography><strong>Especialidad:</strong> {budget.especialidad}</Typography>
-          {budget.treatmentPlan && (
-            <Typography><strong>N° Planificación:</strong> {budget.treatmentPlan._id}</Typography>
-          )}
+          
         </Grid>
       </Grid>
     </Box>
+    <hr/>
 
     {/* Fases y Procedimientos */}
+    <Box component={Paper} p={3} mb={3} mt={3} elevation={3}> 
     {budget.fases.map((fase, faseIndex) => (
       <Box key={faseIndex} mb={4}>
         <Typography variant="h6" gutterBottom>
@@ -83,40 +83,15 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
         </TableContainer>
       </Box>
     ))}
-
+</Box>
     {/* Total General */}
-    <Box mt={3} mb={3}>
+    <Box mt={10} mb={1}>
       <Typography variant="h5" align="right">
-        Total General: ${budget.totalGeneral.toFixed(2)}
+        <strong>Total General: ${budget.totalGeneral.toFixed(2)}</strong>
       </Typography>
     </Box>
 
-    {/* Sección de Planificación */}
-    {!isPrintMode && budget.treatmentPlan && (
-      <Box mt={4}>
-        <Typography variant="h6" gutterBottom>Actividades Planificadas</Typography>
-        <TableContainer component={Paper}>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Cita</TableCell>
-                <TableCell>Actividad</TableCell>
-                <TableCell>Fecha</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {budget.treatmentPlan.actividades.map((actividad, index) => (
-                <TableRow key={index}>
-                  <TableCell>{actividad.cita}</TableCell>
-                  <TableCell>{actividad.actividadPlanTrat}</TableCell>
-                  <TableCell>{new Date(actividad.fechaPlanTrat).toLocaleDateString()}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    )}
+    
   </div>
 ));
 
