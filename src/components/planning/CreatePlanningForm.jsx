@@ -445,6 +445,7 @@ useEffect(() => {
           state: { 
             treatmentPlanId: createdTreatmentId,
             fromPlanning: true // flag para indicar que viene de planificación
+          
           }
         });
       }}>

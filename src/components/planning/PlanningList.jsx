@@ -14,7 +14,12 @@ import {
   Box,
   IconButton,
   Chip,
-  CircularProgress
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -32,19 +37,42 @@ import budgetService from '../../services/budgetService';
 const PlanningList = () => { 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchType, setSearchType] = useState('cedula');
+  const [filteredTreatments, setFilteredTreatments] = useState([]);
   const { 
     patientTreatments, 
     getAllPatientTreatments, 
     deletePatientTreatment 
   } = usePatientTreatments();
 
+  const loadTreatments = async () => {
+    try {
+      setLoading(true);
+      await getAllPatientTreatments();
+      setFilteredTreatments(patientTreatments || []);
+    } catch (error) {
+      console.error('Error loading treatments:', error);
+      toast.error('Error al cargar las planificaciones');
+      setFilteredTreatments([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTreatments();
+  }, []);
+
   useEffect(() => {
     const loadData = async () => {
       try {
-        await getAllPatientTreatments();
+        const treatments = await getAllPatientTreatments();
+        setFilteredTreatments(treatments || []); // Asegurar que sea array
       } catch (error) {
-        console.error('PlanningList - Error loading data:', error);
+        console.error('Error loading treatments:', error);
         toast.error('Error al cargar las planificaciones');
+        setFilteredTreatments([]); // En caso de error, setear array vacío
       } finally {
         setLoading(false);
       }
@@ -53,35 +81,11 @@ const PlanningList = () => {
     loadData();
   }, [getAllPatientTreatments]);
 
-
-
-  const handleSearch = async () => {
-      try {
-        if (!searchQuery.trim()) {
-          await fetchBudgets();
-          return;
-        }
-    
-        let filtered;
-        if (searchType === 'cedula') {
-          filtered = budgets.filter(budget => 
-            budget.paciente?.numeroCedula?.toLowerCase().includes(searchQuery.toLowerCase())
-          );
-        } else {
-          filtered = budgets.filter(budget =>
-            budget.paciente?.nombrePaciente?.toLowerCase().includes(searchQuery.toLowerCase())
-          );
-        }
-    
-        setFilteredBudgets(filtered);
-    
-        if (filtered.length === 0) {
-          toast.info('No se encontraron presupuestos');
-        }
-      } catch (error) {
-        toast.error('Error al buscar presupuestos');
-      }
-  };
+  useEffect(() => {
+    if (patientTreatments) {
+      setFilteredTreatments(patientTreatments);
+    }
+  }, [patientTreatments]);
 
 
   const handleDelete = async (id) => {
@@ -95,6 +99,38 @@ const PlanningList = () => {
       }
     }
   };
+
+  const handleSearch = async () => {
+    try {
+      if (!searchQuery.trim()) {
+        loadTreatments();
+        return;
+      }
+
+      const treatmentsToSearch = patientTreatments || [];
+      let filtered;
+      
+      if (searchType === 'cedula') {
+        filtered = treatmentsToSearch.filter(treatment => 
+          treatment.paciente?.numeroCedula?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      } else {
+        filtered = treatmentsToSearch.filter(treatment =>
+          treatment.paciente?.nombrePaciente?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      setFilteredTreatments(filtered);
+
+      if (filtered.length === 0) {
+        toast.info('No se encontraron planificaciones');
+      }
+    } catch (error) {
+      console.error('Error en búsqueda:', error);
+      toast.error('Error al buscar planificaciones');
+    }
+  };
+
 
   const handleCreateBudget = async (treatment) => {
     try {
@@ -110,6 +146,12 @@ const PlanningList = () => {
     } catch (error) {
       toast.error('Error al gestionar presupuesto');
     }
+  };
+
+  const handleReset = () => {
+    setSearchQuery('');
+    setSearchType('cedula');
+    loadTreatments();
   };
 
   if (loading) {
@@ -150,10 +192,53 @@ const PlanningList = () => {
 
         <Paper sx={{ p: 3, mb: 3 }}>
           <Grid container justifyContent="space-between" alignItems="center">
-            <Grid item>
+            <Grid item xs={12} sm={12} sx={{ mb: 4 }}>
               <Typography variant="h5">Planificaciones</Typography>
             </Grid>
-            <Grid item>
+            <br/>
+            <Grid item xs={12} sm={3}>
+              
+        <FormControl fullWidth>
+          <InputLabel>Buscar por</InputLabel>
+          <Select
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+            label="Buscar por"
+          >
+            <MenuItem value="cedula">Cédula</MenuItem>
+            <MenuItem value="nombre">Nombre</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <TextField
+          fullWidth
+          label={searchType === 'cedula' ? 'Ingrese cédula' : 'Ingrese nombre'}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </Grid>
+      <Grid item xs={12} sm={2}>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleSearch}
+        >
+          Buscar
+        </Button>
+      </Grid>
+
+      <Grid item xs={12} sm={2}>
+  <Button
+    fullWidth
+    variant="outlined"
+    onClick={handleReset}
+  >
+    Restablecer
+  </Button>
+</Grid>
+    
+            <Grid item xs={12} sm={12} sx={{ mt: 4}}>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -169,15 +254,15 @@ const PlanningList = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Paciente</TableCell>
-                <TableCell>Especialidad</TableCell>
-                <TableCell>Actividades</TableCell>
-                <TableCell>Estado</TableCell>
-                <TableCell align="center">Acciones</TableCell>
+                <TableCell><Typography variant="h6">Paciente</Typography></TableCell>
+                <TableCell><Typography variant="h6">Especialidad</Typography></TableCell>
+                <TableCell><Typography variant="h6">Actividades</Typography></TableCell>
+                <TableCell align="center"><Typography variant="h6">Acciones</Typography></TableCell>
               </TableRow>
             </TableHead>
+            {!loading && filteredTreatments.length > 0 ? (
             <TableBody>
-              {patientTreatments.map((treatment) => (
+              {filteredTreatments.map((treatment) => (
                 
                 <TableRow key={treatment._id}>
                   <TableCell>{treatment.paciente.nombrePaciente}</TableCell>
@@ -188,13 +273,7 @@ const PlanningList = () => {
                       {treatment.actividades.filter(a => a.estado === 'completado').length} completadas
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={treatment.budget ? 'Con presupuesto' : 'Sin presupuesto'}
-                      color={treatment.budget ? 'success' : 'default'}
-                      size="small"
-                    />
-                  </TableCell>
+                  
                   <TableCell align="center">
                     <IconButton 
                       onClick={() => handleCreateBudget(treatment)}
@@ -219,6 +298,15 @@ const PlanningList = () => {
                 </TableRow>
               ))}
             </TableBody>
+             ) : (
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    {loading ? 'Cargando...' : 'No hay planificaciones disponibles'}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+             )}
           </Table>
         </TableContainer>
       </Container>

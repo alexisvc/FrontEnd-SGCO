@@ -223,11 +223,20 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
                         Buscar
                       </Button>
                     </Grid>
+                    <Grid item xs={12} sm={2}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleReset}
+                      >
+                        Restablecer
+                      </Button>
+                    </Grid>
                   </>
                 )}
               </Grid>
 
-              <Grid container spacing={2} alignItems="center" sx={{marginTop:2}}>
+              <Grid container spacing={2} sx={{marginTop:2}}>
                 <Grid item xs={12} sm={3}>
                   <Button
                     fullWidth
@@ -248,7 +257,9 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
                   >
                     Nuevo Presupuesto
                   </Button>
+                  
                 </Grid>
+                
               </Grid>
             </Paper>
           </Grid>
@@ -258,13 +269,13 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Fecha</TableCell>
-                    <TableCell>Paciente</TableCell>
-                    <TableCell>Cédula</TableCell>
-                    <TableCell>Especialidad</TableCell>
-                    <TableCell>Planificación</TableCell>
-                    <TableCell align="right">Total</TableCell>
-                    <TableCell align="center">Acciones</TableCell>
+                    <TableCell><Typography variant="h6">Fecha</Typography></TableCell>
+                    <TableCell><Typography variant="h6">Paciente</Typography></TableCell>
+                    <TableCell><Typography variant="h6">Cédula</Typography></TableCell>
+                    <TableCell><Typography variant="h6">Especialidad</Typography></TableCell>
+                    <TableCell><Typography variant="h6">Planificación</Typography></TableCell>
+                    <TableCell align="right"><Typography variant="h6">Total</Typography></TableCell>
+                    <TableCell align="center"><Typography variant="h6">Acciones</Typography></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

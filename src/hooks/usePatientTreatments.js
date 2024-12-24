@@ -7,7 +7,13 @@ export function  usePatientTreatments  ()  {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-
+  const handleError = useCallback((err) => {
+    console.error('Error en operación de presupuesto:', err);
+    setError(err.response?.data?.error || err.message);
+    setLoading(false);
+    return { success: false, error: err.message };
+  }, []);
+  
   const getAllPatientTreatments = useCallback(async () => {
     try {
       setLoading(true);
@@ -109,6 +115,19 @@ const createPatientTreatment = async (treatmentData) => {
     }
   };
 
+  const fecthPatientTreatmentsByPatient = useCallback(async (patientId) => {
+    try{
+      setLoading(true);
+      setError(null);
+      const data = await patientTreatmentService.getByPatientId(patientId);
+      setPatientTreatments(data);
+      setLoading(false);
+      return { success: true, data };
+    }catch (err){
+      return handleError(err);
+    }
+  }, [handleError]);
+
   return {
     patientTreatments,
     loading,
@@ -118,7 +137,8 @@ const createPatientTreatment = async (treatmentData) => {
     createPatientTreatment,
     addActivity,
     updatePatientTreatment,
-    deletePatientTreatment
+    deletePatientTreatment,
+    fecthPatientTreatmentsByPatient,
   };
 };
 

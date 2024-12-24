@@ -193,7 +193,7 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
     <Container>
       {currentTreatment ? (
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h4" gutterBottom align="center">
             Planificación - {currentTreatment.especialidad}
           </Typography>
           <Button
@@ -205,15 +205,15 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
             Editar Planificación
           </Button>
 
-    <TableContainer component={Paper} style={{ marginTop: 30 }}>
+    <TableContainer component={Paper} sx={{ mt: 3, mb:5 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Cita</TableCell>
-                <TableCell>Descripción</TableCell>
-                <TableCell>Fecha</TableCell>
-                <TableCell>Estado</TableCell>
-                <TableCell align="right">Acciones</TableCell>
+                <TableCell><Typography variant="h6">Cita</Typography></TableCell>
+                <TableCell><Typography variant="h6">Descripción</Typography></TableCell>
+                <TableCell><Typography variant="h6">Fecha</Typography></TableCell>
+                <TableCell><Typography variant="h6">Estado</Typography></TableCell>
+                <TableCell align="right"><Typography variant="h6">Acciones</Typography></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -258,7 +258,7 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
           </Table>
         </TableContainer>
 
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mt: 10 }}>
             <Typography variant="h6">Resumen de Actividades</Typography>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={4}>

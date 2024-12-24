@@ -58,7 +58,7 @@ const ContractTab = ({ treatmentPlan }) => {
       ) : (
         <Box>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-            <Typography variant="h6">
+            <Typography variant="h5">
               {contract ? <b>Contrato de Planificación</b>:<b>Cargar Contrato</b>}
             </Typography>
             

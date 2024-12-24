@@ -41,20 +41,21 @@ const BudgetContent = React.forwardRef(({ budget, isPrintMode }, ref) => (
     <Box component={Paper} p={3} mb={3} mt={3} elevation={3}> 
     {budget.fases.map((fase, faseIndex) => (
       <Box key={faseIndex} mb={4}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           {fase.nombre}
         </Typography>
         <Typography variant="subtitle1" gutterBottom>
           {fase.descripcion}
         </Typography>
+        <br/>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>N° de piezas</TableCell>
-                <TableCell>Procedimientos</TableCell>
-                <TableCell align="right">Costo por unidad</TableCell>
-                <TableCell align="right">Costo total</TableCell>
+                <TableCell><Typography variant="h6">N° de piezas</Typography></TableCell>
+                <TableCell><Typography variant="h6">Procedimientos</Typography></TableCell>
+                <TableCell align="right"><Typography variant="h6">Costo por unidad</Typography></TableCell>
+                <TableCell align="right"><Typography variant="h6">Costo total</Typography></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -107,15 +108,7 @@ const BudgetDetails = ({ budget }) => {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="flex-end" mb={3}>
-        <Button
-          startIcon={<PrintOutlined />}
-          onClick={handlePrint}
-          variant="outlined"
-        >
-          Imprimir
-        </Button>
-      </Box>
+      
 
       <BudgetContent 
         ref={componentRef}

@@ -16,6 +16,7 @@ import PaymentDetails from './PaymentDetails';
 import patientTreatmentService from '../../services/patientTreatmentService';
 import PlanningDetails from './PlanningDetails';  
 import ContractTab from '../contract/ContractTab';
+import PrintBudgetReport from './PrintBudgetReport';
 
 function CustomTabPanel({ children, value, index }) {
   return (
@@ -159,9 +160,16 @@ const BudgetManagement = ({
             {treatmentDetails && (
               <Typography variant="subtitle1" color="text.secondary">
                 Planificación: {treatmentDetails.especialidad}
-              </Typography>
+              </Typography>           
             )}
-            
+            <Box display="flex" justifyContent="flex-end" mb={3}>
+              <PrintBudgetReport 
+                budget={localBudget}
+                treatmentDetails={treatmentDetails}
+                paymentSummary={paymentSummary}
+                fetchPaymentSummary={fetchPaymentSummary}
+              />
+            </Box>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 3 }}>
               <Tabs value={tabValue} onChange={handleTabChange}>
                 <Tab label="Planificación" {...a11yProps(0)} />

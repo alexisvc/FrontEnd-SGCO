@@ -28,6 +28,17 @@ const getByPatientId = async (patientId) => {
   }
 };
 
+const getByPatient = async (patientId) => {
+  try{
+    if (!patientId) throw new Error('ID de paciente no proporcionado');
+    const response = await axios.get(`${baseUrl}/paciente/${patientId}`);
+    return response.data;
+  }catch(error){
+    console.error('Error al obtener tratamientos por paciente:', error);
+    throw error;
+  }
+}
+
 // Obtener un tratamiento específico
 const getById = async (id) => {
   try {
@@ -96,6 +107,7 @@ const remove = async (id) => {
 export default {
   getAll,
   getByPatientId,
+  getByPatient,
   getById,
   create,
   addActivity,

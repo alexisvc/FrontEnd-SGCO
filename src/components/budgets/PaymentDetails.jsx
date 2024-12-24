@@ -169,7 +169,10 @@ const PaymentDetails = ({
     <Box>
       {/* Resumen General */}
       <Paper sx={{ p: 2, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Resumen General</Typography>
+      <Typography variant="h4" gutterBottom align="center">
+        Pagos
+      </Typography>
+        <Typography variant="h5" gutterBottom>Resumen General</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <Box>
@@ -183,7 +186,7 @@ const PaymentDetails = ({
               <Typography variant="subtitle2">Actividades Planificadas</Typography>
               <Typography>
                 Completadas: {treatmentDetails.actividades.filter(a => a.estado === 'completado').length} 
-                de {treatmentDetails.actividades.length}
+                 de {treatmentDetails.actividades.length}
               </Typography>
             </Grid>
           )}
@@ -192,9 +195,10 @@ const PaymentDetails = ({
 
       {/* Pagos por Fase */}
       {currentPaymentSummary.fases.map((fase, index) => (
-        <Paper key={index} sx={{ p: 2, mb: 2 }}>
+        <Paper key={index} sx={{ p: 2, mb: 3, mt: 3 }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
             <Typography variant="h6">{fase.nombreFase}</Typography>
+            <br/>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
@@ -209,12 +213,12 @@ const PaymentDetails = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Descripción</TableCell>
-                  <TableCell>Fecha</TableCell>
-                  <TableCell align="right">Monto</TableCell>
-                  <TableCell align="right">Saldo</TableCell>
-                  <TableCell>Método</TableCell>
-                  <TableCell align="center">Acciones</TableCell>
+                  <TableCell><Typography variant="h6">Descripción</Typography></TableCell>
+                  <TableCell><Typography variant="h6">Fecha</Typography></TableCell>
+                  <TableCell align="right"><Typography variant="h6">Monto</Typography></TableCell>
+                  <TableCell align="right"><Typography variant="h6">Saldo</Typography></TableCell>
+                  <TableCell><Typography variant="h6">Método</Typography></TableCell>
+                  <TableCell align="center"><Typography variant="h6">Acciones</Typography></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -255,7 +259,9 @@ const PaymentDetails = ({
               Pendiente: {formatters.amount(fase.saldoPendiente)}
             </Typography>
           </Box>
+          <br/>
         </Paper>
+        
       ))}
 
       {/* Diálogo para nuevo pago */}

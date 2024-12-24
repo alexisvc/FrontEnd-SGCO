@@ -133,6 +133,8 @@ const BudgetForm = ({
   
           setBudget(newBudget);
           setSelectedPatient(treatmentData.paciente);
+          // Deshabilitar la búsqueda de paciente si venimos de planificación
+          setSearched(false);
         }
       } catch (error) {
         console.error('Error:', error);
@@ -250,7 +252,7 @@ const BudgetForm = ({
         </Button>
   
         {/* Búsqueda de paciente */}
-        {mode === 'create' && !treatmentPlan && (
+        { !treatmentPlan && !location?.state?.fromPlanning && (
           <Box component={Paper} style={{padding: '20px', marginBottom: '30px'}}> 
             <Box component="form" onSubmit={handleSearch}>
               <Typography variant="h5" gutterBottom>
@@ -321,7 +323,7 @@ const BudgetForm = ({
         )}
   
         {/* Resultados de búsqueda de paciente */}
-        {searched && patients.length > 0 && (
+        {!treatmentPlan && searched && patients.length > 0 && (
           <TableContainer component={Paper} sx={{ mt: 4 }}>
             <Table>
               <TableHead>

@@ -22,19 +22,19 @@ const PlanningMenu = () => {
       to: "/planificacion/lista",
       icon: <PersonIcon sx={{ fontSize: 40 }} />,
       text: "Planificaciones",
-      description: "Ver planificaciones y presupuestos"
+      description: "Gestión de planificaciones"
     },
     {
       to: "/presupuestos",
       icon: <ReceiptLongIcon sx={{ fontSize: 40 }} />,
       text: "Presupuestos",
-      description: "Ver y gestionar presupuestos"
+      description: "Gestión de presupuestos"
     },
     {
       to: "/reportes-financieros",
       icon: <AccountBalanceWalletIcon sx={{ fontSize: 40 }} />,
       text: "Reportes Financieros",
-      description: "Ver reportes y estadísticas"
+      description: "Ver reportes financieros mensuales"
     }
   ];
 
@@ -94,7 +94,7 @@ const PlanningMenu = () => {
                       {item.icon}
                     </Grid>
                     <Grid item xs>
-                      <Typography variant="h6">
+                      <Typography variant="h5">
                         {item.text}
                       </Typography>
                       <Typography variant="body2" color="white">
