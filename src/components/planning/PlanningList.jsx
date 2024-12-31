@@ -136,7 +136,7 @@ const PlanningList = () => {
     try {
       if (treatment.budget) {
         // Si ya tiene presupuesto, navegar a él
-        navigate(`/presupuestos/${treatment.budget}`);
+        navigate(`/presupuestos/${budget._id}`);
       } else {
         // Crear nuevo presupuesto
         navigate('/presupuestos/nuevo', { 
@@ -180,8 +180,7 @@ const PlanningList = () => {
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
-      <Container maxWidth="lg">
-        <Button
+      <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate("/planificacion")}
@@ -189,6 +188,9 @@ const PlanningList = () => {
         >
           Volver
         </Button>
+      
+      <Container maxWidth="lg">
+        
 
         <Paper sx={{ p: 3, mb: 3 }}>
           <Grid container justifyContent="space-between" alignItems="center">

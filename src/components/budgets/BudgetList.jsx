@@ -308,11 +308,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
                         <IconButton onClick={() => navigate(`/presupuestos/${budget._id}`)}>
                           <ViewIcon />
                         </IconButton>
-                        {budget.treatmentPlan && (
-                          <IconButton onClick={() => navigate(`/planificacion/editar/${currentTreatment._id}`)}>
-                            <EventNoteIcon />
-                          </IconButton>
-                        )}
+                        
                         <IconButton
                           onClick={() => navigate(`/presupuestos/editar/${budget._id}`)}
                           title="Editar"

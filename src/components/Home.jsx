@@ -124,7 +124,7 @@ function Home({ user, logout }) {
                 sx={{
                   color: 'white',
                   backgroundColor: "#8ba082",
-                  margin: 5,
+                  marginBottom: 5,
                   '&:hover': {
                     backgroundColor: "#5d6c56", 
                   },

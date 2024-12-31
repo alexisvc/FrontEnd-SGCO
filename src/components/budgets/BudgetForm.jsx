@@ -117,6 +117,19 @@ const BudgetForm = ({
   useEffect(() => {
     const loadData = async () => {
       try {
+        // Caso 1: Editar presupuesto existente
+        if (mode === 'edit' && id) {
+          const result = await fetchBudgetById(id);
+          if (!result.success) {
+            throw new Error(result.error || 'Error al cargar el presupuesto');
+          }
+          setBudget({
+            ...result.data,
+            paciente: result.data.paciente.id || result.data.paciente
+          });
+          setSelectedPatient(result.data.paciente);
+          setSearched(false);
+        } 
         if (location?.state?.treatmentPlanId) {
           const treatmentData = await patientTreatmentService.getById(location.state.treatmentPlanId);
           
@@ -139,6 +152,7 @@ const BudgetForm = ({
       } catch (error) {
         console.error('Error:', error);
         toast.error('Error al cargar datos');
+        navigate('/presupuestos');
       }
     };
   
@@ -241,8 +255,7 @@ const BudgetForm = ({
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
-      <Container maxWidth="lg">
-        <Button
+      <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate("/presupuestos")}
@@ -250,6 +263,9 @@ const BudgetForm = ({
         >
           Volver
         </Button>
+
+      <Container maxWidth="lg">
+        
   
         {/* Búsqueda de paciente */}
         { !treatmentPlan && !location?.state?.fromPlanning && (

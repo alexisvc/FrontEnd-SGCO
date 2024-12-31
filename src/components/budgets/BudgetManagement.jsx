@@ -141,8 +141,7 @@ const BudgetManagement = ({
 
   return (
     <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
-      <Container maxWidth="lg">
-        <Button
+      <Button
           variant="outlined"
           startIcon={<ArrowBack />}
           onClick={() => navigate("/presupuestos")}
@@ -150,6 +149,9 @@ const BudgetManagement = ({
         >
           Volver
         </Button>
+        
+      <Container maxWidth="lg">
+        
 
         <Paper sx={{ p: 2, mb: 3 }}>
           <Box sx={{ mb: 3 }}>

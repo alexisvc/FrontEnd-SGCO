@@ -1,104 +1,106 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Typography,
   Container,
+  Grid,
+  Paper
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import PersonIcon from '@mui/icons-material/Person';
+import {
+  ArrowBack as ArrowBackIcon,
+  Person as PersonIcon,
+  CalendarMonth as CalendarMonthIcon
+} from '@mui/icons-material';
 
 const AppointmentMenu = () => {
   const navigate = useNavigate();
 
+  const menuItems = [
+    {
+      to: "/odontologos",
+      icon: <PersonIcon sx={{ fontSize: 40 }} />,
+      text: "Gestión de Odontólogos",
+      description: "Gestión de odontólogos"
+    },
+    {
+      to: "/agendamiento/detalles",
+      icon: <CalendarMonthIcon sx={{ fontSize: 40 }} />,
+      text: "Agenda de Citas",
+      description: "Ver y gestionar citas"
+    }
+  ];
+
   return (
-    <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' , backgroundImage:"../../backgrounds/mainBack.png" }}>
-    <Button
+    <div style={{ 
+      backgroundColor: '#f5f1ef', 
+      minHeight: '100vh', 
+      padding: '20px'
+    }}>
+      <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/main-menu")}
-        sx={{ m: 2 }}
+        sx={{ mb: 3 }}
       >
         Atrás
       </Button>
-    <Container>
-      <Typography variant="h4" align="center" gutterBottom>
-        Agendamiento de citas
-      </Typography>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-        <div>
-          <Link
-            to="/odontologos"
-            className="link-button"
-            style={{ textDecoration: "none", width: "100%" }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={
-                <PersonIcon style={{ fontSize: 40, marginRight: "40" }} />
-              }
-              style={{
-                fontSize: "18px",
-                padding: "20px",
-                margin: "5%",
-                width: "140%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                
-              }}
-              sx={{
-                color: "white",
-                backgroundColor: "#8ba082",
-                "&:hover": {
-                  backgroundColor: "#5d6c56",
-                },
-              }}
-            >
-              Gestión de Odontólogos
-            </Button>
-          </Link>
-        </div>
-        <div>
-          <Link
-            to="/agendamiento/detalles"
-            className="link-button"
-            style={{ textDecoration: "none", width: "100%" }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={
-                <CalendarMonthIcon style={{ fontSize: 40, marginRight: "110" }} />
-              }
-              style={{
-                fontSize: "18px",
-                padding: "20px",
-                margin: "5%",
-                width: "145%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-              sx={{
-                color: "white",
-                backgroundColor: "#8ba082",
-                "&:hover": {
-                  backgroundColor: "#5d6c56",
-                },
-              }}
-            >
-              Agenda de Citas
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </Container>
+
+      <Container maxWidth="md">
+        <Typography 
+          variant="h4" 
+          align="center" 
+          gutterBottom 
+          sx={{ mb: 4 , color:'#383434'}}
+        >
+          Agendamiento de citas
+        </Typography>
+
+        <Grid container spacing={3}>
+          {menuItems.map((item, index) => (
+            <Grid item xs={12} key={index}>
+              <Paper 
+                elevation={3}
+                sx={{ 
+                  p: 2,
+                  transition: 'transform 0.2s',
+                  backgroundColor: '#8ba082',
+                  color: 'white',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4,
+                    cursor: 'pointer',
+                    
+                  }
+                }}
+              >
+                <Link 
+                  to={item.to}
+                  style={{ 
+                    textDecoration: "none", 
+                    color: 'inherit',
+                    display: 'block'
+                  }}
+                >
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item>
+                      {item.icon}
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant="h5">
+                        {item.text}
+                      </Typography>
+                      <Typography variant="body2" color="white">
+                        {item.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Link>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </div>
   );
 };

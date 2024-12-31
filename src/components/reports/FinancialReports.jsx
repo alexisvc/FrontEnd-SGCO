@@ -19,6 +19,8 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useFinancialReports } from '../../hooks/useFinancialReports';
+import ExportReportButton from './ExportReportButton';
+import DateSelector from './DateSelector';
 
 export default function FinancialReports() {
   const navigate = useNavigate();
@@ -44,7 +46,11 @@ export default function FinancialReports() {
 
   useEffect(() => {
     fetchReportData();
-  }, [selectedMonth]);
+  }, [selectedMonth, selectedYear]);
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
 
   const fetchReportData = async () => {
     if (selectedMonth && selectedYear) {
@@ -90,23 +96,26 @@ export default function FinancialReports() {
         </Box>
 
         <Paper sx={{ p: 3, mb: 3 }}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel>Mes</InputLabel>
-                <Select
-                  value={selectedMonth}
-                  onChange={handleMonthChange}
-                  label="Mes"
-                >
-                  {months.map((month) => (
-                    <MenuItem key={month.value} value={month.value}>
-                      {month.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={9}>
+              <DateSelector
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
+                onMonthChange={handleMonthChange}
+                onYearChange={handleYearChange}
+                months={months}
+              />
             </Grid>
+            <Grid item xs={12} md={3}>
+              <ExportReportButton 
+                reportData={reportData}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
+                months={months}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+  </Grid>
             <Grid item xs={12} md={6}>
               <Paper elevation={3} sx={{ p: 2, bgcolor: 'primary.light', color: 'white' }}>
                 <Typography variant="h6" gutterBottom>

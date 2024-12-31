@@ -204,19 +204,22 @@ useEffect(() => {
   }
 
   return (
-    <Container>
-      <Box sx={{ mb: 4 }}>
+    <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', padding: '20px' }}>
+    <Box sx={{ mb: 4 }}>
         <Button
           variant="outlined"
           startIcon={<ArrowBack />}
-          onClick={() => navigate('/planificacion')}
+          onClick={() => navigate('/planificacion/lista')}
         >
           Volver
         </Button>
       </Box>
+
+    <Container>
+      
   
       <Paper sx={{ p: 3 }}>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5"  gutterBottom>
           {mode === 'edit' ? 'Editar Planificación' : 'Nueva Planificación'}
         </Typography>
   
@@ -300,20 +303,11 @@ useEffect(() => {
       </TableContainer>
     )}
 
-    {/* Mostrar paciente seleccionado */}
-    {selectedPatient && (
-      <Box mt={2} p={2} sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
-        <Typography variant="subtitle1">
-          <strong>Paciente seleccionado:</strong> {selectedPatient.nombrePaciente}
-        </Typography>
-        <Typography variant="subtitle1">
-          <strong>Cédula:</strong> {selectedPatient.numeroCedula}
-        </Typography>
-      </Box>
-    )}
+    
+
   </Box>
 )}
-  
+  <hr/>
         {/* Formulario de Planificación */}
         <form onSubmit={handleSubmit}>
           {selectedPatient && (
@@ -326,7 +320,7 @@ useEffect(() => {
               </Typography>
             </Box>
           )}
-  
+          <hr/>
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Especialidad</InputLabel>
             <Select
@@ -454,6 +448,7 @@ useEffect(() => {
   </DialogActions>
 </Dialog>
     </Container>
+     </div> 
   );
 };
 

@@ -1,99 +1,127 @@
-import React, { useEffect } from "react";
-import EditTreatmentForm from "./EditTreatmentForm";
-import CreateTreatmentForm from "./CreateTreatmentForm";
+import React, { useEffect, useState } from 'react';
 import {
-  Container,
+  Paper,
   Typography,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-} from "@mui/material";
-import usePatientTreatments from "../../hooks/usePatientTreatments";
+  Chip
+} from '@mui/material';
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import usePatientTreatments from '../../hooks/usePatientTreatments';
 
-const TreamentPlansDetails = ({
-  patientId,
-  patientTreatments,
-  createPatientTreatment,
-  updatePatientTreatment,
-  getPatientTreatmentsByPatientId,
-}) => {
-  // Cargar los tratamientos del paciente al montar el componente
+const TreamentPlansDetails = ({ patientId }) => {
+  const [plans, setPlans] = useState([]);
+  const { getPatientTreatmentsByPatientId } = usePatientTreatments();
+
   useEffect(() => {
-    getPatientTreatmentsByPatientId(patientId);
+    const loadPlans = async () => {
+      try {
+        const data = await getPatientTreatmentsByPatientId(patientId);
+        setPlans(data);
+      } catch (error) {
+        console.error('Error al cargar planes:', error);
+      }
+    };
+
+    if (patientId) {
+      loadPlans();
+    }
   }, [patientId]);
 
-  // Función para manejar la creación de un nuevo tratamiento
-  const handleCreateTreatment = async (formData) => {
-    const newTreatmentData = {
-      ...formData,
-      paciente: patientId,
-    };
-    await createPatientTreatment(newTreatmentData);
-  };
+  const getStatusColor = (status) => ({
+    'pendiente': 'default',
+    'en-proceso': 'primary',
+    'completado': 'success'
+  }[status] || 'default');
 
-  // Función para manejar la actualización de un tratamiento existente
-  const handleUpdateTreatment = async (id, formData) => {
-    await updatePatientTreatment(id, formData);
-  };
+  const formatDate = (date) => new Date(date).toLocaleDateString();
 
   return (
-    <Container component={Paper} sx={{pb:2}}>
-      <Typography
-        variant="h4"
-        gutterBottom
-        align="center"
-        sx={{ pt: 2, pb: 1 }}
-      >
-        Tratamientos
+    <Paper sx={{ p: 3 }}>
+      <Typography variant="h4"
+          gutterBottom
+          align="center"
+          sx={{ pt: 2, pb: 1 }}>
+        Planificaciones del Paciente
       </Typography>
 
-      <TableContainer component={Paper} >
-        <Table sx = {{mb:1}}>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">
-                <Typography variant="h6">Cita</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography variant="h6">Actividad</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography variant="h6">Fecha</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography variant="h6">Monto Abono</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* Mostrar cada tratamiento existente como una fila editable */}
-            {patientTreatments.map((treatment) => (
-              <EditTreatmentForm
-                key={treatment.id}
-                treatmentId={treatment.id}
-                treatmentData={{
-                  cita: treatment.cita,
-                  actividadPlanTrat: treatment.actividadPlanTrat,
-                  fechaPlanTrat: treatment.fechaPlanTrat.split("T")[0],
-                  montoAbono: treatment.montoAbono,
-                }}
-                updatePatientTreatment={handleUpdateTreatment}
-              />
-            ))}
+      {plans.length > 0 ? (
+        plans.map((plan, index) => (
+          <Accordion key={plan._id}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                <Typography variant="subtitle1">
+                  Planificación {index + 1} - {plan.especialidad}
+                </Typography>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {plan.actividades.length} actividades | 
+                    {plan.actividades.filter(a => a.estado === 'completado').length} completadas
+                  </Typography>
+                </Box>
+              </Box>
+            </AccordionSummary>
 
-            {/* Fila para crear un nuevo tratamiento 
-            <CreateTreatmentForm
-              patientId={patientId}
-              createPatientTreatment={handleCreateTreatment}
-            />*/}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+            <AccordionDetails>
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Cita</TableCell>
+                      <TableCell>Actividad</TableCell>
+                      <TableCell>Fecha</TableCell>
+                      <TableCell>Estado</TableCell>
+                      <TableCell align="right">Abono</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {plan.actividades.map((actividad, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell>{actividad.cita}</TableCell>
+                        <TableCell>{actividad.actividadPlanTrat}</TableCell>
+                        <TableCell>{formatDate(actividad.fechaPlanTrat)}</TableCell>
+                        <TableCell>
+                          <Chip
+                            size="small"
+                            label={actividad.estado}
+                            color={getStatusColor(actividad.estado)}
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          ${actividad.montoAbono || 0}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow>
+                      <TableCell colSpan={4} align="right">
+                        <strong>Total Abonos:</strong>
+                      </TableCell>
+                      <TableCell align="right">
+                        <strong>
+                          ${plan.actividades.reduce((sum, act) => sum + (act.montoAbono || 0), 0)}
+                        </strong>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </AccordionDetails>
+          </Accordion>
+        ))
+      ) : (
+        <Typography color="text.secondary" align="center">
+          No hay planificaciones registradas
+        </Typography>
+      )}
+    </Paper>
   );
 };
 
