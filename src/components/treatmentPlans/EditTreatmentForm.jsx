@@ -1,100 +1,64 @@
-import React, { useState } from "react";
-import { TableRow, TableCell, TextField, IconButton, TextareaAutosize } from '@mui/material';
-import SaveIcon from '@mui/icons-material/Save';
-import { toast } from "react-toastify";
+import React from "react";
+import { TableRow, TableCell, TextField, TextareaAutosize } from "@mui/material";
 
 const EditTreatmentForm = ({
-  treatmentId,
   treatmentData,
-  updatePatientTreatment,
 }) => {
-  const [formData, setFormData] = useState({
-    cita: treatmentData?.cita || "",
-    actividadPlanTrat: treatmentData?.actividadPlanTrat || "",
-    fechaPlanTrat: treatmentData?.fechaPlanTrat || "",
-    montoAbono: treatmentData?.montoAbono || "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-      await updatePatientTreatment(treatmentId, formData);
-      // Notificación de éxito
-      toast.success("Plan de tratamiento actualizado exitosamente", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
-    } catch (error) {
-      // Notificación de error
-      toast.error("Error al actualizar el Plan de tratamiento.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
-  };
-
   return (
     <TableRow>
       <TableCell>
         <TextField
           name="cita"
-          value={formData.cita}
-          onChange={handleInputChange}
+          value={treatmentData.cita}
           variant="outlined"
           size="small"
+          fullWidth
+          InputProps={{
+            readOnly: true, // Bloquea el campo para que no se pueda editar
+          }}
         />
       </TableCell>
       <TableCell>
         <TextareaAutosize
           name="actividadPlanTrat"
-          value={formData.actividadPlanTrat}
-          onChange={handleInputChange}
-          //variant="outlined"
+          value={treatmentData.actividadPlanTrat}
+          readOnly // Bloquea el campo para que no se pueda editar
           minRows={3}
+          fullWidth
           style={{ 
-            width: '100%', 
-            padding: '4px', 
-            fontSize: '14px', 
-            fontFamily: 'Roboto',
-            borderRadius: '4px',
+            width: "100%", 
+            padding: "4px", 
+            fontSize: "14px", 
+            fontFamily: "Roboto",
+            borderRadius: "4px",
           }}
-          size="large"
         />
       </TableCell>
       <TableCell>
         <TextField
           name="fechaPlanTrat"
-          value={formData.fechaPlanTrat}
-          onChange={handleInputChange}
+          value={treatmentData.fechaPlanTrat}
           variant="outlined"
           size="small"
           type="date"
+          fullWidth
+          InputProps={{
+            readOnly: true, // Bloquea el campo para que no se pueda editar
+          }}
         />
       </TableCell>
       <TableCell>
         <TextField
           name="montoAbono"
-          value={formData.montoAbono}
-          onChange={handleInputChange}
+          value={treatmentData.montoAbono}
           variant="outlined"
           size="small"
           type="number"
+          fullWidth
+          InputProps={{
+            readOnly: true, // Bloquea el campo para que no se pueda editar
+          }}
         />
-      </TableCell>
-      <TableCell align='center'>
-        <IconButton onClick={handleSubmit}>
-          <SaveIcon />
-        </IconButton>
       </TableCell>
     </TableRow>
   );

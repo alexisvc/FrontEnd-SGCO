@@ -33,18 +33,19 @@ export function useOdontologos() {
       });
   };
 
-  const fetchOdontologoById = (id) => {
+  const fetchOdontologoById = async (id) => {
+  try {
     setLoading(true);
-    odontologosService.getOdontologoById(id)
-      .then(data => {
-        setOdontologo(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
-  };
+    const response = await odontologosService.getOdontologoById(id);
+    setOdontologo(response); // Asegúrate de que se devuelven los datos correctamente
+    setLoading(false);
+    return response;
+  } catch (err) {
+    setError(err);
+    setLoading(false);
+    throw err;
+  }
+};
 
   const fetchOdontologoByName = async (nombreOdontologo) => {
     try {

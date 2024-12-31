@@ -24,6 +24,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SearchIcon from "@mui/icons-material/Search";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { toast } from "react-toastify";
 import { useOdontologos } from "../../hooks/useOdontologos";
 
@@ -35,6 +37,7 @@ const Odontologos = () => {
     fetchOdontologoByEspecialidad,
     createOdontologo,
     setOdontologo,
+    deleteOdontologo,
   } = useOdontologos();
 
   useEffect(() => {
@@ -64,6 +67,24 @@ const Odontologos = () => {
 
   const handleSearchEspecialidadChange = (e) => {
     setSearchEspecialidad(e.target.value);
+  };
+
+  const handleDeleteOdontologo = async (odontologoId) => {
+    if (
+      window.confirm("¿Estás seguro de que deseas eliminar este odontólogo?")
+    ) {
+      try {
+        await deleteOdontologo(odontologoId);
+        toast.success("Odontólogo eliminado exitosamente");
+        fetchOdontologos();
+      } catch (error) {
+        toast.error("Error al eliminar el odontólogo");
+      }
+    }
+  };
+
+  const handleEditOdontologo = (odontologoId) => {
+    navigate(`/odontologos/editar/${odontologoId}`);
   };
 
   const handleSearchSubmit = async (e) => {
@@ -102,7 +123,7 @@ const Odontologos = () => {
 
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       await createOdontologo({
         nombreOdontologo: newOdontologo.nombreOdontologo,
@@ -111,29 +132,29 @@ const Odontologos = () => {
         direccionOdontologo: newOdontologo.direccionOdontologo,
         generoOdontologo: newOdontologo.generoOdontologo,
         especialidad: newOdontologo.especialidad,
-        telefono: newOdontologo.telefono
+        telefono: newOdontologo.telefono,
       });
-      toast.success('Odontólogo creado exitosamente', {
-        position: 'top-right',
+      toast.success("Odontólogo creado exitosamente", {
+        position: "top-right",
         autoClose: 3000,
       });
-  
+
       // Limpiar formulario
       setNewOdontologo({
-        nombreOdontologo: '',
-        edadOdontologo: '',
-        correoOdontologo: '',
-        direccionOdontologo: '',
-        generoOdontologo: '',
-        especialidad: '',
-        telefono: ''
+        nombreOdontologo: "",
+        edadOdontologo: "",
+        correoOdontologo: "",
+        direccionOdontologo: "",
+        generoOdontologo: "",
+        especialidad: "",
+        telefono: "",
       });
-  
+
       setShowCreateForm(false);
       fetchOdontologos();
     } catch (error) {
-      toast.error('Error al crear el odontólogo.', {
-        position: 'top-right',
+      toast.error("Error al crear el odontólogo.", {
+        position: "top-right",
         autoClose: 3000,
       });
     }
@@ -145,11 +166,11 @@ const Odontologos = () => {
   };
 
   return (
-    <div className="Odontologos">
+    <div className="Odontologos" style={{backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate("/main-menu")}
+        onClick={() => navigate("/agendamiento")}
         sx={{ m: 2 }}
       >
         Atrás
@@ -421,15 +442,22 @@ const Odontologos = () => {
                 <TableCell align="center">
                   {odontologo.generoOdontologo}
                 </TableCell>
-                <TableCell align="center">
-                  {odontologo.especialidad}
-                </TableCell>
+                <TableCell align="center">{odontologo.especialidad}</TableCell>
                 <TableCell align="center">{odontologo.telefono}</TableCell>
                 <TableCell align="center">
-                  <IconButton onClick={() => handleViewOdontologo(odontologo)}>
+                  {/*<IconButton onClick={() => handleViewOdontologo(odontologo)}>
                     <VisibilityIcon />
+                  </IconButton>*/}
+                  <IconButton
+                    onClick={() => handleEditOdontologo(odontologo.id)}
+                  >
+                    <EditIcon />
                   </IconButton>
-                  Ver Detalles
+                  <IconButton
+                    onClick={() => handleDeleteOdontologo(odontologo.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
