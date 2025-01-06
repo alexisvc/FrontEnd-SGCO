@@ -140,7 +140,7 @@ const TreatmentList = ({ treatments, onEdit, onDelete }) => {
               </Typography>
             </TableCell>
             <TableCell>
-        <Button onClick={() => handleCreateBudget(treatment.id)}>
+        <Button onClick={() => handleCreateBudget(treatments.id)}>
           Crear Presupuesto
         </Button>
       </TableCell>
