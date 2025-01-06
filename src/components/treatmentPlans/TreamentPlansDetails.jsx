@@ -79,7 +79,7 @@ const TreamentPlansDetails = ({ patientId }) => {
                       <TableCell>Actividad</TableCell>
                       <TableCell>Fecha</TableCell>
                       <TableCell>Estado</TableCell>
-                      <TableCell align="right">Abono</TableCell>
+                      
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -95,20 +95,12 @@ const TreamentPlansDetails = ({ patientId }) => {
                             color={getStatusColor(actividad.estado)}
                           />
                         </TableCell>
-                        <TableCell align="right">
-                          ${actividad.montoAbono || 0}
-                        </TableCell>
+                        
                       </TableRow>
                     ))}
                     <TableRow>
-                      <TableCell colSpan={4} align="right">
-                        <strong>Total Abonos:</strong>
-                      </TableCell>
-                      <TableCell align="right">
-                        <strong>
-                          ${plan.actividades.reduce((sum, act) => sum + (act.montoAbono || 0), 0)}
-                        </strong>
-                      </TableCell>
+                      
+                      
                     </TableRow>
                   </TableBody>
                 </Table>
