@@ -12,7 +12,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Chip
+  Chip,
+  Divider
 } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import usePatientTreatments from '../../hooks/usePatientTreatments';

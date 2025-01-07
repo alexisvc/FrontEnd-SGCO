@@ -114,7 +114,7 @@ export default {
   getAllBudgets,
   getBudgetById,
   getBudgetsByPatient,
-  //getBudgetByTreatment,
+  getBudgetByTreatment,
   createBudget,
   createBudgetForTreatment,
   createBudgetFromTreatment,

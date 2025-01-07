@@ -11,9 +11,27 @@ import evolucionOrtodonciaService from '../../services/evolucionOrtodonciaServic
 import rehabilitacionOralService from '../../services/rehabilitacionOralService';
 import disfuncionMandibularService from '../../services/disfuncionMandibularService';
 import periodonticTreatmentService from '../../services/periodonticTreatmentService';
-
+import budgetService from '../../services/budgetService';
 
 export const generatePDF = async (patientId) => {
+
+    const formatDate = (date) => {
+        if (!date) return 'N/A';
+        const d = new Date(date);
+        
+        // Si la fecha es inválida
+        if (isNaN(d.getTime())) return 'Fecha inválida';
+        
+        // Obtener día, mes y año
+        const dia = d.getDate().toString().padStart(2, '0');
+        const mes = (d.getMonth() + 1).toString().padStart(2, '0');
+        const año = d.getFullYear();
+        
+        return `${dia}/${mes}/${año}`;
+      };
+
+      
+
     try {
         // Obtener detalles del paciente
         let patient = await patientsService.getPatientById(patientId);
@@ -33,16 +51,38 @@ export const generatePDF = async (patientId) => {
 
         // Obtener planes de tratamiento del paciente
         let treatmentPlans = [];
+try {
+    // Primero obtenemos los planes
+    const plans = await treatmentPlansService.getByPatientId(patientId);
+    
+    // Luego obtenemos los presupuestos para cada plan
+    treatmentPlans = await Promise.all(plans.map(async (plan) => {
         try {
-            treatmentPlans = await treatmentPlansService.getByPatientId(patientId);
+            const budget = await budgetService.getBudgetByTreatment(plan._id);
+            return {
+                ...plan,
+                budget: budget || null
+            };
         } catch (error) {
-            if (error.response && error.response.status === 404) {
-                console.warn("Treatment plans not found for patient ID:", patientId);
-            } else {
-                console.error("Error fetching treatment plans:", error);
-                throw error;  // Rethrow if it's a different error
-            }
+            console.warn(`No budget found for plan ${plan._id}`);
+            return {
+                ...plan,
+                budget: null
+            };
         }
+    }));
+
+    console.log('Plans with budgets:', treatmentPlans);
+} catch (error) {
+    if (error.response && error.response.status === 404) {
+        console.warn("Treatment plans not found for patient ID:", patientId);
+    } else {
+        console.error("Error fetching treatment plans:", error);
+        throw error;
+    }
+}
+
+        
 
         // Obtener planes de tratamiento del paciente
         let evolutionCharts = [];
@@ -159,6 +199,8 @@ export const generatePDF = async (patientId) => {
             const pageWidth = doc.internal.pageSize.getWidth();
             const margin = 10;
             const maxLineWidth = pageWidth - margin * 2;
+
+            //if (!text) return yPos;
             
             // Dividir el texto en líneas que se ajusten al ancho de la página
             const lines = doc.splitTextToSize(text, maxLineWidth);
@@ -259,24 +301,106 @@ export const generatePDF = async (patientId) => {
         }
 
         // Agregar planes de tratamiento si existen
-        if (treatmentPlans.length > 0) {
-            doc.setFontSize(17);
-            addText("Plan de tratamientos:", 10, true);
-            // Preparar datos para la tabla
-            const tableData = treatmentPlans.map(plan => [
-                plan.cita,
-                plan.actividadPlanTrat,
-                new Date(plan.fechaPlanTrat).toLocaleDateString(),
-                plan.montoAbono
-            ]);
-            doc.setFontSize(11);
-            // Agregar tabla al PDF
-            autoTable(doc, {
-                head: [['Cita', 'Actividad del Plan de Tratamiento', 'Fecha del Plan', 'Monto Abono']],
-                body: tableData,
-                startY: yPos
+ 
+        if (treatmentPlans && treatmentPlans.length > 0) {
+            //console.log('Plans found:', treatmentPlans); // Log para debug
+            treatmentPlans.forEach((plan, planIndex) => {
+                //console.log(`Plan ${planIndex + 1}:`, plan); // Log para debug
+                //console.log('Budget:', plan.budget); // Log para debug
+                // Título de la planificación
+                doc.setFontSize(16);
+                addText(`Planificación ${planIndex + 1} - ${plan.especialidad}`, 15);
+
+                // Presupuesto total si existe
+                if (plan.budget) {
+                    doc.setFontSize(12);
+                    addText(`Presupuesto: $${plan.budget.totalGeneral}`, 10);
+                }
+
+                // Sección de actividades planificadas
+                doc.setFontSize(14);
+                addText("Actividades Planificadas", 10);
+
+                const actividadesData = plan.actividades.map(actividad => [
+                    actividad.cita || 'N/A',
+                    actividad.actividadPlanTrat || 'N/A',
+                    formatDate(actividad.fechaPlanTrat),
+                    actividad.estado || 'pendiente',
+                    `$${actividad.montoAbono || 0}`
+                ]);
+
+                autoTable(doc, {
+                    head: [['Cita', 'Actividad', 'Fecha', 'Estado', 'Abono']],
+                    body: actividadesData,
+                    startY: yPos,
+                    styles: { fontSize: 10 },
+                    columnStyles: {
+                        0: { cellWidth: 20 },
+                        1: { cellWidth: 'auto' },
+                        2: { cellWidth: 30 },
+                        3: { cellWidth: 30 },
+                        4: { cellWidth: 25, halign: 'right' }
+                    }
+                });
+
+                yPos = doc.lastAutoTable.finalY + 15;
+
+                // Sección de presupuesto
+        if (plan.budget && plan.budget.fases) {  // Cambiado de plan.presupuesto a plan.budget
+            //console.log('Budget found for plan:', plan.budget); // Log para debug
+            
+            doc.setFontSize(14);
+            addText("Presupuesto", 10);
+
+            plan.budget.fases.forEach((fase, faseIndex) => { // Cambiado de plan.presupuesto a plan.budget
+                //console.log(`Processing fase ${faseIndex}:`, fase); // Log para debug
+                
+                doc.setFontSize(12);
+                addText(fase.nombre, 10);
+
+                const procedimientosData = fase.procedimientos.map(proc => [
+                    proc.nombre || 'N/A',
+                    proc.numeroPiezas?.toString() || '0',
+                    `$${proc.costoPorUnidad || 0}`,
+                    `$${proc.costoTotal || 0}`
+                ]);
+
+                autoTable(doc, {
+                    head: [['Procedimiento', 'N° Piezas', 'Costo Unitario', 'Total']],
+                    body: [
+                        ...procedimientosData,
+                        [{ 
+                            content: 'Total Fase:', 
+                            colSpan: 3, 
+                            styles: { fontStyle: 'bold', halign: 'right' }
+                        }, 
+                        { 
+                            content: `$${fase.total || 0}`,
+                            styles: { fontStyle: 'bold', halign: 'right' }
+                        }]
+                    ],
+                    startY: yPos,
+                    styles: { fontSize: 10 },
+                    columnStyles: {
+                        0: { cellWidth: 'auto' },
+                        1: { cellWidth: 30, halign: 'right' },
+                        2: { cellWidth: 30, halign: 'right' },
+                        3: { cellWidth: 30, halign: 'right' }
+                    }
+                });
+
+                yPos = doc.lastAutoTable.finalY + 10;
             });
-            yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
+
+            // Total General
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            addText(`Total General: $${plan.budget.totalGeneral}`, 15, true);  // Cambiado de plan.presupuesto a plan.budget
+            doc.setFont(undefined, 'normal');
+        }
+
+                yPos += 10;  // Espacio entre planes de tratamiento
+            });
         }
 
 // Agregar cuadros de evolución si existen
@@ -284,42 +408,83 @@ if (evolutionCharts.length > 0) {
     doc.setFontSize(17);
     addText("Cuadro de evolución:", 10, true);
 
-    // Estructura separada para almacenar las URLs de las imágenes
-    const imageUrls = evolutionCharts.map(evolution => ({
-        archivo1Url: evolution.archivo1Url,
-        archivo2Url: evolution.archivo2Url
-    }));
-
     const tableData = evolutionCharts.map(evolution => [
-        new Date(evolution.fechaCuadEvol).toLocaleDateString(),
-        evolution.actividadCuadEvol,
-        evolution.recomendacionCuadEvol
+        formatDate(evolution.fechaCuadEvol),
+        evolution.actividadCuadEvol || '',
+        evolution.recomendacionCuadEvol || '',
+        '', // Espacio para firma del odontólogo
+        ''  // Espacio para firma del paciente
     ]);
-    doc.setFontSize(11);
+
     autoTable(doc, {
-        head: [['Fecha', 'Actividad Clínica', 'Recomendación', 'Firma Odontólogo', 'Firma Paciente']],
+        head: [['Fecha', 'Actividad\nClínica', 'Recomendación', 'Firma\nOd.', 'Firma\nPac.']],
         body: tableData,
         startY: yPos,
-        
-        didDrawCell: function (data) {
-            // Para la columna 3 (Firma Odontólogo) y columna 4 (Firma Paciente)
+        theme: 'grid',
+        styles: {
+            fontSize: 9,
+            cellPadding: 3,
+            overflow: 'linebreak',
+            lineWidth: 0.1
+        },
+        columnStyles: {
+            0: { cellWidth: 25 },    // Fecha - reducido
+            1: { cellWidth: 50 },    // Actividad - aumentado
+            2: { cellWidth: 'auto' }, // Recomendación - automático
+            3: { cellWidth: 20 },    // Firma Odontólogo - más pequeño
+            4: { cellWidth: 20 }     // Firma Paciente - más pequeño
+        },
+        headStyles: {
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontStyle: 'bold',
+            halign: 'center',
+            valign: 'middle',
+            fontSize: 8
+        },
+        bodyStyles: {
+            valign: 'middle',
+            halign: 'left'
+        },
+        didDrawCell: function(data) {
             if (data.section === 'body' && (data.column.index === 3 || data.column.index === 4)) {
-                const rowIndex = data.row.index;
-                const evolution = evolutionCharts[rowIndex];
-                if (evolution && evolution.archivo1Url && evolution.archivo2Url) {
+                const evolution = evolutionCharts[data.row.index];
+                if (evolution) {
                     const url = data.column.index === 3 ? evolution.archivo1Url : evolution.archivo2Url;
-                    const img = new Image();
-                    img.src = url;
-                    const imgWidth = 6;  // Ancho fijo de la imagen
-                    const imgHeight = 6; // Alto fijo de la imagen
-                    const xOffset = (data.cell.width - imgWidth) / 2;  // Centrar la imagen horizontalmente
-                    const yOffset = (data.cell.height - imgHeight) / 2; // Centrar la imagen verticalmente
-                    doc.addImage(img, 'JPEG', data.cell.x + xOffset, data.cell.y + yOffset, imgWidth, imgHeight);
+                    if (url) {
+                        try {
+                            // Tamaños más pequeños para las firmas
+                            const imgWidth = 15;   // Reducido de 25 a 15
+                            const imgHeight = 10;  // Reducido de 15 a 10
+                            const xOffset = (data.cell.width - imgWidth) / 2;
+                            const yOffset = (data.cell.height - imgHeight) / 2;
+                            
+                            const img = new Image();
+                            img.src = url;
+                            doc.addImage(
+                                img, 
+                                'PNG', 
+                                data.cell.x + xOffset,
+                                data.cell.y + yOffset,
+                                imgWidth,
+                                imgHeight
+                            );
+                        } catch (error) {
+                            console.warn('Error al cargar firma:', error);
+                        }
+                    }
                 }
+            }
+        },
+        willDrawCell: function(data) {
+            // Altura reducida para las filas
+            if (data.section === 'body') {
+                data.row.height = Math.max(data.row.height, 15); // Reducido de 20 a 15
             }
         }
     });
-    yPos = doc.lastAutoTable.finalY + 10;  // Ajustar posición después de la tabla
+
+    yPos = doc.lastAutoTable.finalY + 10;
 }
 
         // Agregar cirugía patología si existe
