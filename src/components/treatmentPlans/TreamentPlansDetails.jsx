@@ -50,7 +50,10 @@ const TreamentPlansDetails = ({ patientId }) => {
 
   return (
     <Paper sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h4"
+      gutterBottom
+      align="center" 
+      >
         Planificaciones y Presupuestos del Paciente
       </Typography>
 
@@ -58,12 +61,10 @@ const TreamentPlansDetails = ({ patientId }) => {
         <Accordion key={plan._id}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1">
+              <Typography variant="h5">
                 Planificación {index + 1} - {plan.especialidad}
               </Typography>
-              <Typography variant="subtitle2" color="primary">
-                {plan.budget ? `Presupuesto: $${plan.budget.totalGeneral}` : 'Sin presupuesto'}
-              </Typography>
+              
             </Box>
           </AccordionSummary>
 
@@ -74,11 +75,11 @@ const TreamentPlansDetails = ({ patientId }) => {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Cita</TableCell>
-                    <TableCell>Actividad</TableCell>
-                    <TableCell>Fecha</TableCell>
-                    <TableCell>Estado</TableCell>
-                    <TableCell align="right">Abono</TableCell>
+                    <TableCell> <Typography variant="h6" gutterBottom>Cita</Typography></TableCell>
+                    <TableCell><Typography variant="h6" gutterBottom>Actividad</Typography></TableCell>
+                    <TableCell align="right"><Typography variant="h6" gutterBottom>Fecha</Typography></TableCell>
+                    
+                    
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -86,42 +87,37 @@ const TreamentPlansDetails = ({ patientId }) => {
                     <TableRow key={idx}>
                       <TableCell>{actividad.cita}</TableCell>
                       <TableCell>{actividad.actividadPlanTrat}</TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {new Date(actividad.fechaPlanTrat).toLocaleDateString()}
                       </TableCell>
-                      <TableCell>
-                        <Chip
-                          size="small"
-                          label={actividad.estado}
-                          color={actividad.estado === 'completado' ? 'success' : 
-                                actividad.estado === 'en-proceso' ? 'primary' : 'default'}
-                        />
-                      </TableCell>
-                      <TableCell align="right">${actividad.montoAbono || 0}</TableCell>
+                      
+                      
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-
+                  
             {/* Sección de Presupuesto */}
             {plan.budget && (
               <>
-                <Divider sx={{ my: 3 }} />
+              <br/>
+              
+                <hr/>
+                <br/>
                 <Typography variant="h6" gutterBottom>Presupuesto</Typography>
                 {plan.budget.fases.map((fase, faseIndex) => (
                   <Box key={faseIndex} sx={{ mb: 3 }}>
-                    <Typography variant="subtitle1" gutterBottom>
+                    <Typography variant="h6" gutterBottom>
                       {fase.nombre}
                     </Typography>
                     <TableContainer>
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell>Procedimiento</TableCell>
-                            <TableCell align="right">N° Piezas</TableCell>
-                            <TableCell align="right">Costo Unitario</TableCell>
-                            <TableCell align="right">Total</TableCell>
+                            <TableCell><Typography variant="h6" gutterBottom>Procedimiento</Typography></TableCell>
+                            <TableCell align="right"><Typography variant="h6" gutterBottom>N° Piezas</Typography></TableCell>
+                            
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -129,27 +125,17 @@ const TreamentPlansDetails = ({ patientId }) => {
                             <TableRow key={procIndex}>
                               <TableCell>{proc.nombre}</TableCell>
                               <TableCell align="right">{proc.numeroPiezas}</TableCell>
-                              <TableCell align="right">${proc.costoPorUnidad}</TableCell>
-                              <TableCell align="right">${proc.costoTotal}</TableCell>
+                              
                             </TableRow>
                           ))}
-                          <TableRow>
-                            <TableCell colSpan={3} align="right">
-                              <strong>Total Fase:</strong>
-                            </TableCell>
-                            <TableCell align="right">
-                              <strong>${fase.total}</strong>
-                            </TableCell>
-                          </TableRow>
+                          
                         </TableBody>
                       </Table>
                     </TableContainer>
                   </Box>
                 ))}
                 <Box sx={{ mt: 2, textAlign: 'right' }}>
-                  <Typography variant="h6">
-                    Total General: ${plan.budget.totalGeneral}
-                  </Typography>
+                  
                 </Box>
               </>
             )}

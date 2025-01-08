@@ -21,14 +21,17 @@ export function  usePatientTreatments  ()  {
       const data = await patientTreatmentService.getAll();
       if (Array.isArray(data)) {
         setPatientTreatments(data);
+        return data; // Retornar los datos
       } else {
         console.error('Los datos recibidos no son un array:', data);
         setPatientTreatments([]);
+        return [];
       }
     } catch (error) {
       console.error('Hook - Error getting treatments:', error);
       setError(error.message);
-      throw error;
+      setPatientTreatments([]);
+      return [];
     } finally {
       setLoading(false);
     }

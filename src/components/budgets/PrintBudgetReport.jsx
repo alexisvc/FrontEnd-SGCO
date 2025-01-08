@@ -214,7 +214,7 @@ const PrintBudgetReport = ({ budget, treatmentDetails, paymentSummary, fetchPaym
       onClick={generatePDF}
       startIcon={<PrintIcon />}
     >
-      Imprimir Reporte Completo
+      Imprimir Reporte
     </Button>
   );
 };

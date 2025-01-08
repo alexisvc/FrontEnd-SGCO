@@ -212,8 +212,7 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
                 <TableCell><Typography variant="h6">Cita</Typography></TableCell>
                 <TableCell><Typography variant="h6">Descripción</Typography></TableCell>
                 <TableCell><Typography variant="h6">Fecha</Typography></TableCell>
-                <TableCell><Typography variant="h6">Estado</Typography></TableCell>
-                <TableCell align="right"><Typography variant="h6">Acciones</Typography></TableCell>
+                
               </TableRow>
             </TableHead>
             <TableBody>
@@ -231,27 +230,7 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
                   <TableCell>
                     {new Date(actividad.fechaPlanTrat).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={actividad.estado}
-                      color={getStatusColor(actividad.estado)}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    {actividad.estado !== 'completado' && (
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={() => handleUpdateActivityStatus(
-                          index, 
-                          actividad.estado === 'pendiente' ? 'en-proceso' : 'completado'
-                        )}
-                      >
-                        {actividad.estado === 'pendiente' ? 'Iniciar' : 'Completar'}
-                      </Button>
-                    )}
-                  </TableCell>
+                  
                 </TableRow>
               ))}
             </TableBody>
@@ -266,13 +245,7 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
                   Total Actividades: {currentTreatment.actividades?.length || 0}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
-                <Typography>
-                  Completadas: {
-                    currentTreatment.actividades?.filter(a => a.estado === 'completado').length || 0
-                  }
-                </Typography>
-              </Grid>
+              
               <Grid item xs={4}>
                 <Typography>
                   Abonos Sugeridos: ${

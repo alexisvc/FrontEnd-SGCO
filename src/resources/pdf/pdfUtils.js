@@ -309,13 +309,15 @@ try {
                 //console.log('Budget:', plan.budget); // Log para debug
                 // Título de la planificación
                 doc.setFontSize(16);
-                addText(`Planificación ${planIndex + 1} - ${plan.especialidad}`, 15);
-
+                addText(`Planificación ${planIndex + 1} - ${plan.especialidad}`, 10, true);
+                
                 // Presupuesto total si existe
+                /*
                 if (plan.budget) {
                     doc.setFontSize(12);
-                    addText(`Presupuesto: $${plan.budget.totalGeneral}`, 10);
+                    addText(`Presupuesto Total: $${plan.budget.totalGeneral}`, 10);
                 }
+                */
 
                 // Sección de actividades planificadas
                 doc.setFontSize(14);
@@ -325,12 +327,12 @@ try {
                     actividad.cita || 'N/A',
                     actividad.actividadPlanTrat || 'N/A',
                     formatDate(actividad.fechaPlanTrat),
-                    actividad.estado || 'pendiente',
+                    
                     `$${actividad.montoAbono || 0}`
                 ]);
 
                 autoTable(doc, {
-                    head: [['Cita', 'Actividad', 'Fecha', 'Estado', 'Abono']],
+                    head: [['Cita', 'Actividad', 'Fecha', 'Abono']],
                     body: actividadesData,
                     startY: yPos,
                     styles: { fontSize: 10 },
@@ -352,7 +354,7 @@ try {
             doc.setFontSize(14);
             addText("Presupuesto", 10);
 
-            plan.budget.fases.forEach((fase, faseIndex) => { // Cambiado de plan.presupuesto a plan.budget
+            plan.budget.fases.forEach((fase, faseIndex) => { 
                 //console.log(`Processing fase ${faseIndex}:`, fase); // Log para debug
                 
                 doc.setFontSize(12);
@@ -395,7 +397,7 @@ try {
             // Total General
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            addText(`Total General: $${plan.budget.totalGeneral}`, 15, true);  // Cambiado de plan.presupuesto a plan.budget
+            addText(`Presupuesto Total ${plan.especialidad}: $${plan.budget.totalGeneral}`, 15, true);  
             doc.setFont(undefined, 'normal');
         }
 

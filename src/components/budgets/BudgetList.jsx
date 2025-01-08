@@ -295,9 +295,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
                             <Typography variant="body2">
                               {budget.treatmentPlan.actividades?.length || 0} actividades
                             </Typography>
-                            <Typography variant="caption" color="textSecondary">
-                              {budget.treatmentPlan.actividades?.filter(a => a.estado === 'completado').length || 0} completadas
-                            </Typography>
+                            
                           </Box>
                         ) : (
                           'Sin planificación'
