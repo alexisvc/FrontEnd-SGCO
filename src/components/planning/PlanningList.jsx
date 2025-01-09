@@ -34,12 +34,14 @@ import { toast } from 'react-toastify';
 import usePatientTreatments from '../../hooks/usePatientTreatments'; 
 import budgetService from '../../services/budgetService';
 
+
 const PlanningList = () => { 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('cedula');
   const [filteredTreatments, setFilteredTreatments] = useState([]);
+  const [treatmentsWithBudget, setTreatmentsWithBudget] = useState({});
   const { 
     patientTreatments, 
     getAllPatientTreatments, 
@@ -87,6 +89,58 @@ const PlanningList = () => {
     }
   }, [patientTreatments]);
 
+  useEffect(() => {
+    const loadTreatmentsWithBudgetInfo = async () => {
+      try {
+        setLoading(true);
+        const treatments = await getAllPatientTreatments();
+        
+        if (!treatments || !Array.isArray(treatments)) {
+          setFilteredTreatments([]);
+          return;
+        }
+  
+        const treatmentsWithBudgetInfo = await Promise.all(
+          treatments.map(async (treatment) => {
+            try {
+              const budget = await budgetService.getBudgetByTreatment(treatment._id);
+              return {
+                ...treatment,
+                hasBudget: true,
+                budgetId: budget._id
+              };
+            } catch (error) {
+              return {
+                ...treatment,
+                hasBudget: false,
+                budgetId: null
+              };
+            }
+          })
+        );
+  
+        setFilteredTreatments(treatmentsWithBudgetInfo);
+      } catch (error) {
+        console.error('Error loading treatments:', error);
+        toast.error('Error al cargar las planificaciones');
+        setFilteredTreatments([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    loadTreatmentsWithBudgetInfo();
+  }, [getAllPatientTreatments]);
+
+// Función para verificar presupuestos
+const checkBudgetStatus = async (treatmentId) => {
+  try {
+    const budget = await budgetService.getBudgetByTreatment(treatmentId);
+    return budget ? budget._id : null;
+  } catch (error) {
+    return null;
+  }
+};
 
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de eliminar esta planificación?')) {
@@ -133,17 +187,23 @@ const PlanningList = () => {
 
 
   const handleCreateBudget = async (treatment) => {
+    if (!treatment || !treatment._id) {
+      toast.error('Información de tratamiento inválida');
+      return;
+    }
+  
     try {
-      if (treatment.budget) {
-        // Si ya tiene presupuesto, navegar a él
-        navigate(`/presupuestos/${budget._id}`);
+      if (treatment.hasBudget && treatment.budgetId) {
+        // Si ya sabemos que tiene presupuesto y tenemos el ID
+        navigate(`/presupuestos/editar/${treatment.budgetId}`);
       } else {
-        // Crear nuevo presupuesto
+        // Si no tiene presupuesto, crear uno nuevo
         navigate('/presupuestos/nuevo', { 
           state: { treatmentPlanId: treatment._id }
         });
       }
     } catch (error) {
+      console.error('Error al gestionar presupuesto:', error);
       toast.error('Error al gestionar presupuesto');
     }
   };
@@ -271,17 +331,15 @@ const PlanningList = () => {
                   <TableCell>{treatment.especialidad}</TableCell>
                   <TableCell>
                     {treatment.actividades.length} actividades
-                    <Typography variant="caption" display="block">
-                      {treatment.actividades.filter(a => a.estado === 'completado').length} completadas
-                    </Typography>
+                    
                   </TableCell>
                   
                   <TableCell align="center">
                     <IconButton 
                       onClick={() => handleCreateBudget(treatment)}
-                      title="Crear/Ver Presupuesto"
+                      title={treatment.hasBudget ? "Ver Presupuesto" : "Crear Presupuesto"}
                     >
-                      <ReceiptLongIcon />
+                      <ReceiptLongIcon color={treatment.hasBudget ? "primary" : "inherit"}  />
                     </IconButton>
                     <IconButton
                       onClick={() => navigate(`/planificacion/editar/${treatment._id}`)}

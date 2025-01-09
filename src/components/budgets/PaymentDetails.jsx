@@ -181,15 +181,7 @@ const PaymentDetails = ({
               <Typography>Saldo Pendiente: {formatters.amount(currentPaymentSummary.resumenGeneral.saldoPendiente)}</Typography>
             </Box>
           </Grid>
-          {treatmentDetails && (
-            <Grid item xs={12} sm={6}>
-              <Typography variant="subtitle2">Actividades Planificadas</Typography>
-              <Typography>
-                Completadas: {treatmentDetails.actividades.filter(a => a.estado === 'completado').length} 
-                 de {treatmentDetails.actividades.length}
-              </Typography>
-            </Grid>
-          )}
+          
         </Grid>
       </Paper>
 

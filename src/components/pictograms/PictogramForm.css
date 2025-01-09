@@ -1,0 +1,123 @@
+.create-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-image: url("../../backgrounds/pictograms.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pictogram-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  font-family: 'Satisfy', cursive;
+}
+
+.form-section {
+  width: 70%;
+  height: 80%;
+  margin: 10px auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+  justify-content: center;
+}
+
+.form-section h3 {
+  font-size: 5vh;
+  color: #FF637D;
+  -webkit-text-stroke: 0.5px black;
+  margin-bottom: 0;
+}
+
+.form-input {
+  width: 70%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 1vh auto;
+  color: #000;
+}
+
+.form-input p {
+  font-size: 1.8vh;
+  color: #000;
+  font-weight: bold;
+  text-align: left;
+}
+
+.form-input select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #000;
+}
+
+.input-field {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #000;
+}
+
+.eye-icon {
+  width: fit-content;
+  height: fit-content;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.button-container button {
+  font-size: 2.25vh;
+  width: 40%;
+  margin: 10px;
+  padding: 10px;
+  font-family: 'Satisfy', cursive;
+  color: #EAF2E3;
+  background-color: #FF637D;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row; /* Cambia la dirección del eje principal a columna */
+  justify-content: center;
+  align-items: center;
+}
+
+.button-container button span {
+  margin-left: 5px; /* Ajusta el espacio entre el icono y la palabra según tus necesidades */
+}
+
+
+.button-container button:hover {
+  background-color: #66D7D1;
+}
+
+.form-image {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: fit-content;
+}
+
+.form-image img {
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  border: none;
+}

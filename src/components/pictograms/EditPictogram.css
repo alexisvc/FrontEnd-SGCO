@@ -1,0 +1,47 @@
+.edit-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-image: url("../../backgrounds/pictograms.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.edit-pictogram-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    font-family: 'Satisfy', cursive;
+  }
+  
+  .form-section-edit {
+    width: 70%;
+    height: 80%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .form-section-edit h3 {
+    font-size: 5vh;
+    color: #FF637D;
+    -webkit-text-stroke: 0.75px black;
+  }
+
+  
+ 
+  
+
+  
