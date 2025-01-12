@@ -1,37 +1,16 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link, useNavigate } from "react-router-dom";
-import "./LoginForm.css";
-import LoginIcon from '@mui/icons-material/Login';
-import PopUpHelp from "../extras/PopUpHelp";
-import PopUpInstructions from "../extras/PopUpInstructions";
+import { useNavigate } from "react-router-dom";
+import { Button, Grid, TextField, Container } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import HomeIcon from '@mui/icons-material/Home';
-import {
-  Button,
-  Typography,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  TextField,
-  Container,
-  Box,
-} from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import "./LoginForm.css";
 
 export const LoginForm = ({ login }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-  const [isPopUpOpenInstructions, setIsPopUpOpenInstructions] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -39,164 +18,78 @@ export const LoginForm = ({ login }) => {
 
     try {
       await login({ username, password });
-      setUsername("");
-      setPassword("");
-      toast.success("Ingreso exitoso.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.success("Ingreso exitoso.", { position: "top-right", autoClose: 3000 });
+      navigate("/"); // Cambiar a la ruta principal tras login exitoso
     } catch (error) {
       console.error("Error al ingresar:", error);
-      toast.error(
-        "Credenciales incorrectas. Inténtalo de nuevo.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
-      setUsername("");
-      setPassword("");
+      toast.error("Credenciales incorrectas. Inténtalo de nuevo.", { position: "top-right", autoClose: 3000 });
     }
   };
 
   return (
     <div className="login-content">
-      <Container maxWidth={false} direction="row">
-        
-          {/* Cabecera con botones y título */}
-          <Grid >
-              {/* Botones */}
-              <Grid container justifyContent="flex-start" sx={{marginTop:1}}>
-                <Button
-                  sx={{
-                    color: 'white',
-                    backgroundColor: "#8ba082",
-                    marginRight: 2,
-                    '&:hover': {
-                      backgroundColor: "#5d6c56", 
-                    },
-                  }}
-                  startIcon={<ArrowBackIcon />}
-                  size="large"
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                >
-                  Atrás
-                </Button>
-                <Button
-                  sx={{
-                    color: 'white',
-                    backgroundColor: "#8ba082",
-                    marginLeft: 2,
-                    '&:hover': {
-                      backgroundColor: "#5d6c56", 
-                    },
-                  }}
-                  startIcon={<HomeIcon />}
-                  size="large"
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                >
-                  Inicio
-                </Button>
-              </Grid>
-              
-                {/* Título */}
-                <Grid item xs>
-                  <h1 style={{ textAlign: "center" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
-                </Grid>
-                
-                
-              
-    
-            </Grid>
-              
+      <Container>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate("/")}
+            sx={{
+              backgroundColor: "#8ba082",
+              color: "white",
+              "&:hover": { backgroundColor: "#5d6c56" },
+            }}
+          >
+            Atrás
+          </Button>
+          <Button
+            startIcon={<HomeIcon />}
+            onClick={() => navigate("/")}
+            sx={{
+              backgroundColor: "#8ba082",
+              color: "white",
+              "&:hover": { backgroundColor: "#5d6c56" },
+            }}
+          >
+            Inicio
+          </Button>
+        </Grid>
 
-      </Container>
-      
+        <h1 style={{ textAlign: "center", margin: "20px 0" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
 
-      <div className="login">
-        <div className="login-form">
-          <h2 className="login-heading">Iniciar Sesión</h2>
-          <br />
-          
-          <form onSubmit={handleLogin}>
-            <div className="form-input">
-              <label htmlFor="username">
-              <p>Usuario:</p>
-              </label>
+        <div className="login">
+          <div className="login-form">
+            <h2 className="login-heading">Iniciar Sesión</h2>
+            <form onSubmit={handleLogin}>
               <TextField
-              fullWidth
-              id="username"
-                type="text"
-                placeholder="Ingresa tu correo electrónico."
+                fullWidth
+                id="username"
+                label="Usuario"
                 value={username}
-                name="username"
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="input-field"
+                margin="normal"
               />
-            </div>
-            <br />
-            <div className="form-input">
-              <label htmlFor="password">
-              <p>Contraseña:</p>
-              </label>
-                <TextField
-                  fullWidth
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Ingresa tu contraseña"
-                  value={password}
-                  name="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="input-field"
-                />
-            </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <div className="login-button">
-              <Button 
-              type="submit"
-              //variant="contained"
-              //color="primary"
-              startIcon={<LoginIcon />}
-              className="login-button"
-              size="large"
-              style={{ color: 'white' }}
+              <TextField
+                fullWidth
+                id="password"
+                type="password"
+                label="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                margin="normal"
+              />
+              <Button
+                type="submit"
+                startIcon={<LoginIcon />}
+                sx={{ backgroundColor: "#8ba082", color: "white", "&:hover": { backgroundColor: "#5d6c56" } }}
               >
                 Ingresar
-                </Button>
-            </div>
-          </form>
-{/*
-          <div className="footer-login">
-            <p>
-              ¿No tienes una cuenta?
-              <Link to="/register" className="login-link">
-                {" "}
-                Regístrate ahora
-              </Link>
-            </p>
+              </Button>
+            </form>
           </div>
-*/}
         </div>
-        
-        <div className="img-form">
-          <img
-            src="public\backgrounds\main.png"
-            alt="MP"
-          />
-        </div>
-        
-      </div>
+      </Container>
     </div>
   );
 };

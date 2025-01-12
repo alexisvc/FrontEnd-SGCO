@@ -73,13 +73,9 @@ function App() {
   } = usePatients();
   const {
     patientTreatments,
-    loading: treatmentsLoading,  
-    error: treatmentsError,      
-    getAllPatientTreatments,
     createPatientTreatment,
     updatePatientTreatment,
-    getPatientTreatmentsByPatientId,
-    deletePatientTreatment      
+    getPatientTreatmentsByPatientId   
   } = usePatientTreatments();
   const {
     evolutionCharts,
@@ -119,7 +115,6 @@ function App() {
     createBudget,
     updateBudget,
     updateBudgetStatus,
-    setCurrentBudget,
     calculateTotals,
     fetchBudgetById
   } = useBudgets();
@@ -134,7 +129,6 @@ function App() {
   } = usePayments();
 
   const {
-    reports,
     loading: reportsLoading,
     error: reportsError,
     getReporteMensual,
