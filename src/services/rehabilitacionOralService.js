@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001/api/rehabilitacion-oral";
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/rehabilitacion-oral`;
+//const baseUrl = "http://localhost:3001/api/rehabilitacion-oral";
 
 const getAllRehabilitacionOral = async () => {
   const response = await axios.get(baseUrl);

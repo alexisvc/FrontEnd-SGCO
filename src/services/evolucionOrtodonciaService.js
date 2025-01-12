@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/evolucion-ortodoncia';
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/evolucion-ortodoncia`;
+//const baseUrl = 'http://localhost:3001/api/evolucion-ortodoncia';
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:3001/api/consentimiento';
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/consentimiento`;
+//const baseUrl = 'http://localhost:3001/api/consentimiento';
 
 const getAllConsentimientos = () => {
   return axios.get(baseUrl).then((response) => response.data);

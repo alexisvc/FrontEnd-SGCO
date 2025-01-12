@@ -1,7 +1,8 @@
 // medicalRecordsService.js
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001/api/medical-records";
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/medical-records`;
+//const baseUrl = "http://localhost:3001/api/medical-records";
 
 const getAllMedicalRecords = () => {
   return axios.get(baseUrl).then((response) => response.data);

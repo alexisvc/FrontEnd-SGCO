@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/budgets';
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/budgets`;
+//const baseUrl = 'http://localhost:3001/api/budgets';
 
 // Funciones existentes
 const getAllBudgets = () => {
