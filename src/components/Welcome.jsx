@@ -14,11 +14,16 @@ import {
   Typography,
   Container,
   Grid,
-  Paper
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@mui/material";
 
 function Welcome({ user, logout }) {
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const isLoggedIn = !!user;
@@ -45,22 +50,50 @@ function Welcome({ user, logout }) {
     }
   ];
 
+  const handleDeleteDialogOpen = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleConfirmLogout = () => {
+    setDeleteDialogOpen(false);
+    logout();
+    navigate("/");
+  };
+
   return (
     <div style={{ 
       backgroundColor: '#f5f1ef', 
       minHeight: '100vh', 
       height: '100%', 
-  
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between'
     }}>
-      {isPopUpOpen && (
-        <PopUpExit
-          onClose={() => setIsPopUpOpen(false)}
-          logout={logout}
-        />
-      )}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirmar Cierre de Sesión</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            ¿Está seguro que desea cerrar la sesión?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogClose} color="primary">
+            No
+          </Button>
+          <Button onClick={handleConfirmLogout} color="error" autoFocus>
+            Si
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <div style={{ 
         display: "flex", 
@@ -95,7 +128,7 @@ function Welcome({ user, logout }) {
             startIcon={<LogoutIcon />}
             variant="contained"
             size="large"
-            onClick={() => setIsPopUpOpen(true)}
+            onClick={handleDeleteDialogOpen}
             sx={{
               color: "white",
               backgroundColor: "#8ba082",

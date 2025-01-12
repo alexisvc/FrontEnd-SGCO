@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Typography, Grid, TextField, Container, Paper, Box } from "@mui/material";
 import { toast } from "react-toastify";
 import { useOdontologos } from "../../hooks/useOdontologos";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const EditOdontologo = () => {
   const { odontologoId } = useParams(); // Obtener el id del odontólogo desde la URL
@@ -49,7 +50,14 @@ const EditOdontologo = () => {
   };
 
   return (
-    <Container>
+    <div style={{ backgroundColor: '#f5f1ef', minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+      <Button
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate("/odontologos")}
+        sx={{ mx: 2, my: 2 }}
+      >
+        Atrás
+      </Button>
       <Typography variant="h4" align="center" gutterBottom>
         Editar Odontólogo
       </Typography>
@@ -137,7 +145,7 @@ const EditOdontologo = () => {
           </Grid>
         </Container>
       </Box>
-    </Container>
+    </div>
   );
 };
 

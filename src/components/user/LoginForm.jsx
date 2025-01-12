@@ -27,7 +27,6 @@ export const LoginForm = ({ login }) => {
 
   return (
     <div className="login-content">
-      <Container>
         <Grid container justifyContent="space-between" alignItems="center">
           <Button
             startIcon={<ArrowBackIcon />}
@@ -40,6 +39,7 @@ export const LoginForm = ({ login }) => {
           >
             Atrás
           </Button>
+          <h1 style={{ textAlign: "center", margin: "20px 0" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
           <Button
             startIcon={<HomeIcon />}
             onClick={() => navigate("/")}
@@ -52,8 +52,6 @@ export const LoginForm = ({ login }) => {
             Inicio
           </Button>
         </Grid>
-
-        <h1 style={{ textAlign: "center", margin: "20px 0" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
 
         <div className="login">
           <div className="login-form">
@@ -88,7 +86,6 @@ export const LoginForm = ({ login }) => {
             </form>
           </div>
         </div>
-      </Container>
     </div>
   );
 };
