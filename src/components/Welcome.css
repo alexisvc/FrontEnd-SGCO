@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    background-image: url("../../backgrounds/mainBack.png");
+    background-image: url("/backgrounds/mainBack.png");
     background-color: #f5f1ef;
     background-size: 50%;
     background-repeat: no-repeat;
