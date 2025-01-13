@@ -89,13 +89,17 @@ const CreateRehabilitacionOralForm = ({
 
   const handleCheckboxChange = (e, listName) => {
     const { name, checked } = e.target;
-    const updatedList = checked
-      ? [...formData[listName], name]
-      : formData[listName].filter((item) => item !== name);
-
-    setFormData({
-      ...formData,
-      [listName]: updatedList,
+  
+    setFormData((prevFormData) => {
+      const currentList = prevFormData[listName] || [];
+      const updatedList = checked
+        ? [...currentList, name] // Agrega el elemento si está marcado
+        : currentList.filter((item) => item !== name); // Elimina el elemento si se desmarca
+  
+      return {
+        ...prevFormData,
+        [listName]: updatedList,
+      };
     });
   };
 
@@ -117,13 +121,13 @@ const CreateRehabilitacionOralForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("Datos enviados:", formData);
     try {
       const newData = {
         ...formData,
         paciente: patientId,
       };
-
+      console.log("NEW Datos enviados:", newData);
       await createRehabilitacionOral(newData, archivo1, archivo2, archivo3);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
@@ -178,18 +182,27 @@ const CreateRehabilitacionOralForm = ({
       });
       navigate("/patients");
     } catch (error) {
-      // Notificación de error
-      toast.error("Error al crear la Rehabilitación Oral.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
   return (
     <Container component={Paper}>
       <Typography variant="h5" align="center" gutterBottom>
-        Editar Rehabilitación Oral
+        Crear Rehabilitación Oral
       </Typography>
       <Grid container spacing={2} xs={12}>
         {/* Botones de archivo */}
@@ -573,18 +586,18 @@ const CreateRehabilitacionOralForm = ({
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">
-              Orientación del plano oclusal anterior:
+              Orientación del plano oclusal posterior:
             </FormLabel>
             <FormGroup row>
               <FormControlLabel
                 control={
                   <Checkbox
                     name="Aceptable"
-                    checked={formData.orientacionPlanoOclusalAnt.includes(
+                    checked={formData.orientacionPlanoOclusalPost.includes(
                       "Aceptable"
                     )}
                     onChange={(e) =>
-                      handleCheckboxChange(e, "orientacionPlanoOclusalAnt")
+                      handleCheckboxChange(e, "orientacionPlanoOclusalPost")
                     }
                   />
                 }
@@ -594,11 +607,11 @@ const CreateRehabilitacionOralForm = ({
                 control={
                   <Checkbox
                     name="Extrucción dental"
-                    checked={formData.orientacionPlanoOclusalAnt.includes(
+                    checked={formData.orientacionPlanoOclusalPost.includes(
                       "Extrucción dental"
                     )}
                     onChange={(e) =>
-                      handleCheckboxChange(e, "orientacionPlanoOclusalAnt")
+                      handleCheckboxChange(e, "orientacionPlanoOclusalPost")
                     }
                   />
                 }

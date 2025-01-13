@@ -53,12 +53,14 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    //console.log('Datos enviados:', formData); // Verifica que diagnostico sea una cadena válida
+
     try {
       const newTreatmentData = {
         ...formData,
         paciente: patientId,
       };
+      console.log("Datos enviados:", newTreatmentData);
       await createOrtodoncia(newTreatmentData, archivo1, archivo2, archivo3);
       // Lógica para limpiar el formulario o mostrar un mensaje de éxito
       setFormData({
@@ -80,11 +82,20 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
       navigate('/patients');
 
     } catch (error) {
-      // Notificación de error
-      toast.error("Error al actualizar la Ortodoncia.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+          }
     }
   };
 

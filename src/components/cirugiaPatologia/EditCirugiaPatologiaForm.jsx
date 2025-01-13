@@ -30,6 +30,7 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
   useEffect(() => {
     if (cirugiaPatologia) {
       setFormData({
+        paciente: cirugiaPatologia.paciente?._id || cirugiaPatologia.paciente?.id || "", // Solo el ID
         antecedentesCirPat: cirugiaPatologia.antecedentesCirPat || "",
         alergiasMedCirPat: cirugiaPatologia.alergiasMedCirPat || "",
         patologiaTejBland: cirugiaPatologia.patologiaTejBland || "",
@@ -67,7 +68,8 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    //console.log('Datos enviados:', formData); // Asegúrate de que formData.paciente tenga un ID válido
+  
     try {
       await updateCirugiaPatologia(cirugiaPatologia._id, formData, archivo1, archivo2);
       toast.success("Cirugía y patología actualizada exitosamente", {
@@ -76,10 +78,20 @@ const EditCirugiaPatologiaForm = ({ cirugiaPatologia, updateCirugiaPatologia }) 
       });
       navigate("/patients");
     } catch (error) {
-      toast.error("Error al actualizar la Cirugía y patología.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+       // Verificar si el error contiene detalles específicos
+          if (error.response && error.response.data && error.response.data.errors) {
+            error.response.data.errors.forEach((err) => {
+              toast.error(err.msg, {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            });
+          } else {
+            toast.error("Error al crear el paciente.", {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          }
     }
   };
 

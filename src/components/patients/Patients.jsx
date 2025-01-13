@@ -145,11 +145,20 @@ const Patients = ({
       setShowCreateForm(false);
       fetchPatients();
     } catch (error) {
-      // Notificación de error
+      // Verificar si el error contiene detalles específicos
+    if (error.response && error.response.data && error.response.data.errors) {
+      error.response.data.errors.forEach((err) => {
+        toast.error(err.msg, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      });
+    } else {
       toast.error("Error al crear el paciente.", {
         position: "top-right",
         autoClose: 3000,
       });
+    }
     }
   };
 

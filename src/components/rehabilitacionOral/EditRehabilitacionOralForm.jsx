@@ -27,7 +27,8 @@ const EditRehabilitacionOralForm = ({
   updateRehabilitacionOral,
 }) => {
   const [formData, setFormData] = useState({
-    refHorizontal: rehabilitacionOral?.refHorizontal || false,
+    paciente: rehabilitacionOral.paciente?._id || rehabilitacionOral.paciente?.id || "", // Solo el ID
+    refHorizontal: rehabilitacionOral?.refHorizontal || [],
     refVertical: rehabilitacionOral?.refVertical || false,
     longitudLabio: rehabilitacionOral?.longitudLabio || false,
     formaLabio: rehabilitacionOral?.formaLabio || false,
@@ -81,7 +82,8 @@ const EditRehabilitacionOralForm = ({
   useEffect(() => {
     if (rehabilitacionOral) {
       setFormData({
-        refHorizontal: rehabilitacionOral?.refHorizontal || false,
+        paciente: rehabilitacionOral.paciente?._id || rehabilitacionOral.paciente?.id || "", // Solo el ID
+        refHorizontal: rehabilitacionOral?.refHorizontal || [],
     refVertical: rehabilitacionOral?.refVertical || false,
     longitudLabio: rehabilitacionOral?.longitudLabio || false,
     formaLabio: rehabilitacionOral?.formaLabio || false,
@@ -132,6 +134,7 @@ const EditRehabilitacionOralForm = ({
       setArchivo2(rehabilitacionOral?.archivo2);
       setArchivo3(rehabilitacionOral?.archivo3);
     }
+    console.log("Rehabilitación Oral:", formData);
   }, [rehabilitacionOral]);
 
   const navigate = useNavigate();
@@ -190,11 +193,20 @@ const EditRehabilitacionOralForm = ({
       });
       navigate("/patients");
     } catch (error) {
-      // Notificación de error
-      toast.error("Error al actualizar la Rehabilitación Oral.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
@@ -372,7 +384,7 @@ const EditRehabilitacionOralForm = ({
                     onChange={(e) => handleCheckboxChange(e, "refHorizontal")}
                   />
                 }
-                label="Bipupilar"
+                label="Pupilas"
               />
 
               <FormControlLabel
@@ -647,18 +659,18 @@ const EditRehabilitacionOralForm = ({
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">
-              Orientación del plano oclusal anterior:
+              Orientación del plano oclusal posterior:
             </FormLabel>
             <FormGroup row>
               <FormControlLabel
                 control={
                   <Checkbox
                     name="Aceptable"
-                    checked={formData.orientacionPlanoOclusalAnt.includes(
+                    checked={formData.orientacionPlanoOclusalPost.includes(
                       "Aceptable"
                     )}
                     onChange={(e) =>
-                      handleCheckboxChange(e, "orientacionPlanoOclusalAnt")
+                      handleCheckboxChange(e, "orientacionPlanoOclusalPost")
                     }
                   />
                 }
@@ -668,11 +680,11 @@ const EditRehabilitacionOralForm = ({
                 control={
                   <Checkbox
                     name="Extrucción dental"
-                    checked={formData.orientacionPlanoOclusalAnt.includes(
+                    checked={formData.orientacionPlanoOclusalPost.includes(
                       "Extrucción dental"
                     )}
                     onChange={(e) =>
-                      handleCheckboxChange(e, "orientacionPlanoOclusalAnt")
+                      handleCheckboxChange(e, "orientacionPlanoOclusalPost")
                     }
                   />
                 }

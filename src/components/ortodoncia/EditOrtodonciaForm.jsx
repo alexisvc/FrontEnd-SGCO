@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createEvolucion, updateEvolucion }) => {
   const [formData, setFormData] = useState({
+    paciente: ortodoncia.paciente?._id || ortodoncia.paciente?.id || "", // Solo el ID
     diagnostico: ortodoncia?.diagnostico || "",
     objetivo: ortodoncia?.objetivo || "",
     tiempoAproximado: ortodoncia?.tiempoAproximado || "",
@@ -24,6 +25,7 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
 
   useEffect(() => {
     setFormData({
+      paciente: ortodoncia.paciente?._id || ortodoncia.paciente?.id || "", // Solo el ID
       diagnostico: ortodoncia?.diagnostico || "",
       objetivo: ortodoncia?.objetivo || "",
       tiempoAproximado: ortodoncia?.tiempoAproximado || "",
