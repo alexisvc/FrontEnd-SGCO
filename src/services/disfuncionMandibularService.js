@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001/api/disfuncion-mandibular";
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/disfuncion-mandibular`;
+//const baseUrl = "http://localhost:3001/api/disfuncion-mandibular";
 
 const getAllDisfuncionMandibular = () => {
   return axios.get(baseUrl).then((response) => response.data);

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/evolution-charts'; // Ajusta la ruta base según tu configuración
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/evolution-charts`;
+//const baseUrl = 'http://localhost:3001/api/evolution-charts'; // Ajusta la ruta base según tu configuración
 
 const getAllEvolutionCharts = async () => {
   const response = await axios.get(baseUrl);

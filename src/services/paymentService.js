@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/payments';
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/payments`;
+//const baseUrl = 'http://localhost:3001/api/payments';
 
 // Obtener resumen de pagos de un presupuesto
 const getBudgetPaymentsSummary = (budgetId) => {

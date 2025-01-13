@@ -5,7 +5,7 @@
     align-items: center;
     text-align: center;
     background-image: url("/src/assets/backgrounds/ciudad-silencio.png");
-    background-image: url("../../backgrounds/game.png");
+    background-image: url("/public/backgrounds/game.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

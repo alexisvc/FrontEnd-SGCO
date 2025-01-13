@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Link,
   Navigate,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -13,12 +12,8 @@ import RegistrationForm from "./components/user/RegistrationForm";
 import { useUser } from "./hooks/useUser";
 import Home from "./components/Home";
 import "./App.css";
-import PictogramMenu from "./components/pictograms/PictogramMenu";
-import GameMenu from "./components/games/GameMenu";
-import PictogramAccMenu from "./components/acc/PictogramACCMenu";
 
 import Welcome from "./components/Welcome";
-import AboutUs from "./components/extras/AboutUs";
 import EditUser from "./components/user/EditUser";
 import Patients from "./components/patients/Patients";
 import PatientAndMedicalRecordDetails from "./components/PatientAndMedicalRecordDetails";
@@ -54,10 +49,9 @@ import BudgetDetails from "./components/budgets/BudgetDetails";
 // Pagos
 import BudgetManagement from "./components/budgets/BudgetManagement";
 
-import PaymentDetails from "./components/budgets/PaymentDetails"; 
+import PaymentDetails from "./components/budgets/PaymentDetails";
 
 import FinancialReports from "./components/reports/FinancialReports";
-
 
 function App() {
   const { user, logout, login } = useUser();
@@ -75,7 +69,7 @@ function App() {
     patientTreatments,
     createPatientTreatment,
     updatePatientTreatment,
-    getPatientTreatmentsByPatientId   
+    getPatientTreatmentsByPatientId,
   } = usePatientTreatments();
   const {
     evolutionCharts,
@@ -116,7 +110,7 @@ function App() {
     updateBudget,
     updateBudgetStatus,
     calculateTotals,
-    fetchBudgetById
+    fetchBudgetById,
   } = useBudgets();
 
   const {
@@ -125,7 +119,7 @@ function App() {
     registerPayment,
     cancelPayment,
     formatters,
-    helpers
+    helpers,
   } = usePayments();
 
   const {
@@ -133,7 +127,7 @@ function App() {
     error: reportsError,
     getReporteMensual,
     getReporteAnual,
-    getReportePorRango
+    getReportePorRango,
   } = useFinancialReports();
 
   const isLoggedIn = !!user;
@@ -241,7 +235,7 @@ function App() {
               path="/presupuestos"
               element={
                 isLoggedIn ? (
-                  <BudgetList 
+                  <BudgetList
                     budgets={budgets}
                     fetchBudgets={fetchBudgets}
                     loading={loading}
@@ -253,110 +247,104 @@ function App() {
               }
             />
 
-      <Route
-        path="/presupuestos/nuevo"
-        element={
-          isLoggedIn ? (
-            <BudgetForm
-              createBudget={createBudget}
-              calculateTotals={calculateTotals}
-              fetchPatientByCedula={fetchPatientByCedula} 
-              fetchPatientByName={fetchPatientByName}
-              treatmentPlan={location?.state?.treatmentPlan}
-              mode="create"
+            <Route
+              path="/presupuestos/nuevo"
+              element={
+                isLoggedIn ? (
+                  <BudgetForm
+                    createBudget={createBudget}
+                    calculateTotals={calculateTotals}
+                    fetchPatientByCedula={fetchPatientByCedula}
+                    fetchPatientByName={fetchPatientByName}
+                    treatmentPlan={location?.state?.treatmentPlan}
+                    mode="create"
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
 
-      {/* Nueva ruta para gestión de presupuesto */}
-      <Route
-        path="/presupuestos/:id/*"
-        element={
-          isLoggedIn ? (
-            <BudgetManagement
-              budget={currentBudget}
-              fetchBudgetById={fetchBudgetById}
-              updateBudgetStatus={updateBudgetStatus}
-              paymentSummary={paymentSummary}
-              fetchPaymentSummary={fetchPaymentSummary}
-              registerPayment={registerPayment}
-              cancelPayment={cancelPayment}
-              formatters={formatters}
-              helpers={helpers}
+            {/* Nueva ruta para gestión de presupuesto */}
+            <Route
+              path="/presupuestos/:id/*"
+              element={
+                isLoggedIn ? (
+                  <BudgetManagement
+                    budget={currentBudget}
+                    fetchBudgetById={fetchBudgetById}
+                    updateBudgetStatus={updateBudgetStatus}
+                    paymentSummary={paymentSummary}
+                    fetchPaymentSummary={fetchPaymentSummary}
+                    registerPayment={registerPayment}
+                    cancelPayment={cancelPayment}
+                    formatters={formatters}
+                    helpers={helpers}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            >
+              {/* Sub-rutas para BudgetManagement */}
+              <Route index element={<Navigate to="detalles" />} />
+              <Route path="detalles" element={<BudgetDetails />} />
+              <Route path="pagos" element={<PaymentDetails />} />
+            </Route>
+
+            <Route
+              path="/presupuestos/editar/:id"
+              element={
+                isLoggedIn ? (
+                  <BudgetForm
+                    createBudget={createBudget}
+                    updateBudget={updateBudget}
+                    fetchBudgetById={fetchBudgetById}
+                    fetchPatientByCedula={fetchPatientByCedula}
+                    calculateTotals={calculateTotals}
+                    mode="edit"
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      >
-        {/* Sub-rutas para BudgetManagement */}
-        <Route index element={<Navigate to="detalles" />} />
-        <Route 
-          path="detalles" 
-          element={<BudgetDetails />} 
-        />
-        <Route 
-          path="pagos" 
-          element={<PaymentDetails />} 
-        />
-      </Route>
 
-      <Route
-        path="/presupuestos/editar/:id"
-        element={
-          isLoggedIn ? (
-            <BudgetForm
-              createBudget={createBudget}
-              updateBudget={updateBudget}
-              fetchBudgetById={fetchBudgetById}
-              fetchPatientByCedula={fetchPatientByCedula} 
-              calculateTotals={calculateTotals}
-              mode="edit"
+            {/* Vista de presupuestos por paciente */}
+            <Route
+              path="/patients/:patientId/presupuestos"
+              element={
+                isLoggedIn ? (
+                  <BudgetList
+                    budgets={budgets}
+                    fetchBudgets={fetchBudgets}
+                    fetchBudgetsByPatient={fetchBudgetsByPatient}
+                    loading={loading}
+                    error={error}
+                    isPatientView={true}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
 
-      {/* Vista de presupuestos por paciente */}
-      <Route
-  path="/patients/:patientId/presupuestos"
-  element={
-    isLoggedIn ? (
-      <BudgetList 
-        budgets={budgets}
-        fetchBudgets={fetchBudgets}
-        fetchBudgetsByPatient={fetchBudgetsByPatient}
-        loading={loading}
-        error={error}
-        isPatientView={true}
-      />
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
-
-<Route
-  path="/reportes-financieros"
-  element={
-    isLoggedIn ? (
-      <FinancialReports 
-        loading={reportsLoading}
-        error={reportsError}
-        getReporteMensual={getReporteMensual}
-        getReporteAnual={getReporteAnual}
-        getReportePorRango={getReportePorRango}
-      />
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
+            <Route
+              path="/reportes-financieros"
+              element={
+                isLoggedIn ? (
+                  <FinancialReports
+                    loading={reportsLoading}
+                    error={reportsError}
+                    getReporteMensual={getReporteMensual}
+                    getReporteAnual={getReporteAnual}
+                    getReportePorRango={getReportePorRango}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
 
             <Route path="/planificacion" element={<PlanningMenu />} />
 
@@ -364,52 +352,43 @@ function App() {
               path="/planificacion/pacientes"
               element={<PlanningPatientList />}
             />
-<Route
-  path="/planificacion"
-  element={<PlanningMenu />}
-/>
-<Route
-  path="/planificacion/nueva"
-  element={
-    isLoggedIn ? (
-      <CreatePlanningForm
-        onSubmit={createPatientTreatment}
-        fetchPatientByCedula={fetchPatientByCedula}
-        fetchPatientByName={fetchPatientByName}
-        treatmentPlan={null}
-      />
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
+            <Route path="/planificacion" element={<PlanningMenu />} />
+            <Route
+              path="/planificacion/nueva"
+              element={
+                isLoggedIn ? (
+                  <CreatePlanningForm
+                    onSubmit={createPatientTreatment}
+                    fetchPatientByCedula={fetchPatientByCedula}
+                    fetchPatientByName={fetchPatientByName}
+                    treatmentPlan={null}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
 
-<Route
-  path="/planificacion/lista"
-  element={
-    isLoggedIn ? (
-      <PlanningList />  
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
+            <Route
+              path="/planificacion/lista"
+              element={isLoggedIn ? <PlanningList /> : <Navigate to="/" />}
+            />
 
-<Route
-  path="/planificacion/editar/:id"
-  element={
-    isLoggedIn ? (
-      <CreatePlanningForm
-        mode="edit"
-        onSubmit={updatePatientTreatment}
-        fetchPatientByCedula={fetchPatientByCedula}
-        fetchPatientByName={fetchPatientByName}
-      />
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
+            <Route
+              path="/planificacion/editar/:id"
+              element={
+                isLoggedIn ? (
+                  <CreatePlanningForm
+                    mode="edit"
+                    onSubmit={updatePatientTreatment}
+                    fetchPatientByCedula={fetchPatientByCedula}
+                    fetchPatientByName={fetchPatientByName}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
 
             <Route
               path="/treatment-plans/:patientId"
@@ -437,20 +416,6 @@ function App() {
               path="/edit-user"
               element={isLoggedIn ? <EditUser user={user} /> : <Home />}
             />
-            <Route
-              path="/acc-menu"
-              element={isLoggedIn ? <PictogramAccMenu /> : <Home />}
-            />
-            <Route
-              path="/game-menu"
-              element={isLoggedIn ? <GameMenu /> : <Home />}
-            />
-            
-            <Route
-              path="/pictogram-menu"
-              element={isLoggedIn ? <PictogramMenu /> : <Home />}
-            />
-            <Route path="/about-us" element={<AboutUs />} />
             <Route
               path="/main-menu"
               element={

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/treatment-plans';
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/treatment-plans`;
+//const baseUrl = 'http://localhost:3001/api/treatment-plans';
 
 // Obtener todos los tratamientos
 const getAll = async () => {

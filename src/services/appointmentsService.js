@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/api/appointments';
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/appointments`;
+//const baseUrl = 'http://localhost:3001/api/appointments';
 
 const getAllAppointments = () => {
   return axios.get(baseUrl).then((response) => response.data);

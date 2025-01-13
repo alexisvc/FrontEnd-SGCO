@@ -19,7 +19,6 @@ export const LoginForm = ({ login }) => {
     try {
       await login({ username, password });
       toast.success("Ingreso exitoso.", { position: "top-right", autoClose: 3000 });
-      navigate("/"); // Cambiar a la ruta principal tras login exitoso
     } catch (error) {
       console.error("Error al ingresar:", error);
       toast.error("Credenciales incorrectas. Inténtalo de nuevo.", { position: "top-right", autoClose: 3000 });
@@ -28,7 +27,6 @@ export const LoginForm = ({ login }) => {
 
   return (
     <div className="login-content">
-      <Container>
         <Grid container justifyContent="space-between" alignItems="center">
           <Button
             startIcon={<ArrowBackIcon />}
@@ -41,6 +39,7 @@ export const LoginForm = ({ login }) => {
           >
             Atrás
           </Button>
+          <h1 style={{ textAlign: "center", margin: "20px 0" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
           <Button
             startIcon={<HomeIcon />}
             onClick={() => navigate("/")}
@@ -53,8 +52,6 @@ export const LoginForm = ({ login }) => {
             Inicio
           </Button>
         </Grid>
-
-        <h1 style={{ textAlign: "center", margin: "20px 0" }}>ESPECIALIDADES ODONTOLÓGICAS</h1>
 
         <div className="login">
           <div className="login-form">
@@ -89,7 +86,6 @@ export const LoginForm = ({ login }) => {
             </form>
           </div>
         </div>
-      </Container>
     </div>
   );
 };

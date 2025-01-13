@@ -1,5 +1,7 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3001/api/patients';
+
+const baseUrl = `${import.meta.env.VITE_API_URL}/api/patients`;
+//const baseUrl = 'http://localhost:3001/api/patients';
 
 const getAllPatients = () => {
   return axios.get(baseUrl).then((response) => response.data);
