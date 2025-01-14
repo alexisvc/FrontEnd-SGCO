@@ -26,6 +26,7 @@ const EditDisfuncionMandibularForm = ({
   updateDisfuncionMandibular,
 }) => {
   const [formData, setFormData] = useState({
+    paciente: disfuncionMandibular.paciente?._id || disfuncionMandibular.paciente?.id || "", // Solo el ID
     huesoCortical: disfuncionMandibular?.huesoCortical || false,
     espacioArticular: disfuncionMandibular?.espacioArticular || false,
     condillo: disfuncionMandibular?.condillo || false,
@@ -97,11 +98,20 @@ const EditDisfuncionMandibularForm = ({
       });
       navigate("/patients");
     } catch (error) {
-      // Notificación de error
-      toast.error("Error al actualizar la Disfunción Mandibular.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
