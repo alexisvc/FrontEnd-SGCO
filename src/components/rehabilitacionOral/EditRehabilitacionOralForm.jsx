@@ -155,13 +155,17 @@ const EditRehabilitacionOralForm = ({
 
   const handleCheckboxChange = (e, listName) => {
     const { name, checked } = e.target;
-    const updatedList = checked
-      ? [...formData[listName], name]
-      : formData[listName].filter((item) => item !== name);
-
-    setFormData({
-      ...formData,
-      [listName]: updatedList,
+  
+    setFormData((prevFormData) => {
+      const currentList = prevFormData[listName] || [];
+      const updatedList = checked
+        ? [...currentList, name] // Agrega el elemento si está marcado
+        : currentList.filter((item) => item !== name); // Elimina el elemento si se desmarca
+  
+      return {
+        ...prevFormData,
+        [listName]: updatedList,
+      };
     });
   };
 

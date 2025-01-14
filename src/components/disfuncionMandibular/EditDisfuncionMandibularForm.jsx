@@ -22,6 +22,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 const EditDisfuncionMandibularForm = ({
+  patientId,
   disfuncionMandibular,
   updateDisfuncionMandibular,
 }) => {
@@ -89,7 +90,11 @@ const EditDisfuncionMandibularForm = ({
     e.preventDefault();
 
     try {
-      await updateDisfuncionMandibular(disfuncionMandibular.id, formData);
+      const newData = {
+        ...formData,
+        paciente: patientId,
+      };
+      await updateDisfuncionMandibular(disfuncionMandibular.id, newData);
       // Notificación de éxito
       toast.success("Disfunción Mandibular actualizada exitosamente", {
         position: "top-right",
@@ -98,10 +103,20 @@ const EditDisfuncionMandibularForm = ({
       navigate("/patients");
     } catch (error) {
       // Notificación de error
-      toast.error("Error al actualizar la Disfunción Mandibular.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 

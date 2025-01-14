@@ -16,6 +16,7 @@ const DisfuncionMandibularDetails = ({ patientId }) => {
   <Container component={Paper} sx={{pt:3, pb:3}}>
     {disfuncionMandibular ? (
         <EditDisfuncionMandibularForm
+            patientId={patientId}
             disfuncionMandibular={disfuncionMandibular}
             updateDisfuncionMandibular={updateDisfuncionMandibular}
         />
