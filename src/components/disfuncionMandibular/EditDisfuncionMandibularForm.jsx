@@ -27,6 +27,7 @@ const EditDisfuncionMandibularForm = ({
   updateDisfuncionMandibular,
 }) => {
   const [formData, setFormData] = useState({
+    paciente: disfuncionMandibular.paciente?._id || disfuncionMandibular.paciente?.id || "", // Solo el ID
     huesoCortical: disfuncionMandibular?.huesoCortical || false,
     espacioArticular: disfuncionMandibular?.espacioArticular || false,
     condillo: disfuncionMandibular?.condillo || false,

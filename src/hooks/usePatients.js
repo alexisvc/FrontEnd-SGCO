@@ -74,7 +74,8 @@ export function usePatients() {
     } catch (err) {
       setError(err.message);
       setLoading(false);
-      return { success: false, error: err.message };
+      toast.info('No se encontraron presupuestos');
+      //return { success: false, error: err.message };
     }
   };
 /*
@@ -105,7 +106,7 @@ export function usePatients() {
     } catch (err) {
       setError(err.message);
       setLoading(false);
-      return { success: false, error: err.message };
+      toast.info('No se encontraron presupuestos');
     }
   };
 
