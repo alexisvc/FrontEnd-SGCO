@@ -116,6 +116,7 @@ const Appointment = () => {
   };
 
   const generateAvailableEndHours = (startHour) => {
+    console.log("Generating available end hours for", startHour);
     const startTime = dayjs(startHour, 'HH:mm');
     const endTime = dayjs().hour(20).minute(30);
     const hours = [];

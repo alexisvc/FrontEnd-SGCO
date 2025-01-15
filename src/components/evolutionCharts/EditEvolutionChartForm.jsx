@@ -25,6 +25,7 @@ import { useNavigate } from "react-router";
 
 const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
   const [formData, setFormData] = useState({
+    paciente: evolutionChart.paciente?._id || evolutionChart.paciente?.id || "", // Solo el ID
     fechaCuadEvol: evolutionChart?.fechaCuadEvol.split("T")[0] || "",
     actividadCuadEvol: evolutionChart?.actividadCuadEvol || "",
     recomendacionCuadEvol: evolutionChart?.recomendacionCuadEvol || "",
