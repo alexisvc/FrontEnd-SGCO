@@ -317,6 +317,9 @@ const Patients = ({
           <Table>
             <TableHead>
               <TableRow>
+              <TableCell align="center">
+                  <Typography variant="h6"></Typography>
+                </TableCell>
                 <TableCell align="center">
                   <Typography variant="h6">Nombre </Typography>
                 </TableCell>
@@ -350,14 +353,17 @@ const Patients = ({
                 <TableCell align="center">
                   <Typography variant="h6">Afinidad Emergencia</Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="h6">Historia Clínica</Typography>
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {patients.map((patient) => (
                 <TableRow key={patient.id}>
+                  <TableCell align="center">
+                    <IconButton onClick={() => handleViewPatient(patient)}>
+                      <VisibilityIcon />
+                    </IconButton>
+                    Ver HC
+                  </TableCell>
                   <TableCell align="center">{patient.nombrePaciente}</TableCell>
                   <TableCell align="center">{patient.edadPaciente}</TableCell>
                   <TableCell align="center">
@@ -376,12 +382,6 @@ const Patients = ({
                   </TableCell>
                   <TableCell align="center">
                     {patient.afinidadContactoEmergencia}
-                  </TableCell>
-                  <TableCell align="center">
-                    <IconButton onClick={() => handleViewPatient(patient)}>
-                      <VisibilityIcon />
-                    </IconButton>
-                    Ver HC
                   </TableCell>
                 </TableRow>
               ))}

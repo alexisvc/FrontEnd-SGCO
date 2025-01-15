@@ -117,17 +117,20 @@ const Appointment = () => {
 
   const generateAvailableEndHours = (startHour) => {
     console.log("Generating available end hours for", startHour);
-    const startTime = dayjs(startHour, 'HH:mm');
+    // Create a base date for today and set the time components
+    const [hours, minutes] = startHour.split(':').map(Number);
+    const startTime = dayjs().hour(hours).minute(minutes);
     const endTime = dayjs().hour(20).minute(30);
-    const hours = [];
-    let time = startTime.add(15, 'minute'); // Comienza 15 minutos después de la hora de inicio
+    
+    const availableHours = [];
+    let currentTime = startTime.add(15, 'minute');
 
-    while (time.isBefore(endTime) || time.isSame(endTime)) {
-      hours.push(time.format('HH:mm'));
-      time = time.add(15, 'minute');
+    while (currentTime.isBefore(endTime) || currentTime.isSame(endTime)) {
+      availableHours.push(currentTime.format('HH:mm'));
+      currentTime = currentTime.add(15, 'minute');
     }
-
-    return hours;
+    console.log("Available end hours:", availableHours);
+    return availableHours;
   };
 
   const handleEndHourChange = (selectedHour) => {
