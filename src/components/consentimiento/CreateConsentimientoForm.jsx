@@ -13,15 +13,19 @@ const CreateConsentimientoForm = ({ patientId, createConsentimiento }) => {
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
+    const fileName = e.target.files[0]?.name; // Obtener el nombre del archivo seleccionado
+    
     setFormData({
       ...formData,
       archivo: e.target.files[0],
     });
-    toast.success("Archivo cargada correctamente", {
+  
+    toast.success(`Archivo (${fileName}) cargado correctamente`, {
       position: "top-right",
       autoClose: 3000,
     });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

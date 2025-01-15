@@ -55,15 +55,21 @@ const CreatePeriodonticTreatmentsForm = ({
   const navigate = useNavigate();
   
   const handleFileChange = (e) => {
+    const fileName = e.target.files[0]?.name; // Obtener el nombre del archivo subido
+    
     if (e.target.name === "archivo1") {
       setArchivo1(e.target.files[0]);
+      toast.success(`Archivo 1 (${fileName}) cargado correctamente`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } else if (e.target.name === "archivo2") {
       setArchivo2(e.target.files[0]);
+      toast.success(`Archivo 2 (${fileName}) cargado correctamente`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
-    toast.success("Archivo cargada correctamente", {
-      position: "top-right",
-      autoClose: 3000,
-    });
   };
 
   const handleArrayInputChange = (e, index) => {

@@ -42,6 +42,7 @@ const EvolucionOrtodonciaDetails = ({
         {/* Mostrar cada tratamiento existente como una fila editable */}
         {evoluciones.map((evolucion) => (
           <EditEvolucionOrtodonciaForm
+            ortodonciaId={ortodoncia._id}
             key={evolucion.id}
             evolucionId={evolucion.id}
             evolucionData={{

@@ -30,18 +30,29 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
+    const fileName = e.target.files[0]?.name; // Obtener el nombre del archivo subido
+    
     if (e.target.name === "archivo1") {
       setArchivo1(e.target.files[0]);
+      toast.success(`Archivo 1 (${fileName}) cargado correctamente`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } else if (e.target.name === "archivo2") {
       setArchivo2(e.target.files[0]);
+      toast.success(`Archivo 2 (${fileName}) cargado correctamente`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } else if (e.target.name === "archivo3") {
       setArchivo3(e.target.files[0]);
+      toast.success(`Archivo 3 (${fileName}) cargado correctamente`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
-    toast.success("Archivo cargada correctamente", {
-      position: "top-right",
-      autoClose: 3000,
-    });
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -79,8 +90,7 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
         position: "top-right",
         autoClose: 3000,
       });
-      navigate('/patients');
-
+      navigate("/patients");
     } catch (error) {
       // Verificar si el error contiene detalles específicos
       if (error.response && error.response.data && error.response.data.errors) {
@@ -91,22 +101,22 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
           });
         });
       } else {
-        toast.error("Error al crear el paciente.", {
+        toast.error("Error al crear la evolucion.", {
           position: "top-right",
           autoClose: 3000,
-        });
-          }
+        });
+      }
     }
   };
 
   return (
     <Container component={Paper}>
       <Typography
-          variant="h4"
-          gutterBottom
-          align="center"
-          sx={{ pt: 2, pb: 1 }}
-        >
+        variant="h4"
+        gutterBottom
+        align="center"
+        sx={{ pt: 2, pb: 1 }}
+      >
         Crear Ortodoncia
       </Typography>
       <Grid container spacing={2} sx={12}>
@@ -125,11 +135,11 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                 />
                 <Button
                   sx={{
-                    color: 'white',
+                    color: "white",
                     backgroundColor: "#8ba082",
                     //margin: 2,
-                    '&:hover': {
-                      backgroundColor: "#5d6c56", 
+                    "&:hover": {
+                      backgroundColor: "#5d6c56",
                     },
                   }}
                   variant="contained"
@@ -153,11 +163,11 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                 />
                 <Button
                   sx={{
-                    color: 'white',
+                    color: "white",
                     backgroundColor: "#8ba082",
                     //margin: 2,
-                    '&:hover': {
-                      backgroundColor: "#5d6c56", 
+                    "&:hover": {
+                      backgroundColor: "#5d6c56",
                     },
                   }}
                   variant="contained"
@@ -181,11 +191,11 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
                 />
                 <Button
                   sx={{
-                    color: 'white',
+                    color: "white",
                     backgroundColor: "#8ba082",
                     //margin: 2,
-                    '&:hover': {
-                      backgroundColor: "#5d6c56", 
+                    "&:hover": {
+                      backgroundColor: "#5d6c56",
                     },
                   }}
                   variant="contained"
@@ -265,10 +275,15 @@ const CreateOrtodonciaForm = ({ patientId, createOrtodoncia }) => {
             required
           />
         </Grid>
-        
+
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center">
-            <Button sx = {{mb:2}} variant="contained" color="primary" onClick={handleSubmit}>
+            <Button
+              sx={{ mb: 2 }}
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
               <AddCircleIcon fontSize="large" />
               Crear HC Ortodoncia
             </Button>

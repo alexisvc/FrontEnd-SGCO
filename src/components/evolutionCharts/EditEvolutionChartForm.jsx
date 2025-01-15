@@ -23,7 +23,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
-const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
+const EditEvolutionChartForm = ({ patientId, evolutionChart, updateEvolutionChart }) => {
   const [formData, setFormData] = useState({
     paciente: evolutionChart.paciente?._id || evolutionChart.paciente?.id || "", // Solo el ID
     fechaCuadEvol: evolutionChart?.fechaCuadEvol.split("T")[0] || "",
@@ -82,9 +82,13 @@ const EditEvolutionChartForm = ({ evolutionChart, updateEvolutionChart }) => {
     e.preventDefault();
 
     try {
+      const newData = {
+        ...formData,
+        paciente: patientId,
+      };
       await updateEvolutionChart(
         evolutionChart._id,
-        formData,
+        newData,
         archivo1,
         archivo2
       );

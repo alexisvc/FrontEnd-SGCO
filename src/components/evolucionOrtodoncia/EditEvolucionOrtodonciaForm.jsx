@@ -4,6 +4,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { toast } from "react-toastify";
 
 const EditEvolucionOrtodonciaForm = ({
+  ortodonciaId,
   evolucionId,
   evolucionData,
   updateEvolucion,
@@ -26,7 +27,11 @@ const EditEvolucionOrtodonciaForm = ({
     e.preventDefault();
   
     try {
-      await updateEvolucion(evolucionId, formData);
+      const newEvolucionData = {
+        ...formData,
+        ortodoncia: ortodonciaId,
+      };
+      await updateEvolucion(evolucionId, newEvolucionData);
       // Notificación de éxito
       toast.success("Evolución Ortodoncia actualizada exitosamente", {
         position: "top-right",

@@ -38,18 +38,28 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
-    if (e.target.name === "archivo1") {
-      setArchivo1(e.target.files[0]);
-    } else if (e.target.name === "archivo2") {
-      setArchivo2(e.target.files[0]);
-    } else if (e.target.name === "archivo3") {
-      setArchivo3(e.target.files[0]);
-    }
-    toast.success("Archivo cargada correctamente", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
+      const fileName = e.target.files[0]?.name; // Obtener el nombre del archivo subido
+      
+      if (e.target.name === "archivo1") {
+        setArchivo1(e.target.files[0]);
+        toast.success(`Archivo 1 (${fileName}) cargado correctamente`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (e.target.name === "archivo2") {
+        setArchivo2(e.target.files[0]);
+        toast.success(`Archivo 2 (${fileName}) cargado correctamente`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (e.target.name === "archivo3") {
+        setArchivo3(e.target.files[0]);
+        toast.success(`Archivo 3 (${fileName}) cargado correctamente`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -220,7 +230,7 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
                   color="primary"
                   startIcon={<AddCircleIcon />}
                 >
-                  C
+                  Fotos
                 </Button>
               </label>
               {ortodoncia?.archivo3Url && (
@@ -239,7 +249,7 @@ const EditOrtodonciaForm = ({ ortodoncia, updateOrtodoncia, evoluciones, createE
                   startIcon={<DownloadIcon />}
                   
                 >
-                  C
+                  Fotos
                 </Button>
               )}
             </Box>

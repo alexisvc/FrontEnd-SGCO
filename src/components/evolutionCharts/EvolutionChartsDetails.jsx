@@ -68,6 +68,7 @@ const EvolutionChartsDetails = ({
             {evolutionCharts.map((chart) => (
               <EditEvolutionChartForm
                 key={chart.id}
+                patientId={patientId}
                 evolutionChart={chart}
                 updateEvolutionChart={updateEvolutionChart}
               />
