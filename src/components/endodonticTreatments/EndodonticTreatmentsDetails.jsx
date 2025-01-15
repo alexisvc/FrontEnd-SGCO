@@ -89,6 +89,7 @@ const EndodonticTreatmentsDetails = ({
           {endodonticTreatments.map((treatment, index) => (
             <CustomTabPanel value={value} index={index + 1} key={treatment.id}>
               <EditEndodonticTreatmentsForm
+                patientId={patientId}
                 endodonticTreatment={treatment}
                 updateEndodonticTreatments={updateEndodonticTreatment}
               />

@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
 const EditEndodonticTreatmentsForm = ({
+  patientId,
   endodonticTreatment,
   updateEndodonticTreatments,
 }) => {
@@ -125,11 +126,14 @@ const EditEndodonticTreatmentsForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      const newData = {
+        ...formData,
+        paciente: patientId,
+      };
       await updateEndodonticTreatments(
         endodonticTreatment._id,
-        formData,
+        newData,
         archivo1,
         archivo2
       );
