@@ -9,6 +9,7 @@ export function usePeriodonticTreatments() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     periodonticTreatmentService.getAllPeriodonticTreatments()
       .then(data => {
@@ -19,6 +20,7 @@ export function usePeriodonticTreatments() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchPeriodonticTreatmentById = (id) => {

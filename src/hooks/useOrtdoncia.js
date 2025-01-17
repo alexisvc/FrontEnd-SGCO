@@ -8,6 +8,7 @@ export function useOrtodoncia() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     ortodonciaService.getAllOrtodoncias()
       .then(data => {
@@ -18,6 +19,7 @@ export function useOrtodoncia() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchOrtodonciaById = (id) => {

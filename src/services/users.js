@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/users`;
+const baseUrl = "/api/users";
 //const baseUrl = "http://localhost:3001/api/users";
 
 const registerUser = (user) => {

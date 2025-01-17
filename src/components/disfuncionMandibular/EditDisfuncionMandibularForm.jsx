@@ -407,7 +407,7 @@ const EditDisfuncionMandibularForm = ({
         </Grid>
         <Grid item xs={12} container justifyContent="center" alignItems="center" sx={{mb:3}}>
           <img
-            src="/public/resources/images/dolorArticular.png"
+            src="/resources/images/dolorArticular.png"
             alt="dolor articular"
             style={{ width: "40%"}} />
         </Grid>
@@ -457,14 +457,14 @@ const EditDisfuncionMandibularForm = ({
         <Grid container align="center">
           <Grid item xs={6}>
             <img
-              src="/public/resources/images/dolorMuscularIzq.png"
+              src="/resources/images/dolorMuscularIzq.png"
               alt="dolor muscular izquierda"
               style={{ width: "90%" }}
             />
           </Grid>
           <Grid item xs={6}>
             <img
-              src="/public/resources/images/dolorMuscularDer.png"
+              src="/resources/images/dolorMuscularDer.png"
               alt="dolor muscular derecha"
               style={{ width: "90%" }}
             />
@@ -672,7 +672,7 @@ const EditDisfuncionMandibularForm = ({
 
         <Grid item xs={12} container justifyContent="center" alignItems="center">
           <img
-            src="/public/resources/images/mallampati.png"
+            src="/resources/images/mallampati.png"
             alt="dolor articular"
             style={{ width: "40%" }}
           />

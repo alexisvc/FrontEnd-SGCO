@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/cirugia-patologia`;
+const baseUrl = "/api/cirugia-patologia";
 //const baseUrl = 'http://localhost:3001/api/cirugia-patologia';
 
 // Obtiene todas las cirugías patológicas

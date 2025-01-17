@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/disfuncion-mandibular`;
+const baseUrl = "/api/disfuncion-mandibular";
 //const baseUrl = "http://localhost:3001/api/disfuncion-mandibular";
 
 const getAllDisfuncionMandibular = () => {

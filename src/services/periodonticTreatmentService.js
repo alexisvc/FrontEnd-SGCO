@@ -1,7 +1,6 @@
-// periodonticTreatmentService.js
-import axios from "axios";
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/periodoncia`;
+const baseUrl = "/api/periodoncia";
 //const baseUrl = "http://localhost:3001/api/periodoncia";
 
 const getAllPeriodonticTreatments = async () => {

@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/evolucion-ortodoncia`;
+const baseUrl = "/api/evolucion-ortodoncia";
 //const baseUrl = 'http://localhost:3001/api/evolucion-ortodoncia';
 
 const getAll = async () => {

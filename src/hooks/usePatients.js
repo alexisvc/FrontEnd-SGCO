@@ -8,6 +8,7 @@ export function usePatients() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     patientsService.getAllPatients()
       .then(data => {
@@ -18,6 +19,7 @@ export function usePatients() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchPatients = () => {

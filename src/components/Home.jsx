@@ -74,7 +74,7 @@ function Home({ user, logout }) {
             }}
           >
             <img
-              src="public/backgrounds/main.png"
+              src="backgrounds/main.png"
               alt="Background"
               style={{ height: "100%", width: "auto", objectFit: "cover" }}
             />
@@ -148,7 +148,7 @@ function Home({ user, logout }) {
             }}
           >
             <img
-              src="public/backgrounds/main.png"
+              src="backgrounds/main.png"
               alt="Background"
               style={{ height: "100%", width: "auto", objectFit: "cover" }}
             />

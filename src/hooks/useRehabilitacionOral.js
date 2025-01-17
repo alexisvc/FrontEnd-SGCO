@@ -8,6 +8,7 @@ export function useRehabilitacionOral() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     rehabilitacionOralService.getAllRehabilitacionOral()
       .then(data => {
@@ -18,6 +19,7 @@ export function useRehabilitacionOral() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchRehabilitacionOralById = (id) => {

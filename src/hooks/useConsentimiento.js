@@ -8,6 +8,7 @@ export function useConsentimiento() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     consentimientoService.getAllConsentimientos()
       .then(data => {
@@ -18,6 +19,7 @@ export function useConsentimiento() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
   
 

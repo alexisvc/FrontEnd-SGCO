@@ -8,6 +8,7 @@ export function useEvolucionOrtodoncia() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     evolucionOrtodonciaService.getAll()
       .then(data => {
@@ -18,6 +19,7 @@ export function useEvolucionOrtodoncia() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchEvolucionById = (id) => {
