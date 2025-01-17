@@ -510,7 +510,7 @@ const EditPeriodonticTreatmentsForm = ({
                   <Grid container justify="left">
                     <Grid item xs={12}>
                       <img
-                        src="/public/resources/images/periodonciaInferior.png"
+                        src="/resources/images/periodonciaInferior.png"
                         alt="periodonciaInferior"
                         style={{ width: "100%", aspectRatio: "5 / 1" }}
                       />
@@ -836,7 +836,7 @@ const EditPeriodonticTreatmentsForm = ({
                   <Grid container justify="left">
                     <Grid item xs={12}>
                       <img
-                        src="/public/resources/images/periodonciaSuperior.png"
+                        src="/resources/images/periodonciaSuperior.png"
                         alt="periodonciaSuperior"
                         style={{ width: "100%", aspectRatio: "5 / 1" }}
                       />

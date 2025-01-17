@@ -8,6 +8,7 @@ export function useMedicalRecords() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     medicalRecordsService.getAllMedicalRecords()
       .then(data => {
@@ -18,6 +19,7 @@ export function useMedicalRecords() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchMedicalRecordById = (id) => {

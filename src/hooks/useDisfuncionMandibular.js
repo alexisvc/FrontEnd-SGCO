@@ -8,6 +8,7 @@ export function useDisfuncionMandibular() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     disfuncionMandibularService.getAllDisfuncionMandibular()
       .then(data => {
@@ -18,6 +19,7 @@ export function useDisfuncionMandibular() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchDisfuncionMandibularById = (id) => {

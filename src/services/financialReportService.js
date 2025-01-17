@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/financial-reports`;
+const baseUrl = "/api/financial-reports";
 //const baseUrl = 'http://localhost:3001/api/financial-reports';
 
 const getReporteMensual = (mes, año) => {

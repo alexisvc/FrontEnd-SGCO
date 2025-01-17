@@ -8,6 +8,7 @@ export function useCirugiaPatologia() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     cirugiaPatologiaService.getAllCirugiaPatologias()
       .then(data => {
@@ -18,6 +19,7 @@ export function useCirugiaPatologia() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchCirugiaPatologiaById = (id) => {

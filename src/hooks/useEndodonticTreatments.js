@@ -9,6 +9,7 @@ export function useEndodonticTreatments() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     endodonticTreatmentService.getAllEndodonticTreatments()
       .then(data => {
@@ -19,6 +20,7 @@ export function useEndodonticTreatments() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchEndodonticTreatmentById = (id) => {

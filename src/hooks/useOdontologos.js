@@ -8,6 +8,7 @@ export function useOdontologos() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     setLoading(true);
     odontologosService.getAllOdontologos()
       .then(data => {
@@ -18,6 +19,7 @@ export function useOdontologos() {
         setError(err);
         setLoading(false);
       });
+    }
   }, []);
 
   const fetchOdontologos = () => {

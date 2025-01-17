@@ -1,7 +1,6 @@
-// endodonticTreatmentService.js
-import axios from "axios";
+import axios from "../services/axiosConfig";
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/api/endodontic-treatment`;
+const baseUrl = "/api/endodontic-treatment";
 //const baseUrl = "http://localhost:3001/api/endodontic-treatment";
 
 const getAllEndodonticTreatments = async () => {

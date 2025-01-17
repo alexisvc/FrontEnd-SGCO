@@ -7,14 +7,15 @@ const useEvolutionCharts = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (localStorage.loggedUserJSON) {
     evolutionChartService.getAllEvolutionCharts()
     .then(data => {
       setEvolutionCharts(data);
     })
     .catch(err =>{
       setError(err);
-    
     })
+  }
   }, []);
 
   const fetchEvolutionCharts = async () => {
