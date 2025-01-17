@@ -154,7 +154,20 @@ const PlanningDetails = ({ budget, treatmentDetails  }) => {
       toast.success('Estado actualizado exitosamente');
     } catch (error) {
       console.error('Error updating activity status:', error);
-      toast.error('Error al actualizar el estado');
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 

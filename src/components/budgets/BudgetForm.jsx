@@ -250,6 +250,19 @@ const BudgetForm = ({
     } catch (error) {
       console.error('Error submitting budget:', error);
       toast.error(error.response?.data?.error || 'Error al crear el presupuesto');
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 

@@ -164,8 +164,8 @@ const EditPeriodonticTreatmentsForm = ({
         toast.error("Error al crear el paciente.", {
           position: "top-right",
           autoClose: 3000,
-        });
-          }
+        });
+      }
     }
   };
 

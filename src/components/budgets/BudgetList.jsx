@@ -187,9 +187,15 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
             <Paper sx={{ p: 3, mb: 3 }}>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
-                  <Typography variant="h5" gutterBottom>
+                  <Typography
+                    variant="h4"
+                    gutterBottom
+                    align="center"
+                    sx={{ pt: 2, pb: 1 }}
+                  >
                     Presupuestos
                   </Typography>
+                  
                 </Grid>
                 {!isPatientView && (
                   <>
@@ -246,20 +252,7 @@ const BudgetList = ({ budgets, loading, error, fetchBudgets, fetchBudgetsByPatie
                   >
                     Nueva Planificación
                   </Button>
-                </Grid>
-                <Grid item xs={12} sm={3}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    onClick={() => navigate('/presupuestos/nuevo')}
-                  >
-                    Nuevo Presupuesto
-                  </Button>
-                  
-                </Grid>
-                
+                </Grid>            
               </Grid>
             </Paper>
           </Grid>

@@ -99,11 +99,20 @@ const EditEvolutionChartForm = ({ patientId, evolutionChart, updateEvolutionChar
       });
       navigate("/patients");
     } catch (error) {
-      // Notificación de error
-      toast.error("Error al actualizar el Cuadro de evolución.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // Verificar si el error contiene detalles específicos
+      if (error.response && error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.msg, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error al crear el paciente.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 

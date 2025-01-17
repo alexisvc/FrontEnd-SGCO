@@ -255,7 +255,14 @@ const checkBudgetStatus = async (treatmentId) => {
         <Paper sx={{ p: 3, mb: 3 }}>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item xs={12} sm={12} sx={{ mb: 4 }}>
-              <Typography variant="h5">Planificaciones</Typography>
+              <Typography
+                variant="h4"
+                gutterBottom
+                align="center"
+                sx={{ pt: 2, pb: 1 }}
+              >
+                Planificaciones
+              </Typography>
             </Grid>
             <br/>
             <Grid item xs={12} sm={3}>
